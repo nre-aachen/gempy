@@ -41,7 +41,7 @@ class PlotData(object):
         plt.style.use(['seaborn-white', 'seaborn-paper'])
         matplotlib.rc("font", family="Times New Roman")
 
-    def plot_data(self, direction="y", serie="all", **kwargs):
+    def plot_data(self, direction="y", serie="all", *args, **kwargs):
         """
         Plot the projection of all data
         :param direction:
@@ -115,7 +115,7 @@ class PlotData(object):
         plt.ylabel(y)
 
     def plot_potential_field(self, cell_number, potential_field=None, n_pf=0,
-                             direction="y", plot_data=True, serie="all", **kwargs):
+                             direction="y", plot_data=True, serie="all", *args, **kwargs):
 
         if not potential_field:
             potential_field = self._potential_field_p[n_pf]
@@ -124,8 +124,8 @@ class PlotData(object):
             self.plot_data(direction, self._data.series.columns.values[n_pf])
 
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
-        plt.contour(potential_field[_a, _b, _c].T,
-                    extent=extent_val,
+        plt.contour(potential_field[_a, _b, _c].T, 40,
+                    extent=extent_val, *args,
                     **kwargs)
 
         if 'colorbar' in kwargs:

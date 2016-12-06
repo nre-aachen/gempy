@@ -88,7 +88,7 @@ class DataManagement(object):
     # TODO: Probably at some point I will have to make an static and dynamic data classes
     def __init__(self, x_min, x_max, y_min, y_max, z_min, z_max,
                  nx=50, ny=50, nz=50,
-                 path_i=os.getcwd(), path_f=os.getcwd(),
+                 path_i=None, path_f=None,
                  **kwargs):
         """
         Some of the initial parameters needed for the interpolation and visualization
@@ -278,7 +278,7 @@ class Interpolator(object):
     """
     Class which contain all needed methods to perform potential field implicit modelling in theano
     """
-    def __init__(self, _data, _grid, *args,**kwargs):
+    def __init__(self, _data, _grid, *args, **kwargs):
         """
         Here we import all the necessary data for the interpolation
         :param _data: All values of a DataManagement object (I have to check but I would say we only need to pass
@@ -286,6 +286,8 @@ class Interpolator(object):
         :param _grid: All values of Grid (so far only the grid is useful)
         :param args: All the constant values for the interpolation. See docs set_interpolator
         """
+
+        verbose = kwargs.get('verbose', 0)
 
         theano.config.optimizer = 'fast_compile'
         theano.config.exception_verbosity = 'high'
@@ -297,7 +299,8 @@ class Interpolator(object):
         self._set_constant_parameteres(_data, _grid, *args)
         self.theano_compilation_3D()
 
-        self.potential_fields = [self.compute_potential_field(i)for i in np.arange(len(self._data.series.columns))]
+        self.potential_fields = [self.compute_potential_field(i, verbose=verbose)
+                                 for i in np.arange(len(self._data.series.columns))]
 
     def _select_serie(self, series_name=0):
         """
@@ -344,12 +347,12 @@ class Interpolator(object):
         # TODO: To be sure what is the mathematical meaning of this
 
         if not rescaling_factor:
-            max_coord = pn.concat([_data.Foliations, _data.Interfaces]).max()[:3]
-            min_coord = pn.concat([_data.Foliations, _data.Interfaces]).min()[:3]
+            max_coord = pn.concat([_data.Foliations, _data.Interfaces]).max()[['X', 'Y', 'Z']]
+            min_coord = pn.concat([_data.Foliations, _data.Interfaces]).min()[['X', 'Y', 'Z']]
             rescaling_factor = np.max(max_coord - min_coord)
 
         self.rescaling_factor_T = theano.shared(rescaling_factor, "rescaling factor", allow_downcast=True)
-        self.n_formations_T = theano.shared(np.zeros(2), "Vector. Number of formations in the serie")
+        self.number_of_points_per_formation_T = theano.shared(np.zeros(2), "Vector. Number of formations in the serie")
 
         _universal_matrix = np.vstack((_grid.grid.T,
                                        (_grid.grid ** 2).T,
@@ -360,6 +363,9 @@ class Interpolator(object):
 
         self.block = theano.shared(np.zeros_like(_grid.grid[:, 0]), "Final block")
         self.grid_val_T = theano.shared(_grid.grid + 1e-10, "Positions of the points to interpolate")
+
+    def get_constant_parameters(self):
+        return self.a_T, self.c_o_T, self.nugget_effect_grad_T
 
     def compute_block_model(self, series_number="all", verbose=0):
         """
@@ -372,6 +378,7 @@ class Interpolator(object):
             series_number = np.arange(len(self._data.series.columns))
         for i in series_number:
             formations_in_serie = self._select_serie(i)
+            # Number assigned to each formation
             n_formation = np.squeeze(np.where(np.in1d(self._data.formations, self._data.series.ix[:, i])))+1
             if verbose > 0:
                 print(n_formation)
@@ -410,7 +417,7 @@ class Interpolator(object):
             layers = self._data.Interfaces[self._data.Interfaces["formation"].str.contains(for_in_ser)].as_matrix()[:, :3]
             rest_layer_points = layers[1:]
             # TODO self.n_formation probably should not be self
-            self.n_formations_T.set_value(np.array(rest_layer_points.shape[0], ndmin=1))
+            self.number_of_points_per_formation_T.set_value(np.array(rest_layer_points.shape[0], ndmin=1))
             ref_layer_points = np.tile(layers[0], (np.shape(layers)[0] - 1, 1))
         else:
             # TODO: This is ugly
@@ -424,7 +431,7 @@ class Interpolator(object):
             for i in layers[1:]:
                 rest_layer_points = np.vstack((rest_layer_points, i[1:]))
                 rest_dim = np.append(rest_dim, rest_dim[-1] + i[1:].shape[0])
-            self.n_formations_T.set_value(rest_dim)
+            self.number_of_points_per_formation_T.set_value(rest_dim)
             ref_layer_points = np.vstack((np.tile(i[0], (np.shape(i)[0] - 1, 1)) for i in layers))
 
         if verbose > 0:
@@ -436,9 +443,13 @@ class Interpolator(object):
                       self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)])
 
         # self.grad is none so far. I have it for further research in the calculation of the Jacobian matrix
+
+            if verbose > 2:
+                print('number_formations', n_formation)
+
         self.grad = self._block_export(dips_position, dip_angles, azimuth, polarity,
-                                      rest_layer_points, ref_layer_points,
-                                      n_formation, yet_simulated)
+                                       rest_layer_points, ref_layer_points,
+                                       n_formation, yet_simulated)
 
     def _aux_computations_potential_field(self,  for_in_ser, verbose=0):
 
@@ -455,7 +466,7 @@ class Interpolator(object):
         else:
             layers_list = []
             for formation in for_in_ser.split("|"):
-                layers_list.append(self._data.Interfaces[self._data.Interfaces["formation"] == formation].as_matrix()[:, :3])
+                layers_list.append(self._data.Interfaces[self._data.Interfaces["formation"] == formation].as_matrix()[:,:3])
             layers = np.asarray(layers_list)
             rest_layer_points = np.vstack((i[1:] for i in layers))
             ref_layer_points = np.vstack((np.tile(i[0], (np.shape(i)[0] - 1, 1)) for i in layers))
@@ -464,8 +475,8 @@ class Interpolator(object):
             print("The serie formations are %s" % for_in_ser)
             if verbose > 1:
                 print("The formations are: \n"
-                      "Layers ", self._data.Interfaces[self._data.Interfaces["formation"].str.contains(for_in_ser)], " \n "
-                                                                                                    "Foliations ",
+                      "Layers \n", self._data.Interfaces[self._data.Interfaces["formation"].str.contains(for_in_ser)],
+                      "\n Foliations \n",
                       self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)])
 
         self.Z_x, G_x, G_y, G_z, self.potential_interfaces, C, DK = self._interpolate(
@@ -907,9 +918,9 @@ class Interpolator(object):
         potential_field_unique, updates1 = theano.scan(fn=average_potential,
                                                        outputs_info=None,
                                                        sequences=dict(
-                                                           input=T.concatenate((T.stack(0),
-                                                                                n_formation,
-                                                                                )), taps=[0, 1]),
+                                                            input=T.concatenate((T.stack(0),
+                                                                                self.number_of_points_per_formation_T)),
+                                                            taps=[0, 1]),
                                                        non_sequences=potential_field_interfaces)
 
         # Loop to segment the distinct lithologies

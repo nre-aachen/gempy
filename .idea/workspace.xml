@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/GeMpy_core.py" afterPath="$PROJECT_DIR$/GeMpy/GeMpy_core.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/Visualization.py" afterPath="$PROJECT_DIR$/GeMpy/Visualization.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Sandstone Project.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Sandstone Project.ipynb" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,11 +40,28 @@
       <file leaf-file-name="GeMpy_core.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy_core.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
+            <state relative-caret-position="8793">
+              <caret line="892" column="59" selection-start-line="892" selection-start-column="33" selection-end-line="892" selection-end-column="59" />
               <folding>
                 <element signature="e#219#232#0" expanded="true" />
-                <element signature="e#9984#11771#0" expanded="false" />
+                <element signature="e#3089#9943#0" expanded="false" />
+                <element signature="e#9970#11757#0" expanded="false" />
+                <element signature="e#12938#13504#0" expanded="false" />
+                <element signature="e#13683#16234#0" expanded="false" />
+                <element signature="e#16283#16337#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Visualization.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1098">
+              <caret line="126" column="54" selection-start-line="126" selection-start-column="54" selection-end-line="126" selection-end-column="54" />
+              <folding>
+                <element signature="e#236#267#0" expanded="true" />
+                <element signature="e#2518#3475#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -93,8 +112,8 @@
         <option value="$PROJECT_DIR$/GeMpy/External_communication.py" />
         <option value="$PROJECT_DIR$/GeMpy/GeMpy.py" />
         <option value="$PROJECT_DIR$/GeMpy/__init__.py" />
-        <option value="$PROJECT_DIR$/GeMpy/Visualization.py" />
         <option value="$USER_HOME$/Papers/test.ipynb" />
+        <option value="$PROJECT_DIR$/GeMpy/Visualization.py" />
         <option value="$PROJECT_DIR$/GeMpy/GeMpy_core.py" />
       </list>
     </option>
@@ -594,7 +613,7 @@
     <frame x="65" y="24" width="1015" height="1896" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19091848" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17536534" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17833333" sideWeight="0.5304437" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946378" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -666,7 +685,14 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="23" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/GeMpy/GeMpy_core.py</url>
+          <line>304</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="26" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -677,7 +703,11 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#219#232#0" expanded="true" />
-            <element signature="e#9984#11771#0" expanded="false" />
+            <element signature="e#3089#9943#0" expanded="false" />
+            <element signature="e#9970#11757#0" expanded="false" />
+            <element signature="e#12938#13504#0" expanded="false" />
+            <element signature="e#13683#16234#0" expanded="false" />
+            <element signature="e#16283#16337#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -717,8 +747,8 @@
           <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
           <folding>
             <element signature="e#236#267#0" expanded="true" />
-            <element signature="e#1154#2452#0" expanded="false" />
-            <element signature="e#2511#3468#0" expanded="false" />
+            <element signature="e#1161#2459#0" expanded="false" />
+            <element signature="e#2518#3475#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -729,7 +759,11 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#219#232#0" expanded="true" />
-            <element signature="e#9984#11771#0" expanded="false" />
+            <element signature="e#3089#9943#0" expanded="false" />
+            <element signature="e#9970#11757#0" expanded="false" />
+            <element signature="e#12938#13504#0" expanded="false" />
+            <element signature="e#13683#16234#0" expanded="false" />
+            <element signature="e#16283#16337#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -747,8 +781,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#236#267#0" expanded="true" />
-            <element signature="e#1154#2452#0" expanded="false" />
-            <element signature="e#2511#3468#0" expanded="false" />
+            <element signature="e#1161#2459#0" expanded="false" />
+            <element signature="e#2518#3475#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -768,8 +802,8 @@
           <caret line="18" column="31" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
           <folding>
             <element signature="e#236#267#0" expanded="true" />
-            <element signature="e#1154#2452#0" expanded="false" />
-            <element signature="e#2511#3468#0" expanded="false" />
+            <element signature="e#1161#2459#0" expanded="false" />
+            <element signature="e#2518#3475#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -849,8 +883,8 @@
           <caret line="214" column="49" selection-start-line="214" selection-start-column="49" selection-end-line="214" selection-end-column="49" />
           <folding>
             <element signature="e#236#267#0" expanded="true" />
-            <element signature="e#1154#2452#0" expanded="false" />
-            <element signature="e#2511#3468#0" expanded="false" />
+            <element signature="e#1161#2459#0" expanded="false" />
+            <element signature="e#2518#3475#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -869,8 +903,8 @@
           <caret line="164" column="49" selection-start-line="164" selection-start-column="49" selection-end-line="164" selection-end-column="51" />
           <folding>
             <element signature="e#236#267#0" expanded="true" />
-            <element signature="e#1154#2452#0" expanded="false" />
-            <element signature="e#2511#3468#0" expanded="false" />
+            <element signature="e#1161#2459#0" expanded="false" />
+            <element signature="e#2518#3475#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1016,26 +1050,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Papers/test.ipynb" />
     <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="110" column="60" selection-start-line="110" selection-start-column="60" selection-end-line="110" selection-end-column="60" />
+        <state relative-caret-position="1098">
+          <caret line="126" column="54" selection-start-line="126" selection-start-column="54" selection-end-line="126" selection-end-column="54" />
           <folding>
             <element signature="e#236#267#0" expanded="true" />
-            <element signature="e#1154#2452#0" expanded="false" />
-            <element signature="e#2511#3468#0" expanded="false" />
+            <element signature="e#2518#3475#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Papers/test.ipynb" />
     <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy_core.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
+        <state relative-caret-position="8793">
+          <caret line="892" column="59" selection-start-line="892" selection-start-column="33" selection-end-line="892" selection-end-column="59" />
           <folding>
             <element signature="e#219#232#0" expanded="true" />
-            <element signature="e#9984#11771#0" expanded="false" />
+            <element signature="e#3089#9943#0" expanded="false" />
+            <element signature="e#9970#11757#0" expanded="false" />
+            <element signature="e#12938#13504#0" expanded="false" />
+            <element signature="e#13683#16234#0" expanded="false" />
+            <element signature="e#16283#16337#0" expanded="false" />
           </folding>
         </state>
       </provider>
