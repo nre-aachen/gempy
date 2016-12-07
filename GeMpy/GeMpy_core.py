@@ -379,6 +379,8 @@ class Interpolator(object):
         :param verbose: int: level of verbosity during the computation
         :return: self.block will get updated with the corresponding formations
         """
+       # self.block = theano.shared(np.zeros_like(self._grid.grid[:, 0]), "Final block")
+
         if series_number == "all":
             series_number = np.arange(len(self._data.series.columns))
         for i in series_number:
@@ -413,10 +415,14 @@ class Interpolator(object):
             yet_simulated = np.ones_like(self._data.grid[:, 0], dtype="int8")
             print("I am in the except")
         # TODO: change [:,:3] that is positional based for XYZ so is more consistent
-        dips_position = self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)].as_matrix()[:, :3]
-        dip_angles = self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)]["dip"].as_matrix()
-        azimuth = self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)]["azimuth"].as_matrix()
-        polarity = self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)]["polarity"].as_matrix()
+        dips_position = self._data.Foliations[
+                            self._data.Foliations["formation"].str.contains(for_in_ser)].as_matrix()[:,:3]
+        dip_angles = self._data.Foliations[
+            self._data.Foliations["formation"].str.contains(for_in_ser)]["dip"].as_matrix()
+        azimuth = self._data.Foliations[
+            self._data.Foliations["formation"].str.contains(for_in_ser)]["azimuth"].as_matrix()
+        polarity = self._data.Foliations[
+            self._data.Foliations["formation"].str.contains(for_in_ser)]["polarity"].as_matrix()
 
         if for_in_ser.count("|") == 0:
             layers = self._data.Interfaces[self._data.Interfaces["formation"].str.contains(for_in_ser)].as_matrix()[:, :3]

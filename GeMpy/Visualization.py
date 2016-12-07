@@ -39,7 +39,8 @@ class PlotData(object):
 
     def _set_style(self):
         plt.style.use(['seaborn-white', 'seaborn-paper'])
-        matplotlib.rc("font", family="Times New Roman")
+       # sns.set_context("paper")
+       # matplotlib.rc("font", family="Helvetica")
 
     def plot_data(self, direction="y", serie="all", *args, **kwargs):
         """
@@ -47,6 +48,7 @@ class PlotData(object):
         :param direction:
         :return:
         """
+
         x, y, Gx, Gy = self._slice(direction)[4:]
 
         if serie == "all":
