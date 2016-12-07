@@ -296,7 +296,7 @@ class Interpolator(object):
         self._data = _data
         self._grid = _grid
 
-        self._set_constant_parameteres(_data, _grid, *args)
+        self._set_constant_parameteres(_data, _grid, *args, **kwargs)
         self.theano_compilation_3D()
 
         self.potential_fields = [self.compute_potential_field(i, verbose=verbose)
@@ -314,14 +314,19 @@ class Interpolator(object):
             _formations_in_serie = "|".join(self._data.series[series_name].drop_duplicates())
         return _formations_in_serie
 
-    def _set_constant_parameteres(self, _data, _grid, range_var=None, c_o=None,
-                                  nugget_effect=0.01, u_grade=2, rescaling_factor=None):
+    def _set_constant_parameteres(self, _data, _grid, **kwargs):
         """
         Basic interpolator parameters. Also here it is possible to change some flags of theano
         :param range_var: Range of the variogram, it is recommended the distance of the longest diagonal
         :param c_o: Sill of the variogram
         """
         # TODO: update Docstring
+
+        u_grade = kwargs.get('u_grade', 2)
+        range_var = kwargs.get('range_var', None)
+        c_o = kwargs.get('c_o', None)
+        nugget_effect = kwargs.get('nugget_effect', 0.01)
+        rescaling_factor = kwargs.get('rescaling_factor', None)
 
         if not range_var:
             range_var = np.sqrt((_data.xmax - _data.xmin) ** 2 +
@@ -479,7 +484,7 @@ class Interpolator(object):
                       "\n Foliations \n",
                       self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)])
 
-        self.Z_x, G_x, G_y, G_z, self.potential_interfaces, C, DK = self._interpolate(
+        self.Z_x, G_x, G_y, G_z, self.potential_interfaces, self.C, self.DK = self._interpolate(
             dips_position, dip_angles, azimuth, polarity,
             rest_layer_points, ref_layer_points)[:]
 

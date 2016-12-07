@@ -124,7 +124,7 @@ class PlotData(object):
             self.plot_data(direction, self._data.series.columns.values[n_pf])
 
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
-        plt.contour(potential_field[_a, _b, _c].T, 40,
+        plt.contour(potential_field[_a, _b, _c].T, 12,
                     extent=extent_val, *args,
                     **kwargs)
 
