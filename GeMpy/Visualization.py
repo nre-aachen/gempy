@@ -4,7 +4,7 @@ the potential field method.
 Tested on Ubuntu 14
 
 Created on 23/09/2016
-
+somehting
 @author: Miguel de la Varga
 """
 
