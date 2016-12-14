@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Code &mdash; GeMpy 2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="GeMpy 2 documentation" href="GeMpy Introduction.html" />
+    <link rel="prev" title="Project" href="project.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-GeMpy_core">
+<span id="code"></span><h1>Code<a class="headerlink" href="#module-GeMpy_core" title="Permalink to this headline">¶</a></h1>
+<p>Module with classes and methods to perform implicit regional modelling based on
+the potential field method.
+Tested on Ubuntu 14</p>
+<p>Created on 10/10 /2016</p>
+<p>&#64;author: Miguel de la Varga</p>
+<p>this is only to test git 3</p>
+<dl class="class">
+<dt id="GeMpy_core.DataManagement">
+<em class="property">class </em><code class="descclassname">GeMpy_core.</code><code class="descname">DataManagement</code><span class="sig-paren">(</span><em>x_min</em>, <em>x_max</em>, <em>y_min</em>, <em>y_max</em>, <em>z_min</em>, <em>z_max</em>, <em>nx=50</em>, <em>ny=50</em>, <em>nz=50</em>, <em>path_i=None</em>, <em>path_f=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#DataManagement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.DataManagement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to import the raw data of the model and set data classifications into formations and series</p>
+<dl class="method">
+<dt id="GeMpy_core.DataManagement.calculate_gradient">
+<code class="descname">calculate_gradient</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#DataManagement.calculate_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.DataManagement.calculate_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations
+:return: self.Foliations: extra columns with components xyz of the unity vector.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="GeMpy_core.DataManagement.load_data_csv">
+<em class="property">static </em><code class="descname">load_data_csv</code><span class="sig-paren">(</span><em>data_type</em>, <em>path='/home/miguel/PycharmProjects/GeMpy'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#DataManagement.load_data_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.DataManagement.load_data_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to load either interface or foliations data csv files. Normally this is in which GeoModeller exports it
+:param data_type: string, &#8216;interfaces&#8217; or &#8216;foliations&#8217;
+:param path: path to the files
+:return: Pandas framework with the imported data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.DataManagement.set_series">
+<code class="descname">set_series</code><span class="sig-paren">(</span><em>series_distribution=None</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#DataManagement.set_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.DataManagement.set_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>The formations have to be separated by this thing! |
+:param series_distribution: dict: with the name of the serie as key and the name of the formations as values.
+:param order of the series by default takes the dictionary keys which until python 3.6 are random. This is
+important to set the erosion relations between the different series
+:return: self.series: A pandas DataFrame with the series and formations relations</p>
+<blockquote>
+<div>self.Interfaces and self.Foliations: one extra column with the given series</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeMpy_core.GeMpy">
+<em class="property">class </em><code class="descclassname">GeMpy_core.</code><code class="descname">GeMpy</code><span class="sig-paren">(</span><em>project_name='Default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#GeMpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.GeMpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parent class that is used as container for the other classes</p>
+<dl class="method">
+<dt id="GeMpy_core.GeMpy.create_grid">
+<code class="descname">create_grid</code><span class="sig-paren">(</span><em>grid_type='regular_3D'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#GeMpy.create_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.GeMpy.create_grid" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>grid_type</strong> &#8211; </li>
+<li><strong>**kwargs</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.GeMpy.import_data">
+<code class="descname">import_data</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#GeMpy.import_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.GeMpy.import_data" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>*args</strong> &#8211; </li>
+<li><strong>**kwargs</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.GeMpy.set_interpolator">
+<code class="descname">set_interpolator</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#GeMpy.set_interpolator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.GeMpy.set_interpolator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to initialize the class interpolator. All the constant parameters for the interpolation can be passed
+as args, otherwise they will take the default value (TODO: documentation of the dafault values)
+:param args: range_var=None: Range of the variogram</p>
+<blockquote>
+<div>c_o=None: Covariance at 0
+nugget_effect=0.01: Nugget effect of the gradients
+u_grade=2: Grade of the polynomial used in the universal part of the Kriging
+rescaling_factor=None: Magic factor that multiplies the covariances)</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self.Interpolator, updated self.Plot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeMpy_core.Grid">
+<em class="property">class </em><code class="descclassname">GeMpy_core.</code><code class="descname">Grid</code><span class="sig-paren">(</span><em>spatial_parameters</em>, <em>grid_type='regular_3D'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class with set of functions to generate grids</p>
+<dl class="method">
+<dt id="GeMpy_core.Grid.create_regular_grid_2d">
+<code class="descname">create_regular_grid_2d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Grid.create_regular_grid_2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Grid.create_regular_grid_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to create a 2D regular grid where we interpolate
+:return: 2D regular grid for the resoulution nx, ny</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.Grid.create_regular_grid_3d">
+<code class="descname">create_regular_grid_3d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Grid.create_regular_grid_3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Grid.create_regular_grid_3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to create a 3D regurlar grid where is interpolated
+:return: 3D regurlar grid for the resolution nx,ny</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeMpy_core.Interpolator">
+<em class="property">class </em><code class="descclassname">GeMpy_core.</code><code class="descname">Interpolator</code><span class="sig-paren">(</span><em>_data</em>, <em>_grid</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Interpolator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Interpolator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class which contain all needed methods to perform potential field implicit modelling in theano</p>
+<dl class="method">
+<dt id="GeMpy_core.Interpolator.compute_block_model">
+<code class="descname">compute_block_model</code><span class="sig-paren">(</span><em>series_number='all'</em>, <em>verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Interpolator.compute_block_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Interpolator.compute_block_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to compute the block model for the given series using data provided in the DataManagement object
+:param series_number: &#8216;all&#8217; or list of int with the series to interpolate
+:param verbose: int: level of verbosity during the computation
+:return: self.block will get updated with the corresponding formations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.Interpolator.compute_potential_field">
+<code class="descname">compute_potential_field</code><span class="sig-paren">(</span><em>series_name=0</em>, <em>verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Interpolator.compute_potential_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Interpolator.compute_potential_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute an individual potential field.
+:param series_name: int or str with the serie you want to obtain
+:param verbose: int level of verbosity during the computation
+:return: potential field 3D array</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.Interpolator.theano_compilation_3D">
+<code class="descname">theano_compilation_3D</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Interpolator.theano_compilation_3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Interpolator.theano_compilation_3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that generates the symbolic code to perform the interpolation
+:return: Array containing the potential field (maybe it returs all the pieces too I have to evaluate how
+this influences performance)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="GeMpy Introduction.html">Documentation overview</a><ul>
+      <li>Previous: <a href="project.html" title="previous chapter">Project</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/code.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Miguel de la Varga. NRE-RWTH team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/code.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
