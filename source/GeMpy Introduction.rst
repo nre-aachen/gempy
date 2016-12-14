@@ -14,9 +14,10 @@ Contents:
    :maxdepth: 2
     
    tutorial
-   project
+   ./Notebook1/Sandstone Project.ipynb
+   project 
    code
-   ...
+   
 
 Indices and tables
 ==================
