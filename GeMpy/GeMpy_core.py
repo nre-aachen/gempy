@@ -23,14 +23,18 @@ from Visualization import PlotData
 class GeMpy(object):
     """
     Parent class that is used as container for the other classes
+
+    Args:
+        project_name (str): Global name of the project
+
+    Attributes:
+        project_name (str): Global name of the project
+        Data (GeMpy_core.DataManagement): Object that encapsulate all raw data of the project
+        Grid (GeMpy_core.Grid): Object that contain different grids
+        Interpolator (GeMpy_core.Interpolator): Object to perform the potential field method
+        Plot (GeMpy_core.PlotData): Object to visualize data and results
     """
     def __init__(self, project_name='Default'):
-        """
-        Basic init so far with name of the project. As the library grows probably we will need to add more things
-        like the directory and so on
-        :param project_name: (str)
-            Global name of the project
-        """
 
         self.project_name = project_name
         # TODO it has to be something better than None for this
@@ -39,72 +43,78 @@ class GeMpy(object):
         self.Interpolator = None
         self.Plot = None
 
-    def import_data(self, *args, **kwargs):
-        """
-
-        Args:
-            *args:
-
-            **kwargs:
-
-        Returns:
-
-        """
+    def import_data(self, extent, **kwargs):
         """
         Method to initialize the class data. Calling this function some of the data has to be provided (TODO give to
         everything a default).
-        :param args:
-            Extent:  x_min, x_max, y_min, y_max, z_min, z_max,
-            Resolution: nx=50, ny=50, nz=50
-        :param kwargs:
-            Path to the data bases of interfaces and foliations:
-            path_i=os.getcwd(),
-            path_f=os.getcwd()
-        :return: objects
-            self.Data, self.Plot
+
+        Args:
+            extent (list):  [x_min, x_max, y_min, y_max, z_min, z_max]
+            **kwargs: Arbitrary keyword arguments.
+
+        Keyword Args:
+            Resolution ((Optional[list])): [nx, ny, nz]. Defaults to 50
+            path_i: Path to the data bases of interfaces. Default os.getcwd(),
+            path_f: Path to the data bases of foliations. Default os.getcwd()
+
+        Returns:
+            self.Data(GeMpy_core.DataManagement): Object that encapsulate all raw data of the project
+            self.Plot(GeMpy_core.PlotData): Object to visualize data and results
         """
-        self.Data = DataManagement(*args, **kwargs)
+
+        self.Data = DataManagement(extent, **kwargs)
         self.Plot = PlotData(self.Data)
 
     def create_grid(self, grid_type="regular_3D", **kwargs):
         """
         Method to initialize the class grid. So far is really simple and only has the regular grid type
 
-        :param grid_type: str
-            regular_3D or regular_2D (I am not even sure if regular 2D still working)
-        :return: numpy.array
-            self.Grid
-        """
-        self.Grid = Grid(self.Data, grid_type=grid_type, **kwargs)
-
-    def create_grid(self, grid_type="regular_3D", **kwargs):
-        """
-
         Args:
-            grid_type:
-            **kwargs:
+            grid_type (str): regular_3D or regular_2D (I am not even sure if regular 2D still working)
+            **kwargs: Arbitrary keyword arguments.
 
         Returns:
-
+            self.Grid(GeMpy_core.Grid): Object that contain different grids
         """
-        self.Grid = Grid(self.Data, grid_type=grid_type, **kwargs)
+
+        self.Grid = Grid(self.Data.extent, self.Data.resolution, grid_type=grid_type, **kwargs)
 
     def set_interpolator(self, *args, **kwargs):
         """
         Method to initialize the class interpolator. All the constant parameters for the interpolation can be passed
         as args, otherwise they will take the default value (TODO: documentation of the dafault values)
-        :param args: range_var=None: Range of the variogram
-                     c_o=None: Covariance at 0
-                     nugget_effect=0.01: Nugget effect of the gradients
-                     u_grade=2: Grade of the polynomial used in the universal part of the Kriging
-                     rescaling_factor=None: Magic factor that multiplies the covariances)
-        :return: self.Interpolator, updated self.Plot
+
+        Args:
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments.
+
+        Keyword Args:
+            range_var: Range of the variogram. Default None
+            c_o: Covariance at 0. Default None
+            nugget_effect: Nugget effect of the gradients. Default 0.01
+            u_grade: Grade of the polynomial used in the universal part of the Kriging. Default 2
+            rescaling_factor: Magic factor that multiplies the covariances). Default 2
+
+        Returns:
+            self.Interpolator (GeMpy_core.Interpolator): Object to perform the potential field method
+            self.Plot(GeMpy_core.PlotData): Object to visualize data and results. It gets updated.
         """
+
         self.Interpolator = Interpolator(self.Data, self.Grid, *args, **kwargs)
         self.Plot = PlotData(self.Data, block=self.Interpolator.block,
                              potential_field=self.Interpolator.potential_fields)
 
     def update_data(self, update_class="Plot Data"):
+        """
+        Method to recreate an object in case we change the input data.
+        # TODO it has to be a better way to do this
+
+        Args:
+            update_class (str):
+
+        Returns:
+            self.Plot(GeMpy_core.PlotData): Object to visualize data and results. It gets updated.
+        """
         if update_class == "Plot Data":
             self.Plot = PlotData(self.Data)
 
@@ -112,39 +122,43 @@ class GeMpy(object):
 class DataManagement(object):
     """
     Class to import the raw data of the model and set data classifications into formations and series
+
+    Args:
+        extent (list):  [x_min, x_max, y_min, y_max, z_min, z_max]
+        Resolution ((Optional[list])): [nx, ny, nz]. Defaults to 50
+        path_i: Path to the data bases of interfaces. Default os.getcwd(),
+        path_f: Path to the data bases of foliations. Default os.getcwd()
+
+    Attributes:
+        extent(list):  [x_min, x_max, y_min, y_max, z_min, z_max]
+        resolution ((Optional[list])): [nx, ny, nz]
+        Foliations(pandas.core.frame.DataFrame): Pandas data frame with the foliations data
+        Interfaces(pandas.core.frame.DataFrame): Pandas data frame with the interfaces data
+        formations(numpy.ndarray): Dictionary that contains the name of the formations
+        series(pandas.core.frame.DataFrame): Pandas data frame which contains every formation within each series
     """
 
     # TODO: Data management using pandas, find an easy way to add values
     # TODO: Probably at some point I will have to make an static and dynamic data classes
-    def __init__(self, x_min, x_max, y_min, y_max, z_min, z_max,
-                 nx=50, ny=50, nz=50,
+    def __init__(self, extent,
+                 resolution=[50, 50, 50],
                  path_i=None, path_f=None,
                  **kwargs):
-        """
-        Some of the initial parameters needed for the interpolation and visualization
-        :param x_min: extent
-        :param x_max: extent
-        :param y_min: extent
-        :param y_max: extent
-        :param z_min: extent
-        :param z_max: extent
-        :param nx: resolution, number of cells in direction x
-        :param ny: resolution, number of cells in direction y
-        :param nz: resolution, number of cells in direction z
-        :param path_i: path to the interfaces table
-        :param path_f: path to the foliations table
-        """
 
-        self.xmin = x_min
-        self.xmax = x_max
-        self.ymin = y_min
-        self.ymax = y_max
-        self.zmin = z_min
-        self.zmax = z_max
+        # Deprecated
+        self.xmin = extent[0]
+        self.xmax = extent[1]
+        self.ymin = extent[2]
+        self.ymax = extent[3]
+        self.zmin = extent[4]
+        self.zmax = extent[5]
+        self.nx = resolution[0]
+        self.ny = resolution[1]
+        self.nz = resolution[2]
+        # -------------------
 
-        self.nx = nx
-        self.ny = ny
-        self.nz = nz
+        self.extent = extent
+        self.resolution = resolution
 
         # TODO choose the default source of data. So far only
         if path_f:
@@ -160,27 +174,34 @@ class DataManagement(object):
         else:
             self.Interfaces = pn.DataFrame(columns=['X', 'Y', 'Z', 'formation'])
 
-
         self.formations = self._set_formations()
         self.series = self.set_series()
         self.calculate_gradient()
 
     @staticmethod
     def load_data_csv(data_type, path=os.getcwd(), **kwargs):
+        """
+        Method to load either interface or foliations data csv files. Normally this is in which GeoModeller exports it
 
+        Args:
+            data_type (str): 'interfaces' or 'foliations'
+            path (str): path to the files. Default os.getcwd()
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            pandas.core.frame.DataFrame: Data frame with the raw data
+
+        """
         # TODO: in case that the columns have a different name specify in pandas which columns are interfaces /
         #  coordinates, dips and so on.
         # TODO: use pandas to read any format file not only csv
-        """
-        Method to load either interface or foliations data csv files. Normally this is in which GeoModeller exports it
-        :param data_type: string, 'interfaces' or 'foliations'
-        :param path: path to the files
-        :return: Pandas framework with the imported data
-        """
+
         if data_type == "foliations":
             return pn.read_csv(path, **kwargs)
-        else:
+        elif data_type == 'interfaces':
             return pn.read_csv(path, **kwargs)
+        else:
+            raise NameError('Data type not understood. Try interfaces or foliations')
 
         # TODO if we load different data the Interpolator parameters must be also updated:  Research how and implement
 
@@ -188,7 +209,10 @@ class DataManagement(object):
         """
         Function to import the formations that will be used later on. By default all the formations in the tables are
         chosen.
-        :return: formations in the table
+
+        Returns:
+             pandas.core.frame.DataFrame: Data frame with the raw data
+
         """
         try:
             getattr(self, "formations")
@@ -212,13 +236,19 @@ class DataManagement(object):
 
     def set_series(self, series_distribution=None, order=None):
         """
-        The formations have to be separated by this thing! |
-        :param series_distribution: dict: with the name of the serie as key and the name of the formations as values.
-        :param order of the series by default takes the dictionary keys which until python 3.6 are random. This is
-        important to set the erosion relations between the different series
-        :return: self.series: A pandas DataFrame with the series and formations relations
-                 self.Interfaces and self.Foliations: one extra column with the given series
+        Method to define the different series of the project
+
+        Args:
+            series_distribution (dict): with the name of the serie as key and the name of the formations as values.
+            order(Optional[list]): order of the series by default takes the dictionary keys which until python 3.6 are
+                random. This is important to set the erosion relations between the different series
+
+        Returns:
+            self.series: A pandas DataFrame with the series and formations relations
+            self.Interfaces: one extra column with the given series
+            self.Foliations: one extra column with the given series
         """
+
         if series_distribution is None:
             # TODO: Possibly we have to debug this function
             _series = {"Default serie": self.formations}
@@ -241,8 +271,11 @@ class DataManagement(object):
         return _series
 
     def calculate_gradient(self):
-        """ Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations
-        :return: self.Foliations: extra columns with components xyz of the unity vector.
+        """
+        Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations
+
+        Returns:
+            self.Foliations: extra columns with components xyz of the unity vector.
         """
 
         self.Foliations['G_x'] = np.sin(np.deg2rad(self.Foliations["dip"])) * \
@@ -251,22 +284,21 @@ class DataManagement(object):
             np.cos(np.deg2rad(self.Foliations["azimuth"])) * self.Foliations["polarity"]
         self.Foliations['G_z'] = np.cos(np.deg2rad(self.Foliations["dip"])) * self.Foliations["polarity"]
 
-    def get_spatial_parameters(self):
-        return self.xmax, self.xmin, self.ymax, self.ymin, self.zmax, self.zmin, self.nx, self.ny, self.nz
-
     # TODO set new interface/set
 
 
 class Grid(object):
     """
     Class with set of functions to generate grids
+
+    Args:
+        extent (list):  [x_min, x_max, y_min, y_max, z_min, z_max]
+        resolution (list): [nx, ny, nz].
+        grid_type(str): Type of grid. So far only regular 3D is implemented
     """
-    def __init__(self, spatial_parameters, grid_type="regular_3D", **kwargs):
-        """
-        Selection of grid type
-        :param type: So far regular 3D or 2D grid
-        """
-        self._grid_par = spatial_parameters
+    def __init__(self, extent, resolution, grid_type="regular_3D"):
+        self._grid_ext = extent
+        self._grid_res = resolution
 
         if grid_type == "regular_3D":
             self.grid = self.create_regular_grid_3d()
@@ -275,30 +307,18 @@ class Grid(object):
         else:
             print("Wrong type")
 
-    def create_regular_grid_2d(self):
-        """
-        Method to create a 2D regular grid where we interpolate
-        :return: 2D regular grid for the resoulution nx, ny
-        """
-        try:
-            g = np.meshgrid(
-                np.linspace(self._grid_par.xmin, self._grid_par.xmax, self._grid_par.nx, dtype="float32"),
-                np.linspace(self._grid_par.ymin, self._grid_par.ymax, self._grid_par.ny, dtype="float32"),
-            )
-            return np.vstack(map(np.ravel, g)).T.astype("float32")
-        except AttributeError:
-            print("Extent or resolution not provided. Use set_extent and/or set_resolutions first")
-
     def create_regular_grid_3d(self):
         """
-        Method to create a 3D regurlar grid where is interpolated
-        :return: 3D regurlar grid for the resolution nx,ny
+        Method to create a 3D regular grid where is interpolated
+
+        Returns:
+            numpy.ndarray: Unraveled 3D numpy array where every row correspond to the xyz coordinates of a regular grid
         """
 
         g = np.meshgrid(
-            np.linspace(self._grid_par.xmin, self._grid_par.xmax, self._grid_par.nx, dtype="float32"),
-            np.linspace(self._grid_par.ymin, self._grid_par.ymax, self._grid_par.ny, dtype="float32"),
-            np.linspace(self._grid_par.zmin, self._grid_par.zmax, self._grid_par.nz, dtype="float32"), indexing="ij"
+            np.linspace(self._grid_ext[0], self._grid_ext[1], self._grid_res[0], dtype="float32"),
+            np.linspace(self._grid_ext[2], self._grid_ext[3], self._grid_res[1], dtype="float32"),
+            np.linspace(self._grid_ext[4], self._grid_ext[5], self._grid_res[2], dtype="float32"), indexing="ij"
         )
 
         return np.vstack(map(np.ravel, g)).T.astype("float32")
@@ -307,15 +327,16 @@ class Grid(object):
 class Interpolator(object):
     """
     Class which contain all needed methods to perform potential field implicit modelling in theano
+
+    Args:
+        _data(GeMpy_core.DataManagement): All values of a DataManagement object
+        _grid(GeMpy_core.Grid): A grid object
+        **kwargs: Arbitrary keyword arguments.
+
+    Keyword Args:
+        verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0
     """
     def __init__(self, _data, _grid, *args, **kwargs):
-        """
-        Here we import all the necessary data for the interpolation
-        :param _data: All values of a DataManagement object (I have to check but I would say we only need to pass
-        Interfaces and Foliations)
-        :param _grid: All values of Grid (so far only the grid is useful)
-        :param args: All the constant values for the interpolation. See docs set_interpolator
-        """
 
         verbose = kwargs.get('verbose', 0)
 
@@ -326,9 +347,11 @@ class Interpolator(object):
         self._data = _data
         self._grid = _grid
 
-        self._set_constant_parameteres(_data, _grid, *args)
-        self.theano_compilation_3D()
+        self._set_constant_parameteres(_data, _grid, **kwargs)
 
+        # Depricated
+        self.theano_compilation_3D()
+        # -------------------------
         self.potential_fields = [self.compute_potential_field(i, verbose=verbose)
                                  for i in np.arange(len(self._data.series.columns))]
 
