@@ -28,7 +28,8 @@ class GeMpy(object):
         """
         Basic init so far with name of the project. As the library grows probably we will need to add more things
         like the directory and so on
-        :param project_name: Global name of the project
+        :param project_name: (str)
+            Global name of the project
         """
 
         self.project_name = project_name
@@ -40,14 +41,26 @@ class GeMpy(object):
 
     def import_data(self, *args, **kwargs):
         """
+        
+        Args:
+            *args:
+            **kwargs:
+
+        Returns:
+
+        """
+        """
         Method to initialize the class data. Calling this function some of the data has to be provided (TODO give to
         everything a default).
-        :param args: Extent:  x_min, x_max, y_min, y_max, z_min, z_max,
-                     Resolution: nx=50, ny=50, nz=50
-        :param kwargs: Path to the data bases of interfaces and foliations:
-                       path_i=os.getcwd(),
-                       path_f=os.getcwd()
-        :return: self.Data, self.Plot
+        :param args:
+            Extent:  x_min, x_max, y_min, y_max, z_min, z_max,
+            Resolution: nx=50, ny=50, nz=50
+        :param kwargs:
+            Path to the data bases of interfaces and foliations:
+            path_i=os.getcwd(),
+            path_f=os.getcwd()
+        :return: objects
+            self.Data, self.Plot
         """
         self.Data = DataManagement(*args, **kwargs)
         self.Plot = PlotData(self.Data)
@@ -55,8 +68,23 @@ class GeMpy(object):
     def create_grid(self, grid_type="regular_3D", **kwargs):
         """
         Method to initialize the class grid. So far is really simple and only has the regular grid type
-        :param grid_type: str: regular_3D or regular_2D (I am not even sure if regular 2D still working)
-        :return: self.Grid
+
+        :param grid_type: str
+            regular_3D or regular_2D (I am not even sure if regular 2D still working)
+        :return: numpy.array
+            self.Grid
+        """
+        self.Grid = Grid(self.Data, grid_type=grid_type, **kwargs)
+
+    def create_grid(self, grid_type="regular_3D", **kwargs):
+        """
+
+        Args:
+            grid_type:
+            **kwargs:
+
+        Returns:
+
         """
         self.Grid = Grid(self.Data, grid_type=grid_type, **kwargs)
 
@@ -78,6 +106,7 @@ class GeMpy(object):
     def update_data(self, update_class="Plot Data"):
         if update_class == "Plot Data":
             self.Plot = PlotData(self.Data)
+
 
 class DataManagement(object):
     """
