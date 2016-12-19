@@ -15,17 +15,22 @@ import seaborn as sns
 # TODO: inherit pygeomod classes
 #import sys, os
 
-
-
 class PlotData(object):
-    """Object Definition to perform Bayes Analysis"""
+    """
+    Class to make the different plot related with GeMpy
+
+    Args:
+        _data(GeMpy_core.DataManagement): All values of a DataManagement object
+        block(theano shared): 3D array containing the lithology block
+        **kwargs: Arbitrary keyword arguments.
+
+    Keyword Args:
+        potential_field(numpy.ndarray): 3D array containing a individual potential field
+        verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0
+    """
 
     def __init__(self, _data, block=None, **kwargs):
-        """
 
-        :param _data:
-        :param kwds: potential field, block
-        """
         self._data = _data
         if block:
             self._block = block
@@ -38,28 +43,40 @@ class PlotData(object):
         self._set_style()
 
     def _set_style(self):
+        """
+        Private function to set some plotting options
+
+        """
+
         plt.style.use(['seaborn-white', 'seaborn-paper'])
        # sns.set_context("paper")
        # matplotlib.rc("font", family="Helvetica")
 
-    def plot_data(self, direction="y", serie="all", *args, **kwargs):
+    def plot_data(self, direction="y", series="all", *args, **kwargs):
         """
-        Plot the projection of all data
-        :param direction:
-        :return:
+        Plot the projecton of the raw data (interfaces and foliations) in 2D following a specific directions
+
+        Args:
+            direction(str): xyz. Caartesian direction to be plotted
+            series(str): series to plot
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            Data plot
+
         """
 
         x, y, Gx, Gy = self._slice(direction)[4:]
 
-        if serie == "all":
+        if series == "all":
             series_to_plot_i = self._data.Interfaces[self._data.Interfaces["series"].
                                                      isin(self._data.series.columns.values)]
             series_to_plot_f = self._data.Foliations[self._data.Foliations["series"].
                                                      isin(self._data.series.columns.values)]
 
         else:
-            series_to_plot_i = self._data.Interfaces[self._data.Interfaces["series"] == serie]
-            series_to_plot_f = self._data.Foliations[self._data.Foliations["series"] == serie]
+            series_to_plot_i = self._data.Interfaces[self._data.Interfaces["series"] == series]
+            series_to_plot_f = self._data.Foliations[self._data.Foliations["series"] == series]
         sns.lmplot(x, y,
                    data=series_to_plot_i,
                    fit_reg=False,
@@ -79,6 +96,10 @@ class PlotData(object):
         plt.ylabel(y)
 
     def _slice(self, direction, cell_number=25):
+        """
+        Slice the 3D array (blocks or potential field) in the specific direction selected in the plotting functions
+
+        """
         _a, _b, _c = slice(0, self._data.nx), slice(0, self._data.ny), slice(0, self._data.nz)
         if direction == "x":
             _a = cell_number
@@ -106,7 +127,17 @@ class PlotData(object):
         return _a, _b, _c, extent_val, x, y, Gx, Gy
 
     def plot_block_section(self, cell_number=13, direction="y", **kwargs):
+        """
+        Plot a section of the block model
 
+        Args:
+            cell_number(int): position of the array to plot
+            direction(str): xyz. Caartesian direction to be plotted
+            **kwargs: imshow keywargs
+
+        Returns:
+            Block plot
+        """
         plot_block = self._block.get_value().reshape(self._data.nx, self._data.ny, self._data.nz)
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
 
@@ -118,7 +149,20 @@ class PlotData(object):
 
     def plot_potential_field(self, cell_number, potential_field=None, n_pf=0,
                              direction="y", plot_data=True, serie="all", *args, **kwargs):
+        """
+        Plot a potential field in a given direction.
 
+        Args:
+            cell_number(int): position of the array to plot
+            potential_field(str): name of the potential field (or series) to plot
+            n_pf(int): number of the  potential field (or series) to plot
+            direction(str): xyz. Caartesian direction to be plotted
+            serie: *Deprecated*
+            **kwargs: plt.contour kwargs
+
+        Returns:
+            Potential field plot
+        """
         if not potential_field:
             potential_field = self._potential_field_p[n_pf]
 
