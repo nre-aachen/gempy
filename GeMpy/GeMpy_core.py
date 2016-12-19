@@ -417,16 +417,28 @@ class Interpolator(object):
         self.block = theano.shared(np.zeros_like(_grid.grid[:, 0]), "Final block")
         self.grid_val_T = theano.shared(_grid.grid + 1e-10, "Positions of the points to interpolate")
 
-    def get_constant_parameters(self):
+    def _get_constant_parameters(self):
+        """
+        Deprecated?
+
+        Returns:
+
+        """
         return self.a_T, self.c_o_T, self.nugget_effect_grad_T
 
     def compute_block_model(self, series_number="all", verbose=0):
         """
         Method to compute the block model for the given series using data provided in the DataManagement object
-        :param series_number: 'all' or list of int with the series to interpolate
-        :param verbose: int: level of verbosity during the computation
-        :return: self.block will get updated with the corresponding formations
+
+        Args:
+            series_number(str or int): series to interpolate
+            verbose(int): level of verbosity during the computation
+
+        Returns:
+            self.block(theano shared[numpy.ndarray]): 3D block with the corresponding formations
+
         """
+
         if series_number == "all":
             series_number = np.arange(len(self._data.series.columns))
         for i in series_number:
@@ -441,9 +453,14 @@ class Interpolator(object):
     def compute_potential_field(self, series_name=0, verbose=0):
         """
         Compute an individual potential field.
-        :param series_name: int or str with the serie you want to obtain
-        :param verbose: int level of verbosity during the computation
-        :return: potential field 3D array
+
+        Args:
+            series_name (str or int): name or number of series to interpolate
+            verbose(int): int level of verbosity during the computation
+
+        Returns:
+            numpy.ndarray: 3D array with the potential field
+
         """
 
         assert series_name is not "all", "Compute potential field only returns one potential field at the time"
@@ -451,7 +468,17 @@ class Interpolator(object):
         return self._aux_computations_potential_field(formations_in_serie, verbose=verbose)
 
     def _aux_computations_block_model(self, for_in_ser, n_formation, verbose=0):
+        """
+        Private function with the bridge steps from the selection of serie to the input in theano
 
+        Args:
+            for_in_ser: array with the formation for the series to interpolate
+            n_formation: number of formation in the series
+            verbose: verbosity
+
+        Returns:
+            self.block(theano shared[numpy.ndarray]): 3D block with the corresponding formations
+        """
         # TODO Probably here I should add some asserts for sanity check
         try:
             yet_simulated = (self.block.get_value() == 0) * 1
@@ -505,6 +532,16 @@ class Interpolator(object):
                                        n_formation, yet_simulated)
 
     def _aux_computations_potential_field(self,  for_in_ser, verbose=0):
+        """
+        Private function with the bridge steps from the selection of serie to the input in theano
+
+        Args:
+            for_in_ser: array with the formation for the series to interpolate
+            verbose: verbosity
+
+        Returns:
+            numpy.ndarray: 3D array with the potential field
+        """
 
         # TODO: change [:,:3] that is positional based for XYZ so is more consistent
         dips_position = self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)].as_matrix()[:, :3]
@@ -548,9 +585,12 @@ class Interpolator(object):
 
     def theano_compilation_3D(self):
         """
-        Function that generates the symbolic code to perform the interpolation
-        :return: Array containing the potential field (maybe it returs all the pieces too I have to evaluate how
-        this influences performance)
+        Function that generates the symbolic code to perform the interpolation. Calling this function creates
+         both the theano functions for the potential field and the block.
+
+        Returns:
+            theano function for the potential field
+            theano function for the block
         """
 
         # Creation of symbolic variables
@@ -946,9 +986,9 @@ class Interpolator(object):
             [Z_x, G_x, G_y, G_z, potential_field_interfaces, C_matrix, DK_parameters],
             on_unused_input="warn", profile=True, allow_input_downcast=True)
 
-        #=======================================================================
+        # =======================================================================
         #               CODE TO EXPORT THE BLOCK DIRECTLY
-        #========================================================================
+        # ========================================================================
 
         # Aux shared parameters
         infinite_pos = theano.shared(np.float32(np.inf))
