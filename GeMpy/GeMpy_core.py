@@ -168,7 +168,7 @@ class DataManagement(object):
         else:
             self.Foliations = pn.DataFrame(columns=['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation', 'series'])
         if path_i:
-            self.Interfaces = self.load_data_csv(data_type="Interfaces", path=path_i, **kwargs)
+            self.Interfaces = self.load_data_csv(data_type="interfaces", path=path_i, **kwargs)
             assert set(['X', 'Y', 'Z', 'formation']).issubset(self.Interfaces.columns), \
                 "One or more columns do not match with the expected values " + str(self.Interfaces.columns)
         else:
