@@ -1,29 +1,23 @@
-# GeMpy
+.. GeMpy documentation master file, created by
+   sphinx-quickstart on Wed Dec 14 12:44:40 2016.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Welcome to GeMpy's documentation!
+=================================
+A 3D Structural geologic implicit modelling in python. (v 0.3)
+***************************************************************
 
-### What is this repository for? ###
+GeMpy is an opensource project for the generation of 3D structural geological modelling. The algorithm is based on a especial type of Universal cokrigin interpolation created by Laujaunie et al (1997) and developed along the past year by (*add many more papers!!!*). This tool allows the generation of models with relative complex structures just from data. 
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+The results look like this:
 
-### How do I get set up? ###
+.. image:: ./images/sandstone_example2.png
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+Its implicit nature allows the user to generate complete 3D geological models through the interpolation of:
+- Interfaces points: 3D points in space that delimit the different formation in a given setting.
+- Foliations: Measurements of the poles (perpendicular to the layer) at any point in the 3D space.
 
-### Contribution guidelines ###
+.. image:: ./images/input_example.png
 
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+In addition to the interpolation GeMpy has been created with the idea of perform Bayesian Inferences in geological modeling (de la Varga and Wellmann, 2016). Due to this, the whole interpolation algorithm has been written in the optimization packge theano (http://deeplearning.net/software/theano/) what allows the computation of gradients opening the door to the use of advance HMC methods coupling GeMpy and PyMC3 (https://pymc-devs.github.io/pymc3/notebooks/getting_started.html). Also, the use of theano allows the use of the GPU through cuda (see theano doc for more information).
