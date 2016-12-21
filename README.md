@@ -7,7 +7,7 @@ GeMpy is an opensource project for the generation of 3D structural geological mo
 
 The results look like this:
 
-![img](https://github.com/nre-aachen/GeMpy/blob/master/source/images/input_example.png)
+![img](https://github.com/nre-aachen/GeMpy/blob/master/source/images/sandstone_example.png)
 
 Its implicit nature allows the user to generate complete 3D geological models through the interpolation of:
 - Interfaces points: 3D points in space that delimit the different formation in a given setting.
