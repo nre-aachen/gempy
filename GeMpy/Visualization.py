@@ -52,14 +52,14 @@ class PlotData(object):
        # sns.set_context("paper")
        # matplotlib.rc("font", family="Helvetica")
 
-    def plot_data(self, direction="y", series="all", *args, **kwargs):
+    def plot_data(self, direction="y", series="all", **kwargs):
         """
         Plot the projecton of the raw data (interfaces and foliations) in 2D following a specific directions
 
         Args:
             direction(str): xyz. Caartesian direction to be plotted
             series(str): series to plot
-            **kwargs: Arbitrary keyword arguments.
+            **kwargs: seaborn lmplot key arguments. (TODO: adding the link to them)
 
         Returns:
             Data plot
@@ -77,6 +77,7 @@ class PlotData(object):
         else:
             series_to_plot_i = self._data.Interfaces[self._data.Interfaces["series"] == series]
             series_to_plot_f = self._data.Foliations[self._data.Foliations["series"] == series]
+
         sns.lmplot(x, y,
                    data=series_to_plot_i,
                    fit_reg=False,
@@ -126,13 +127,18 @@ class PlotData(object):
             raise AttributeError(str(direction) + "must be a cartesian direction, i.e. xyz")
         return _a, _b, _c, extent_val, x, y, Gx, Gy
 
-    def plot_block_section(self, cell_number=13, direction="y", **kwargs):
+    def plot_block_section(self, cell_number=13, direction="y", interpolation='none', **kwargs):
         """
         Plot a section of the block model
 
         Args:
             cell_number(int): position of the array to plot
             direction(str): xyz. Caartesian direction to be plotted
+                interpolation(str): Type of interpolation of plt.imshow. Default 'none'.  Acceptable values are 'none'
+                ,'nearest', 'bilinear', 'bicubic',
+                'spline16', 'spline36', 'hanning', 'hamming', 'hermite', 'kaiser',
+                'quadric', 'catrom', 'gaussian', 'bessel', 'mitchell', 'sinc',
+                'lanczos'
             **kwargs: imshow keywargs
 
         Returns:
@@ -143,7 +149,7 @@ class PlotData(object):
 
         plt.imshow(plot_block[_a, _b, _c].T, origin="bottom", cmap="viridis",
                    extent=extent_val,
-                   interpolation="none", **kwargs)
+                   interpolation=interpolation, **kwargs)
         plt.xlabel(x)
         plt.ylabel(y)
 

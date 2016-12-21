@@ -43,13 +43,16 @@ class GeMpy(object):
         self.Interpolator = None
         self.Plot = None
 
-    def import_data(self, extent, **kwargs):
+    def import_data(self, extent, resolution=[50, 50, 50], **kwargs):
         """
         Method to initialize the class data. Calling this function some of the data has to be provided (TODO give to
         everything a default).
 
         Args:
-            extent (list):  [x_min, x_max, y_min, y_max, z_min, z_max]
+            extent (list or array):  [x_min, x_max, y_min, y_max, z_min, z_max]. Extent for the visualization of data
+             and default of for the Grid class.
+            resolution (list or array): [nx, ny, nz]. Resolution for the visualization of data
+             and default of for the Grid class.
             **kwargs: Arbitrary keyword arguments.
 
         Keyword Args:
@@ -62,10 +65,10 @@ class GeMpy(object):
             self.Plot(GeMpy_core.PlotData): Object to visualize data and results
         """
 
-        self.Data = DataManagement(extent, **kwargs)
+        self.Data = DataManagement(extent, resolution, **kwargs)
         self.Plot = PlotData(self.Data)
 
-    def create_grid(self, grid_type="regular_3D", **kwargs):
+    def create_grid(self, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
         """
         Method to initialize the class grid. So far is really simple and only has the regular grid type
 
@@ -76,8 +79,12 @@ class GeMpy(object):
         Returns:
             self.Grid(GeMpy_core.Grid): Object that contain different grids
         """
+        if not extent:
+            extent = self.Data.extent
+        if not resolution:
+            resolution = self.Data.resolution
 
-        self.Grid = Grid(self.Data.extent, self.Data.resolution, grid_type=grid_type, **kwargs)
+        self.Grid = Grid(extent, resolution, grid_type=grid_type, **kwargs)
 
     def set_interpolator(self, *args, **kwargs):
         """

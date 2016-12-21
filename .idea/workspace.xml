@@ -2,8 +2,35 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Prototype Notebook/.ipynb_checkpoints/Sandstone Project-checkpoint.ipynb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Prototype Notebook/GeMpy 3D-Testing.ipynb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Prototype Notebook/Max Project.ipynb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Prototype Notebook/PGM3_testmodel.ipynb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Prototype Notebook/Sandstone Project.ipynb" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/doctrees/GeMpy Introduction.doctree" afterPath="$PROJECT_DIR$/build/doctrees/GeMpy Introduction.doctree" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/doctrees/Notebook1/Sandstone Project.doctree" afterPath="$PROJECT_DIR$/build/doctrees/Notebook1/Sandstone Project.doctree" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/doctrees/code.doctree" afterPath="$PROJECT_DIR$/build/doctrees/code.doctree" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/doctrees/environment.pickle" afterPath="$PROJECT_DIR$/build/doctrees/environment.pickle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/doctrees/project.doctree" afterPath="$PROJECT_DIR$/build/doctrees/project.doctree" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/doctrees/tutorial.doctree" afterPath="$PROJECT_DIR$/build/doctrees/tutorial.doctree" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/objects.inv" afterPath="$PROJECT_DIR$/build/html/objects.inv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/GeMpy_core.py" afterPath="$PROJECT_DIR$/GeMpy/GeMpy_core.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/Visualization.py" afterPath="$PROJECT_DIR$/GeMpy/Visualization.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/.buildinfo" afterPath="$PROJECT_DIR$/build/html/.buildinfo" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/GeMpy Introduction.html" afterPath="$PROJECT_DIR$/build/html/GeMpy Introduction.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/Notebook1/Sandstone Project.html" afterPath="$PROJECT_DIR$/build/html/Notebook1/Sandstone Project.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/_sources/GeMpy Introduction.txt" afterPath="$PROJECT_DIR$/build/html/_sources/GeMpy Introduction.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/_sources/code.txt" afterPath="$PROJECT_DIR$/build/html/_sources/code.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/_sources/tutorial.txt" afterPath="$PROJECT_DIR$/build/html/_sources/tutorial.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/code.html" afterPath="$PROJECT_DIR$/build/html/code.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/genindex.html" afterPath="$PROJECT_DIR$/build/html/genindex.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/project.html" afterPath="$PROJECT_DIR$/build/html/project.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/searchindex.js" afterPath="$PROJECT_DIR$/build/html/searchindex.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/html/tutorial.html" afterPath="$PROJECT_DIR$/build/html/tutorial.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/GeMpy Introduction.rst" afterPath="$PROJECT_DIR$/source/GeMpy Introduction.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/code.rst" afterPath="$PROJECT_DIR$/source/code.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/tutorial.rst" afterPath="$PROJECT_DIR$/source/tutorial.rst" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,13 +66,13 @@
       <file leaf-file-name="GeMpy_core.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy_core.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
-              <caret line="170" column="61" selection-start-line="170" selection-start-column="61" selection-end-line="170" selection-end-column="61" />
+            <state relative-caret-position="-11244">
+              <caret line="364" column="0" selection-start-line="364" selection-start-column="0" selection-end-line="364" selection-end-column="0" />
               <folding>
-                <element signature="e#2691#3881#0" expanded="false" />
-                <element signature="e#3944#4330#0" expanded="false" />
-                <element signature="e#11896#13198#0" expanded="false" />
-                <element signature="e#14333#14899#0" expanded="false" />
+                <element signature="e#1260#2357#0" expanded="false" />
+                <element signature="e#4363#4749#0" expanded="false" />
+                <element signature="e#4786#12288#0" expanded="false" />
+                <element signature="e#14752#15318#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -54,9 +81,11 @@
       <file leaf-file-name="Visualization.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="19" column="14" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="14" />
-              <folding />
+            <state relative-caret-position="199">
+              <caret line="139" column="46" selection-start-line="139" selection-start-column="38" selection-end-line="139" selection-end-column="46" />
+              <folding>
+                <element signature="e#3251#4349#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -108,8 +137,8 @@
         <option value="$PROJECT_DIR$/GeMpy/GeMpy.py" />
         <option value="$PROJECT_DIR$/GeMpy/__init__.py" />
         <option value="$USER_HOME$/Papers/test.ipynb" />
-        <option value="$PROJECT_DIR$/GeMpy/Visualization.py" />
         <option value="$PROJECT_DIR$/GeMpy/GeMpy_core.py" />
+        <option value="$PROJECT_DIR$/GeMpy/Visualization.py" />
       </list>
     </option>
   </component>
@@ -120,10 +149,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
-    <option name="y" value="24" />
-    <option name="width" value="1301" />
-    <option name="height" value="744" />
+    <option name="x" value="75" />
+    <option name="y" value="54" />
+    <option name="width" value="1291" />
+    <option name="height" value="714" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -166,8 +195,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -220,6 +247,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -633,7 +662,14 @@
       <option name="project" value="LOCAL" />
       <updated>1481723825466</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Corrected bug when importing interfaces">
+      <created>1482229527562</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1482229527562</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TodoView">
@@ -646,28 +682,28 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1301" height="744" extended-state="6" />
+    <frame x="75" y="54" width="1291" height="714" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15458167" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16064256" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17536534" sideWeight="0.49585405" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3287037" sideWeight="0.5091633" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3423729" sideWeight="0.51566267" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946378" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3287037" sideWeight="0.49083665" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3423729" sideWeight="0.48433736" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17745303" sideWeight="0.46323937" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21607515" sideWeight="0.48258707" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498618" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985386" sideWeight="0.49806523" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39979124" sideWeight="0.49806523" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21607515" sideWeight="0.48258707" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498618" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15240084" sideWeight="0.49806523" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Concurrent Activities Diagram" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985386" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39979124" sideWeight="0.49806523" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -718,18 +754,12 @@
     <MESSAGE value="Testing git" />
     <MESSAGE value="Updating NRE" />
     <MESSAGE value="Checking that the new branch is NRE" />
-    <option name="LAST_COMMIT_MESSAGE" value="Checking that the new branch is NRE" />
+    <MESSAGE value="Corrected bug when importing interfaces" />
+    <option name="LAST_COMMIT_MESSAGE" value="Corrected bug when importing interfaces" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/GeMpy/GeMpy_core.py</url>
-          <line>357</line>
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="27" />
+      <option name="time" value="28" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -739,10 +769,10 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#2691#3881#0" expanded="false" />
-            <element signature="e#3944#4330#0" expanded="false" />
-            <element signature="e#11896#13198#0" expanded="false" />
-            <element signature="e#14333#14899#0" expanded="false" />
+            <element signature="e#1260#2357#0" expanded="false" />
+            <element signature="e#4363#4749#0" expanded="false" />
+            <element signature="e#4786#12288#0" expanded="false" />
+            <element signature="e#14752#15318#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -780,7 +810,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
-          <folding />
+          <folding>
+            <element signature="e#3251#4349#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -789,10 +821,10 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#2691#3881#0" expanded="false" />
-            <element signature="e#3944#4330#0" expanded="false" />
-            <element signature="e#11896#13198#0" expanded="false" />
-            <element signature="e#14333#14899#0" expanded="false" />
+            <element signature="e#1260#2357#0" expanded="false" />
+            <element signature="e#4363#4749#0" expanded="false" />
+            <element signature="e#4786#12288#0" expanded="false" />
+            <element signature="e#14752#15318#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -808,7 +840,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3251#4349#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -825,7 +859,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
           <caret line="18" column="31" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
-          <folding />
+          <folding>
+            <element signature="e#3251#4349#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -902,7 +938,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3780">
           <caret line="214" column="49" selection-start-line="214" selection-start-column="49" selection-end-line="214" selection-end-column="49" />
-          <folding />
+          <folding>
+            <element signature="e#3251#4349#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -918,7 +956,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2952">
           <caret line="164" column="49" selection-start-line="164" selection-start-column="49" selection-end-line="164" selection-end-column="51" />
-          <folding />
+          <folding>
+            <element signature="e#3251#4349#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1080,21 +1120,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="19" column="14" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="14" />
-          <folding />
+        <state relative-caret-position="199">
+          <caret line="139" column="46" selection-start-line="139" selection-start-column="38" selection-end-line="139" selection-end-column="46" />
+          <folding>
+            <element signature="e#3251#4349#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy_core.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="170" column="61" selection-start-line="170" selection-start-column="61" selection-end-line="170" selection-end-column="61" />
+        <state relative-caret-position="-11244">
+          <caret line="364" column="0" selection-start-line="364" selection-start-column="0" selection-end-line="364" selection-end-column="0" />
           <folding>
-            <element signature="e#2691#3881#0" expanded="false" />
-            <element signature="e#3944#4330#0" expanded="false" />
-            <element signature="e#11896#13198#0" expanded="false" />
-            <element signature="e#14333#14899#0" expanded="false" />
+            <element signature="e#1260#2357#0" expanded="false" />
+            <element signature="e#4363#4749#0" expanded="false" />
+            <element signature="e#4786#12288#0" expanded="false" />
+            <element signature="e#14752#15318#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="GeMpy 2 documentation" href="#" />
-    <link rel="next" title="Tutorial" href="tutorial.html" />
+    <link rel="next" title="Kriging structure of the Potential field method" href="Introduction to GeMpy.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -42,29 +42,43 @@
             
   <div class="section" id="welcome-to-gempy-s-documentation">
 <h1>Welcome to GeMpy&#8217;s documentation!<a class="headerlink" href="#welcome-to-gempy-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Why nothing happens</p>
+<div class="section" id="a-3d-structural-geologic-implicit-modelling-in-python-v-0-3">
+<h2>A 3D Structural geologic implicit modelling in python. (v 0.3)<a class="headerlink" href="#a-3d-structural-geologic-implicit-modelling-in-python-v-0-3" title="Permalink to this headline">¶</a></h2>
+<p>GeMpy is an opensource project for the generation of 3D structural geological modelling. The algorithm is based on a especial type of Universal cokrigin interpolation created by Laujaunie et al (1997) and developed along the past year by (<em>add many more papers!!!</em>). This tool allows the generation of models with relative complex structures just from data.</p>
+<p>The results look like this:</p>
+<img alt="./images/sandstone_example2.png" src="./images/sandstone_example2.png" />
+<p>Its implicit nature allows the user to generate complete 3D geological models through the interpolation of:
+- Interfaces points: 3D points in space that delimit the different formation in a given setting.
+- Foliations: Measurements of the poles (perpendicular to the layer) at any point in the 3D space.</p>
+<img alt="./images/input_example.png" src="./images/input_example.png" />
+<p>In addition to the interpolation GeMpy has been created with the idea of perform Bayesian Inferences in geological modeling (de la Varga and Wellmann, 2016). Due to this, the whole interpolation algorithm has been written in the optimization packge theano (<a class="reference external" href="http://deeplearning.net/software/theano/">http://deeplearning.net/software/theano/</a>) what allows the computation of gradients opening the door to the use of advance HMC methods coupling GeMpy and PyMC3 (<a class="reference external" href="https://pymc-devs.github.io/pymc3/notebooks/getting_started.html">https://pymc-devs.github.io/pymc3/notebooks/getting_started.html</a>). Also, the use of theano allows the use of the GPU through cuda (see theano doc for more information).</p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebook1/Sandstone Project.html">Sandstone Model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Notebook1/Sandstone Project.html#Plotting-raw-data">Plotting raw data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Notebook1/Sandstone Project.html#Class-Interpolator">Class Interpolator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Notebook1/Sandstone Project.html#Early-granite">Early granite</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Notebook1/Sandstone Project.html#BIF-Series">BIF Series</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Notebook1/Sandstone Project.html#SImple-mafic">SImple mafic</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Welcome to GeMpy&#8217;s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Introduction to GeMpy.html">Kriging structure of the <em>Potential field method</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html">Example 1: Sandstone Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html#plotting-raw-data">Plotting raw data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html#class-interpolator">Class Interpolator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html#optimizing-the-export-of-lithologies">Optimizing the export of lithologies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html#export-to-vtk-under-development">Export to vtk. (<em>Under development</em>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html#performance-analysis">Performance Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Notebook1/Sandstone Project.html#Optimizing-the-export-of-lithologies">Optimizing the export of lithologies</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebook1/Sandstone Project.html#Export-vtk">Export vtk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebook1/Sandstone Project.html#Performance-Analysis">Performance Analysis</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Notebook1/Sandstone Project.html#CPU">CPU</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Notebook1/Sandstone Project.html#GPU">GPU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Notebooks/Example_2_Simple.html">Simple model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_2_Simple.html#importing-dependencies">Importing dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_2_Simple.html#interactive-pandas-dataframe">Interactive pandas Dataframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_2_Simple.html#combining-potential-fields-depositional-series">Combining potential fields: Depositional series</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="project.html">Project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">Code</a></li>
 </ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">Code</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -82,16 +96,18 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to GeMpy&#8217;s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<h3><a href="#">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Welcome to GeMpy&#8217;s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Introduction to GeMpy.html">Kriging structure of the <em>Potential field method</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">Code</a></li>
 </ul>
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="tutorial.html" title="next chapter">Tutorial</a></li>
+      <li>Next: <a href="Introduction to GeMpy.html" title="next chapter">Kriging structure of the <em>Potential field method</em></a></li>
   </ul></li>
 </ul>
 </div>

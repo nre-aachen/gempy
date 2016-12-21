@@ -1,0 +1,641 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Simple model &mdash; GeMpy 2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="GeMpy 2 documentation" href="../GeMpy Introduction.html" />
+    <link rel="up" title="Tutorial" href="../tutorial.html" />
+    <link rel="next" title="Code" href="../code.html" />
+    <link rel="prev" title="Example 1: Sandstone Model" href="Example_1_Sandstone_Project.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="simple-model">
+<h1>Simple model<a class="headerlink" href="#simple-model" title="Permalink to this headline">¶</a></h1>
+<p>This notebook is a series of independent cells showing how to create a
+simple model from the beginning to the end using GeMpy</p>
+<div class="section" id="importing-dependencies">
+<h2>Importing dependencies<a class="headerlink" href="#importing-dependencies" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Importing</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;/home/bl3/PycharmProjects/GeMpy/GeMpy&quot;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pn</span>
+
+<span class="kn">import</span> <span class="nn">GeMpy_core</span>
+<span class="kn">import</span> <span class="nn">Visualization</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">GeMpy_core</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;CUDA_LAUNCH_BLOCKING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">suppress</span> <span class="o">=</span>  <span class="bp">True</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
+
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
+<span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="s1">&#39;png&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;savefig.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">75</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.autolayout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">6</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">18</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.markersize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">14</span>
+
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+
+<span class="c1"># This sets reasonable defaults for font size for</span>
+<span class="c1"># a figure that will go in a paper</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;paper&quot;</span><span class="p">)</span>
+
+<span class="c1"># Set the font to be serif, rather than sans</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="s1">&#39;Arial&#39;</span><span class="p">)</span>
+
+<span class="c1"># Make the background white, and specify the</span>
+<span class="c1"># specific font family</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">qgrid</span>
+<span class="n">qgrid</span><span class="o">.</span><span class="n">nbinstall</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># copies javascript dependencies to your /nbextensions folder</span>
+
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<div class="section" id="visualize-data">
+<h3>Visualize data<a class="headerlink" href="#visualize-data" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Setting extend, grid and compile</span>
+<span class="c1"># Setting the extent</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">GeMpy_core</span><span class="o">.</span><span class="n">GeMpy</span><span class="p">()</span>
+<span class="n">test</span><span class="o">.</span><span class="n">import_data</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+
+<span class="c1"># =========================</span>
+<span class="c1"># DATA GENERATION IN PYTHON</span>
+<span class="c1"># =========================</span>
+<span class="c1"># Layers coordinates</span>
+<span class="n">layer_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">6.5</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span><span class="c1">#-np.array([5,5,4]))/8+0.5</span>
+<span class="n">layer_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">layer_1</span><span class="p">,</span><span class="n">layer_2</span><span class="p">])</span>
+
+<span class="c1"># Foliations coordinates</span>
+<span class="n">dip_pos_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">])</span><span class="c1">#- np.array([5,5,4]))/8+0.5</span>
+<span class="n">dip_pos_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+
+<span class="c1"># Dips</span>
+<span class="n">dip_angle_1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">dip_angle_2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">340</span><span class="p">)</span>
+<span class="n">dips_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">dip_angle_1</span><span class="p">,</span> <span class="n">dip_angle_2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+
+<span class="c1"># Azimuths</span>
+<span class="n">azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">90</span><span class="p">,</span><span class="mi">90</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+
+<span class="c1"># Polarity</span>
+<span class="n">polarity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+
+<span class="c1"># Pandas Dataframe with the interfaces data</span>
+<span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;X&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer_1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span><span class="n">layer_2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="s2">&quot;Y&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer_1</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span><span class="n">layer_2</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="s2">&quot;Z&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer_1</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span><span class="n">layer_2</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]),</span>
+            <span class="s2">&quot;formation&quot;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+               <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="s2">&quot;Layer 1&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_1</span><span class="p">)),</span>
+               <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="s2">&quot;Layer 2&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_2</span><span class="p">)))})</span>
+
+<span class="c1"># Pandas Dataframe with the Foliations data</span>
+<span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span> <span class="o">=</span>   <span class="n">pn</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;X&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dip_pos_1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">dip_pos_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="s2">&quot;Y&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dip_pos_1</span><span class="p">[</span> <span class="mi">1</span><span class="p">],</span><span class="n">dip_pos_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="s2">&quot;Z&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dip_pos_1</span><span class="p">[</span> <span class="mi">2</span><span class="p">],</span><span class="n">dip_pos_2</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+            <span class="s2">&quot;azimuth&quot;</span> <span class="p">:</span> <span class="n">azimuths</span><span class="p">,</span>
+            <span class="s2">&quot;dip&quot;</span> <span class="p">:</span> <span class="n">dips_angles</span><span class="p">,</span>
+            <span class="s2">&quot;polarity&quot;</span> <span class="p">:</span> <span class="n">polarity</span><span class="p">,</span>
+            <span class="s2">&quot;formation&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Layer 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Layer 2&quot;</span><span class="p">]})</span>
+
+<span class="c1"># Creation of the formations (to be deprecated)</span>
+<span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">formations</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+<span class="c1"># Calculation of the pola gradient from dip azimuth and polarity</span>
+<span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">calculate_gradient</span><span class="p">()</span>
+
+<span class="c1"># Set defautl series</span>
+<span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">set_series</span><span class="p">()</span>
+
+<span class="c1"># Method to be sure all objects get updated</span>
+<span class="n">test</span><span class="o">.</span><span class="n">update_data</span><span class="p">()</span>
+
+
+<span class="c1"># The following code is for the visualization of labels of the input data (yet to be implemented)↔</span>
+<span class="c1"># ----------------------------------------------------------------------------------------------</span>
+<span class="k">def</span> <span class="nf">annotate_plot</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotate the plot of a given DataFrame using one of its columns</span>
+
+<span class="sd">    Should be called right after a DataFrame or series plot method,</span>
+<span class="sd">    before telling matplotlib to show the plot.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    frame : pandas.DataFrame</span>
+
+<span class="sd">    plot_col : str</span>
+<span class="sd">        The string identifying the column of frame that was plotted</span>
+
+<span class="sd">    label_col : str</span>
+<span class="sd">        The string identifying the column of frame to be used as label</span>
+
+<span class="sd">    kwargs:</span>
+<span class="sd">        Other key-word args that should be passed to plt.annotate</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    After calling this function you should call plt.show() to get the</span>
+<span class="sd">    results. This function only adds the annotations, it doesn&#39;t show</span>
+<span class="sd">    them.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>  <span class="c1"># Make sure we have pyplot as plt</span>
+
+    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="n">label_col</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">y</span><span class="p">]):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mf">0.15</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">inter_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf{x}}_{\alpha \, 0}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 1}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 2}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 3}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 0}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 1}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 2}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 3}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 4}^2$&#39;</span><span class="p">]</span>
+
+<span class="n">foli_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf{x}}_{\beta \,{0}}$&#39;</span><span class="p">,</span>
+              <span class="s1">r&#39;${\bf{x}}_{\beta \,{1}}$&#39;</span><span class="p">]</span>
+
+<span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">inter_labels</span><span class="p">)</span>
+<span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">foli_labels</span><span class="p">)</span>
+
+<span class="c1"># Plot and table</span>
+<span class="n">test</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_data</span><span class="p">()</span>
+<span class="n">annotate_plot</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">,</span> <span class="s1">&#39;labels&#39;</span><span class="p">,</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
+<span class="n">annotate_plot</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">,</span> <span class="s1">&#39;labels&#39;</span><span class="p">,</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
+
+
+<span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span>
+</pre></div>
+</div>
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>X</th>
+      <th>Y</th>
+      <th>Z</th>
+      <th>formation</th>
+      <th>series</th>
+      <th>labels</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.5</td>
+      <td>4.0</td>
+      <td>7.0</td>
+      <td>Layer 1</td>
+      <td>Default serie</td>
+      <td>${\bf{x}}_{\alpha \, 0}^1$</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.0</td>
+      <td>4.0</td>
+      <td>6.5</td>
+      <td>Layer 1</td>
+      <td>Default serie</td>
+      <td>${\bf{x}}_{\alpha \, 1}^1$</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4.0</td>
+      <td>4.0</td>
+      <td>7.0</td>
+      <td>Layer 1</td>
+      <td>Default serie</td>
+      <td>${\bf{x}}_{\alpha \, 2}^1$</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>5.0</td>
+      <td>4.0</td>
+      <td>6.0</td>
+      <td>Layer 1</td>
+      <td>Default serie</td>
+      <td>${\bf{x}}_{\alpha \, 3}^1$</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3.0</td>
+      <td>4.0</td>
+      <td>5.0</td>
+      <td>Layer 2</td>
+      <td>Default serie</td>
+      <td>${\bf{x}}_{\alpha \, 0}^2$</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6.0</td>
+      <td>4.0</td>
+      <td>4.0</td>
+      <td>Layer 2</td>
+      <td>Default serie</td>
+      <td>${\bf{x}}_{\alpha \, 1}^2$</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>8.0</td>
+      <td>4.0</td>
+      <td>4.0</td>
+      <td>Layer 2</td>
+      <td>Default serie</td>
+      <td>${\bf{x}}_{\alpha \, 2}^2$</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7.0</td>
+      <td>4.0</td>
+      <td>3.0</td>
+      <td>Layer 2</td>
+      <td>Default serie</td>
+      <td>${\bf{x}}_{\alpha \, 3}^2$</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.0</td>
+      <td>4.0</td>
+      <td>6.0</td>
+      <td>Layer 2</td>
+      <td>Default serie</td>
+      <td>${\bf{x}}_{\alpha \, 4}^2$</td>
+    </tr>
+  </tbody>
+</table>
+</div><img alt="../_images/Example_2_Simple_5_1.png" src="../_images/Example_2_Simple_5_1.png" />
+</div>
+</div>
+<div class="section" id="interactive-pandas-dataframe">
+<h2>Interactive pandas Dataframe<a class="headerlink" href="#interactive-pandas-dataframe" title="Permalink to this headline">¶</a></h2>
+<p>Using qgrid it is possible to modify the tables in place as following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">qgrid</span>
+<span class="n">qgrid</span><span class="o">.</span><span class="n">show_grid</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span>Widget Javascript not detected.  It may not be installed properly. Did you enable the widgetsnbextension? If not, then run &quot;jupyter nbextension enable --py --sys-prefix widgetsnbextension&quot;
+</pre></div>
+</div>
+<div class="section" id="grid-and-potential-field">
+<h3>Grid and potential field<a class="headerlink" href="#grid-and-potential-field" title="Permalink to this headline">¶</a></h3>
+<p>We can see the potential field generated out of the data above</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">test</span><span class="o">.</span><span class="n">create_grid</span><span class="p">()</span>
+<span class="n">test</span><span class="o">.</span><span class="n">set_interpolator</span><span class="p">(</span><span class="n">u_grade</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">test</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">colorbar</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;magma&#39;</span><span class="p">)</span>
+<span class="c1">#test.Interpolator.DK;</span>
+</pre></div>
+</div>
+<img alt="../_images/Example_2_Simple_9_0.png" src="../_images/Example_2_Simple_9_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span>from ipywidgets import widgets
+from ipywidgets import interact
+def cov_cubic_f(r,a = 6, c_o = 1):↔
+def cov_cubic_d1_f(r,a = 6., c_o = 1):↔
+
+def cov_cubic_d2_f(r, a = 6, c_o = 1):↔
+
+def plot_potential_var(a = 10, c_o = 1, nugget_effect = 0):↔
+
+def plot_potential_direction_var( a = 10, c_o = 1, nugget_effect = 0):↔
+
+def plot_directionU_directionU_var(a = 10, c_o = 1, nugget_effect = 0):↔
+
+    plt.title(&quot;Variogram&quot;)
+    plt.margins(0,0.1)
+
+    ax2 = fig.add_subplot(122)
+    ax2.plot(x,np.asarray(y))
+    ax2.scatter(0,nugget_effect+y[0], s = 20)
+
+    plt.title(&quot;Covariance Function&quot;)
+    plt.tight_layout()
+    plt.margins(0,0.1)
+    plt.suptitle(&#39;$C_{\partial {Z}/ \partial x, \, \partial {Z}/ \partial x}(h_x)$&#39;
+                 , y = 1.08, fontsize=15)
+
+def plot_directionU_directionV_var(a = 10, c_o = 1, nugget_effect = 0):↔
+
+    plt.title(&quot;Variogram&quot;)
+    plt.margins(0,0.1)
+
+    ax2 = fig.add_subplot(122)
+    ax2.plot(x,np.asarray(y))
+    ax2.scatter(0,nugget_effect+y[0], s = 20)
+    plt.title(&quot;Covariance Function&quot;)
+    plt.tight_layout()
+    plt.margins(0,0.1)
+    plt.suptitle(&#39;$C_{\partial {Z}/ \partial x, \, \partial {Z}/ \partial y}(h_x,h_y)$&#39;
+                 , y = 1.08, fontsize=15)
+
+
+def plot_all(a = 10, c_o = 1, nugget_effect = 0):↔
+</pre></div>
+</div>
+</div>
+<div class="section" id="from-potential-field-to-block">
+<h3>From potential field to block<a class="headerlink" href="#from-potential-field-to-block" title="Permalink to this headline">¶</a></h3>
+<p>The potential field describe the deposition form and direction of a
+basin. However, in most scenarios the real goal of structural modeling
+is the segmentation in layers of areas with significant change of
+properties (e.g. shales and carbonates). Since we need to provide at
+least one point per interface, we can easily compute the value of the
+potential field at the intersections between two layers. Therefore, by
+simple comparison between a concrete value of the potential field and
+the values of the interfaces it is possible to segment the domain into
+layers Fig X.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">test</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">compute_block_model</span><span class="p">()</span>
+<span class="n">test</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_block_section</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/Example_2_Simple_13_0.png" src="../_images/Example_2_Simple_13_0.png" />
+</div>
+</div>
+<div class="section" id="combining-potential-fields-depositional-series">
+<h2>Combining potential fields: Depositional series<a class="headerlink" href="#combining-potential-fields-depositional-series" title="Permalink to this headline">¶</a></h2>
+<p>In reality, most geological settings are formed by a concatenation of
+depositional phases separated clearly by unconformity bounderies. Each
+of these phases can be model by a potential field. In order to capture
+this behavior, we can classify the formations that belong to individual
+depositional phase into categories or series. The potential field
+computed for each of these series could be seen as a sort of evolution
+of the basin if an unconformity did not occur. Finally, sorting the
+temporal relation between series allow to superpose the corresponding
+potential field at an specific location.</p>
+<p>In the next example, we add a new serie consisting in a layer&#8212;&#8217;Layer
+3&#8217;&#8212; Fig X, which generate the potential field of Fig X and
+subsequently the block Figure X.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Setting extend, grid and compile</span>
+<span class="c1"># Setting the extent</span>
+<span class="n">two_pot</span> <span class="o">=</span> <span class="n">GeMpy_core</span><span class="o">.</span><span class="n">GeMpy</span><span class="p">()</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">import_data</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+
+
+<span class="c1"># Data Generation</span>
+<span class="n">layer_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">6.5</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span><span class="c1">#-np.array([5,5,4]))/8+0.5</span>
+<span class="n">layer_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
+<span class="n">layer_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
+
+<span class="n">dip_pos_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">])</span><span class="c1">#- np.array([5,5,4]))/8+0.5</span>
+<span class="n">dip_pos_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<span class="n">dip_pos_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">dip_angle_1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">dip_angle_2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">340</span><span class="p">)</span>
+<span class="n">dip_angle_3</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+
+<span class="n">dips_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">dip_angle_1</span><span class="p">,</span> <span class="n">dip_angle_2</span><span class="p">,</span> <span class="n">dip_angle_3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">layer_1</span><span class="p">,</span><span class="n">layer_2</span><span class="p">,</span> <span class="n">layer_3</span><span class="p">])</span>
+<span class="n">azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">90</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+<span class="n">polarity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;X&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">layer_1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span><span class="n">layer_2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">layer_3</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])),</span>
+                                               <span class="s2">&quot;Y&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">layer_1</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span><span class="n">layer_2</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">layer_3</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])),</span>
+                                               <span class="s2">&quot;Z&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">layer_1</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span><span class="n">layer_2</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">layer_3</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])),</span>
+<span class="s2">&quot;formation&quot;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="s2">&quot;Layer 1&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_1</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="s2">&quot;Layer 2&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_2</span><span class="p">)),</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="s2">&quot;Layer 3&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_3</span><span class="p">))))})</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span> <span class="o">=</span>   <span class="n">pn</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;X&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">dip_pos_1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dip_pos_2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dip_pos_3</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span>
+                                                 <span class="s2">&quot;Y&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">dip_pos_1</span><span class="p">[</span> <span class="mi">1</span><span class="p">],</span><span class="n">dip_pos_2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dip_pos_3</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span>
+                                                 <span class="s2">&quot;Z&quot;</span> <span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">dip_pos_1</span><span class="p">[</span> <span class="mi">2</span><span class="p">],</span><span class="n">dip_pos_2</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">dip_pos_3</span><span class="p">[</span><span class="mi">2</span><span class="p">])),</span>
+                                         <span class="s2">&quot;azimuth&quot;</span> <span class="p">:</span> <span class="n">azimuths</span><span class="p">,</span>
+                                         <span class="s2">&quot;dip&quot;</span> <span class="p">:</span> <span class="n">dips_angles</span><span class="p">,</span>
+                                         <span class="s2">&quot;polarity&quot;</span> <span class="p">:</span> <span class="n">polarity</span><span class="p">,</span>
+<span class="s2">&quot;formation&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Layer 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Layer 2&quot;</span><span class="p">,</span> <span class="s1">&#39;Layer 3&#39;</span><span class="p">]})</span>
+
+<span class="n">inter_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf{x}}_{\alpha \, 0}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 1}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 2}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 3}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 0}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 1}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 2}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 3}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 4}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 0}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 1}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 2}^1$&#39;</span><span class="p">]</span>
+
+<span class="n">foli_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf{x}}_{\beta \,{0}}$&#39;</span><span class="p">,</span>
+              <span class="s1">r&#39;${\bf{x}}_{\beta \,{1}}$&#39;</span><span class="p">,</span>
+              <span class="s1">r&#39;${\bf{x}}_{\beta \,{0}}$&#39;</span><span class="p">]</span>
+
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">inter_labels</span><span class="p">)</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">foli_labels</span><span class="p">)</span>
+
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">formations</span> <span class="o">=</span> <span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">calculate_gradient</span><span class="p">()</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">set_series</span><span class="p">({</span><span class="s1">&#39;younger&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;Layer 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Layer 2&#39;</span><span class="p">),</span>
+                         <span class="s1">&#39;older&#39;</span><span class="p">:</span> <span class="s1">&#39;Layer 3&#39;</span><span class="p">},</span> <span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;younger&#39;</span><span class="p">,</span> <span class="s1">&#39;older&#39;</span><span class="p">])</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">update_data</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">annotate_plot</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotate the plot of a given DataFrame using one of its columns</span>
+
+<span class="sd">    Should be called right after a DataFrame or series plot method,</span>
+<span class="sd">    before telling matplotlib to show the plot.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    frame : pandas.DataFrame</span>
+
+<span class="sd">    plot_col : str</span>
+<span class="sd">        The string identifying the column of frame that was plotted</span>
+
+<span class="sd">    label_col : str</span>
+<span class="sd">        The string identifying the column of frame to be used as label</span>
+
+<span class="sd">    kwargs:</span>
+<span class="sd">        Other key-word args that should be passed to plt.annotate</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    After calling this function you should call plt.show() to get the</span>
+<span class="sd">    results. This function only adds the annotations, it doesn&#39;t show</span>
+<span class="sd">    them.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>  <span class="c1"># Make sure we have pyplot as plt</span>
+
+    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="n">label_col</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">y</span><span class="p">]):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mf">0.15</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="n">serie_to_plot</span> <span class="o">=</span> <span class="s1">&#39;older&#39;</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">series</span> <span class="o">=</span> <span class="n">serie_to_plot</span><span class="p">)</span>
+<span class="n">annotate_plot</span><span class="p">(</span><span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">serie_to_plot</span><span class="p">]</span>
+              <span class="p">,</span> <span class="s1">&#39;labels&#39;</span><span class="p">,</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
+<span class="n">annotate_plot</span><span class="p">(</span><span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">serie_to_plot</span><span class="p">],</span>
+              <span class="s1">&#39;labels&#39;</span><span class="p">,</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
+
+<span class="n">two_pot</span><span class="o">.</span><span class="n">create_grid</span><span class="p">()</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">set_interpolator</span><span class="p">(</span><span class="n">u_grade</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/Example_2_Simple_16_0.png" src="../_images/Example_2_Simple_16_0.png" />
+<p>This potential field gives the following block</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">two_pot</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">n_pf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">colorbar</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;magma&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/Example_2_Simple_18_0.png" src="../_images/Example_2_Simple_18_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Reset the block</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">two_pot</span><span class="o">.</span><span class="n">Grid</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">compute_block_model</span><span class="p">(</span><span class="n">series_number</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_block_section</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/Example_2_Simple_19_0.png" src="../_images/Example_2_Simple_19_0.png" />
+<p>Combining both potential field where the first potential field is
+younger than the second we can obtain the following structure.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Reset the block</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">two_pot</span><span class="o">.</span><span class="n">Grid</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">compute_block_model</span><span class="p">(</span><span class="n">series_number</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">two_pot</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_block_section</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/Example_2_Simple_21_0.png" src="../_images/Example_2_Simple_21_0.png" />
+<div class="section" id="side-note-example-of-covariances-involved-in-the-cokriging-system">
+<h3>Side note: Example of covariances involved in the cokriging system<a class="headerlink" href="#side-note-example-of-covariances-involved-in-the-cokriging-system" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">plot_potential_var</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">14</span> <span class="o">/</span> <span class="mi">3</span>  <span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+
+<span class="n">plot_all</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">14</span> <span class="o">/</span> <span class="mi">3</span>  <span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span> <span class="c1"># 0**2 /14/3</span>
+</pre></div>
+</div>
+<img alt="../_images/Example_2_Simple_23_0.png" src="../_images/Example_2_Simple_23_0.png" />
+<img alt="../_images/Example_2_Simple_23_1.png" src="../_images/Example_2_Simple_23_1.png" />
+<img alt="../_images/Example_2_Simple_23_2.png" src="../_images/Example_2_Simple_23_2.png" />
+<img alt="../_images/Example_2_Simple_23_3.png" src="../_images/Example_2_Simple_23_3.png" />
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../GeMpy Introduction.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../GeMpy Introduction.html">Welcome to GeMpy&#8217;s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction to GeMpy.html">Kriging structure of the <em>Potential field method</em></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorial.html">Tutorial</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Example_1_Sandstone_Project.html">Example 1: Sandstone Model</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Simple model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#importing-dependencies">Importing dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interactive-pandas-dataframe">Interactive pandas Dataframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#combining-potential-fields-depositional-series">Combining potential fields: Depositional series</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../code.html">Code</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../GeMpy Introduction.html">Documentation overview</a><ul>
+  <li><a href="../tutorial.html">Tutorial</a><ul>
+      <li>Previous: <a href="Example_1_Sandstone_Project.html" title="previous chapter">Example 1: Sandstone Model</a></li>
+      <li>Next: <a href="../code.html" title="next chapter">Code</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/Notebooks/Example_2_Simple.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Miguel de la Varga. NRE-RWTH team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="../_sources/Notebooks/Example_2_Simple.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

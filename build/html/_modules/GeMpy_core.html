@@ -86,13 +86,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Interpolator</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Plot</span> <span class="o">=</span> <span class="bp">None</span>
 
-<div class="viewcode-block" id="GeMpy.import_data"><a class="viewcode-back" href="../code.html#GeMpy_core.GeMpy.import_data">[docs]</a>    <span class="k">def</span> <span class="nf">import_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GeMpy.import_data"><a class="viewcode-back" href="../code.html#GeMpy_core.GeMpy.import_data">[docs]</a>    <span class="k">def</span> <span class="nf">import_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extent</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method to initialize the class data. Calling this function some of the data has to be provided (TODO give to</span>
 <span class="sd">        everything a default).</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            extent (list):  [x_min, x_max, y_min, y_max, z_min, z_max]</span>
+<span class="sd">            extent (list or array):  [x_min, x_max, y_min, y_max, z_min, z_max]. Extent for the visualization of data</span>
+<span class="sd">             and default of for the Grid class.</span>
+<span class="sd">            resolution (list or array): [nx, ny, nz]. Resolution for the visualization of data</span>
+<span class="sd">             and default of for the Grid class.</span>
 <span class="sd">            **kwargs: Arbitrary keyword arguments.</span>
 
 <span class="sd">        Keyword Args:</span>
@@ -105,10 +108,10 @@
 <span class="sd">            self.Plot(GeMpy_core.PlotData): Object to visualize data and results</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Data</span> <span class="o">=</span> <span class="n">DataManagement</span><span class="p">(</span><span class="n">extent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Data</span> <span class="o">=</span> <span class="n">DataManagement</span><span class="p">(</span><span class="n">extent</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Plot</span> <span class="o">=</span> <span class="n">PlotData</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Data</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GeMpy.create_grid"><a class="viewcode-back" href="../code.html#GeMpy_core.GeMpy.create_grid">[docs]</a>    <span class="k">def</span> <span class="nf">create_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid_type</span><span class="o">=</span><span class="s2">&quot;regular_3D&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GeMpy.create_grid"><a class="viewcode-back" href="../code.html#GeMpy_core.GeMpy.create_grid">[docs]</a>    <span class="k">def</span> <span class="nf">create_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">grid_type</span><span class="o">=</span><span class="s2">&quot;regular_3D&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method to initialize the class grid. So far is really simple and only has the regular grid type</span>
 
@@ -119,8 +122,12 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            self.Grid(GeMpy_core.Grid): Object that contain different grids</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">extent</span><span class="p">:</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">extent</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">resolution</span><span class="p">:</span>
+            <span class="n">resolution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">resolution</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Grid</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Data</span><span class="p">,</span> <span class="n">grid_type</span><span class="o">=</span><span class="n">grid_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Grid</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">(</span><span class="n">extent</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_type</span><span class="o">=</span><span class="n">grid_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GeMpy.set_interpolator"><a class="viewcode-back" href="../code.html#GeMpy_core.GeMpy.set_interpolator">[docs]</a>    <span class="k">def</span> <span class="nf">set_interpolator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -132,11 +139,11 @@
 <span class="sd">            **kwargs: Arbitrary keyword arguments.</span>
 
 <span class="sd">        Keyword Args:</span>
-<span class="sd">            range_var=None: Range of the variogram</span>
-<span class="sd">            c_o=None: Covariance at 0</span>
-<span class="sd">            nugget_effect=0.01: Nugget effect of the gradients</span>
-<span class="sd">            u_grade=2: Grade of the polynomial used in the universal part of the Kriging</span>
-<span class="sd">            rescaling_factor=None: Magic factor that multiplies the covariances)</span>
+<span class="sd">            range_var: Range of the variogram. Default None</span>
+<span class="sd">            c_o: Covariance at 0. Default None</span>
+<span class="sd">            nugget_effect: Nugget effect of the gradients. Default 0.01</span>
+<span class="sd">            u_grade: Grade of the polynomial used in the universal part of the Kriging. Default 2</span>
+<span class="sd">            rescaling_factor: Magic factor that multiplies the covariances). Default 2</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            self.Interpolator (GeMpy_core.Interpolator): Object to perform the potential field method</span>
@@ -165,39 +172,43 @@
 <div class="viewcode-block" id="DataManagement"><a class="viewcode-back" href="../code.html#GeMpy_core.DataManagement">[docs]</a><span class="k">class</span> <span class="nc">DataManagement</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class to import the raw data of the model and set data classifications into formations and series</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        extent (list):  [x_min, x_max, y_min, y_max, z_min, z_max]</span>
+<span class="sd">        Resolution ((Optional[list])): [nx, ny, nz]. Defaults to 50</span>
+<span class="sd">        path_i: Path to the data bases of interfaces. Default os.getcwd(),</span>
+<span class="sd">        path_f: Path to the data bases of foliations. Default os.getcwd()</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        extent(list):  [x_min, x_max, y_min, y_max, z_min, z_max]</span>
+<span class="sd">        resolution ((Optional[list])): [nx, ny, nz]</span>
+<span class="sd">        Foliations(pandas.core.frame.DataFrame): Pandas data frame with the foliations data</span>
+<span class="sd">        Interfaces(pandas.core.frame.DataFrame): Pandas data frame with the interfaces data</span>
+<span class="sd">        formations(numpy.ndarray): Dictionary that contains the name of the formations</span>
+<span class="sd">        series(pandas.core.frame.DataFrame): Pandas data frame which contains every formation within each series</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># TODO: Data management using pandas, find an easy way to add values</span>
     <span class="c1"># TODO: Probably at some point I will have to make an static and dynamic data classes</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extent</span><span class="p">,</span>
-                 <span class="n">nx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">nz</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                 <span class="n">resolution</span><span class="o">=</span><span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
                  <span class="n">path_i</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">path_f</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Some of the initial parameters needed for the interpolation and visualization</span>
-<span class="sd">        :param x_min: extent</span>
-<span class="sd">        :param x_max: extent</span>
-<span class="sd">        :param y_min: extent</span>
-<span class="sd">        :param y_max: extent</span>
-<span class="sd">        :param z_min: extent</span>
-<span class="sd">        :param z_max: extent</span>
-<span class="sd">        :param nx: resolution, number of cells in direction x</span>
-<span class="sd">        :param ny: resolution, number of cells in direction y</span>
-<span class="sd">        :param nz: resolution, number of cells in direction z</span>
-<span class="sd">        :param path_i: path to the interfaces table</span>
-<span class="sd">        :param path_f: path to the foliations table</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c1"># Deprecated</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span> <span class="o">=</span> <span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span> <span class="o">=</span> <span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span> <span class="o">=</span> <span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="n">extent</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zmax</span> <span class="o">=</span> <span class="n">extent</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">=</span> <span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">=</span> <span class="n">resolution</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nz</span> <span class="o">=</span> <span class="n">resolution</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="c1"># -------------------</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">=</span> <span class="n">nx</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">=</span> <span class="n">ny</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nz</span> <span class="o">=</span> <span class="n">nz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extent</span> <span class="o">=</span> <span class="n">extent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="n">resolution</span>
 
         <span class="c1"># TODO choose the default source of data. So far only</span>
         <span class="k">if</span> <span class="n">path_f</span><span class="p">:</span>
@@ -207,12 +218,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;dip&#39;</span><span class="p">,</span> <span class="s1">&#39;azimuth&#39;</span><span class="p">,</span> <span class="s1">&#39;polarity&#39;</span><span class="p">,</span> <span class="s1">&#39;formation&#39;</span><span class="p">,</span> <span class="s1">&#39;series&#39;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">path_i</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Interfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_data_csv</span><span class="p">(</span><span class="n">data_type</span><span class="o">=</span><span class="s2">&quot;Interfaces&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path_i</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Interfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_data_csv</span><span class="p">(</span><span class="n">data_type</span><span class="o">=</span><span class="s2">&quot;interfaces&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path_i</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">assert</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;formation&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Interfaces</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> \
                 <span class="s2">&quot;One or more columns do not match with the expected values &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Interfaces</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Interfaces</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;formation&#39;</span><span class="p">])</span>
-
 
         <span class="bp">self</span><span class="o">.</span><span class="n">formations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_formations</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_series</span><span class="p">()</span>
@@ -220,20 +230,28 @@
 
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="DataManagement.load_data_csv"><a class="viewcode-back" href="../code.html#GeMpy_core.DataManagement.load_data_csv">[docs]</a>    <span class="k">def</span> <span class="nf">load_data_csv</span><span class="p">(</span><span class="n">data_type</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to load either interface or foliations data csv files. Normally this is in which GeoModeller exports it</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            data_type (str): &#39;interfaces&#39; or &#39;foliations&#39;</span>
+<span class="sd">            path (str): path to the files. Default os.getcwd()</span>
+<span class="sd">            **kwargs: Arbitrary keyword arguments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.core.frame.DataFrame: Data frame with the raw data</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO: in case that the columns have a different name specify in pandas which columns are interfaces /</span>
         <span class="c1">#  coordinates, dips and so on.</span>
         <span class="c1"># TODO: use pandas to read any format file not only csv</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Method to load either interface or foliations data csv files. Normally this is in which GeoModeller exports it</span>
-<span class="sd">        :param data_type: string, &#39;interfaces&#39; or &#39;foliations&#39;</span>
-<span class="sd">        :param path: path to the files</span>
-<span class="sd">        :return: Pandas framework with the imported data</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;foliations&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pn</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s1">&#39;interfaces&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pn</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pn</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Data type not understood. Try interfaces or foliations&#39;</span><span class="p">)</span></div>
 
         <span class="c1"># TODO if we load different data the Interpolator parameters must be also updated:  Research how and implement</span>
 
@@ -241,7 +259,10 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function to import the formations that will be used later on. By default all the formations in the tables are</span>
 <span class="sd">        chosen.</span>
-<span class="sd">        :return: formations in the table</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">             pandas.core.frame.DataFrame: Data frame with the raw data</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;formations&quot;</span><span class="p">)</span>
@@ -265,13 +286,19 @@
 
 <div class="viewcode-block" id="DataManagement.set_series"><a class="viewcode-back" href="../code.html#GeMpy_core.DataManagement.set_series">[docs]</a>    <span class="k">def</span> <span class="nf">set_series</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series_distribution</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The formations have to be separated by this thing! |</span>
-<span class="sd">        :param series_distribution: dict: with the name of the serie as key and the name of the formations as values.</span>
-<span class="sd">        :param order of the series by default takes the dictionary keys which until python 3.6 are random. This is</span>
-<span class="sd">        important to set the erosion relations between the different series</span>
-<span class="sd">        :return: self.series: A pandas DataFrame with the series and formations relations</span>
-<span class="sd">                 self.Interfaces and self.Foliations: one extra column with the given series</span>
+<span class="sd">        Method to define the different series of the project</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            series_distribution (dict): with the name of the serie as key and the name of the formations as values.</span>
+<span class="sd">            order(Optional[list]): order of the series by default takes the dictionary keys which until python 3.6 are</span>
+<span class="sd">                random. This is important to set the erosion relations between the different series</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self.series: A pandas DataFrame with the series and formations relations</span>
+<span class="sd">            self.Interfaces: one extra column with the given series</span>
+<span class="sd">            self.Foliations: one extra column with the given series</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="n">series_distribution</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="c1"># TODO: Possibly we have to debug this function</span>
             <span class="n">_series</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Default serie&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">formations</span><span class="p">}</span>
@@ -294,18 +321,18 @@
         <span class="k">return</span> <span class="n">_series</span></div>
 
 <div class="viewcode-block" id="DataManagement.calculate_gradient"><a class="viewcode-back" href="../code.html#GeMpy_core.DataManagement.calculate_gradient">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations</span>
-<span class="sd">        :return: self.Foliations: extra columns with components xyz of the unity vector.</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self.Foliations: extra columns with components xyz of the unity vector.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s1">&#39;G_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;dip&quot;</span><span class="p">]))</span> <span class="o">*</span> \
             <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;azimuth&quot;</span><span class="p">]))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;polarity&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s1">&#39;G_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;dip&quot;</span><span class="p">]))</span> <span class="o">*</span> \
             <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;azimuth&quot;</span><span class="p">]))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;polarity&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s1">&#39;G_z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;dip&quot;</span><span class="p">]))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;polarity&quot;</span><span class="p">]</span></div>
-
-    <span class="k">def</span> <span class="nf">get_spatial_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nz</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s1">&#39;G_z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;dip&quot;</span><span class="p">]))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;polarity&quot;</span><span class="p">]</span></div></div>
 
     <span class="c1"># TODO set new interface/set</span>
 
@@ -313,13 +340,15 @@
 <div class="viewcode-block" id="Grid"><a class="viewcode-back" href="../code.html#GeMpy_core.Grid">[docs]</a><span class="k">class</span> <span class="nc">Grid</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class with set of functions to generate grids</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        extent (list):  [x_min, x_max, y_min, y_max, z_min, z_max]</span>
+<span class="sd">        resolution (list): [nx, ny, nz].</span>
+<span class="sd">        grid_type(str): Type of grid. So far only regular 3D is implemented</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_parameters</span><span class="p">,</span> <span class="n">grid_type</span><span class="o">=</span><span class="s2">&quot;regular_3D&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Selection of grid type</span>
-<span class="sd">        :param type: So far regular 3D or 2D grid</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span> <span class="o">=</span> <span class="n">spatial_parameters</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extent</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_type</span><span class="o">=</span><span class="s2">&quot;regular_3D&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid_ext</span> <span class="o">=</span> <span class="n">extent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid_res</span> <span class="o">=</span> <span class="n">resolution</span>
 
         <span class="k">if</span> <span class="n">grid_type</span> <span class="o">==</span> <span class="s2">&quot;regular_3D&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_regular_grid_3d</span><span class="p">()</span>
@@ -328,30 +357,18 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Wrong type&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Grid.create_regular_grid_2d"><a class="viewcode-back" href="../code.html#GeMpy_core.Grid.create_regular_grid_2d">[docs]</a>    <span class="k">def</span> <span class="nf">create_regular_grid_2d</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Method to create a 2D regular grid where we interpolate</span>
-<span class="sd">        :return: 2D regular grid for the resoulution nx, ny</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">,</span> <span class="n">g</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Extent or resolution not provided. Use set_extent and/or set_resolutions first&quot;</span><span class="p">)</span></div>
-
 <div class="viewcode-block" id="Grid.create_regular_grid_3d"><a class="viewcode-back" href="../code.html#GeMpy_core.Grid.create_regular_grid_3d">[docs]</a>    <span class="k">def</span> <span class="nf">create_regular_grid_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Method to create a 3D regurlar grid where is interpolated</span>
-<span class="sd">        :return: 3D regurlar grid for the resolution nx,ny</span>
+<span class="sd">        Method to create a 3D regular grid where is interpolated</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Unraveled 3D numpy array where every row correspond to the xyz coordinates of a regular grid</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">zmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">zmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_par</span><span class="o">.</span><span class="n">nz</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid_ext</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_ext</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_res</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid_ext</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_ext</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_res</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid_ext</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_ext</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_res</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">,</span> <span class="n">g</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span></div></div>
@@ -360,15 +377,16 @@
 <div class="viewcode-block" id="Interpolator"><a class="viewcode-back" href="../code.html#GeMpy_core.Interpolator">[docs]</a><span class="k">class</span> <span class="nc">Interpolator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class which contain all needed methods to perform potential field implicit modelling in theano</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        _data(GeMpy_core.DataManagement): All values of a DataManagement object</span>
+<span class="sd">        _grid(GeMpy_core.Grid): A grid object</span>
+<span class="sd">        **kwargs: Arbitrary keyword arguments.</span>
+
+<span class="sd">    Keyword Args:</span>
+<span class="sd">        verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_data</span><span class="p">,</span> <span class="n">_grid</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Here we import all the necessary data for the interpolation</span>
-<span class="sd">        :param _data: All values of a DataManagement object (I have to check but I would say we only need to pass</span>
-<span class="sd">        Interfaces and Foliations)</span>
-<span class="sd">        :param _grid: All values of Grid (so far only the grid is useful)</span>
-<span class="sd">        :param args: All the constant values for the interpolation. See docs set_interpolator</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">verbose</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
@@ -379,9 +397,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="n">_grid</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_constant_parameteres</span><span class="p">(</span><span class="n">_data</span><span class="p">,</span> <span class="n">_grid</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">theano_compilation_3D</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_constant_parameteres</span><span class="p">(</span><span class="n">_data</span><span class="p">,</span> <span class="n">_grid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
+        <span class="c1"># Depricated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theano_compilation_3D</span><span class="p">()</span>
+        <span class="c1"># -------------------------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">potential_fields</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">compute_potential_field</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
                                  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="p">))]</span>
 
@@ -397,14 +417,19 @@
             <span class="n">_formations_in_serie</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">series_name</span><span class="p">]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">_formations_in_serie</span>
 
-    <span class="k">def</span> <span class="nf">_set_constant_parameteres</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_data</span><span class="p">,</span> <span class="n">_grid</span><span class="p">,</span> <span class="n">range_var</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">c_o</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                                  <span class="n">nugget_effect</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">u_grade</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rescaling_factor</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_set_constant_parameteres</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_data</span><span class="p">,</span> <span class="n">_grid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Basic interpolator parameters. Also here it is possible to change some flags of theano</span>
 <span class="sd">        :param range_var: Range of the variogram, it is recommended the distance of the longest diagonal</span>
 <span class="sd">        :param c_o: Sill of the variogram</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO: update Docstring</span>
+
+        <span class="n">u_grade</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;u_grade&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">range_var</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;range_var&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">c_o</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;c_o&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">nugget_effect</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;nugget_effect&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">rescaling_factor</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rescaling_factor&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">range_var</span><span class="p">:</span>
             <span class="n">range_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">_data</span><span class="o">.</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">_data</span><span class="o">.</span><span class="n">xmin</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span>
@@ -447,16 +472,28 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">shared</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">_grid</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="s2">&quot;Final block&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grid_val_T</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">shared</span><span class="p">(</span><span class="n">_grid</span><span class="o">.</span><span class="n">grid</span> <span class="o">+</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="s2">&quot;Positions of the points to interpolate&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_constant_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_constant_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deprecated?</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a_T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c_o_T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget_effect_grad_T</span>
 
 <div class="viewcode-block" id="Interpolator.compute_block_model"><a class="viewcode-back" href="../code.html#GeMpy_core.Interpolator.compute_block_model">[docs]</a>    <span class="k">def</span> <span class="nf">compute_block_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series_number</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method to compute the block model for the given series using data provided in the DataManagement object</span>
-<span class="sd">        :param series_number: &#39;all&#39; or list of int with the series to interpolate</span>
-<span class="sd">        :param verbose: int: level of verbosity during the computation</span>
-<span class="sd">        :return: self.block will get updated with the corresponding formations</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            series_number(str or int): series to interpolate</span>
+<span class="sd">            verbose(int): level of verbosity during the computation</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self.block(theano shared[numpy.ndarray]): 3D block with the corresponding formations</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="n">series_number</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
             <span class="n">series_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">series_number</span><span class="p">:</span>
@@ -471,9 +508,14 @@
 <div class="viewcode-block" id="Interpolator.compute_potential_field"><a class="viewcode-back" href="../code.html#GeMpy_core.Interpolator.compute_potential_field">[docs]</a>    <span class="k">def</span> <span class="nf">compute_potential_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series_name</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute an individual potential field.</span>
-<span class="sd">        :param series_name: int or str with the serie you want to obtain</span>
-<span class="sd">        :param verbose: int level of verbosity during the computation</span>
-<span class="sd">        :return: potential field 3D array</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            series_name (str or int): name or number of series to interpolate</span>
+<span class="sd">            verbose(int): int level of verbosity during the computation</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: 3D array with the potential field</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">assert</span> <span class="n">series_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;Compute potential field only returns one potential field at the time&quot;</span>
@@ -481,7 +523,17 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aux_computations_potential_field</span><span class="p">(</span><span class="n">formations_in_serie</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_aux_computations_block_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">for_in_ser</span><span class="p">,</span> <span class="n">n_formation</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Private function with the bridge steps from the selection of serie to the input in theano</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            for_in_ser: array with the formation for the series to interpolate</span>
+<span class="sd">            n_formation: number of formation in the series</span>
+<span class="sd">            verbose: verbosity</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self.block(theano shared[numpy.ndarray]): 3D block with the corresponding formations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO Probably here I should add some asserts for sanity check</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">yet_simulated</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span>
@@ -491,10 +543,14 @@
             <span class="n">yet_simulated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int8&quot;</span><span class="p">)</span>
             <span class="k">print</span><span class="p">(</span><span class="s2">&quot;I am in the except&quot;</span><span class="p">)</span>
         <span class="c1"># TODO: change [:,:3] that is positional based for XYZ so is more consistent</span>
-        <span class="n">dips_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">for_in_ser</span><span class="p">)]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
-        <span class="n">dip_angles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">for_in_ser</span><span class="p">)][</span><span class="s2">&quot;dip&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
-        <span class="n">azimuth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">for_in_ser</span><span class="p">)][</span><span class="s2">&quot;azimuth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
-        <span class="n">polarity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">for_in_ser</span><span class="p">)][</span><span class="s2">&quot;polarity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+        <span class="n">dips_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">for_in_ser</span><span class="p">)]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">dip_angles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">for_in_ser</span><span class="p">)][</span><span class="s2">&quot;dip&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+        <span class="n">azimuth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">for_in_ser</span><span class="p">)][</span><span class="s2">&quot;azimuth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+        <span class="n">polarity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">for_in_ser</span><span class="p">)][</span><span class="s2">&quot;polarity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">for_in_ser</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">for_in_ser</span><span class="p">)]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
@@ -535,6 +591,16 @@
                                        <span class="n">n_formation</span><span class="p">,</span> <span class="n">yet_simulated</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_aux_computations_potential_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">for_in_ser</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Private function with the bridge steps from the selection of serie to the input in theano</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            for_in_ser: array with the formation for the series to interpolate</span>
+<span class="sd">            verbose: verbosity</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: 3D array with the potential field</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># TODO: change [:,:3] that is positional based for XYZ so is more consistent</span>
         <span class="n">dips_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">for_in_ser</span><span class="p">)]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
@@ -562,7 +628,7 @@
                       <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Foliations </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
                       <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;formation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">for_in_ser</span><span class="p">)])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Z_x</span><span class="p">,</span> <span class="n">G_x</span><span class="p">,</span> <span class="n">G_y</span><span class="p">,</span> <span class="n">G_z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">potential_interfaces</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DK</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Z_x</span><span class="p">,</span> <span class="n">G_x</span><span class="p">,</span> <span class="n">G_y</span><span class="p">,</span> <span class="n">G_z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">potential_interfaces</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">DK</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolate</span><span class="p">(</span>
             <span class="n">dips_position</span><span class="p">,</span> <span class="n">dip_angles</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">polarity</span><span class="p">,</span>
             <span class="n">rest_layer_points</span><span class="p">,</span> <span class="n">ref_layer_points</span><span class="p">)[:]</span>
 
@@ -578,9 +644,12 @@
 
 <div class="viewcode-block" id="Interpolator.theano_compilation_3D"><a class="viewcode-back" href="../code.html#GeMpy_core.Interpolator.theano_compilation_3D">[docs]</a>    <span class="k">def</span> <span class="nf">theano_compilation_3D</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Function that generates the symbolic code to perform the interpolation</span>
-<span class="sd">        :return: Array containing the potential field (maybe it returs all the pieces too I have to evaluate how</span>
-<span class="sd">        this influences performance)</span>
+<span class="sd">        Function that generates the symbolic code to perform the interpolation. Calling this function creates</span>
+<span class="sd">         both the theano functions for the potential field and the block.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            theano function for the potential field</span>
+<span class="sd">            theano function for the block</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Creation of symbolic variables</span>
@@ -976,9 +1045,9 @@
             <span class="p">[</span><span class="n">Z_x</span><span class="p">,</span> <span class="n">G_x</span><span class="p">,</span> <span class="n">G_y</span><span class="p">,</span> <span class="n">G_z</span><span class="p">,</span> <span class="n">potential_field_interfaces</span><span class="p">,</span> <span class="n">C_matrix</span><span class="p">,</span> <span class="n">DK_parameters</span><span class="p">],</span>
             <span class="n">on_unused_input</span><span class="o">=</span><span class="s2">&quot;warn&quot;</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">allow_input_downcast</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-        <span class="c1">#=======================================================================</span>
+        <span class="c1"># =======================================================================</span>
         <span class="c1">#               CODE TO EXPORT THE BLOCK DIRECTLY</span>
-        <span class="c1">#========================================================================</span>
+        <span class="c1"># ========================================================================</span>
 
         <span class="c1"># Aux shared parameters</span>
         <span class="n">infinite_pos</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">shared</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">))</span>
@@ -1089,7 +1158,15 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../GeMpy Introduction.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../GeMpy Introduction.html">Welcome to GeMpy&#8217;s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction to GeMpy.html">Kriging structure of the <em>Potential field method</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code.html">Code</a></li>
+</ul>
+<div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../GeMpy Introduction.html">Documentation overview</a><ul>
