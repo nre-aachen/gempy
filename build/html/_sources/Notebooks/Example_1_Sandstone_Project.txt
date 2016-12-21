@@ -455,10 +455,6 @@ method ``plot_block_section`` to see a 2D section of the model
 .. image:: Example_1_Sandstone_Project_files/Example_1_Sandstone_Project_29_0.png
 
 
-.. code:: python
-
-    plt.imshow?
-
 Export to vtk. (*Under development*)
 ------------------------------------
 
