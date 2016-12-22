@@ -67,6 +67,7 @@ resulting a cokriging system of the form:
 
 .. math::
    :nowrap:
+
    \begin{equation}
    \left[ \begin{array}{ccc}
    {\bf{C_{\partial {\bf{Z}}/ \partial u, \, \partial {\bf{Z}}/ \partial v}}} & 
