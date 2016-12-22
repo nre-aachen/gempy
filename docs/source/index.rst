@@ -29,7 +29,7 @@ Contents:
    :maxdepth: 3
 
    self
-   Kriging
+   ./Kriging.ipynb
    tutorial
    code
    

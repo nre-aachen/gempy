@@ -29,7 +29,7 @@ Contents:
    :maxdepth: 3
 
    self
-   ./Introduction to GeMpy.ipynb 
+   Kriging.ipynb
    tutorial
    code
    
