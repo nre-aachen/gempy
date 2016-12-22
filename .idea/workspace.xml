@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/build/html/.nojekyll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/build/html/Introduction to GeMpy.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/build/html/_sources/Introduction to GeMpy.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/build/html/_sources/theory.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/build/html/theory.html" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" afterPath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" />
+    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="Docs 0.98&#10;&#10;This may be the last one?">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/searchindex.js" afterPath="$PROJECT_DIR$/docs/build/html/searchindex.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DevelopersGuide.txt" afterPath="$PROJECT_DIR$/DevelopersGuide.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/conf.py" afterPath="$PROJECT_DIR$/docs/source/conf.py" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,95 +37,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GeMpy_core.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GeMpy_core.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy_core.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3132">
-              <caret line="390" column="25" selection-start-line="390" selection-start-column="25" selection-end-line="390" selection-end-column="25" />
+            <state relative-caret-position="288">
+              <caret line="389" column="0" selection-start-line="389" selection-start-column="0" selection-end-line="389" selection-end-column="0" />
               <folding>
                 <element signature="e#1260#2357#0" expanded="false" />
                 <element signature="e#4363#4749#0" expanded="false" />
                 <element signature="e#4786#12288#0" expanded="false" />
                 <element signature="e#14752#15318#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="conf.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="151" column="17" selection-start-line="151" selection-start-column="17" selection-end-line="151" selection-end-column="17" />
-              <folding>
-                <marker date="1482409884891" expanded="true" signature="0:439" ph="..." />
-                <marker date="1482409884891" expanded="false" signature="441:461" ph="import ..." />
-                <marker date="1482409884891" expanded="true" signature="463:781" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="1870:1996" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="2021:2115" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="2310:2510" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="2592:2845" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="2863:3268" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="3324:3868" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="3896:4160" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="4189:4369" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="4396:4558" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="4607:5475" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="6215:7881" ph="..." />
-                <marker date="1482409884891" expanded="true" signature="7914:12300" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DevelopersGuide.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DevelopersGuide.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="FIRST">
-              <first_editor relative-caret-position="249">
-                <caret line="16" column="74" selection-start-line="16" selection-start-column="74" selection-end-line="16" selection-end-column="74" />
-                <folding />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-          <provider editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="0">
-                <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-                <folding />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GeMpy Introduction.rst" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/docs/source/GeMpy Introduction.rst">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="requirements.txt" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/requirements.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -199,9 +115,9 @@
         <option value="$PROJECT_DIR$/docs/source/conf.py" />
         <option value="$USER_HOME$/nrw-aachen_Web/projects.html" />
         <option value="$PROJECT_DIR$/docs/source/GeMpy Introduction.rst" />
-        <option value="$PROJECT_DIR$/DevelopersGuide.txt" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/requirements.txt" />
+        <option value="$PROJECT_DIR$/DevelopersGuide.txt" />
       </list>
     </option>
   </component>
@@ -867,7 +783,14 @@
       <option name="project" value="LOCAL" />
       <updated>1482409905404</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="Docs 0.97&#10;&#10;seriously?">
+      <created>1482411390777</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1482411390777</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TodoView">
@@ -934,7 +857,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Calculation of the potential value in the interfaces. Not tested yet" />
     <MESSAGE value="Extraction of lithologies in theano. I have to optimize it yet" />
     <MESSAGE value="uploading desktop" />
     <MESSAGE value="Major changes in the structure. I need to test it further and adjust the inheritances" />
@@ -959,7 +881,8 @@
     <MESSAGE value="Docs 0.962&#10;&#10;Why dont you want to install you son of" />
     <MESSAGE value="Docs 0.963&#10;&#10;my hate increases" />
     <MESSAGE value="Docs 0.966&#10;&#10;No sense..." />
-    <option name="LAST_COMMIT_MESSAGE" value="Docs 0.966&#10;&#10;No sense..." />
+    <MESSAGE value="Docs 0.97&#10;&#10;seriously?" />
+    <option name="LAST_COMMIT_MESSAGE" value="Docs 0.97&#10;&#10;seriously?" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -975,13 +898,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/GeMpy/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="9" column="1" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
@@ -1275,19 +1191,6 @@
     <entry file="file://$USER_HOME$/Papers/test.ipynb" />
     <entry file="file://$PROJECT_DIR$/build/lib/GeMpy/GeMpy_core.py" />
     <entry file="file://$PROJECT_DIR$/build/html/_sources/GeMpy Introduction.txt" />
-    <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy_core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3132">
-          <caret line="390" column="25" selection-start-line="390" selection-start-column="25" selection-end-line="390" selection-end-column="25" />
-          <folding>
-            <element signature="e#1260#2357#0" expanded="false" />
-            <element signature="e#4363#4749#0" expanded="false" />
-            <element signature="e#4786#12288#0" expanded="false" />
-            <element signature="e#14752#15318#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/nrw-aachen_Web/projects.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
@@ -1307,40 +1210,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/GeMpy Introduction.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
+        <state relative-caret-position="396">
           <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="151" column="17" selection-start-line="151" selection-start-column="17" selection-end-line="151" selection-end-column="17" />
-          <folding>
-            <marker date="1482409884891" expanded="true" signature="0:439" ph="..." />
-            <marker date="1482409884891" expanded="false" signature="441:461" ph="import ..." />
-            <marker date="1482409884891" expanded="true" signature="463:781" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="1870:1996" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="2021:2115" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="2310:2510" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="2592:2845" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="2863:3268" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="3324:3868" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="3896:4160" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="4189:4369" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="4396:4558" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="4607:5475" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="6215:7881" ph="..." />
-            <marker date="1482409884891" expanded="true" signature="7914:12300" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DevelopersGuide.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
           <folding />
         </state>
       </provider>
@@ -1371,11 +1242,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/DevelopersGuide.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="9" column="49" selection-start-line="9" selection-start-column="49" selection-end-line="9" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
           <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/update_doc_elements.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy_core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="389" column="0" selection-start-line="389" selection-start-column="0" selection-end-line="389" selection-end-column="0" />
+          <folding>
+            <element signature="e#1260#2357#0" expanded="false" />
+            <element signature="e#4363#4749#0" expanded="false" />
+            <element signature="e#4786#12288#0" expanded="false" />
+            <element signature="e#14752#15318#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
