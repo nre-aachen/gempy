@@ -2,140 +2,139 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/.ipynb_checkpoints/Introduction to GeMpy-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/Introduction to GeMpy.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/input_example.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/sandstone_example2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/doctrees/GeMpy Introduction.doctree" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/doctrees/Introduction to GeMpy.doctree" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/doctrees/Notebooks/Example_1_Sandstone_Project.doctree" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/doctrees/Notebooks/Example_2_Simple.doctree" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/doctrees/code.doctree" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/doctrees/environment.pickle" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/doctrees/theory.doctree" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/doctrees/tutorial.doctree" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/.buildinfo" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/.nojekyll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/GeMpy Introduction.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/Introduction to GeMpy.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/Notebooks/Example_1_Sandstone_Project.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/Notebooks/Example_2_Simple.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_1_Sandstone_Project_14_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_1_Sandstone_Project_20_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_1_Sandstone_Project_22_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_1_Sandstone_Project_24_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_1_Sandstone_Project_29_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_2_Simple_13_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_2_Simple_16_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_2_Simple_18_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_2_Simple_19_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_2_Simple_21_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_2_Simple_23_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_2_Simple_23_1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_2_Simple_23_2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_2_Simple_23_3.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_2_Simple_5_1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/Example_2_Simple_9_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/input_example.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_images/sandstone_example.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_modules/GeMpy_core.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_modules/Visualization.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_modules/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_sources/GeMpy Introduction.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_sources/Introduction to GeMpy.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_sources/Notebooks/Example_1_Sandstone_Project.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_sources/Notebooks/Example_2_Simple.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_sources/code.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_sources/theory.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_sources/tutorial.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/ajax-loader.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/alabaster.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/basic.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/comment-bright.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/comment-close.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/comment.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/custom.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/doctools.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/down-pressed.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/down.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/file.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/jquery-1.11.1.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/jquery.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/minus.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/plus.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/pygments.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/searchtools.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/underscore-1.3.1.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/underscore.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/up-pressed.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/up.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/_static/websupport.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/code.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/genindex.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/objects.inv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/py-modindex.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/search.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/searchindex.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/theory.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/html/tutorial.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/GeMpy/External_communication.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/GeMpy/GeMpy_core.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/GeMpy/GeoMig.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/GeMpy/Visualization.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/GeMpy/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/pygeomod/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/pygeomod/build/lib/pygeomod/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/pygeomod/build/lib/pygeomod/colormaps.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/pygeomod/build/lib/pygeomod/geoPyMC.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/pygeomod/build/lib/pygeomod/geogrid.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/pygeomod/build/lib/pygeomod/geomodeller_xml_obj.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/pygeomod/build/lib/pygeomod/plot_grav_mag.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/pygeomod/build/lib/pygeomod/struct_data.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/lib/pygeomod/setup.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/.ipynb_checkpoints/Introduction to GeMpy-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/GeMpy Introduction.rst" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Introduction to GeMpy.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_1_Sandstone_Project.rst" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_1_Sandstone_Project_files/Example_1_Sandstone_Project_14_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_1_Sandstone_Project_files/Example_1_Sandstone_Project_20_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_1_Sandstone_Project_files/Example_1_Sandstone_Project_22_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_1_Sandstone_Project_files/Example_1_Sandstone_Project_24_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_1_Sandstone_Project_files/Example_1_Sandstone_Project_29_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple.rst" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_10_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_13_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_14_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_16_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_17_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_18_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_19_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_20_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_21_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_22_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_23_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_23_1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_23_2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_23_3.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_24_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_24_1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_24_2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_24_3.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_5_1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_6_1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/Notebooks/Example_2_Simple_files/Example_2_Simple_9_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/code.rst" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/conf.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/images/input_example.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/images/sandstone_example.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/source/Notebooks_14_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/source/Notebooks_20_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/source/Notebooks_22_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/source/Notebooks_24_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/source/Notebooks_29_0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/theory.rst" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/tutorial.rst" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/docs/input_example.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/docs/sandstone_example2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/doctrees/GeMpy Introduction.doctree" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/doctrees/Introduction to GeMpy.doctree" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/doctrees/Notebooks/Example_1_Sandstone_Project.doctree" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/doctrees/Notebooks/Example_2_Simple.doctree" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/doctrees/code.doctree" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/doctrees/theory.doctree" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/doctrees/tutorial.doctree" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/.nojekyll" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_1_Sandstone_Project_14_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_1_Sandstone_Project_20_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_1_Sandstone_Project_22_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_1_Sandstone_Project_24_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_1_Sandstone_Project_29_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_2_Simple_13_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_2_Simple_16_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_2_Simple_18_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_2_Simple_19_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_2_Simple_21_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_2_Simple_23_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_2_Simple_23_1.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_2_Simple_23_2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_2_Simple_23_3.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_2_Simple_5_1.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/Example_2_Simple_9_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/input_example.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_images/sandstone_example.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/ajax-loader.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/comment-bright.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/comment-close.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/comment.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/down-pressed.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/down.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/file.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/minus.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/plus.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/up-pressed.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/up.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/objects.inv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_1_Sandstone_Project_files/Example_1_Sandstone_Project_14_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_1_Sandstone_Project_files/Example_1_Sandstone_Project_20_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_1_Sandstone_Project_files/Example_1_Sandstone_Project_22_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_1_Sandstone_Project_files/Example_1_Sandstone_Project_24_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_1_Sandstone_Project_files/Example_1_Sandstone_Project_29_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_10_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_13_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_14_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_16_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_17_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_18_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_19_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_20_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_21_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_22_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_23_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_23_1.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_23_2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_23_3.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_24_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_24_1.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_24_2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_24_3.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_5_1.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_6_1.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple_files/Example_2_Simple_9_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/images/input_example.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/images/sandstone_example.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/source/Notebooks_14_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/source/Notebooks_20_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/source/Notebooks_22_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/source/Notebooks_24_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/source/Notebooks_29_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/docs/.ipynb_checkpoints/Introduction to GeMpy-checkpoint.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/docs/Introduction to GeMpy.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/.buildinfo" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/GeMpy Introduction.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/Introduction to GeMpy.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/Notebooks/Example_1_Sandstone_Project.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/Notebooks/Example_2_Simple.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_modules/GeMpy_core.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_modules/Visualization.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_modules/index.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_sources/GeMpy Introduction.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_sources/Introduction to GeMpy.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_sources/Notebooks/Example_1_Sandstone_Project.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_sources/Notebooks/Example_2_Simple.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_sources/code.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_sources/theory.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_sources/tutorial.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/alabaster.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/basic.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/custom.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/doctools.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/jquery-1.11.1.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/jquery.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/pygments.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/searchtools.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/underscore-1.3.1.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/underscore.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/_static/websupport.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/code.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/genindex.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/py-modindex.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/search.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/searchindex.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/theory.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/html/tutorial.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/GeMpy/External_communication.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/GeMpy/GeMpy_core.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/GeMpy/GeoMig.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/GeMpy/Visualization.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/GeMpy/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/pygeomod/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/pygeomod/build/lib/pygeomod/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/pygeomod/build/lib/pygeomod/colormaps.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/pygeomod/build/lib/pygeomod/geoPyMC.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/pygeomod/build/lib/pygeomod/geogrid.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/pygeomod/build/lib/pygeomod/geomodeller_xml_obj.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/pygeomod/build/lib/pygeomod/plot_grav_mag.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/pygeomod/build/lib/pygeomod/struct_data.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/build/lib/pygeomod/setup.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/.ipynb_checkpoints/Introduction to GeMpy-checkpoint.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Introduction to GeMpy.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_1_Sandstone_Project.rst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_2_Simple.rst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/code.rst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/conf.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/index.rst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/theory.rst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/tutorial.rst" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/update_doc_elements.sh" afterPath="$PROJECT_DIR$/update_doc_elements.sh" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -339,6 +338,38 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="GeMpy" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -372,6 +403,22 @@
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="Sqlite (Xerial)" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="39" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="46" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="49" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="400" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="39" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="46" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="49" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="400" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
   </component>
   <component name="RunManager" selected="Python.starting theano">
     <configuration default="false" name="starting theano" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -791,7 +838,14 @@
       <option name="project" value="LOCAL" />
       <updated>1482401134806</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Changes in docs">
+      <created>1482401395447</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1482401395447</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TodoView">
@@ -805,14 +859,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1301" height="772" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16334662" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16334662" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17536534" sideWeight="0.49585405" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34104937" sideWeight="0.5187251" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17592593" sideWeight="0.53944224" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946378" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34104937" sideWeight="0.4812749" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17745303" sideWeight="0.46323937" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34104937" sideWeight="0.4812749" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17592593" sideWeight="0.46055776" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498618" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985386" sideWeight="0.49806523" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -878,7 +932,8 @@
     <MESSAGE value="Checking that the new branch is NRE" />
     <MESSAGE value="Corrected bug when importing interfaces" />
     <MESSAGE value="Change in requirements" />
-    <option name="LAST_COMMIT_MESSAGE" value="Change in requirements" />
+    <MESSAGE value="Changes in docs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes in docs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -1,0 +1,120 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Kriging structure of the *Potential field method*"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[comment]: <> (General idea)\n",
+    "\n",
+    "The potential field method (cite Lajaunie) serves as the core of method used in GeMpy to generate the 3-D geological model. The idea is to exploit the stratigrafic nature of geological settings describing the deposition direction with an scalar field. This means that every layer---or in a sense every synchronal deposition---will have the same value forming a sequence of isosurfaces $k$. In addition, the direction of the layers can be provided either in the form of dips (i.e. tangential to the isosurfaces) or pole (i.e. perpendicular to the isosurface) allowing to utilize more information as input in the forward modeling step.\n",
+    "\n",
+    "** Mathematical description ** page 574 laujaunie\n",
+    "\n",
+    "[comment]: <> (Potential field from a Kriging pespective)\n",
+    "\n",
+    "Mathematically the method is based on a specific universal co-kriging where the variables to interpolate that bears algebraic relation between them, which is one parameter is the first derivative of the other. \n",
+    "\n",
+    "\\begin{equation}\n",
+    "\\frac{\\partial Z_\\it{i}}{\\partial u}(x) = \\lim_{\\it{p}\\to 0} \\frac{ Z(x+pu)-Z(x)}{p}\n",
+    "\\end{equation}\n",
+    "\n",
+    "Kriging or Gaussian process regression (cite Matheron) is a spatial interpolation method that makes use of a given covariance function to compute the best linear unbiased prediction between the data. This method can be easily extended to multivariate methods---i.e. cokriging--- and the consideration of drifts in the mean values---i.e. universal kriging.\n",
+    "\n",
+    "[comment]: <> (Notation)\n",
+    "\n",
+    "Normally, notation of cokriging parameters is complicated since it has to be considered *p* random functions $\\bf{Z}_\\it{i}$ (i.e. every parameter involved in the interpolation), sampled at different points $\\bf{x}$ of the three-dimensional domain $\\mathbb{R}^3$. Therefore for clarity in this paper we will refer to the potential field random function $\\bf{Z}$ and its set of samples ${\\bf{x}}_{\\alpha}$ while the second random function will be $\\partial {\\bf{Z}}/ \\partial u$ and its samples ${\\bf{x}}_{\\beta}$. In addition, samples that belong to a singular layer or foliation will be denoted as a subset denoted by a superscript as ${\\bf{x}}_\\alpha ^k$ and every individual point by a subscript,${\\bf{x}}_{\\alpha \\, i}^k$.\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[comment]: <> (universal co-kriging)\n",
+    "\n",
+    "Universal co-kriging allows to modify the unbiased conditions of kriging making use of two or more variables exploiting their relative drift dependencies. In our particular case, the main advantage is to be able to utilized two different type of data sampled from different locations to estimate both parameters---potential field, $\\bf{Z}$,  and pole,  $\\partial {\\bf{Z}}/ \\partial u$---as if they were sampled in all the involved locations at any given point ${\\bf{x}}_0$.Due to the mathematical dependencies between the two variables allows to express the universal drift as\n",
+    "\\begin{equation}\n",
+    "\\lambda F_1 + \\lambda F_2 = f_10\n",
+    "\\end{equation}\n",
+    "\n",
+    "resulting a cokriging system of the form:\n",
+    "\\begin{equation}\n",
+    "\\left[ \\begin{array}{ccc}\n",
+    "{\\bf{C_{\\partial {\\bf{Z}}/ \\partial u, \\, \\partial {\\bf{Z}}/ \\partial v}}} & \n",
+    "{\\bf{C_{\\partial {\\bf{Z}}/ \\partial u, \\, Z}}} & \n",
+    "\\bf{U_{\\partial {\\bf{Z}}/ \\partial u}} \\\\\n",
+    "{\\bf{C_{Z, \\, \\partial {\\bf{Z}}/ \\partial u }}} & \n",
+    "{\\bf{C_{\\bf{Z}, \\, \\bf{Z}}}} &\n",
+    "{\\bf{U_{Z}}} \\\\\n",
+    "\\bf{U'_{\\partial {\\bf{Z}}/ \\partial u}} &\n",
+    "{\\bf{U'_{Z}}} & \n",
+    "{\\bf{0}} \\end{array} \\right]\n",
+    "\\left[ \\begin{array}{cc}\n",
+    "\\lambda_{{\\partial {\\bf{Z}}/ \\partial u, \\, \\partial {\\bf{Z}}/ \\partial v}} &\n",
+    "\\lambda_{\\partial {\\bf{Z}}/ \\partial u, \\, Z}\\\\\n",
+    "\\lambda_{Z, \\,\\partial {\\bf{Z}}/ \\partial u} &\n",
+    "\\lambda_{\\bf{Z}, \\,\\bf{Z}}\\\\\n",
+    "{\\mu} & {\\mu} \\end{array} \\right] =\n",
+    "\\left[ \\begin{array}{cc}\n",
+    "{\\bf{c_{\\partial {\\bf{Z}}/ \\partial u, \\, \\partial {\\bf{Z}}/ \\partial v}}} & {\\bf{c_{\\partial {\\bf{Z}}/ \\partial u, \\, Z}}} \\\\\n",
+    "{\\bf{c_{Z, \\,\\partial {\\bf{Z}}/ \\partial u}}} &  {\\bf{c_{\\bf{Z}, \\,\\bf{Z}}}} \\\\\n",
+    "{\\bf{f_{10}}} & {\\bf{f_{20}}} \\end{array} \\right]\n",
+    "\\label{krig_sys}\n",
+    "\\end{equation} \n",
+    "\n",
+    "As we can see in Eq \\ref{krig_sys}, it is possible to solve the kriging system for the potential field, **Z** as well as its derivative $\\partial {\\bf{Z}}/ \\partial u$. Whether the main goal is the segmentation of the layers which is done using the value of **Z**, the gradient of the potential field could be used for further mathematical application such as meshing or geophysical forward calculations.\n",
+    "\n",
+    "\n",
+    "\n",
+    "[comment]: <> (explain at some point that the covariance functions have to be twice differentiable and so on)"
+   ]
+  }
+ ],
+ "metadata": {
+  "anaconda-cloud": {},
+  "kernelspec": {
+   "display_name": "Python [Root]",
+   "language": "python",
+   "name": "Python [Root]"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.5.2"
+  },
+  "latex_envs": {
+   "bibliofile": "biblio.bib",
+   "cite_by": "apalike",
+   "current_citInitial": 1,
+   "eqLabelWithNumbers": true,
+   "eqNumInitial": 0
+  },
+  "nav_menu": {},
+  "toc": {
+   "navigate_menu": true,
+   "number_sections": false,
+   "sideBar": true,
+   "threshold": 6,
+   "toc_cell": false,
+   "toc_section_display": "block",
+   "toc_window_display": true
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 0
+}

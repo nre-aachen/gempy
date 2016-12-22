@@ -1,0 +1,638 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Code &mdash; GeMpy 2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="GeMpy 2 documentation" href="GeMpy Introduction.html" />
+    <link rel="prev" title="Simple model" href="Notebooks/Example_2_Simple.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="code">
+<h1>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<span class="target" id="module-GeMpy_core"></span><p>Module with classes and methods to perform implicit regional modelling based on
+the potential field method.
+Tested on Ubuntu 14</p>
+<p>Created on 10/10 /2016</p>
+<p>&#64;author: Miguel de la Varga</p>
+<p>this is only to test git 3</p>
+<dl class="class">
+<dt id="GeMpy_core.DataManagement">
+<em class="property">class </em><code class="descclassname">GeMpy_core.</code><code class="descname">DataManagement</code><span class="sig-paren">(</span><em>extent, resolution=[50, 50, 50], path_i=None, path_f=None, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#DataManagement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.DataManagement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to import the raw data of the model and set data classifications into formations and series</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>extent</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; [x_min, x_max, y_min, y_max, z_min, z_max]</li>
+<li><strong>Resolution</strong> (<em>(Optional[list]</em>) &#8211; [nx, ny, nz]. Defaults to 50</li>
+<li><strong>path_i</strong> &#8211; Path to the data bases of interfaces. Default os.getcwd(),</li>
+<li><strong>path_f</strong> &#8211; Path to the data bases of foliations. Default os.getcwd()</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="GeMpy_core.DataManagement.extent">
+<code class="descname">extent</code><a class="headerlink" href="#GeMpy_core.DataManagement.extent" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> &#8211; [x_min, x_max, y_min, y_max, z_min, z_max]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeMpy_core.DataManagement.resolution">
+<code class="descname">resolution</code><a class="headerlink" href="#GeMpy_core.DataManagement.resolution" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>(Optional[list]</em> &#8211; [nx, ny, nz]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeMpy_core.DataManagement.Foliations">
+<code class="descname">Foliations</code><a class="headerlink" href="#GeMpy_core.DataManagement.Foliations" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>pandas.core.frame.DataFrame</em> &#8211; Pandas data frame with the foliations data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeMpy_core.DataManagement.Interfaces">
+<code class="descname">Interfaces</code><a class="headerlink" href="#GeMpy_core.DataManagement.Interfaces" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>pandas.core.frame.DataFrame</em> &#8211; Pandas data frame with the interfaces data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeMpy_core.DataManagement.formations">
+<code class="descname">formations</code><a class="headerlink" href="#GeMpy_core.DataManagement.formations" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>numpy.ndarray</em> &#8211; Dictionary that contains the name of the formations</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeMpy_core.DataManagement.series">
+<code class="descname">series</code><a class="headerlink" href="#GeMpy_core.DataManagement.series" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>pandas.core.frame.DataFrame</em> &#8211; Pandas data frame which contains every formation within each series</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.DataManagement.calculate_gradient">
+<code class="descname">calculate_gradient</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#DataManagement.calculate_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.DataManagement.calculate_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">extra columns with components xyz of the unity vector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">self.Foliations</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="GeMpy_core.DataManagement.load_data_csv">
+<em class="property">static </em><code class="descname">load_data_csv</code><span class="sig-paren">(</span><em>data_type</em>, <em>path='/home/bl3/PycharmProjects/GeMpy'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#DataManagement.load_data_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.DataManagement.load_data_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to load either interface or foliations data csv files. Normally this is in which GeoModeller exports it</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_type</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; &#8216;interfaces&#8217; or &#8216;foliations&#8217;</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; path to the files. Default os.getcwd()</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Data frame with the raw data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">pandas.core.frame.DataFrame</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.DataManagement.set_series">
+<code class="descname">set_series</code><span class="sig-paren">(</span><em>series_distribution=None</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#DataManagement.set_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.DataManagement.set_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to define the different series of the project</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>series_distribution</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; with the name of the serie as key and the name of the formations as values.</li>
+<li><strong>order</strong> (<em>Optional[list]</em>) &#8211; order of the series by default takes the dictionary keys which until python 3.6 are
+random. This is important to set the erosion relations between the different series</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A pandas DataFrame with the series and formations relations
+self.Interfaces: one extra column with the given series
+self.Foliations: one extra column with the given series</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self.series</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeMpy_core.GeMpy">
+<em class="property">class </em><code class="descclassname">GeMpy_core.</code><code class="descname">GeMpy</code><span class="sig-paren">(</span><em>project_name='Default'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#GeMpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.GeMpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parent class that is used as container for the other classes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_name</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Global name of the project</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="GeMpy_core.GeMpy.project_name">
+<code class="descname">project_name</code><a class="headerlink" href="#GeMpy_core.GeMpy.project_name" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; Global name of the project</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeMpy_core.GeMpy.Data">
+<code class="descname">Data</code><a class="headerlink" href="#GeMpy_core.GeMpy.Data" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>GeMpy_core.DataManagement</em> &#8211; Object that encapsulate all raw data of the project</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeMpy_core.GeMpy.Grid">
+<code class="descname">Grid</code><a class="headerlink" href="#GeMpy_core.GeMpy.Grid" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>GeMpy_core.Grid</em> &#8211; Object that contain different grids</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeMpy_core.GeMpy.Interpolator">
+<code class="descname">Interpolator</code><a class="headerlink" href="#GeMpy_core.GeMpy.Interpolator" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>GeMpy_core.Interpolator</em> &#8211; Object to perform the potential field method</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeMpy_core.GeMpy.Plot">
+<code class="descname">Plot</code><a class="headerlink" href="#GeMpy_core.GeMpy.Plot" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>GeMpy_core.PlotData</em> &#8211; Object to visualize data and results</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.GeMpy.create_grid">
+<code class="descname">create_grid</code><span class="sig-paren">(</span><em>extent=None</em>, <em>resolution=None</em>, <em>grid_type='regular_3D'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#GeMpy.create_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.GeMpy.create_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to initialize the class grid. So far is really simple and only has the regular grid type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid_type</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; regular_3D or regular_2D (I am not even sure if regular 2D still working)</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>self.Grid</strong> &#8211; Object that contain different grids</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#GeMpy_core.Grid" title="GeMpy_core.Grid">GeMpy_core.Grid</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.GeMpy.import_data">
+<code class="descname">import_data</code><span class="sig-paren">(</span><em>extent, resolution=[50, 50, 50], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#GeMpy.import_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.GeMpy.import_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to initialize the class data. Calling this function some of the data has to be provided (TODO give to
+everything a default).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>extent</strong> (<em>list or array</em>) &#8211; [x_min, x_max, y_min, y_max, z_min, z_max]. Extent for the visualization of data
+and default of for the Grid class.</li>
+<li><strong>resolution</strong> (<em>list or array</em>) &#8211; [nx, ny, nz]. Resolution for the visualization of data
+and default of for the Grid class.</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first simple">
+<li><strong>Resolution</strong> (<em>(Optional[list]</em>) &#8211; [nx, ny, nz]. Defaults to 50</li>
+<li><strong>path_i</strong> &#8211; Path to the data bases of interfaces. Default os.getcwd(),</li>
+<li><strong>path_f</strong> &#8211; Path to the data bases of foliations. Default os.getcwd()</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>self.Data</strong> &#8211; Object that encapsulate all raw data of the project
+self.Plot(GeMpy_core.PlotData): Object to visualize data and results</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#GeMpy_core.DataManagement" title="GeMpy_core.DataManagement">GeMpy_core.DataManagement</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.GeMpy.set_interpolator">
+<code class="descname">set_interpolator</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#GeMpy.set_interpolator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.GeMpy.set_interpolator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to initialize the class interpolator. All the constant parameters for the interpolation can be passed
+as args, otherwise they will take the default value (TODO: documentation of the dafault values)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>*args</strong> &#8211; Variable length argument list</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first simple">
+<li><strong>range_var</strong> &#8211; Range of the variogram. Default None</li>
+<li><strong>c_o</strong> &#8211; Covariance at 0. Default None</li>
+<li><strong>nugget_effect</strong> &#8211; Nugget effect of the gradients. Default 0.01</li>
+<li><strong>u_grade</strong> &#8211; Grade of the polynomial used in the universal part of the Kriging. Default 2</li>
+<li><strong>rescaling_factor</strong> &#8211; Magic factor that multiplies the covariances). Default 2</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>self.Interpolator</strong> &#8211; Object to perform the potential field method
+self.Plot(GeMpy_core.PlotData): Object to visualize data and results. It gets updated.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#GeMpy_core.Interpolator" title="GeMpy_core.Interpolator">GeMpy_core.Interpolator</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.GeMpy.update_data">
+<code class="descname">update_data</code><span class="sig-paren">(</span><em>update_class='Plot Data'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#GeMpy.update_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.GeMpy.update_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to recreate an object in case we change the input data.
+# TODO it has to be a better way to do this</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>update_class</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>self.Plot</strong> &#8211; Object to visualize data and results. It gets updated.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">GeMpy_core.PlotData</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeMpy_core.Grid">
+<em class="property">class </em><code class="descclassname">GeMpy_core.</code><code class="descname">Grid</code><span class="sig-paren">(</span><em>extent</em>, <em>resolution</em>, <em>grid_type='regular_3D'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class with set of functions to generate grids</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>extent</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; [x_min, x_max, y_min, y_max, z_min, z_max]</li>
+<li><strong>resolution</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; [nx, ny, nz].</li>
+<li><strong>grid_type</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Type of grid. So far only regular 3D is implemented</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="GeMpy_core.Grid.create_regular_grid_3d">
+<code class="descname">create_regular_grid_3d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Grid.create_regular_grid_3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Grid.create_regular_grid_3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to create a 3D regular grid where is interpolated</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Unraveled 3D numpy array where every row correspond to the xyz coordinates of a regular grid</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeMpy_core.Interpolator">
+<em class="property">class </em><code class="descclassname">GeMpy_core.</code><code class="descname">Interpolator</code><span class="sig-paren">(</span><em>_data</em>, <em>_grid</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Interpolator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Interpolator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class which contain all needed methods to perform potential field implicit modelling in theano</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>_data</strong> (<a class="reference internal" href="#GeMpy_core.DataManagement" title="GeMpy_core.DataManagement"><em>GeMpy_core.DataManagement</em></a>) &#8211; All values of a DataManagement object</li>
+<li><strong>_grid</strong> (<a class="reference internal" href="#GeMpy_core.Grid" title="GeMpy_core.Grid"><em>GeMpy_core.Grid</em></a>) &#8211; A grid object</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>verbose</strong> (<em>int</em>) &#8211; Level of verbosity during the execution of the functions (up to 5). Default 0</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="GeMpy_core.Interpolator.compute_block_model">
+<code class="descname">compute_block_model</code><span class="sig-paren">(</span><em>series_number='all'</em>, <em>verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Interpolator.compute_block_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Interpolator.compute_block_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to compute the block model for the given series using data provided in the DataManagement object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>series_number</strong> (<em>str or int</em>) &#8211; series to interpolate</li>
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; level of verbosity during the computation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>self.block</strong> &#8211; 3D block with the corresponding formations</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">theano shared[numpy.ndarray]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.Interpolator.compute_potential_field">
+<code class="descname">compute_potential_field</code><span class="sig-paren">(</span><em>series_name=0</em>, <em>verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Interpolator.compute_potential_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Interpolator.compute_potential_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute an individual potential field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>series_name</strong> (<em>str or int</em>) &#8211; name or number of series to interpolate</li>
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; int level of verbosity during the computation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">3D array with the potential field</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeMpy_core.Interpolator.theano_compilation_3D">
+<code class="descname">theano_compilation_3D</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy_core.html#Interpolator.theano_compilation_3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy_core.Interpolator.theano_compilation_3D" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Function that generates the symbolic code to perform the interpolation. Calling this function creates</dt>
+<dd>both the theano functions for the potential field and the block.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">theano function for the potential field
+theano function for the block</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-Visualization"></span><p>Module with classes and methods to visualized structural geology data and potential fields of the regional modelling based on
+the potential field method.
+Tested on Ubuntu 14</p>
+<p>Created on 23/09/2016
+somehting
+&#64;author: Miguel de la Varga</p>
+<dl class="class">
+<dt id="Visualization.PlotData">
+<em class="property">class </em><code class="descclassname">Visualization.</code><code class="descname">PlotData</code><span class="sig-paren">(</span><em>_data</em>, <em>block=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Visualization.html#PlotData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Visualization.PlotData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to make the different plot related with GeMpy</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>_data</strong> (<a class="reference internal" href="#GeMpy_core.DataManagement" title="GeMpy_core.DataManagement"><em>GeMpy_core.DataManagement</em></a>) &#8211; All values of a DataManagement object</li>
+<li><strong>block</strong> (<em>theano shared</em>) &#8211; 3D array containing the lithology block</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>potential_field</strong> (<em>numpy.ndarray</em>) &#8211; 3D array containing a individual potential field</li>
+<li><strong>verbose</strong> (<em>int</em>) &#8211; Level of verbosity during the execution of the functions (up to 5). Default 0</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Visualization.PlotData.export_vtk">
+<code class="descname">export_vtk</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Visualization.html#PlotData.export_vtk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Visualization.PlotData.export_vtk" title="Permalink to this definition">¶</a></dt>
+<dd><p>export vtk
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Visualization.PlotData.plot_block_section">
+<code class="descname">plot_block_section</code><span class="sig-paren">(</span><em>cell_number=13</em>, <em>direction='y'</em>, <em>interpolation='none'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Visualization.html#PlotData.plot_block_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Visualization.PlotData.plot_block_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a section of the block model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cell_number</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; position of the array to plot</li>
+<li><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; xyz. Caartesian direction to be plotted
+interpolation(str): Type of interpolation of plt.imshow. Default &#8216;none&#8217;.  Acceptable values are &#8216;none&#8217;
+,&#8217;nearest&#8217;, &#8216;bilinear&#8217;, &#8216;bicubic&#8217;,
+&#8216;spline16&#8217;, &#8216;spline36&#8217;, &#8216;hanning&#8217;, &#8216;hamming&#8217;, &#8216;hermite&#8217;, &#8216;kaiser&#8217;,
+&#8216;quadric&#8217;, &#8216;catrom&#8217;, &#8216;gaussian&#8217;, &#8216;bessel&#8217;, &#8216;mitchell&#8217;, &#8216;sinc&#8217;,
+&#8216;lanczos&#8217;</li>
+<li><strong>**kwargs</strong> &#8211; imshow keywargs</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Block plot</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Visualization.PlotData.plot_data">
+<code class="descname">plot_data</code><span class="sig-paren">(</span><em>direction='y'</em>, <em>series='all'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Visualization.html#PlotData.plot_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Visualization.PlotData.plot_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the projecton of the raw data (interfaces and foliations) in 2D following a specific directions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; xyz. Caartesian direction to be plotted</li>
+<li><strong>series</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; series to plot</li>
+<li><strong>**kwargs</strong> &#8211; seaborn lmplot key arguments. (TODO: adding the link to them)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Data plot</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Visualization.PlotData.plot_potential_field">
+<code class="descname">plot_potential_field</code><span class="sig-paren">(</span><em>cell_number</em>, <em>potential_field=None</em>, <em>n_pf=0</em>, <em>direction='y'</em>, <em>plot_data=True</em>, <em>serie='all'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Visualization.html#PlotData.plot_potential_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Visualization.PlotData.plot_potential_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a potential field in a given direction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cell_number</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; position of the array to plot</li>
+<li><strong>potential_field</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the potential field (or series) to plot</li>
+<li><strong>n_pf</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of the  potential field (or series) to plot</li>
+<li><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; xyz. Caartesian direction to be plotted</li>
+<li><strong>serie</strong> &#8211; <em>Deprecated</em></li>
+<li><strong>**kwargs</strong> &#8211; plt.contour kwargs</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Potential field plot</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="GeMpy Introduction.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="GeMpy Introduction.html">Welcome to GeMpy&#8217;s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Introduction to GeMpy.html">Kriging structure of the <em>Potential field method</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code</a><ul class="simple">
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="GeMpy Introduction.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Notebooks/Example_2_Simple.html" title="previous chapter">Simple model</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/code.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Miguel de la Varga. NRE-RWTH team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/code.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

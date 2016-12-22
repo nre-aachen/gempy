@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to GeMpy’s documentation! &mdash; GeMpy 2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="GeMpy 2 documentation" href="#" />
+    <link rel="next" title="Kriging structure of the Potential field method" href="Introduction to GeMpy.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-gempy-s-documentation">
+<h1>Welcome to GeMpy&#8217;s documentation!<a class="headerlink" href="#welcome-to-gempy-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="a-3d-structural-geologic-implicit-modelling-in-python-v-0-3">
+<h2>A 3D Structural geologic implicit modelling in python. (v 0.3)<a class="headerlink" href="#a-3d-structural-geologic-implicit-modelling-in-python-v-0-3" title="Permalink to this headline">¶</a></h2>
+<p>GeMpy is an opensource project for the generation of 3D structural geological modelling. The algorithm is based on a especial type of Universal cokrigin interpolation created by Laujaunie et al (1997) and developed along the past year by (<em>add many more papers!!!</em>). This tool allows the generation of models with relative complex structures just from data.</p>
+<p>The results look like this:</p>
+<img alt="_images/sandstone_example.png" src="_images/sandstone_example.png" />
+<p>Its implicit nature allows the user to generate complete 3D geological models through the interpolation of:
+- Interfaces points: 3D points in space that delimit the different formation in a given setting.
+- Foliations: Measurements of the poles (perpendicular to the layer) at any point in the 3D space.</p>
+<img alt="_images/input_example.png" src="_images/input_example.png" />
+<p>In addition to the interpolation GeMpy has been created with the idea of perform Bayesian Inferences in geological modeling (de la Varga and Wellmann, 2016). Due to this, the whole interpolation algorithm has been written in the optimization packge theano (<a class="reference external" href="http://deeplearning.net/software/theano/">http://deeplearning.net/software/theano/</a>) what allows the computation of gradients opening the door to the use of advance HMC methods coupling GeMpy and PyMC3 (<a class="reference external" href="https://pymc-devs.github.io/pymc3/notebooks/getting_started.html">https://pymc-devs.github.io/pymc3/notebooks/getting_started.html</a>). Also, the use of theano allows the use of the GPU through cuda (see theano doc for more information).</p>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Welcome to GeMpy&#8217;s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Introduction to GeMpy.html">Kriging structure of the <em>Potential field method</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html">Example 1: Sandstone Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html#plotting-raw-data">Plotting raw data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html#class-interpolator">Class Interpolator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html#optimizing-the-export-of-lithologies">Optimizing the export of lithologies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html#export-to-vtk-under-development">Export to vtk. (<em>Under development</em>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_1_Sandstone_Project.html#performance-analysis">Performance Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Notebooks/Example_2_Simple.html">Simple model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_2_Simple.html#importing-dependencies">Importing dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_2_Simple.html#interactive-pandas-dataframe">Interactive pandas Dataframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Example_2_Simple.html#combining-potential-fields-depositional-series">Combining potential fields: Depositional series</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">Code</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="#">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Welcome to GeMpy&#8217;s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Introduction to GeMpy.html">Kriging structure of the <em>Potential field method</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">Code</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="Introduction to GeMpy.html" title="next chapter">Kriging structure of the <em>Potential field method</em></a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/GeMpy Introduction.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Miguel de la Varga. NRE-RWTH team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/GeMpy Introduction.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

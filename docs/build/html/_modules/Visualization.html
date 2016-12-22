@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Visualization &mdash; GeMpy 2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="GeMpy 2 documentation" href="../GeMpy Introduction.html" />
+    <link rel="up" title="Module code" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for Visualization</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module with classes and methods to visualized structural geology data and potential fields of the regional modelling based on</span>
+<span class="sd">the potential field method.</span>
+<span class="sd">Tested on Ubuntu 14</span>
+
+<span class="sd">Created on 23/09/2016</span>
+<span class="sd">somehting</span>
+<span class="sd">@author: Miguel de la Varga</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+<span class="c1"># TODO: inherit pygeomod classes</span>
+<span class="c1">#import sys, os</span>
+
+<div class="viewcode-block" id="PlotData"><a class="viewcode-back" href="../code.html#Visualization.PlotData">[docs]</a><span class="k">class</span> <span class="nc">PlotData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to make the different plot related with GeMpy</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        _data(GeMpy_core.DataManagement): All values of a DataManagement object</span>
+<span class="sd">        block(theano shared): 3D array containing the lithology block</span>
+<span class="sd">        **kwargs: Arbitrary keyword arguments.</span>
+
+<span class="sd">    Keyword Args:</span>
+<span class="sd">        potential_field(numpy.ndarray): 3D array containing a individual potential field</span>
+<span class="sd">        verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_data</span><span class="p">,</span> <span class="n">block</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_data</span>
+        <span class="k">if</span> <span class="n">block</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_block</span> <span class="o">=</span> <span class="n">block</span>
+
+        <span class="k">if</span> <span class="s1">&#39;potential_field&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_potential_field_p</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;potential_field&#39;</span><span class="p">]</span>
+
+    <span class="c1"># TODO planning the whole visualization scheme. Only data, potential field and block. 2D 3D? Improving the iteration</span>
+    <span class="c1"># with pandas framework</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_style</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_set_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Private function to set some plotting options</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">([</span><span class="s1">&#39;seaborn-white&#39;</span><span class="p">,</span> <span class="s1">&#39;seaborn-paper&#39;</span><span class="p">])</span>
+       <span class="c1"># sns.set_context(&quot;paper&quot;)</span>
+       <span class="c1"># matplotlib.rc(&quot;font&quot;, family=&quot;Helvetica&quot;)</span>
+
+<div class="viewcode-block" id="PlotData.plot_data"><a class="viewcode-back" href="../code.html#Visualization.PlotData.plot_data">[docs]</a>    <span class="k">def</span> <span class="nf">plot_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">series</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the projecton of the raw data (interfaces and foliations) in 2D following a specific directions</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            direction(str): xyz. Caartesian direction to be plotted</span>
+<span class="sd">            series(str): series to plot</span>
+<span class="sd">            **kwargs: seaborn lmplot key arguments. (TODO: adding the link to them)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Data plot</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">Gx</span><span class="p">,</span> <span class="n">Gy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slice</span><span class="p">(</span><span class="n">direction</span><span class="p">)[</span><span class="mi">4</span><span class="p">:]</span>
+
+        <span class="k">if</span> <span class="n">series</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            <span class="n">series_to_plot_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span><span class="o">.</span>
+                                                     <span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)]</span>
+            <span class="n">series_to_plot_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span><span class="o">.</span>
+                                                     <span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">series_to_plot_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">series</span><span class="p">]</span>
+            <span class="n">series_to_plot_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">series</span><span class="p">]</span>
+
+        <span class="n">sns</span><span class="o">.</span><span class="n">lmplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+                   <span class="n">data</span><span class="o">=</span><span class="n">series_to_plot_i</span><span class="p">,</span>
+                   <span class="n">fit_reg</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;formation&quot;</span><span class="p">,</span>
+                   <span class="n">scatter_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;marker&quot;</span><span class="p">:</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
+                   <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="n">legend_out</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Plotting orientations</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="n">series_to_plot_f</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">series_to_plot_f</span><span class="p">[</span><span class="n">y</span><span class="p">],</span>
+                   <span class="n">series_to_plot_f</span><span class="p">[</span><span class="n">Gx</span><span class="p">],</span> <span class="n">series_to_plot_f</span><span class="p">[</span><span class="n">Gy</span><span class="p">],</span>
+                   <span class="n">pivot</span><span class="o">=</span><span class="s2">&quot;tail&quot;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">cell_number</span><span class="o">=</span><span class="mi">25</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Slice the 3D array (blocks or potential field) in the specific direction selected in the plotting functions</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">nx</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">ny</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">nz</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+            <span class="n">_a</span> <span class="o">=</span> <span class="n">cell_number</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;Y&quot;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Z&quot;</span>
+            <span class="n">Gx</span> <span class="o">=</span> <span class="s2">&quot;G_y&quot;</span>
+            <span class="n">Gy</span> <span class="o">=</span> <span class="s2">&quot;G_z&quot;</span>
+            <span class="n">extent_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">zmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">zmax</span>
+        <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
+            <span class="n">_b</span> <span class="o">=</span> <span class="n">cell_number</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;X&quot;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Z&quot;</span>
+            <span class="n">Gx</span> <span class="o">=</span> <span class="s2">&quot;G_x&quot;</span>
+            <span class="n">Gy</span> <span class="o">=</span> <span class="s2">&quot;G_z&quot;</span>
+            <span class="n">extent_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">zmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">zmax</span>
+        <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;z&quot;</span><span class="p">:</span>
+            <span class="n">_c</span> <span class="o">=</span> <span class="n">cell_number</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;X&quot;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Y&quot;</span>
+            <span class="n">Gx</span> <span class="o">=</span> <span class="s2">&quot;G_x&quot;</span>
+            <span class="n">Gy</span> <span class="o">=</span> <span class="s2">&quot;G_y&quot;</span>
+            <span class="n">extent_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">ymax</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;must be a cartesian direction, i.e. xyz&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">,</span> <span class="n">extent_val</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">Gx</span><span class="p">,</span> <span class="n">Gy</span>
+
+<div class="viewcode-block" id="PlotData.plot_block_section"><a class="viewcode-back" href="../code.html#Visualization.PlotData.plot_block_section">[docs]</a>    <span class="k">def</span> <span class="nf">plot_block_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell_number</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot a section of the block model</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cell_number(int): position of the array to plot</span>
+<span class="sd">            direction(str): xyz. Caartesian direction to be plotted</span>
+<span class="sd">                interpolation(str): Type of interpolation of plt.imshow. Default &#39;none&#39;.  Acceptable values are &#39;none&#39;</span>
+<span class="sd">                ,&#39;nearest&#39;, &#39;bilinear&#39;, &#39;bicubic&#39;,</span>
+<span class="sd">                &#39;spline16&#39;, &#39;spline36&#39;, &#39;hanning&#39;, &#39;hamming&#39;, &#39;hermite&#39;, &#39;kaiser&#39;,</span>
+<span class="sd">                &#39;quadric&#39;, &#39;catrom&#39;, &#39;gaussian&#39;, &#39;bessel&#39;, &#39;mitchell&#39;, &#39;sinc&#39;,</span>
+<span class="sd">                &#39;lanczos&#39;</span>
+<span class="sd">            **kwargs: imshow keywargs</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Block plot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plot_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">nz</span><span class="p">)</span>
+        <span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">,</span> <span class="n">extent_val</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slice</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">cell_number</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">plot_block</span><span class="p">[</span><span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span>
+                   <span class="n">extent</span><span class="o">=</span><span class="n">extent_val</span><span class="p">,</span>
+                   <span class="n">interpolation</span><span class="o">=</span><span class="n">interpolation</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlotData.plot_potential_field"><a class="viewcode-back" href="../code.html#Visualization.PlotData.plot_potential_field">[docs]</a>    <span class="k">def</span> <span class="nf">plot_potential_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell_number</span><span class="p">,</span> <span class="n">potential_field</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">n_pf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                             <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">serie</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot a potential field in a given direction.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cell_number(int): position of the array to plot</span>
+<span class="sd">            potential_field(str): name of the potential field (or series) to plot</span>
+<span class="sd">            n_pf(int): number of the  potential field (or series) to plot</span>
+<span class="sd">            direction(str): xyz. Caartesian direction to be plotted</span>
+<span class="sd">            serie: *Deprecated*</span>
+<span class="sd">            **kwargs: plt.contour kwargs</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Potential field plot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">potential_field</span><span class="p">:</span>
+            <span class="n">potential_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_field_p</span><span class="p">[</span><span class="n">n_pf</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">plot_data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">n_pf</span><span class="p">])</span>
+
+        <span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">,</span> <span class="n">extent_val</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slice</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">cell_number</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">potential_field</span><span class="p">[</span><span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span>
+                    <span class="n">extent</span><span class="o">=</span><span class="n">extent_val</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;colorbar&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">n_pf</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlotData.export_vtk"><a class="viewcode-back" href="../code.html#Visualization.PlotData.export_vtk">[docs]</a>    <span class="k">def</span> <span class="nf">export_vtk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        export vtk</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../GeMpy Introduction.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../GeMpy Introduction.html">Welcome to GeMpy&#8217;s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction to GeMpy.html">Kriging structure of the <em>Potential field method</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code.html">Code</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../GeMpy Introduction.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Miguel de la Varga. NRE-RWTH team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
