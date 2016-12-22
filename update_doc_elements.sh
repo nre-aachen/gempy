@@ -6,7 +6,7 @@
 cd './Prototype Notebook'
 
 # converts all Jupyter Notebook files to basic html
- for f in *.ipynb; do jupyter nbconvert --to rst --output-dir ../source/Notebooks $f; done
+ for f in *.ipynb; do jupyter nbconvert --to rst --output-dir ../docs/source/Notebooks $f; done
 
 cd ../
 make html
