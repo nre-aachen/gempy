@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/conf.py" afterPath="$PROJECT_DIR$/docs/source/conf.py" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,9 +54,13 @@
       <file leaf-file-name="conf.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="666">
-              <caret line="38" column="25" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="25" />
-              <folding />
+            <state relative-caret-position="0">
+              <caret line="0" column="22" selection-start-line="0" selection-start-column="22" selection-end-line="0" selection-end-column="22" />
+              <folding>
+                <marker date="1482408494651" expanded="true" signature="5428:6032" ph="..." />
+                <marker date="1482408494651" expanded="true" signature="6135:7801" ph="..." />
+                <marker date="1482408494651" expanded="true" signature="7834:7914" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -795,7 +799,14 @@
       <option name="project" value="LOCAL" />
       <updated>1482407612543</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Docs 0.95&#10;&#10;Images bug in the readme">
+      <created>1482407685193</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1482407685193</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TodoView">
@@ -862,7 +873,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Second try to organize code" />
     <MESSAGE value="Setup created" />
     <MESSAGE value="Reducing space" />
     <MESSAGE value="Cleaning up useless code" />
@@ -887,7 +897,8 @@
     <MESSAGE value="Docs 0.91" />
     <MESSAGE value="Docs 0.912" />
     <MESSAGE value="Docs 0.94&#10;&#10;I am totally there" />
-    <option name="LAST_COMMIT_MESSAGE" value="Docs 0.94&#10;&#10;I am totally there" />
+    <MESSAGE value="Docs 0.95&#10;&#10;Images bug in the readme" />
+    <option name="LAST_COMMIT_MESSAGE" value="Docs 0.95&#10;&#10;Images bug in the readme" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1243,9 +1254,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="38" column="25" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="25" />
-          <folding />
+        <state relative-caret-position="0">
+          <caret line="0" column="22" selection-start-line="0" selection-start-column="22" selection-end-line="0" selection-end-column="22" />
+          <folding>
+            <marker date="1482408494651" expanded="true" signature="5428:6032" ph="..." />
+            <marker date="1482408494651" expanded="true" signature="6135:7801" ph="..." />
+            <marker date="1482408494651" expanded="true" signature="7834:7914" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
