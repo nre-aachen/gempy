@@ -21,6 +21,7 @@ import os
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('/home/miguel/PycharmProjects/GeMpy/GeMpy'))
 sys.path.insert(1, os.path.abspath('../../GeMpy'))
+sys.path.insert(1, os.path.abspath('../GeMpy'))
 
 # -- General configuration ------------------------------------------------
 
@@ -47,6 +48,7 @@ extensions = [
     'sphinx.ext.napoleon'
    # 'nbsphinx'
 ]
+napoleon_google_docstring = True
 
 nbsphinx_execute = 'never'
 nbsphinx_allow_errors = True

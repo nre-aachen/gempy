@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/GeMpy Introduction.doctree" afterPath="$PROJECT_DIR$/docs/build/doctrees/GeMpy Introduction.doctree" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" afterPath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/GeMpy Introduction.html" afterPath="$PROJECT_DIR$/docs/build/html/GeMpy Introduction.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/_sources/GeMpy Introduction.txt" afterPath="$PROJECT_DIR$/docs/build/html/_sources/GeMpy Introduction.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/searchindex.js" afterPath="$PROJECT_DIR$/docs/build/html/searchindex.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/conf.py" afterPath="$PROJECT_DIR$/docs/source/conf.py" />
     </list>
     <ignored path="GeMpy.iws" />
@@ -60,25 +55,23 @@
         <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="149" column="17" selection-start-line="149" selection-start-column="17" selection-end-line="149" selection-end-column="17" />
+              <caret line="151" column="17" selection-start-line="151" selection-start-column="17" selection-end-line="151" selection-end-column="17" />
               <folding>
-                <marker date="1482409409603" expanded="true" signature="0:439" ph="..." />
-                <marker date="1482409409603" expanded="false" signature="441:461" ph="import ..." />
-                <marker date="1482409409603" expanded="true" signature="463:781" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="834:1152" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="1167:1623" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="1789:1915" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="1940:2034" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="2229:2429" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="2511:2764" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="2782:3187" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="3243:3787" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="3815:4079" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="4108:4288" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="4315:4477" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="4526:5394" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="6134:7800" ph="..." />
-                <marker date="1482409409603" expanded="true" signature="7833:12219" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="0:439" ph="..." />
+                <marker date="1482409884891" expanded="false" signature="441:461" ph="import ..." />
+                <marker date="1482409884891" expanded="true" signature="463:781" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="1870:1996" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="2021:2115" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="2310:2510" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="2592:2845" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="2863:3268" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="3324:3868" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="3896:4160" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="4189:4369" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="4396:4558" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="4607:5475" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="6215:7881" ph="..." />
+                <marker date="1482409884891" expanded="true" signature="7914:12300" ph="..." />
               </folding>
             </state>
           </provider>
@@ -853,7 +846,14 @@
       <option name="project" value="LOCAL" />
       <updated>1482409080354</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="Docs 0.963&#10;&#10;my hate increases">
+      <created>1482409665325</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1482409665325</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1302,25 +1302,23 @@
     <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="149" column="17" selection-start-line="149" selection-start-column="17" selection-end-line="149" selection-end-column="17" />
+          <caret line="151" column="17" selection-start-line="151" selection-start-column="17" selection-end-line="151" selection-end-column="17" />
           <folding>
-            <marker date="1482409409603" expanded="true" signature="0:439" ph="..." />
-            <marker date="1482409409603" expanded="false" signature="441:461" ph="import ..." />
-            <marker date="1482409409603" expanded="true" signature="463:781" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="834:1152" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="1167:1623" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="1789:1915" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="1940:2034" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="2229:2429" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="2511:2764" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="2782:3187" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="3243:3787" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="3815:4079" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="4108:4288" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="4315:4477" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="4526:5394" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="6134:7800" ph="..." />
-            <marker date="1482409409603" expanded="true" signature="7833:12219" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="0:439" ph="..." />
+            <marker date="1482409884891" expanded="false" signature="441:461" ph="import ..." />
+            <marker date="1482409884891" expanded="true" signature="463:781" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="1870:1996" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="2021:2115" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="2310:2510" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="2592:2845" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="2863:3268" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="3324:3868" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="3896:4160" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="4189:4369" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="4396:4558" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="4607:5475" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="6215:7881" ph="..." />
+            <marker date="1482409884891" expanded="true" signature="7914:12300" ph="..." />
           </folding>
         </state>
       </provider>
