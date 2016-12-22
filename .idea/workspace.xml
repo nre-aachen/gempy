@@ -4,6 +4,7 @@
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/GeMpy Introduction.rst" afterPath="$PROJECT_DIR$/docs/source/GeMpy Introduction.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/Kriging.rst" afterPath="$PROJECT_DIR$/docs/source/Kriging.rst" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -115,7 +116,7 @@
         <entry file="file://$PROJECT_DIR$/docs/source/GeMpy Introduction.rst">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="378">
-              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -834,7 +835,14 @@
       <option name="project" value="LOCAL" />
       <updated>1482408718892</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="Docs 0.962&#10;&#10;Why dont you want to install you son of">
+      <created>1482408876429</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1482408876429</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TodoView">
@@ -901,7 +909,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Reducing space" />
     <MESSAGE value="Cleaning up useless code" />
     <MESSAGE value="Some TODOs and added requirements.txt" />
     <MESSAGE value="Calculation of the potential value in the interfaces. Not tested yet" />
@@ -926,7 +933,8 @@
     <MESSAGE value="Docs 0.94&#10;&#10;I am totally there" />
     <MESSAGE value="Docs 0.95&#10;&#10;Images bug in the readme" />
     <MESSAGE value="Docs 0.96&#10;&#10;The damn code is not displayed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Docs 0.96&#10;&#10;The damn code is not displayed" />
+    <MESSAGE value="Docs 0.962&#10;&#10;Why dont you want to install you son of" />
+    <option name="LAST_COMMIT_MESSAGE" value="Docs 0.962&#10;&#10;Why dont you want to install you son of" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1275,7 +1283,7 @@
     <entry file="file://$PROJECT_DIR$/docs/source/GeMpy Introduction.rst">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding />
         </state>
       </provider>
