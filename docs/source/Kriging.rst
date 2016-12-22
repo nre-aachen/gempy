@@ -19,7 +19,8 @@ Mathematically the method is based on a specific universal co-kriging
 where the variables to interpolate that bears algebraic relation between
 them, which is one parameter is the first derivative of the other.
 
-.. raw:: latex
+.. math::
+   :nowrap:
 
    \begin{equation}
    \frac{\partial Z_\it{i}}{\partial u}(x) = \lim_{\it{p}\to 0} \frac{ Z(x+pu)-Z(x)}{p}
@@ -55,7 +56,8 @@ the involved locations at any given point :math:`{\bf{x}}_0`.Due to the
 mathematical dependencies between the two variables allows to express
 the universal drift as
 
-.. raw:: latex
+.. math::
+   :nowrap:
 
    \begin{equation}
    \lambda F_1 + \lambda F_2 = f_10
@@ -63,8 +65,8 @@ the universal drift as
 
 resulting a cokriging system of the form:
 
-.. raw:: latex
-
+.. math::
+   :nowrap:
    \begin{equation}
    \left[ \begin{array}{ccc}
    {\bf{C_{\partial {\bf{Z}}/ \partial u, \, \partial {\bf{Z}}/ \partial v}}} & 
