@@ -1,40 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="More changes in docs 3">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Kriging.ipynb" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/source/Introduction to GeMpy.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/source/Kriging.rst" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/source/theory.rst" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/make.bat" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/GeMpy Introduction.doctree" afterPath="$PROJECT_DIR$/docs/build/doctrees/GeMpy Introduction.doctree" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/Notebooks/Example_1_Sandstone_Project.doctree" afterPath="$PROJECT_DIR$/docs/build/doctrees/Notebooks/Example_1_Sandstone_Project.doctree" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/Notebooks/Example_2_Simple.doctree" afterPath="$PROJECT_DIR$/docs/build/doctrees/Notebooks/Example_2_Simple.doctree" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/code.doctree" afterPath="$PROJECT_DIR$/docs/build/doctrees/code.doctree" />
+    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="More changes in docs 4">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Kriging.rst" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/source/Kriging.ipynb" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" afterPath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/theory.doctree" afterPath="$PROJECT_DIR$/docs/build/doctrees/theory.doctree" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/tutorial.doctree" afterPath="$PROJECT_DIR$/docs/build/doctrees/tutorial.doctree" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/_images/sandstone_example.png" afterPath="$PROJECT_DIR$/docs/build/html/_images/sandstone_example.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/objects.inv" afterPath="$PROJECT_DIR$/docs/build/html/objects.inv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Makefile" afterPath="$PROJECT_DIR$/Makefile" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/GeMpy Introduction.html" afterPath="$PROJECT_DIR$/docs/build/html/GeMpy Introduction.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/Notebooks/Example_1_Sandstone_Project.html" afterPath="$PROJECT_DIR$/docs/build/html/Notebooks/Example_1_Sandstone_Project.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/Notebooks/Example_2_Simple.html" afterPath="$PROJECT_DIR$/docs/build/html/Notebooks/Example_2_Simple.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/_modules/GeMpy_core.html" afterPath="$PROJECT_DIR$/docs/build/html/_modules/GeMpy_core.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/_modules/Visualization.html" afterPath="$PROJECT_DIR$/docs/build/html/_modules/Visualization.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/_modules/index.html" afterPath="$PROJECT_DIR$/docs/build/html/_modules/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/_sources/GeMpy Introduction.txt" afterPath="$PROJECT_DIR$/docs/build/html/_sources/GeMpy Introduction.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/code.html" afterPath="$PROJECT_DIR$/docs/build/html/code.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/genindex.html" afterPath="$PROJECT_DIR$/docs/build/html/genindex.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/py-modindex.html" afterPath="$PROJECT_DIR$/docs/build/html/py-modindex.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/search.html" afterPath="$PROJECT_DIR$/docs/build/html/search.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/searchindex.js" afterPath="$PROJECT_DIR$/docs/build/html/searchindex.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/theory.html" afterPath="$PROJECT_DIR$/docs/build/html/theory.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/tutorial.html" afterPath="$PROJECT_DIR$/docs/build/html/tutorial.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/GeMpy Introduction.rst" afterPath="$PROJECT_DIR$/docs/source/GeMpy Introduction.rst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/conf.py" afterPath="$PROJECT_DIR$/docs/source/conf.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/index.rst" afterPath="$PROJECT_DIR$/docs/source/index.rst" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -105,8 +77,8 @@
       <file leaf-file-name="Visualization.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="37">
-              <caret line="133" column="13" selection-start-line="133" selection-start-column="13" selection-end-line="133" selection-end-column="13" />
+            <state relative-caret-position="379">
+              <caret line="152" column="21" selection-start-line="152" selection-start-column="21" selection-end-line="152" selection-end-column="21" />
               <folding>
                 <element signature="e#3251#4349#0" expanded="false" />
               </folding>
@@ -803,7 +775,14 @@
       <option name="project" value="LOCAL" />
       <updated>1482402699434</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="More changes in docs 4">
+      <created>1482404832089</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1482404832089</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TodoView">
@@ -817,9 +796,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1301" height="772" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16334662" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16334662" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17536534" sideWeight="0.49585405" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17592593" sideWeight="0.53944224" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946378" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -894,7 +873,8 @@
     <MESSAGE value="More changes in docs" />
     <MESSAGE value="More changes in docs 2" />
     <MESSAGE value="More changes in docs 3" />
-    <option name="LAST_COMMIT_MESSAGE" value="More changes in docs 3" />
+    <MESSAGE value="More changes in docs 4" />
+    <option name="LAST_COMMIT_MESSAGE" value="More changes in docs 4" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1275,8 +1255,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="37">
-          <caret line="133" column="13" selection-start-line="133" selection-start-column="13" selection-end-line="133" selection-end-column="13" />
+        <state relative-caret-position="379">
+          <caret line="152" column="21" selection-start-line="152" selection-start-column="21" selection-end-line="152" selection-end-column="21" />
           <folding>
             <element signature="e#3251#4349#0" expanded="false" />
           </folding>
