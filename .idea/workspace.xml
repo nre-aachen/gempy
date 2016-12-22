@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="More changes in docs 4">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/Kriging.rst" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/source/Kriging.ipynb" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" afterPath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/objects.inv" afterPath="$PROJECT_DIR$/docs/build/html/objects.inv" />
+    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="GeMpy.iws" />
@@ -782,7 +778,14 @@
       <option name="project" value="LOCAL" />
       <updated>1482404832089</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Docs 0.9">
+      <created>1482405174139</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1482405174139</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TodoView">
@@ -849,7 +852,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Finding out all the problems with float32 operations:&#10;- All the euclidean distances now are done in the CPU in float64&#10;- When the range is too low and I use the GPU there are some nan. I should correct this using switch&#10;&#10;Also I found a bug in the dips, they almost dont have any effect in the interpolation. I have to try to increase the rank of the universal part but I dont have too much faith&#10;" />
     <MESSAGE value="added a matplotlib visualization of the potential field&#10;started the degree 2 of universal kriging&#10;" />
     <MESSAGE value="testing vs geomodeller" />
     <MESSAGE value="First try to organize code" />
@@ -874,7 +876,8 @@
     <MESSAGE value="More changes in docs 2" />
     <MESSAGE value="More changes in docs 3" />
     <MESSAGE value="More changes in docs 4" />
-    <option name="LAST_COMMIT_MESSAGE" value="More changes in docs 4" />
+    <MESSAGE value="Docs 0.9" />
+    <option name="LAST_COMMIT_MESSAGE" value="Docs 0.9" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
