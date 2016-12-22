@@ -29,7 +29,7 @@ Contents:
    :maxdepth: 3
 
    self
-   ./Introduction to GeMpy.ipynb 
+   Introduction+to+GeMpy
    tutorial
    code
    
