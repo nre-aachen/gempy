@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/GeMpy Introduction.doctree" afterPath="$PROJECT_DIR$/docs/build/doctrees/GeMpy Introduction.doctree" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" afterPath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/GeMpy Introduction.rst" afterPath="$PROJECT_DIR$/docs/source/GeMpy Introduction.rst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/Kriging.rst" afterPath="$PROJECT_DIR$/docs/source/Kriging.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/GeMpy Introduction.html" afterPath="$PROJECT_DIR$/docs/build/html/GeMpy Introduction.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/_sources/GeMpy Introduction.txt" afterPath="$PROJECT_DIR$/docs/build/html/_sources/GeMpy Introduction.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/searchindex.js" afterPath="$PROJECT_DIR$/docs/build/html/searchindex.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/conf.py" afterPath="$PROJECT_DIR$/docs/source/conf.py" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -56,25 +60,25 @@
         <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="17" />
+              <caret line="149" column="17" selection-start-line="149" selection-start-column="17" selection-end-line="149" selection-end-column="17" />
               <folding>
-                <marker date="1482408618391" expanded="true" signature="0:439" ph="..." />
-                <marker date="1482408618391" expanded="false" signature="441:461" ph="import ..." />
-                <marker date="1482408618391" expanded="true" signature="463:781" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="834:1152" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="1167:1624" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="1790:1916" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="1941:2035" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="2230:2430" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="2512:2765" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="2783:3188" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="3244:3788" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="3816:4080" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="4109:4289" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="4316:4478" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="4527:5395" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="6135:7801" ph="..." />
-                <marker date="1482408618391" expanded="true" signature="7834:12220" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="0:439" ph="..." />
+                <marker date="1482409409603" expanded="false" signature="441:461" ph="import ..." />
+                <marker date="1482409409603" expanded="true" signature="463:781" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="834:1152" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="1167:1623" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="1789:1915" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="1940:2034" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="2229:2429" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="2511:2764" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="2782:3187" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="3243:3787" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="3815:4079" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="4108:4288" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="4315:4477" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="4526:5394" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="6134:7800" ph="..." />
+                <marker date="1482409409603" expanded="true" signature="7833:12219" ph="..." />
               </folding>
             </state>
           </provider>
@@ -94,8 +98,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="213">
-                <caret line="14" column="60" selection-start-line="14" selection-start-column="60" selection-end-line="14" selection-end-column="60" />
+              <first_editor relative-caret-position="249">
+                <caret line="16" column="74" selection-start-line="16" selection-start-column="74" selection-end-line="16" selection-end-column="74" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -842,7 +846,14 @@
       <option name="project" value="LOCAL" />
       <updated>1482408876429</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Docs 0.963&#10;&#10;my hate increases">
+      <created>1482409080354</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1482409080354</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TodoView">
@@ -909,7 +920,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Cleaning up useless code" />
     <MESSAGE value="Some TODOs and added requirements.txt" />
     <MESSAGE value="Calculation of the potential value in the interfaces. Not tested yet" />
     <MESSAGE value="Extraction of lithologies in theano. I have to optimize it yet" />
@@ -934,7 +944,8 @@
     <MESSAGE value="Docs 0.95&#10;&#10;Images bug in the readme" />
     <MESSAGE value="Docs 0.96&#10;&#10;The damn code is not displayed" />
     <MESSAGE value="Docs 0.962&#10;&#10;Why dont you want to install you son of" />
-    <option name="LAST_COMMIT_MESSAGE" value="Docs 0.962&#10;&#10;Why dont you want to install you son of" />
+    <MESSAGE value="Docs 0.963&#10;&#10;my hate increases" />
+    <option name="LAST_COMMIT_MESSAGE" value="Docs 0.963&#10;&#10;my hate increases" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1291,25 +1302,25 @@
     <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="17" />
+          <caret line="149" column="17" selection-start-line="149" selection-start-column="17" selection-end-line="149" selection-end-column="17" />
           <folding>
-            <marker date="1482408618391" expanded="true" signature="0:439" ph="..." />
-            <marker date="1482408618391" expanded="false" signature="441:461" ph="import ..." />
-            <marker date="1482408618391" expanded="true" signature="463:781" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="834:1152" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="1167:1624" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="1790:1916" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="1941:2035" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="2230:2430" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="2512:2765" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="2783:3188" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="3244:3788" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="3816:4080" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="4109:4289" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="4316:4478" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="4527:5395" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="6135:7801" ph="..." />
-            <marker date="1482408618391" expanded="true" signature="7834:12220" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="0:439" ph="..." />
+            <marker date="1482409409603" expanded="false" signature="441:461" ph="import ..." />
+            <marker date="1482409409603" expanded="true" signature="463:781" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="834:1152" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="1167:1623" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="1789:1915" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="1940:2034" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="2229:2429" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="2511:2764" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="2782:3187" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="3243:3787" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="3815:4079" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="4108:4288" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="4315:4477" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="4526:5394" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="6134:7800" ph="..." />
+            <marker date="1482409409603" expanded="true" signature="7833:12219" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1339,8 +1350,8 @@
       </provider>
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="213">
-            <caret line="14" column="60" selection-start-line="14" selection-start-column="60" selection-end-line="14" selection-end-column="60" />
+          <first_editor relative-caret-position="249">
+            <caret line="16" column="74" selection-start-line="16" selection-start-column="74" selection-end-line="16" selection-end-column="74" />
             <folding />
           </first_editor>
           <second_editor />
