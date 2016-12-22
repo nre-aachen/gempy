@@ -15,6 +15,7 @@ The results look like this:
 .. image:: ./images/sandstone_example.png
 
 Its implicit nature allows the user to generate complete 3D geological models through the interpolation of:
+
 - Interfaces points: 3D points in space that delimit the different formation in a given setting.
 - Foliations: Measurements of the poles (perpendicular to the layer) at any point in the 3D space.
 
@@ -29,7 +30,7 @@ Contents:
    :maxdepth: 3
 
    self
-   Kriging.ipynb
+   Kriging
    tutorial
    code
    
