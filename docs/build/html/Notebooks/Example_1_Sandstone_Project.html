@@ -44,8 +44,8 @@
             
   <div class="section" id="example-1-sandstone-model">
 <h1>Example 1: Sandstone Model<a class="headerlink" href="#example-1-sandstone-model" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Importing</span>
-<span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Importing</span>
+<span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="k">as</span> <span class="nn">T</span>
 <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../GeMpy&quot;</span><span class="p">)</span>
 
@@ -59,16 +59,16 @@
 <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">Visualization</span><span class="p">)</span>
 
 <span class="c1"># Usuful packages</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pn</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pn</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="c1"># This was to choose the gpu</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;CUDA_LAUNCH_BLOCKING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
 
 <span class="c1"># Default options of printin</span>
-<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span> <span class="mi">130</span><span class="p">,</span> <span class="n">suppress</span> <span class="o">=</span>  <span class="bp">True</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span> <span class="mi">130</span><span class="p">,</span> <span class="n">suppress</span> <span class="o">=</span>  <span class="kc">True</span><span class="p">)</span>
 
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
 <span class="c1">#%matplotlib notebook</span>
@@ -83,7 +83,7 @@ files, even though in our case it is not a big deal).</p>
 <p><em>General note. So far the reescaling factor is calculated for all series
 at the same time. GeoModeller does it individually for every potential
 field. I have to look better what this parameter exactly means</em></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Setting extend, grid and compile</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Setting extend, grid and compile</span>
 <span class="c1"># Setting the extent</span>
 <span class="n">sandstone</span> <span class="o">=</span> <span class="n">GeMpy_core</span><span class="o">.</span><span class="n">GeMpy</span><span class="p">()</span>
 
@@ -95,7 +95,7 @@ field. I have to look better what this parameter exactly means</em></p>
 </div>
 <p>All input data is stored in pandas dataframes under,
 <code class="docutils literal"><span class="pre">self.Data.Interances</span></code> and <code class="docutils literal"><span class="pre">self.Data.Foliations</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 <div>
@@ -192,7 +192,7 @@ field. I have to look better what this parameter exactly means</em></p>
 </div><p>In case of disconformities, we can define which formation belong to
 which series using a dictionary. Until python 3.6 is important to
 specify the order of the series otherwise is random</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">set_series</span><span class="p">({</span><span class="s2">&quot;EarlyGranite_Series&quot;</span><span class="p">:</span><span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">formations</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">set_series</span><span class="p">({</span><span class="s2">&quot;EarlyGranite_Series&quot;</span><span class="p">:</span><span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">formations</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
                       <span class="s2">&quot;BIF_Series&quot;</span><span class="p">:(</span><span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">formations</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">formations</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
                       <span class="s2">&quot;SimpleMafic_Series&quot;</span><span class="p">:</span><span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">formations</span><span class="p">[</span><span class="mi">2</span><span class="p">]},</span>
                        <span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;EarlyGranite_Series&quot;</span><span class="p">,</span>
@@ -226,7 +226,7 @@ specify the order of the series otherwise is random</p>
   </tbody>
 </table>
 </div><p>Now in the data frame we should have the series column too</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 <div>
@@ -322,7 +322,7 @@ specify the order of the series otherwise is random</p>
 </table>
 </div><p>Next step is the creating of a grid. So far only regular. By default it
 takes the extent and the resolution given in the <code class="docutils literal"><span class="pre">import_data</span></code> method.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Create a class Grid so far just regular grid</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Create a class Grid so far just regular grid</span>
 <span class="n">sandstone</span><span class="o">.</span><span class="n">create_grid</span><span class="p">()</span>
 <span class="n">sandstone</span><span class="o">.</span><span class="n">Grid</span><span class="o">.</span><span class="n">grid</span>
 </pre></div>
@@ -344,7 +344,7 @@ This object contains some methods to plot the data and the results.</p>
 direction using the following method. Also is possible to choose the
 series you want to plot. Additionally all the key arguments of seaborn
 lmplot can be used.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">series</span> <span class="o">=</span> <span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">series</span> <span class="o">=</span> <span class="n">sandstone</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 <img alt="../_images/Example_1_Sandstone_Project_14_0.png" src="../_images/Example_1_Sandstone_Project_14_0.png" />
@@ -357,20 +357,20 @@ variables of the interpolation. I recommend not to touch them if you do
 not know what are you doing. The default values should be good enough.
 Also the first time we execute the method, we will compile the theano
 function so it can take a bit of time.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">set_interpolator</span><span class="p">()</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">set_interpolator</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Now we could visualize the individual potential fields as follow:</p>
 <div class="section" id="early-granite">
 <h3>Early granite<a class="headerlink" href="#early-granite" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_pf</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_pf</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/Example_1_Sandstone_Project_20_0.png" src="../_images/Example_1_Sandstone_Project_20_0.png" />
 </div>
 <div class="section" id="bif-series">
 <h3>BIF Series<a class="headerlink" href="#bif-series" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">n_pf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s2">&quot;magma&quot;</span><span class="p">,</span>  <span class="n">plot_data</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">n_pf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s2">&quot;magma&quot;</span><span class="p">,</span>  <span class="n">plot_data</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                                         <span class="n">verbose</span> <span class="o">=</span> <span class="mi">5</span> <span class="p">)</span>
 </pre></div>
 </div>
@@ -378,7 +378,7 @@ function so it can take a bit of time.</p>
 </div>
 <div class="section" id="simple-mafic">
 <h3>SImple mafic<a class="headerlink" href="#simple-mafic" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_pf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_pf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/Example_1_Sandstone_Project_24_0.png" src="../_images/Example_1_Sandstone_Project_24_0.png" />
@@ -390,14 +390,14 @@ function so it can take a bit of time.</p>
 method <code class="docutils literal"><span class="pre">compute_block_model</span></code> will compute the block model, updating
 the attribute <code class="docutils literal"><span class="pre">block</span></code>. This attribute is a theano shared function that
 can return a 3D array (raveled) using the method <code class="docutils literal"><span class="pre">get_value()</span></code>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Reset the block</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Reset the block</span>
 <span class="n">sandstone</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">sandstone</span><span class="o">.</span><span class="n">Grid</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span>
 
 <span class="c1"># Compute the block</span>
 <span class="n">sandstone</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">compute_block_model</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">get_value</span><span class="p">(),</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">sandstone</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">get_value</span><span class="p">())</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">get_value</span><span class="p">(),</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">sandstone</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">get_value</span><span class="p">())</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span>
@@ -406,7 +406,7 @@ can return a 3D array (raveled) using the method <code class="docutils literal">
 </div>
 <p>And again after computing the model in the Plot object we can use the
 method <code class="docutils literal"><span class="pre">plot_block_section</span></code> to see a 2D section of the model</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_block_section</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">interpolation</span> <span class="o">=</span> <span class="s1">&#39;nearest&#39;</span><span class="p">,</span>  <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_block_section</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">interpolation</span> <span class="o">=</span> <span class="s1">&#39;nearest&#39;</span><span class="p">,</span>  <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;sandstone_example.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -414,7 +414,7 @@ method <code class="docutils literal"><span class="pre">plot_block_section</span
 </div>
 <div class="section" id="export-to-vtk-under-development">
 <h2>Export to vtk. (<em>Under development</em>)<a class="headerlink" href="#export-to-vtk-under-development" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Export model to VTK</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Export model to VTK</span>
 
 <span class="sd">Export the geology blocks to VTK for visualisation of the entire 3-D model in an</span>
 <span class="sd">external VTK viewer, e.g. Paraview.</span>
@@ -434,7 +434,7 @@ method <code class="docutils literal"><span class="pre">plot_block_section</span
 <span class="n">delx</span> <span class="o">=</span> <span class="mf">0.2</span>
 <span class="n">dely</span> <span class="o">=</span> <span class="mf">0.2</span>
 <span class="n">delz</span> <span class="o">=</span> <span class="mf">0.2</span>
-<span class="kn">from</span> <span class="nn">pyevtk.hl</span> <span class="kn">import</span> <span class="n">gridToVTK</span>
+<span class="kn">from</span> <span class="nn">pyevtk.hl</span> <span class="k">import</span> <span class="n">gridToVTK</span>
 <span class="c1"># Coordinates</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">extent_x</span> <span class="o">+</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">delx</span><span class="p">,</span> <span class="n">delx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">extent_y</span> <span class="o">+</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">dely</span><span class="p">,</span> <span class="n">dely</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
@@ -468,7 +468,7 @@ computation so be careful if you need a fast call)</p>
 <div class="section" id="cpu">
 <h3>CPU<a class="headerlink" href="#cpu" title="Permalink to this headline">¶</a></h3>
 <p>The following profile is with a 2 core laptop. Nothing spectacular.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">timeit</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">timeit</span>
 <span class="c1"># Reset the block</span>
 <span class="n">sandstone</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">sandstone</span><span class="o">.</span><span class="n">Grid</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span>
 
@@ -479,13 +479,13 @@ computation so be careful if you need a fast call)</p>
 <p>Looking at the profile we can see that most of time is in pow operation
 (exponential). This probably is that the extent is huge and we are doing
 it with too much precision. I am working on it</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">esandstone</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">_interpolate</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">esandstone</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">_interpolate</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="gpu">
 <h3>GPU<a class="headerlink" href="#gpu" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">timeit</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">timeit</span>
 <span class="c1"># Reset the block</span>
 <span class="n">sandstone</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">sandstone</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span>
 
@@ -493,7 +493,7 @@ it with too much precision. I am working on it</p>
 <span class="n">sandstone</span><span class="o">.</span><span class="n">compute_block_model</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">block_export</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">sandstone</span><span class="o">.</span><span class="n">block_export</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

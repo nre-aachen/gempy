@@ -1,0 +1,9 @@
+Before a big commit.
+(we need to make the tests!!!)
+
+- Check all notebooks work fine
+- run update_doc_elements to update the Shpinx tutorial notebooks
+- if you add some math to the notebooks probably you have to go afterwards to the rst and change the latex enviroment
+  to ..math:
+- Then you can build or not the html to check offline if everything is in order
+- Push and check that readmydocs just worked fine

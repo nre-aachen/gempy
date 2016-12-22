@@ -48,28 +48,28 @@
 simple model from the beginning to the end using GeMpy</p>
 <div class="section" id="importing-dependencies">
 <h2>Importing dependencies<a class="headerlink" href="#importing-dependencies" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Importing</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Importing</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="k">as</span> <span class="nn">T</span>
 <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;/home/bl3/PycharmProjects/GeMpy/GeMpy&quot;</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pn</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pn</span>
 
 <span class="kn">import</span> <span class="nn">GeMpy_core</span>
 <span class="kn">import</span> <span class="nn">Visualization</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">GeMpy_core</span><span class="p">)</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;CUDA_LAUNCH_BLOCKING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
-<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">suppress</span> <span class="o">=</span>  <span class="bp">True</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">suppress</span> <span class="o">=</span>  <span class="kc">True</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">cm</span>
 
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">set_matplotlib_formats</span>
 <span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="s1">&#39;png&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;savefig.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">75</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.autolayout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.autolayout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">6</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">18</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">20</span>
@@ -78,7 +78,7 @@ simple model from the beginning to the end using GeMpy</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.markersize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">14</span>
 
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
 <span class="c1"># This sets reasonable defaults for font size for</span>
 <span class="c1"># a figure that will go in a paper</span>
@@ -92,14 +92,14 @@ simple model from the beginning to the end using GeMpy</p>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">qgrid</span>
-<span class="n">qgrid</span><span class="o">.</span><span class="n">nbinstall</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># copies javascript dependencies to your /nbextensions folder</span>
+<span class="n">qgrid</span><span class="o">.</span><span class="n">nbinstall</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># copies javascript dependencies to your /nbextensions folder</span>
 
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
 </pre></div>
 </div>
 <div class="section" id="visualize-data">
 <h3>Visualize data<a class="headerlink" href="#visualize-data" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Setting extend, grid and compile</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Setting extend, grid and compile</span>
 <span class="c1"># Setting the extent</span>
 <span class="n">test</span> <span class="o">=</span> <span class="n">GeMpy_core</span><span class="o">.</span><span class="n">GeMpy</span><span class="p">()</span>
 <span class="n">test</span><span class="o">.</span><span class="n">import_data</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
@@ -191,23 +191,23 @@ simple model from the beginning to the end using GeMpy</p>
 <span class="sd">    results. This function only adds the annotations, it doesn&#39;t show</span>
 <span class="sd">    them.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>  <span class="c1"># Make sure we have pyplot as plt</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># Make sure we have pyplot as plt</span>
 
     <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="n">label_col</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">y</span><span class="p">]):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mf">0.15</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="n">inter_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf{x}}_{\alpha \, 0}^1$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 1}^1$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 2}^1$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 3}^1$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 0}^2$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 1}^2$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 2}^2$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 3}^2$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 4}^2$&#39;</span><span class="p">]</span>
+<span class="n">inter_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 0}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 1}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 2}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 3}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 0}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 1}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 2}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 3}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 4}^2$&#39;</span><span class="p">]</span>
 
-<span class="n">foli_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf{x}}_{\beta \,{0}}$&#39;</span><span class="p">,</span>
-              <span class="s1">r&#39;${\bf{x}}_{\beta \,{1}}$&#39;</span><span class="p">]</span>
+<span class="n">foli_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\beta \,</span><span class="si">{0}</span><span class="s1">}$&#39;</span><span class="p">,</span>
+              <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\beta \,</span><span class="si">{1}</span><span class="s1">}$&#39;</span><span class="p">]</span>
 
 <span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">inter_labels</span><span class="p">)</span>
 <span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">foli_labels</span><span class="p">)</span>
@@ -324,7 +324,7 @@ simple model from the beginning to the end using GeMpy</p>
 <div class="section" id="interactive-pandas-dataframe">
 <h2>Interactive pandas Dataframe<a class="headerlink" href="#interactive-pandas-dataframe" title="Permalink to this headline">¶</a></h2>
 <p>Using qgrid it is possible to modify the tables in place as following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">qgrid</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">qgrid</span>
 <span class="n">qgrid</span><span class="o">.</span><span class="n">show_grid</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -334,14 +334,14 @@ simple model from the beginning to the end using GeMpy</p>
 <div class="section" id="grid-and-potential-field">
 <h3>Grid and potential field<a class="headerlink" href="#grid-and-potential-field" title="Permalink to this headline">¶</a></h3>
 <p>We can see the potential field generated out of the data above</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">test</span><span class="o">.</span><span class="n">create_grid</span><span class="p">()</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">test</span><span class="o">.</span><span class="n">create_grid</span><span class="p">()</span>
 <span class="n">test</span><span class="o">.</span><span class="n">set_interpolator</span><span class="p">(</span><span class="n">u_grade</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">test</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">colorbar</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;magma&#39;</span><span class="p">)</span>
+<span class="n">test</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">colorbar</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;magma&#39;</span><span class="p">)</span>
 <span class="c1">#test.Interpolator.DK;</span>
 </pre></div>
 </div>
 <img alt="../_images/Example_2_Simple_9_0.png" src="../_images/Example_2_Simple_9_0.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span>from ipywidgets import widgets
+<div class="code python highlight-default"><div class="highlight"><pre><span></span>from ipywidgets import widgets
 from ipywidgets import interact
 def cov_cubic_f(r,a = 6, c_o = 1):↔
 def cov_cubic_d1_f(r,a = 6., c_o = 1):↔
@@ -397,7 +397,7 @@ potential field at the intersections between two layers. Therefore, by
 simple comparison between a concrete value of the potential field and
 the values of the interfaces it is possible to segment the domain into
 layers Fig X.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">test</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">compute_block_model</span><span class="p">()</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">test</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">compute_block_model</span><span class="p">()</span>
 <span class="n">test</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_block_section</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -418,7 +418,7 @@ potential field at an specific location.</p>
 <p>In the next example, we add a new serie consisting in a layer&#8212;&#8217;Layer
 3&#8217;&#8212; Fig X, which generate the potential field of Fig X and
 subsequently the block Figure X.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Setting extend, grid and compile</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Setting extend, grid and compile</span>
 <span class="c1"># Setting the extent</span>
 <span class="n">two_pot</span> <span class="o">=</span> <span class="n">GeMpy_core</span><span class="o">.</span><span class="n">GeMpy</span><span class="p">()</span>
 <span class="n">two_pot</span><span class="o">.</span><span class="n">import_data</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
@@ -455,22 +455,22 @@ subsequently the block Figure X.</p>
                                          <span class="s2">&quot;polarity&quot;</span> <span class="p">:</span> <span class="n">polarity</span><span class="p">,</span>
 <span class="s2">&quot;formation&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Layer 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Layer 2&quot;</span><span class="p">,</span> <span class="s1">&#39;Layer 3&#39;</span><span class="p">]})</span>
 
-<span class="n">inter_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf{x}}_{\alpha \, 0}^1$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 1}^1$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 2}^1$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 3}^1$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 0}^2$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 1}^2$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 2}^2$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 3}^2$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 4}^2$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 0}^1$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 1}^1$&#39;</span><span class="p">,</span>
-               <span class="s1">r&#39;${\bf{x}}_{\alpha \, 2}^1$&#39;</span><span class="p">]</span>
+<span class="n">inter_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 0}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 1}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 2}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 3}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 0}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 1}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 2}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 3}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 4}^2$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 0}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 1}^1$&#39;</span><span class="p">,</span>
+               <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\alpha \, 2}^1$&#39;</span><span class="p">]</span>
 
-<span class="n">foli_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf{x}}_{\beta \,{0}}$&#39;</span><span class="p">,</span>
-              <span class="s1">r&#39;${\bf{x}}_{\beta \,{1}}$&#39;</span><span class="p">,</span>
-              <span class="s1">r&#39;${\bf{x}}_{\beta \,{0}}$&#39;</span><span class="p">]</span>
+<span class="n">foli_labels</span> <span class="o">=</span><span class="p">[</span><span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\beta \,</span><span class="si">{0}</span><span class="s1">}$&#39;</span><span class="p">,</span>
+              <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\beta \,</span><span class="si">{1}</span><span class="s1">}$&#39;</span><span class="p">,</span>
+              <span class="s1">r&#39;${\bf</span><span class="si">{x}</span><span class="s1">}_{\beta \,</span><span class="si">{0}</span><span class="s1">}$&#39;</span><span class="p">]</span>
 
 <span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">inter_labels</span><span class="p">)</span>
 <span class="n">two_pot</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">foli_labels</span><span class="p">)</span>
@@ -512,7 +512,7 @@ subsequently the block Figure X.</p>
 <span class="sd">    results. This function only adds the annotations, it doesn&#39;t show</span>
 <span class="sd">    them.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>  <span class="c1"># Make sure we have pyplot as plt</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># Make sure we have pyplot as plt</span>
 
     <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="n">label_col</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">y</span><span class="p">]):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mf">0.15</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -531,11 +531,11 @@ subsequently the block Figure X.</p>
 </div>
 <img alt="../_images/Example_2_Simple_16_0.png" src="../_images/Example_2_Simple_16_0.png" />
 <p>This potential field gives the following block</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">two_pot</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">n_pf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">colorbar</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;magma&#39;</span><span class="p">)</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">two_pot</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">plot_potential_field</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">n_pf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">colorbar</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;magma&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/Example_2_Simple_18_0.png" src="../_images/Example_2_Simple_18_0.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Reset the block</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Reset the block</span>
 <span class="n">two_pot</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">two_pot</span><span class="o">.</span><span class="n">Grid</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span>
 
 <span class="n">two_pot</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">compute_block_model</span><span class="p">(</span><span class="n">series_number</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -545,7 +545,7 @@ subsequently the block Figure X.</p>
 <img alt="../_images/Example_2_Simple_19_0.png" src="../_images/Example_2_Simple_19_0.png" />
 <p>Combining both potential field where the first potential field is
 younger than the second we can obtain the following structure.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Reset the block</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Reset the block</span>
 <span class="n">two_pot</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">two_pot</span><span class="o">.</span><span class="n">Grid</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span>
 
 <span class="n">two_pot</span><span class="o">.</span><span class="n">Interpolator</span><span class="o">.</span><span class="n">compute_block_model</span><span class="p">(</span><span class="n">series_number</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
@@ -555,7 +555,7 @@ younger than the second we can obtain the following structure.</p>
 <img alt="../_images/Example_2_Simple_21_0.png" src="../_images/Example_2_Simple_21_0.png" />
 <div class="section" id="side-note-example-of-covariances-involved-in-the-cokriging-system">
 <h3>Side note: Example of covariances involved in the cokriging system<a class="headerlink" href="#side-note-example-of-covariances-involved-in-the-cokriging-system" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">plot_potential_var</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">14</span> <span class="o">/</span> <span class="mi">3</span>  <span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">plot_potential_var</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">14</span> <span class="o">/</span> <span class="mi">3</span>  <span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
 
 <span class="n">plot_all</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">14</span> <span class="o">/</span> <span class="mi">3</span>  <span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span> <span class="c1"># 0**2 /14/3</span>
 </pre></div>
