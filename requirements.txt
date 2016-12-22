@@ -2,4 +2,3 @@ numpy
 matplotlib
 theano
 pandas
-python 3.0

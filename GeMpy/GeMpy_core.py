@@ -380,7 +380,7 @@ class Interpolator(object):
         :param range_var: Range of the variogram, it is recommended the distance of the longest diagonal
         :param c_o: Sill of the variogram
         """
-        # TODO: update Docstring
+        # TODO: update Docstrig
 
         u_grade = kwargs.get('u_grade', 2)
         range_var = kwargs.get('range_var', None)
