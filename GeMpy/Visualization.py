@@ -29,11 +29,9 @@ class PlotData(object):
         verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0
     """
 
-    def __init__(self, _data, block=None, **kwargs):
+    def __init__(self, _data, **kwargs):
 
         self._data = _data
-        if block:
-            self._block = block
 
         if 'potential_field' in kwargs:
             self._potential_field_p = kwargs['potential_field']
@@ -69,14 +67,14 @@ class PlotData(object):
         x, y, Gx, Gy = self._slice(direction)[4:]
 
         if series == "all":
-            series_to_plot_i = self._data.Interfaces[self._data.Interfaces["series"].
+            series_to_plot_i = self._data.interfaces[self._data.interfaces["series"].
                                                      isin(self._data.series.columns.values)]
-            series_to_plot_f = self._data.Foliations[self._data.Foliations["series"].
+            series_to_plot_f = self._data.foliations[self._data.foliations["series"].
                                                      isin(self._data.series.columns.values)]
 
         else:
-            series_to_plot_i = self._data.Interfaces[self._data.Interfaces["series"] == series]
-            series_to_plot_f = self._data.Foliations[self._data.Foliations["series"] == series]
+            series_to_plot_i = self._data.interfaces[self._data.interfaces["series"] == series]
+            series_to_plot_f = self._data.foliations[self._data.foliations["series"] == series]
 
         sns.lmplot(x, y,
                    data=series_to_plot_i,
@@ -127,7 +125,7 @@ class PlotData(object):
             raise AttributeError(str(direction) + "must be a cartesian direction, i.e. xyz")
         return _a, _b, _c, extent_val, x, y, Gx, Gy
 
-    def plot_block_section(self, cell_number=13, direction="y", interpolation='none', **kwargs):
+    def plot_block_section(self, cell_number=13, block=None,  direction="y", interpolation='none', **kwargs):
         """
         Plot a section of the block model
 
@@ -144,7 +142,17 @@ class PlotData(object):
         Returns:
             Block plot
         """
-        plot_block = self._block.get_value().reshape(self._data.nx, self._data.ny, self._data.nz)
+        if block:
+            assert type(block) is 'theano.tensor.sharedvar.TensorSharedVariable', 'Block has to be a theano shared' \
+                                                                                  'object.'
+            _block = block
+        else:
+            try:
+                _block = self._data.interpolator.block
+            except AttributeError:
+                raise AttributeError('There is no block to plot')
+
+        plot_block = _block.get_value().reshape(self._data.nx, self._data.ny, self._data.nz)
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
 
         plt.imshow(plot_block[_a, _b, _c].T, origin="bottom", cmap="viridis",
@@ -154,7 +162,7 @@ class PlotData(object):
         plt.ylabel(y)
 
     def plot_potential_field(self, cell_number, potential_field=None, n_pf=0,
-                             direction="y", plot_data=True, serie="all", *args, **kwargs):
+                             direction="y", plot_data=True, series="all", *args, **kwargs):
         """
         Plot a potential field in a given direction.
 
@@ -169,8 +177,12 @@ class PlotData(object):
         Returns:
             Potential field plot
         """
+
         if not potential_field:
-            potential_field = self._potential_field_p[n_pf]
+            try:
+                potential_field = self._data.interpolator.potential_fields[n_pf]
+            except AttributeError:
+                print('No potential field has been computed yet')
 
         if plot_data:
             self.plot_data(direction, self._data.series.columns.values[n_pf])

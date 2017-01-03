@@ -30,7 +30,7 @@ class GeMpy(object):
     Attributes:
         project_name (str): Global name of the project
         Data (GeMpy_core.DataManagement): Object that encapsulate all raw data of the project
-        Grid (GeMpy_core.Grid): Object that contain different grids
+        Grid (GeMpy_core.grid): Object that contain different grids
         Interpolator (GeMpy_core.Interpolator): Object to perform the potential field method
         Plot (GeMpy_core.PlotData): Object to visualize data and results
     """
@@ -50,9 +50,9 @@ class GeMpy(object):
 
         Args:
             extent (list or array):  [x_min, x_max, y_min, y_max, z_min, z_max]. Extent for the visualization of data
-             and default of for the Grid class.
+             and default of for the grid class.
             resolution (list or array): [nx, ny, nz]. Resolution for the visualization of data
-             and default of for the Grid class.
+             and default of for the grid class.
             **kwargs: Arbitrary keyword arguments.
 
         Keyword Args:
@@ -77,7 +77,7 @@ class GeMpy(object):
             **kwargs: Arbitrary keyword arguments.
 
         Returns:
-            self.Grid(GeMpy_core.Grid): Object that contain different grids
+            self.grid(GeMpy_core.grid): Object that contain different grids
         """
         if not extent:
             extent = self.Data.extent
@@ -225,7 +225,7 @@ class DataManagement(object):
             getattr(self, "formations")
         except AttributeError:
             try:
-                # Foliations may or may not be in all formations so we need to use Interfaces
+                # foliations may or may not be in all formations so we need to use interfaces
                 formations = self.Interfaces["formation"].unique()
 
                 # TODO: Trying to make this more elegant?
@@ -252,8 +252,8 @@ class DataManagement(object):
 
         Returns:
             self.series: A pandas DataFrame with the series and formations relations
-            self.Interfaces: one extra column with the given series
-            self.Foliations: one extra column with the given series
+            self.interfaces: one extra column with the given series
+            self.foliations: one extra column with the given series
         """
 
         if series_distribution is None:
@@ -282,7 +282,7 @@ class DataManagement(object):
         Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations
 
         Returns:
-            self.Foliations: extra columns with components xyz of the unity vector.
+            self.foliations: extra columns with components xyz of the unity vector.
         """
 
         self.Foliations['G_x'] = np.sin(np.deg2rad(self.Foliations["dip"])) * \
@@ -337,7 +337,7 @@ class Interpolator(object):
 
     Args:
         _data(GeMpy_core.DataManagement): All values of a DataManagement object
-        _grid(GeMpy_core.Grid): A grid object
+        _grid(GeMpy_core.grid): A grid object
         **kwargs: Arbitrary keyword arguments.
 
     Keyword Args:
@@ -535,7 +535,7 @@ class Interpolator(object):
             if verbose > 1:
                 print("The formations are: \n"
                       "Layers ", self._data.Interfaces[self._data.Interfaces["formation"].str.contains(for_in_ser)], " \n "
-                                                                                                         "Foliations ",
+                                                                                                         "foliations ",
                       self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)])
 
         # self.grad is none so far. I have it for further research in the calculation of the Jacobian matrix
@@ -582,7 +582,7 @@ class Interpolator(object):
             if verbose > 1:
                 print("The formations are: \n"
                       "Layers \n", self._data.Interfaces[self._data.Interfaces["formation"].str.contains(for_in_ser)],
-                      "\n Foliations \n",
+                      "\n foliations \n",
                       self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)])
 
         self.Z_x, G_x, G_y, G_z, self.potential_interfaces, self.C, self.DK = self._interpolate(
@@ -634,8 +634,8 @@ class Interpolator(object):
         # TODO: Check that the distances does not go nuts when I use too large numbers
 
         # Here we create the array with the points to simulate:
-        #   Grid points except those who have been simulated in a younger serie
-        #   Interfaces points to segment the lithologies
+        #   grid points except those who have been simulated in a younger serie
+        #   interfaces points to segment the lithologies
         yet_simulated = T.vector("boolean function that avoid to simulate twice a point of a different serie")
         grid_val = T.vertical_stack((
             self.grid_val_T*yet_simulated.reshape((yet_simulated.shape[0], 1))).nonzero_values().reshape((-1, 3)),

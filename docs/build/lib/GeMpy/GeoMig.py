@@ -134,7 +134,7 @@ class Interpolator(GeoPlot):
             getattr(self, "formations")
         except AttributeError:
             try:
-                # Foliations may or may not be in all formations so we need to use Interfaces
+                # foliations may or may not be in all formations so we need to use interfaces
                 self.formations = self.Interfaces["formation"].unique()
 
                 # TODO: Trying to make this more elegant?
@@ -254,7 +254,7 @@ class Interpolator(GeoPlot):
             if verbose > 1:
                 print("The formations are: \n"
                       "Layers ", self.Interfaces[self.Interfaces["formation"].str.contains(for_in_ser)], " \n "
-                                                                                                    "Foliations ",
+                                                                                                    "foliations ",
                       self.Foliations[self.Foliations["formation"].str.contains(for_in_ser)])
 
         self.grad = self.block_export(self.dips_position, self.dip_angles, self.azimuth, self.polarity,
@@ -288,7 +288,7 @@ class Interpolator(GeoPlot):
             if verbose > 1:
                 print("The formations are: \n"
                       "Layers ", self.Interfaces[self.Interfaces["formation"].str.contains(for_in_ser)], " \n "
-                                                                                                    "Foliations ",
+                                                                                                    "foliations ",
                       self.Foliations[self.Foliations["formation"].str.contains(for_in_ser)])
 
         self.Z_x, self.G_x, self.G_y, self.G_z, self.potential_interfaces, self.C, self.DK = self.interpolate(
@@ -337,8 +337,8 @@ class Interpolator(GeoPlot):
         _aux_ref_layer_points = ref_layer_points.astype("float64")
 
         # Here we create the array with the points to simulate:
-        #   Grid points except those who have been simulated in a younger serie
-        #   Interfaces points to segment the lithologies
+        #   grid points except those who have been simulated in a younger serie
+        #   interfaces points to segment the lithologies
         yet_simulated = T.vector("boolean function that avoid to simulate twice a point of a different serie")
         grid_val = T.vertical_stack((
             self.grid_val_T*yet_simulated.reshape((yet_simulated.shape[0], 1))).nonzero_values().reshape((-1, 3)),

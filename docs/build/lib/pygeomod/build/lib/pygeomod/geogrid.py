@@ -59,7 +59,7 @@ class GeoGrid():
     def load_grid(self):
         """Load exported grid, discretisation and dimensions from file"""
         if not hasattr(self, 'grid_filename'):
-            raise AttributeError("Grid filename is not defined!")
+            raise AttributeError("grid filename is not defined!")
         self.grid = np.loadtxt(self.grid_filename,
                                delimiter = ',',
                                dtype='int',
