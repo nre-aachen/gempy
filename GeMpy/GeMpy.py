@@ -187,11 +187,12 @@ def plot_potential_field(geo_data, cell_number, potential_field=None, n_pf=0,
 
 
 def i_set_data(geo_data, dtype="foliations"):
-    import qgrid
-    qgrid.nbinstall(overwrite=True)
-    qgrid.set_defaults(show_toolbar=True)
-    assert dtype is 'foliations' or dtype is 'interfaces', 'dtype must be either foliations or interfaces'
-    qgrid.show_grid(get_raw_data(geo_data,dtype))
+    # import qgrid
+    # qgrid.nbinstall(overwrite=True)
+    # qgrid.set_defaults(show_toolbar=True)
+    # assert dtype is 'foliations' or dtype is 'interfaces', 'dtype must be either foliations or interfaces'
+    # qgrid.show_grid(get_raw_data(geo_data, dtype))
+    geo_data.i_set_data(dtype=dtype)
 
 
 def update_potential_fields(geo_data, verbose=0):
