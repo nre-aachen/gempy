@@ -212,6 +212,7 @@ class DataManagement(object):
         assert dtype is 'foliations' or dtype is 'interfaces', 'dtype must be either foliations or interfaces'
         qgrid.show_grid(self.get_raw_data(dtype=dtype))
 
+
     def get_raw_data(self, dtype='all'):
 
         import pandas as _pn
