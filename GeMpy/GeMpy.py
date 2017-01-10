@@ -11,11 +11,11 @@ this is only to test git 3
 
 """
 
-#import theano
-#import theano.tensor as T
+# import theano
+# import theano.tensor as T
 import numpy as _np
-#import sys, os
-#import pandas as pn
+# import sys, os
+# import pandas as pn
 
 from Visualization import PlotData
 from DataManagement import DataManagement
@@ -48,22 +48,19 @@ def import_data(extent, resolution=[50, 50, 50], **kwargs):
     return DataManagement(extent, resolution, **kwargs)
 
 
-def plot_data(geo_data, direction="y",  series="all", **kwargs):
-
+def plot_data(geo_data, direction="y", series="all", **kwargs):
     plot = PlotData(geo_data)
-    plot.plot_data(direction=direction,  series=series, **kwargs)
+    plot.plot_data(direction=direction, series=series, **kwargs)
     # TODO saving options
     return plot
 
 
 def get_raw_data(geo_data, dtype='all'):
-
     return geo_data.get_raw_data(dtype=dtype)
 
 
-def set_data_series(geo_data, series_distribution=None, order=None, verbose=0):
-
-    geo_data.set_series(series_distribution=series_distribution, order=order)
+def set_data_series(geo_data, series_distribution=None, order_series=None, verbose=0):
+    geo_data.set_series(series_distribution=series_distribution, order=order_series)
 
     if verbose > 0:
         return get_raw_data(geo_data)
@@ -125,12 +122,21 @@ def set_interpolator(geo_data, compile_theano=False, *args, **kwargs):
         geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid, **kwargs)
 
 
+def compute_block_model(geo_data, series_number="all",
+                        series_distribution=None, order_series=None,
+                        extent=None, resolution=None, grid_type="regular_3D",
+                        verbose=0, **kwargs):
 
-    #geo_data.Plot = PlotData(geo_data.Data, block=self.Interpolator.block,
-    #                     potential_field=self.Interpolator.potential_fields)
+    if extent or resolution:
+        set_grid(geo_data, extent=extent, resolution=resolution, grid_type=grid_type, **kwargs)
 
+    if series_distribution:
+        set_data_series(geo_data, series_distribution=series_distribution, order_series=order_series, verbose=0)
 
-def compute_block_model(geo_data, series_number="all", verbose=0):
+    if not getattr(geo_data, 'interpolator', None):
+        import warnings
+        warnings.warn('Using default interpolation values')
+        set_interpolator(geo_data)
 
     geo_data.interpolator.block.set_value(_np.zeros_like(geo_data.grid.grid[:, 0]))
 
@@ -140,16 +146,22 @@ def compute_block_model(geo_data, series_number="all", verbose=0):
 
 
 def plot_section(geo_data, cell_number, block=None, direction="y", **kwargs):
-
     plot = PlotData(geo_data)
-    plot.plot_block_section(cell_number, block=block, direction=direction,  **kwargs)
+    plot.plot_block_section(cell_number, block=block, direction=direction, **kwargs)
     # TODO saving options
     return plot
 
 
 def plot_potential_field(geo_data, cell_number, potential_field=None, n_pf=0,
                          direction="y", plot_data=True, series="all", *args, **kwargs):
-
     plot = PlotData(geo_data)
     plot.plot_potential_field(cell_number, potential_field=potential_field, n_pf=n_pf, direction=direction,
                               plot_data=plot_data, series=series, *args, **kwargs)
+
+
+def i_set_data(geo_data, dtype="foliations"):
+    import qgrid
+    qgrid.nbinstall(overwrite=True)
+    qgrid.set_defaults(show_toolbar=True)
+    assert dtype is 'foliations' or dtype is 'interfaces', 'dtype must be either foliations or interfaces'
+    qgrid.show_grid(get_raw_data(geo_data,dtype))

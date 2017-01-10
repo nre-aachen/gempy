@@ -71,7 +71,6 @@ class DataManagement(object):
         # Create default grid object. (Is this necessary now?)
         self.grid = self.create_grid(extent=None, resolution=None, grid_type="regular_3D", **kwargs)
 
-
     @staticmethod
     def load_data_csv(data_type, path=os.getcwd(), **kwargs):
         """
@@ -97,7 +96,7 @@ class DataManagement(object):
         else:
             raise NameError('Data type not understood. Try interfaces or foliations')
 
-        # TODO if we load different data the Interpolator parameters must be also updated:  Research how and implement
+            # TODO if we load different data the Interpolator parameters must be also updated:  Research how and implement
 
     def _set_formations(self):
         """
@@ -346,7 +345,7 @@ class DataManagement(object):
                                            _grid.grid[:, 1] * _grid.grid[:, 2]))
             self.universal_matrix_T = theano.shared(_universal_matrix + 1e-10, "universal matrix")
 
-            self.block = theano.shared(np.zeros_like(_grid.grid[:, 0]), "Final block")
+            self.block = theano.shared(np.zeros_like(_grid.grid[:, 0]), "Final block computed")
             self.grid_val_T = theano.shared(_grid.grid + 1e-10, "Positions of the points to interpolate")
 
         def _get_constant_parameters(self):

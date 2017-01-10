@@ -4,16 +4,17 @@ the potential field method.
 Tested on Ubuntu 14
 
 Created on 23/09/2016
-somehting
+
 @author: Miguel de la Varga
 """
-
 
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
+
+
 # TODO: inherit pygeomod classes
-#import sys, os
+# import sys, os
 
 class PlotData(object):
     """
@@ -36,8 +37,8 @@ class PlotData(object):
         if 'potential_field' in kwargs:
             self._potential_field_p = kwargs['potential_field']
 
-    # TODO planning the whole visualization scheme. Only data, potential field and block. 2D 3D? Improving the iteration
-    # with pandas framework
+            # TODO planning the whole visualization scheme. Only data, potential field and block. 2D 3D? Improving the iteration
+            # with pandas framework
         self._set_style()
 
     def _set_style(self):
@@ -47,8 +48,8 @@ class PlotData(object):
         """
 
         plt.style.use(['seaborn-white', 'seaborn-paper'])
-       # sns.set_context("paper")
-       # matplotlib.rc("font", family="Helvetica")
+        # sns.set_context("paper")
+        # matplotlib.rc("font", family="Helvetica")
 
     def plot_data(self, direction="y", series="all", **kwargs):
         """
@@ -68,9 +69,9 @@ class PlotData(object):
 
         if series == "all":
             series_to_plot_i = self._data.interfaces[self._data.interfaces["series"].
-                                                     isin(self._data.series.columns.values)]
+                isin(self._data.series.columns.values)]
             series_to_plot_f = self._data.foliations[self._data.foliations["series"].
-                                                     isin(self._data.series.columns.values)]
+                isin(self._data.series.columns.values)]
 
         else:
             series_to_plot_i = self._data.interfaces[self._data.interfaces["series"] == series]
@@ -125,7 +126,7 @@ class PlotData(object):
             raise AttributeError(str(direction) + "must be a cartesian direction, i.e. xyz")
         return _a, _b, _c, extent_val, x, y, Gx, Gy
 
-    def plot_block_section(self, cell_number=13, block=None,  direction="y", interpolation='none', **kwargs):
+    def plot_block_section(self, cell_number=13, block=None, direction="y", interpolation='none', **kwargs):
         """
         Plot a section of the block model
 
@@ -182,7 +183,7 @@ class PlotData(object):
             try:
                 potential_field = self._data.interpolator.potential_fields[n_pf]
             except AttributeError:
-                print('No potential field has been computed yet')
+                raise AttributeError('No potential field has been computed yet')
 
         if plot_data:
             self.plot_data(direction, self._data.series.columns.values[n_pf])
