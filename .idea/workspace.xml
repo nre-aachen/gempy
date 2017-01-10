@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="last changes to GeMpy.py to leave it decent for Orleans">
+    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/.ipynb_checkpoints/Example_3_Simple_PyMC-checkpoint.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/.ipynb_checkpoints/Sandstone Testing new structure-checkpoint.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_3_Simple_PyMC.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/Sandstone Testing new structure.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/GeMpy.py" afterPath="$PROJECT_DIR$/GeMpy/GeMpy.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/GeMpyMC.py" afterPath="$PROJECT_DIR$/GeMpy/GeMpyMC.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/Visualization.py" afterPath="$PROJECT_DIR$/GeMpy/Visualization.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_2_Simple.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_2_Simple.ipynb" />
     </list>
     <ignored path="GeMpy.iws" />
@@ -43,7 +43,7 @@
       <file leaf-file-name="GeMpy.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-796">
+            <state relative-caret-position="-148">
               <caret line="72" column="59" selection-start-line="72" selection-start-column="59" selection-end-line="72" selection-end-column="59" />
               <folding>
                 <element signature="e#3887#5304#0" expanded="false" />
@@ -220,7 +220,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy" />
+              <option name="myItemId" value="Prototype Notebook" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -236,40 +236,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="GeMpy" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DataManagement.py" />
-              <option name="myItemType" value="com.jetbrains.python.projectView.PyFileNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DataManagement" />
-              <option name="myItemType" value="com.jetbrains.python.projectView.PyElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DataManagement.py" />
-              <option name="myItemType" value="com.jetbrains.python.projectView.PyFileNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DataManagement" />
-              <option name="myItemType" value="com.jetbrains.python.projectView.PyElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="InterpolatorClass" />
-              <option name="myItemType" value="com.jetbrains.python.projectView.PyElementNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -903,7 +869,14 @@
       <option name="project" value="LOCAL" />
       <updated>1484039762111</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="last changes to GeMpy.py to leave it decent for Orleans v2">
+      <created>1484055644450</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1484055644450</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TodoView">
@@ -917,9 +890,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.187251" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.187251" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17536534" sideWeight="0.49585405" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20987654" sideWeight="0.5051793" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946378" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -970,7 +943,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Testing git" />
     <MESSAGE value="Updating NRE" />
     <MESSAGE value="Checking that the new branch is NRE" />
     <MESSAGE value="Corrected bug when importing interfaces" />
@@ -995,7 +967,8 @@
     <MESSAGE value="Docs 0.984&#10;&#10;This is going to be IT" />
     <MESSAGE value="New structure following my brothers advices" />
     <MESSAGE value="last changes to GeMpy.py to leave it decent for Orleans" />
-    <option name="LAST_COMMIT_MESSAGE" value="last changes to GeMpy.py to leave it decent for Orleans" />
+    <MESSAGE value="last changes to GeMpy.py to leave it decent for Orleans v2" />
+    <option name="LAST_COMMIT_MESSAGE" value="last changes to GeMpy.py to leave it decent for Orleans v2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1428,7 +1401,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-796">
+        <state relative-caret-position="-148">
           <caret line="72" column="59" selection-start-line="72" selection-start-column="59" selection-end-line="72" selection-end-column="59" />
           <folding>
             <element signature="e#3887#5304#0" expanded="false" />
