@@ -64,12 +64,40 @@ class DataManagement(object):
         else:
             self.interfaces = pn.DataFrame(columns=['X', 'Y', 'Z', 'formation'])
 
-        self.formations = self._set_formations()
+        self._set_formations()
         self.series = self.set_series()
         self.calculate_gradient()
 
         # Create default grid object. (Is this necessary now?)
         self.grid = self.create_grid(extent=None, resolution=None, grid_type="regular_3D", **kwargs)
+
+    def set_interfaces(self, interf_Dataframe, append=False):
+
+        assert set(['X', 'Y', 'Z', 'formation']).issubset(interf_Dataframe.columns), \
+            "One or more columns do not match with the expected values " + str(interf_Dataframe.columns)
+
+        if append:
+            self.interfaces = self.interfaces.append(interf_Dataframe)
+        else:
+            self.interfaces = interf_Dataframe
+
+        self._set_formations()
+        self.set_series()
+
+
+    def set_foliations(self, foliat_Dataframe, append=False):
+
+        assert set(['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation']).issubset(
+            foliat_Dataframe.columns), "One or more columns do not match with the expected values " +\
+                                       str(foliat_Dataframe.columns)
+        if append:
+            self.foliations = self.foliations.append(foliat_Dataframe)
+        else:
+            self.foliations = foliat_Dataframe
+
+        self._set_formations()
+        self.set_series()
+        self.calculate_gradient()
 
     @staticmethod
     def load_data_csv(data_type, path=os.getcwd(), **kwargs):
@@ -107,25 +135,24 @@ class DataManagement(object):
              pandas.core.frame.DataFrame: Data frame with the raw data
 
         """
+      #  try:
+      #      getattr(self, "formations")
+      #  except AttributeError:
         try:
-            getattr(self, "formations")
+            # foliations may or may not be in all formations so we need to use interfaces
+            self.formations = self.interfaces["formation"].unique()
+
+            # TODO: Trying to make this more elegant?
+            for el in self.formations:
+                for check in self.formations:
+                    assert (el not in check or el == check), "One of the formations name contains other" \
+                                                             " string. Please rename." + str(el) + " in " + str(
+                        check)
+
+                    # TODO: Add the possibility to change the name in pandas directly
+                    # (adding just a 1 in the contained string)
         except AttributeError:
-            try:
-                # foliations may or may not be in all formations so we need to use interfaces
-                formations = self.interfaces["formation"].unique()
-
-                # TODO: Trying to make this more elegant?
-                for el in self.formations:
-                    for check in self.formations:
-                        assert (el not in check or el == check), "One of the formations name contains other" \
-                                                                 " string. Please rename." + str(el) + " in " + str(
-                            check)
-
-                        # TODO: Add the possibility to change the name in pandas directly
-                        # (adding just a 1 in the contained string)
-            except AttributeError:
-                pass
-        return formations
+            pass
 
     def set_series(self, series_distribution=None, order=None):
         """
@@ -277,6 +304,10 @@ class DataManagement(object):
 
             self.theano_compilation_3D()
             # -------------------------
+            self.potential_fields = [self.compute_potential_field(i, verbose=verbose)
+                                     for i in np.arange(len(self._data.series.columns))]
+
+        def update_potential_fields(self, verbose=0):
             self.potential_fields = [self.compute_potential_field(i, verbose=verbose)
                                      for i in np.arange(len(self._data.series.columns))]
 

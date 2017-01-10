@@ -48,6 +48,33 @@ def import_data(extent, resolution=[50, 50, 50], **kwargs):
     return DataManagement(extent, resolution, **kwargs)
 
 
+def set_interfaces(geo_data, interf_Dataframe, append=False, update_p_field = True):
+    geo_data.set_interfaces(interf_Dataframe, append=append)
+    # To update the interpolator parameters without calling a new object
+    try:
+        geo_data.interpolator._data = geo_data
+        geo_data.interpolator._grid = geo_data.grid
+        geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid)
+        if update_p_field:
+            print('I am here')
+            geo_data.interpolator.update_potential_fields()
+    except AttributeError:
+        pass
+
+
+def set_foliations(geo_data, foliat_Dataframe, append=False, update_p_field=True):
+    geo_data.set_foliations(foliat_Dataframe, append=append)
+    # To update the interpolator parameters without calling a new object
+    try:
+        geo_data.interpolator._data = geo_data
+        geo_data.interpolator._grid = geo_data.grid
+        geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid)
+        if update_p_field:
+            geo_data.interpolator.update_potential_fields()
+    except AttributeError:
+        pass
+
+
 def plot_data(geo_data, direction="y", series="all", **kwargs):
     plot = PlotData(geo_data)
     plot.plot_data(direction=direction, series=series, **kwargs)
@@ -165,3 +192,7 @@ def i_set_data(geo_data, dtype="foliations"):
     qgrid.set_defaults(show_toolbar=True)
     assert dtype is 'foliations' or dtype is 'interfaces', 'dtype must be either foliations or interfaces'
     qgrid.show_grid(get_raw_data(geo_data,dtype))
+
+
+def update_potential_fields(geo_data, verbose=0):
+    geo_data.interpolator.update_potential_fields(verbose=verbose)

@@ -9,3 +9,9 @@ Created on 10/01/2017
 
 """
 
+from .DataManagement import DataManagement
+import pymc3 as pm
+
+class GeMpyMC(DataManagement.InterpolatorClass):
+    def __init__(self, geo_data):
+

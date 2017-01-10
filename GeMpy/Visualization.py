@@ -200,6 +200,42 @@ class PlotData(object):
         plt.xlabel(x)
         plt.ylabel(y)
 
+    @staticmethod
+    def annotate_plot(frame, label_col, x, y, **kwargs):
+        """
+        Annotate the plot of a given DataFrame using one of its columns
+
+        Should be called right after a DataFrame or series plot method,
+        before telling matplotlib to show the plot.
+
+        Parameters
+        ----------
+        frame : pandas.DataFrame
+
+        plot_col : str
+            The string identifying the column of frame that was plotted
+
+        label_col : str
+            The string identifying the column of frame to be used as label
+
+        kwargs:
+            Other key-word args that should be passed to plt.annotate
+
+        Returns
+        -------
+        None
+
+        Notes
+        -----
+        After calling this function you should call plt.show() to get the
+        results. This function only adds the annotations, it doesn't show
+        them.
+        """
+        import matplotlib.pyplot as plt  # Make sure we have pyplot as plt
+
+        for label, x, y in zip(frame[label_col], frame[x], frame[y]):
+            plt.annotate(label, xy=(x + 0.2, y + 0.15), **kwargs)
+
     def export_vtk(self):
         """
         export vtk
