@@ -1,3 +1,4 @@
+from __future__ import division
 
 import theano
 import theano.tensor as T
