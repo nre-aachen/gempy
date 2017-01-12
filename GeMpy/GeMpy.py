@@ -21,6 +21,38 @@ from Visualization import PlotData
 from DataManagement import DataManagement
 
 
+def compute_block_model(geo_data, series_number="all",
+                        series_distribution=None, order_series=None,
+                        extent=None, resolution=None, grid_type="regular_3D",
+                        verbose=0, **kwargs):
+
+    if extent or resolution:
+        set_grid(geo_data, extent=extent, resolution=resolution, grid_type=grid_type, **kwargs)
+
+    if series_distribution:
+        set_data_series(geo_data, series_distribution=series_distribution, order_series=order_series, verbose=0)
+
+    if not getattr(geo_data, 'interpolator', None):
+        import warnings
+
+        warnings.warn('Using default interpolation values')
+        set_interpolator(geo_data)
+
+    geo_data.interpolator.block.set_value(_np.zeros_like(geo_data.grid.grid[:, 0]))
+
+    geo_data.interpolator.compute_block_model(series_number=series_number, verbose=verbose)
+
+    return geo_data.interpolator.block
+
+
+def get_grid(geo_data):
+    return geo_data.grid.grid
+
+
+def get_raw_data(geo_data, dtype='all'):
+    return geo_data.get_raw_data(dtype=dtype)
+
+
 def import_data(extent, resolution=[50, 50, 50], **kwargs):
     """
     Method to initialize the class data. Calling this function some of the data has to be provided (TODO give to
@@ -48,15 +80,33 @@ def import_data(extent, resolution=[50, 50, 50], **kwargs):
     return DataManagement(extent, resolution, **kwargs)
 
 
+def i_set_data(geo_data, dtype="foliations"):
+
+    geo_data.i_set_data(dtype=dtype)
+
+
+def set_data_series(geo_data, series_distribution=None, order_series=None,
+                        update_p_field=True, verbose=0):
+
+    geo_data.set_series(series_distribution=series_distribution, order=order_series)
+    try:
+        if update_p_field:
+            geo_data.interpolator.update_potential_fields()
+    except AttributeError:
+        pass
+
+    if verbose > 0:
+        return get_raw_data(geo_data)
+
+
 def set_interfaces(geo_data, interf_Dataframe, append=False, update_p_field = True):
     geo_data.set_interfaces(interf_Dataframe, append=append)
     # To update the interpolator parameters without calling a new object
     try:
         geo_data.interpolator._data = geo_data
         geo_data.interpolator._grid = geo_data.grid
-        geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid)
+       # geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid)
         if update_p_field:
-            print('I am here')
             geo_data.interpolator.update_potential_fields()
     except AttributeError:
         pass
@@ -68,29 +118,11 @@ def set_foliations(geo_data, foliat_Dataframe, append=False, update_p_field=True
     try:
         geo_data.interpolator._data = geo_data
         geo_data.interpolator._grid = geo_data.grid
-        geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid)
+      #  geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid)
         if update_p_field:
             geo_data.interpolator.update_potential_fields()
     except AttributeError:
         pass
-
-
-def plot_data(geo_data, direction="y", series="all", **kwargs):
-    plot = PlotData(geo_data)
-    plot.plot_data(direction=direction, series=series, **kwargs)
-    # TODO saving options
-    return plot
-
-
-def get_raw_data(geo_data, dtype='all'):
-    return geo_data.get_raw_data(dtype=dtype)
-
-
-def set_data_series(geo_data, series_distribution=None, order_series=None, verbose=0):
-    geo_data.set_series(series_distribution=series_distribution, order=order_series)
-
-    if verbose > 0:
-        return get_raw_data(geo_data)
 
 
 def set_grid(geo_data, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
@@ -110,10 +142,6 @@ def set_grid(geo_data, extent=None, resolution=None, grid_type="regular_3D", **k
         resolution = geo_data.resolution
 
     geo_data.grid = geo_data.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
-
-
-def get_grid(geo_data):
-    return geo_data.grid.grid
 
 
 def set_interpolator(geo_data, compile_theano=False, *args, **kwargs):
@@ -140,7 +168,7 @@ def set_interpolator(geo_data, compile_theano=False, *args, **kwargs):
     if not getattr(geo_data, 'grid', None):
         set_grid(geo_data)
 
-    if not getattr(geo_data, 'interpolator', None):
+    if not getattr(geo_data, 'interpolator', None) or compile_theano:
         geo_data.interpolator = geo_data.InterpolatorClass(geo_data, geo_data.grid, compile_theano=True,
                                                            *args, **kwargs)
     else:
@@ -149,27 +177,11 @@ def set_interpolator(geo_data, compile_theano=False, *args, **kwargs):
         geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid, **kwargs)
 
 
-def compute_block_model(geo_data, series_number="all",
-                        series_distribution=None, order_series=None,
-                        extent=None, resolution=None, grid_type="regular_3D",
-                        verbose=0, **kwargs):
-
-    if extent or resolution:
-        set_grid(geo_data, extent=extent, resolution=resolution, grid_type=grid_type, **kwargs)
-
-    if series_distribution:
-        set_data_series(geo_data, series_distribution=series_distribution, order_series=order_series, verbose=0)
-
-    if not getattr(geo_data, 'interpolator', None):
-        import warnings
-        warnings.warn('Using default interpolation values')
-        set_interpolator(geo_data)
-
-    geo_data.interpolator.block.set_value(_np.zeros_like(geo_data.grid.grid[:, 0]))
-
-    geo_data.interpolator.compute_block_model(series_number=series_number, verbose=verbose)
-
-    return geo_data.interpolator.block
+def plot_data(geo_data, direction="y", series="all", **kwargs):
+    plot = PlotData(geo_data)
+    plot.plot_data(direction=direction, series=series, **kwargs)
+    # TODO saving options
+    return plot
 
 
 def plot_section(geo_data, cell_number, block=None, direction="y", **kwargs):
@@ -183,13 +195,9 @@ def plot_potential_field(geo_data, cell_number, potential_field=None, n_pf=0,
                          direction="y", plot_data=True, series="all", *args, **kwargs):
 
     plot = PlotData(geo_data)
-    plot.plot_potential_field(cell_number, potential_field=potential_field, n_pf=n_pf, direction=direction,
-                              plot_data=plot_data, series=series, *args, **kwargs)
-
-
-def i_set_data(geo_data, dtype="foliations"):
-
-    geo_data.i_set_data(dtype=dtype)
+    plot.plot_potential_field(cell_number, potential_field=potential_field, n_pf=n_pf,
+                              direction=direction,  plot_data=plot_data, series=series,
+                              *args, **kwargs)
 
 
 def update_potential_fields(geo_data, verbose=0):

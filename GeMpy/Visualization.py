@@ -37,7 +37,8 @@ class PlotData(object):
         if 'potential_field' in kwargs:
             self._potential_field_p = kwargs['potential_field']
 
-            # TODO planning the whole visualization scheme. Only data, potential field and block. 2D 3D? Improving the iteration
+            # TODO planning the whole visualization scheme. Only data, potential field
+            # and block. 2D 3D? Improving the iteration
             # with pandas framework
         self._set_style()
 
@@ -53,7 +54,8 @@ class PlotData(object):
 
     def plot_data(self, direction="y", series="all", **kwargs):
         """
-        Plot the projecton of the raw data (interfaces and foliations) in 2D following a specific directions
+        Plot the projecton of the raw data (interfaces and foliations) in 2D following a
+        specific directions
 
         Args:
             direction(str): xyz. Caartesian direction to be plotted
@@ -143,17 +145,23 @@ class PlotData(object):
         Returns:
             Block plot
         """
-        if block:
-            assert type(block) is 'theano.tensor.sharedvar.TensorSharedVariable', 'Block has to be a theano shared' \
-                                                                                  'object.'
-            _block = block
+        if block is not None:
+            import theano
+            import numpy
+            assert (type(block) is theano.tensor.sharedvar.TensorSharedVariable or
+                    type(block) is numpy.ndarray), \
+                'Block has to be a theano shared object or numpy array.'
+            if type(block) is numpy.ndarray:
+                _block = block
+            else:
+                _block = block.get_value()
         else:
             try:
-                _block = self._data.interpolator.block
+                _block = self._data.interpolator.block.get_value()
             except AttributeError:
                 raise AttributeError('There is no block to plot')
 
-        plot_block = _block.get_value().reshape(self._data.nx, self._data.ny, self._data.nz)
+        plot_block = _block.reshape(self._data.nx, self._data.ny, self._data.nz)
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
 
         plt.imshow(plot_block[_a, _b, _c].T, origin="bottom", cmap="viridis",
