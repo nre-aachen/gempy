@@ -596,7 +596,7 @@ class DataManagement(object):
             # Calculating the dimensions of the
             length_of_CG = dips_position.shape[0] * n_dimensions
             length_of_CGI = rest_layer_points.shape[0]
-            length_of_U_I = grade_universal
+            length_of_U_I = grade_universal + 1
             length_of_C = length_of_CG + length_of_CGI + length_of_U_I
 
             # Extra parameters
@@ -617,7 +617,8 @@ class DataManagement(object):
             # ==========================================
             # Calculation of Cartesian and Euclidian distances
             # ===========================================
-            # Auxiliary tile for dips and transformation to float 64 of variables in order to calculate precise euclidian
+            # Auxiliary tile for dips and transformation to float 64 of variables in order to calculate
+            #  precise euclidian
             # distances
             _aux_dips_pos = T.tile(dips_position, (n_dimensions, 1)).astype("float64")
             _aux_rest_layer_points = rest_layer_points.astype("float64")
@@ -805,7 +806,7 @@ class DataManagement(object):
 
                 # Gradients
                 n = dips_position.shape[0]
-                U_G = T.zeros((n * n_dimensions, n_dimensions))
+                U_G = T.zeros((n * n_dimensions, n_dimensions + 1))
                 # x
                 U_G = T.set_subtensor(
                     U_G[:n, 0], 1)
@@ -818,8 +819,14 @@ class DataManagement(object):
                     U_G[n * 2: n * 3, 2], 1
                 )
 
+                U_G = T.set_subtensor(U_G[:, -1], [0, 0, 0, 0, 0, 0])
+
                 # Interface
                 U_I = -hx * gi_reescale
+
+                hxf = (T.lt(rest_layer_points[:, 0], 5) - T.lt(ref_layer_points[:, 0], 5))*2 + 1
+
+                U_I = T.horizontal_stack(U_I, T.stack(hxf).T)
 
             elif self.u_grade_T.get_value() == 9:
                 # ==========================
@@ -852,27 +859,26 @@ class DataManagement(object):
 
                 # Interface
                 U_I = - T.stack(
-                    gi_reescale * (rest_layer_points[:, 0] - ref_layer_points[:, 0]),
-                    gi_reescale * (rest_layer_points[:, 1] - ref_layer_points[:, 1]),
-                    gi_reescale * (rest_layer_points[:, 2] - ref_layer_points[:, 2]),
-                    gi_reescale ** 2 * (rest_layer_points[:, 0] ** 2 - ref_layer_points[:, 0] ** 2),
-                    gi_reescale ** 2 * (rest_layer_points[:, 1] ** 2 - ref_layer_points[:, 1] ** 2),
-                    gi_reescale ** 2 * (rest_layer_points[:, 2] ** 2 - ref_layer_points[:, 2] ** 2),
-                    gi_reescale ** 2 * (
-                        rest_layer_points[:, 0] * rest_layer_points[:, 1] - ref_layer_points[:, 0] * ref_layer_points[:,
-                                                                                                     1]),
-                    gi_reescale ** 2 * (
-                        rest_layer_points[:, 0] * rest_layer_points[:, 2] - ref_layer_points[:, 0] * ref_layer_points[:,
-                                                                                                     2]),
-                    gi_reescale ** 2 * (
-                        rest_layer_points[:, 1] * rest_layer_points[:, 2] - ref_layer_points[:, 1] * ref_layer_points[:,
-                                                                                                     2]),
+                    gi_reescale * (rest_layer_points[:, 0] - ref_layer_points[:, 0]), # x
+                    gi_reescale * (rest_layer_points[:, 1] - ref_layer_points[:, 1]), # y
+                    gi_reescale * (rest_layer_points[:, 2] - ref_layer_points[:, 2]), # z
+                    gi_reescale ** 2 * (rest_layer_points[:, 0] ** 2 - ref_layer_points[:, 0] ** 2), # xx
+                    gi_reescale ** 2 * (rest_layer_points[:, 1] ** 2 - ref_layer_points[:, 1] ** 2), # yy
+                    gi_reescale ** 2 * (rest_layer_points[:, 2] ** 2 - ref_layer_points[:, 2] ** 2), # zz
+                    gi_reescale ** 2 * (rest_layer_points[:, 0] * rest_layer_points[:, 1] - ref_layer_points[:, 0] *
+                                        ref_layer_points[:, 1]),
+                    gi_reescale ** 2 * (rest_layer_points[:, 0] * rest_layer_points[:, 2] - ref_layer_points[:, 0] *
+                                        ref_layer_points[:, 2]),
+                    gi_reescale ** 2 * (rest_layer_points[:, 1] * rest_layer_points[:, 2] - ref_layer_points[:, 1] *
+                                        ref_layer_points[:, 2]),
                 ).T
+
+
 
             # =================================
             # Creation of the Covariance Matrix
             # =================================
-            C_matrix = T.zeros((length_of_C, length_of_C))
+            C_matrix = T.zeros((length_of_C, length_of_C ))
 
             # First row of matrices
             C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, 0:length_of_CG], C_G)
@@ -917,7 +923,7 @@ class DataManagement(object):
 
             # Creation of a matrix of dimensions equal to the grid with the weights for every point (big 4D matrix in
             # ravel form)
-            weights = T.tile(DK_parameters, (grid_val.shape[0], 1)).T
+            weights = T.tile(DK_parameters, (grid_val.shape[0] , 1)).T
 
             # Gradient contribution
             sigma_0_grad = T.sum(
@@ -965,14 +971,17 @@ class DataManagement(object):
                 gi_rescale_aux = T.set_subtensor(gi_rescale_aux[:3], 1)
                 _aux_magic_term = T.tile(gi_rescale_aux[:grade_universal], (grid_val.shape[0], 1)).T
                 f_0 = (T.sum(
-                    weights[-length_of_U_I:, :] * gi_reescale * _aux_magic_term *
+                    weights[-length_of_U_I:-1, :] * gi_reescale * _aux_magic_term *
                     universal_matrix[:grade_universal]
                     , axis=0))
 
+            # Contribution faults
+            f_1 = weights[-1, :] * T.lt(universal_matrix[0, :], 5) * 2 - 1
+
             # Potential field
             # Value of the potential field
-            Z_x = (sigma_0_grad + sigma_0_interf + f_0)[:-rest_layer_points.shape[0]]
-            potential_field_interfaces = (sigma_0_grad + sigma_0_interf + f_0)[-rest_layer_points.shape[0]:]
+            Z_x = (sigma_0_grad + sigma_0_interf + f_0 + f_1)[:-rest_layer_points.shape[0]]
+            potential_field_interfaces = (sigma_0_grad + sigma_0_interf + f_0 + f_1)[-rest_layer_points.shape[0]:]
 
             # Theano function to calculate a potential field
             self._interpolate = theano.function(
@@ -1007,7 +1016,7 @@ class DataManagement(object):
                                                            outputs_info=None,
                                                            sequences=dict(
                                                                input=T.concatenate((T.stack(0),
-                                                                                    self.number_of_points_per_formation_T)),
+                                                                    self.number_of_points_per_formation_T)),
                                                                taps=[0, 1]),
                                                            non_sequences=potential_field_interfaces)
 
