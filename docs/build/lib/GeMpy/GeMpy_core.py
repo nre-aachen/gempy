@@ -56,7 +56,7 @@ class GeMpy(object):
         """
         Method to initialize the class grid. So far is really simple and only has the regular grid type
         :param grid_type: str: regular_3D or regular_2D (I am not even sure if regular 2D still working)
-        :return: self.Grid
+        :return: self.grid
         """
         self.Grid = Grid(self.Data, grid_type=grid_type, **kwargs)
 
@@ -125,7 +125,7 @@ class DataManagement(object):
         else:
             self.Foliations = pn.DataFrame(columns=['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation', 'series'])
         if path_i:
-            self.Interfaces = self.load_data_csv(data_type="Interfaces", path=path_i, **kwargs)
+            self.Interfaces = self.load_data_csv(data_type="interfaces", path=path_i, **kwargs)
             assert set(['X', 'Y', 'Z', 'formation']).issubset(self.Interfaces.columns), \
                 "One or more columns do not match with the expected values " + str(self.Interfaces.columns)
         else:
@@ -165,7 +165,7 @@ class DataManagement(object):
             getattr(self, "formations")
         except AttributeError:
             try:
-                # Foliations may or may not be in all formations so we need to use Interfaces
+                # foliations may or may not be in all formations so we need to use interfaces
                 formations = self.Interfaces["formation"].unique()
 
                 # TODO: Trying to make this more elegant?
@@ -188,7 +188,7 @@ class DataManagement(object):
         :param order of the series by default takes the dictionary keys which until python 3.6 are random. This is
         important to set the erosion relations between the different series
         :return: self.series: A pandas DataFrame with the series and formations relations
-                 self.Interfaces and self.Foliations: one extra column with the given series
+                 self.interfaces and self.foliations: one extra column with the given series
         """
         if series_distribution is None:
             # TODO: Possibly we have to debug this function
@@ -213,7 +213,7 @@ class DataManagement(object):
 
     def calculate_gradient(self):
         """ Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations
-        :return: self.Foliations: extra columns with components xyz of the unity vector.
+        :return: self.foliations: extra columns with components xyz of the unity vector.
         """
 
         self.Foliations['G_x'] = np.sin(np.deg2rad(self.Foliations["dip"])) * \
@@ -283,8 +283,8 @@ class Interpolator(object):
         """
         Here we import all the necessary data for the interpolation
         :param _data: All values of a DataManagement object (I have to check but I would say we only need to pass
-        Interfaces and Foliations)
-        :param _grid: All values of Grid (so far only the grid is useful)
+        interfaces and foliations)
+        :param _grid: All values of grid (so far only the grid is useful)
         :param args: All the constant values for the interpolation. See docs set_interpolator
         """
 
@@ -440,7 +440,7 @@ class Interpolator(object):
             if verbose > 1:
                 print("The formations are: \n"
                       "Layers ", self._data.Interfaces[self._data.Interfaces["formation"].str.contains(for_in_ser)], " \n "
-                                                                                                         "Foliations ",
+                                                                                                         "foliations ",
                       self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)])
 
         # self.grad is none so far. I have it for further research in the calculation of the Jacobian matrix
@@ -477,7 +477,7 @@ class Interpolator(object):
             if verbose > 1:
                 print("The formations are: \n"
                       "Layers \n", self._data.Interfaces[self._data.Interfaces["formation"].str.contains(for_in_ser)],
-                      "\n Foliations \n",
+                      "\n foliations \n",
                       self._data.Foliations[self._data.Foliations["formation"].str.contains(for_in_ser)])
 
         self.Z_x, G_x, G_y, G_z, self.potential_interfaces, C, DK = self._interpolate(
@@ -526,8 +526,8 @@ class Interpolator(object):
         # TODO: Check that the distances does not go nuts when I use too large numbers
 
         # Here we create the array with the points to simulate:
-        #   Grid points except those who have been simulated in a younger serie
-        #   Interfaces points to segment the lithologies
+        #   grid points except those who have been simulated in a younger serie
+        #   interfaces points to segment the lithologies
         yet_simulated = T.vector("boolean function that avoid to simulate twice a point of a different serie")
         grid_val = T.vertical_stack((
             self.grid_val_T*yet_simulated.reshape((yet_simulated.shape[0], 1))).nonzero_values().reshape((-1, 3)),

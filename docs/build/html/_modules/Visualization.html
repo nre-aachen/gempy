@@ -47,16 +47,17 @@
 <span class="sd">Tested on Ubuntu 14</span>
 
 <span class="sd">Created on 23/09/2016</span>
-<span class="sd">somehting</span>
+
 <span class="sd">@author: Miguel de la Varga</span>
 <span class="sd">&quot;&quot;&quot;</span>
-
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+
+
 <span class="c1"># TODO: inherit pygeomod classes</span>
-<span class="c1">#import sys, os</span>
+<span class="c1"># import sys, os</span>
 
 <div class="viewcode-block" id="PlotData"><a class="viewcode-back" href="../code.html#Visualization.PlotData">[docs]</a><span class="k">class</span> <span class="nc">PlotData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -72,17 +73,16 @@
 <span class="sd">        verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_data</span><span class="p">,</span> <span class="n">block</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_data</span>
-        <span class="k">if</span> <span class="n">block</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_block</span> <span class="o">=</span> <span class="n">block</span>
 
         <span class="k">if</span> <span class="s1">&#39;potential_field&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_potential_field_p</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;potential_field&#39;</span><span class="p">]</span>
 
-    <span class="c1"># TODO planning the whole visualization scheme. Only data, potential field and block. 2D 3D? Improving the iteration</span>
-    <span class="c1"># with pandas framework</span>
+            <span class="c1"># TODO planning the whole visualization scheme. Only data, potential field</span>
+            <span class="c1"># and block. 2D 3D? Improving the iteration</span>
+            <span class="c1"># with pandas framework</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_style</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_set_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -92,12 +92,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">([</span><span class="s1">&#39;seaborn-white&#39;</span><span class="p">,</span> <span class="s1">&#39;seaborn-paper&#39;</span><span class="p">])</span>
-       <span class="c1"># sns.set_context(&quot;paper&quot;)</span>
-       <span class="c1"># matplotlib.rc(&quot;font&quot;, family=&quot;Helvetica&quot;)</span>
+        <span class="c1"># sns.set_context(&quot;paper&quot;)</span>
+        <span class="c1"># matplotlib.rc(&quot;font&quot;, family=&quot;Helvetica&quot;)</span>
 
 <div class="viewcode-block" id="PlotData.plot_data"><a class="viewcode-back" href="../code.html#Visualization.PlotData.plot_data">[docs]</a>    <span class="k">def</span> <span class="nf">plot_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">series</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Plot the projecton of the raw data (interfaces and foliations) in 2D following a specific directions</span>
+<span class="sd">        Plot the projecton of the raw data (interfaces and foliations) in 2D following a</span>
+<span class="sd">        specific directions</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            direction(str): xyz. Caartesian direction to be plotted</span>
@@ -112,14 +113,14 @@
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">Gx</span><span class="p">,</span> <span class="n">Gy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slice</span><span class="p">(</span><span class="n">direction</span><span class="p">)[</span><span class="mi">4</span><span class="p">:]</span>
 
         <span class="k">if</span> <span class="n">series</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
-            <span class="n">series_to_plot_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span><span class="o">.</span>
-                                                     <span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)]</span>
-            <span class="n">series_to_plot_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span><span class="o">.</span>
-                                                     <span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)]</span>
+            <span class="n">series_to_plot_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span><span class="o">.</span>
+                <span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)]</span>
+            <span class="n">series_to_plot_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">foliations</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span><span class="o">.</span>
+                <span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">series_to_plot_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">series</span><span class="p">]</span>
-            <span class="n">series_to_plot_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">Foliations</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">series</span><span class="p">]</span>
+            <span class="n">series_to_plot_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">series</span><span class="p">]</span>
+            <span class="n">series_to_plot_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">foliations</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">series</span><span class="p">]</span>
 
         <span class="n">sns</span><span class="o">.</span><span class="n">lmplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
                    <span class="n">data</span><span class="o">=</span><span class="n">series_to_plot_i</span><span class="p">,</span>
@@ -170,7 +171,7 @@
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;must be a cartesian direction, i.e. xyz&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">,</span> <span class="n">extent_val</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">Gx</span><span class="p">,</span> <span class="n">Gy</span>
 
-<div class="viewcode-block" id="PlotData.plot_block_section"><a class="viewcode-back" href="../code.html#Visualization.PlotData.plot_block_section">[docs]</a>    <span class="k">def</span> <span class="nf">plot_block_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell_number</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="PlotData.plot_block_section"><a class="viewcode-back" href="../code.html#Visualization.PlotData.plot_block_section">[docs]</a>    <span class="k">def</span> <span class="nf">plot_block_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell_number</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">block</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a section of the block model</span>
 
@@ -187,7 +188,23 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            Block plot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">plot_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">nz</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">block</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">theano</span>
+            <span class="kn">import</span> <span class="nn">numpy</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="ow">is</span> <span class="n">theano</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">sharedvar</span><span class="o">.</span><span class="n">TensorSharedVariable</span> <span class="ow">or</span>
+                    <span class="nb">type</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="ow">is</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">),</span> \
+                <span class="s1">&#39;Block has to be a theano shared object or numpy array.&#39;</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="ow">is</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+                <span class="n">_block</span> <span class="o">=</span> <span class="n">block</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_block</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">interpolator</span><span class="o">.</span><span class="n">block</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;There is no block to plot&#39;</span><span class="p">)</span>
+
+        <span class="n">plot_block</span> <span class="o">=</span> <span class="n">_block</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">nz</span><span class="p">)</span>
         <span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">,</span> <span class="n">extent_val</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slice</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">cell_number</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">plot_block</span><span class="p">[</span><span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span>
@@ -197,7 +214,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PlotData.plot_potential_field"><a class="viewcode-back" href="../code.html#Visualization.PlotData.plot_potential_field">[docs]</a>    <span class="k">def</span> <span class="nf">plot_potential_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell_number</span><span class="p">,</span> <span class="n">potential_field</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">n_pf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                             <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">serie</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                             <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">series</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a potential field in a given direction.</span>
 
@@ -212,8 +229,12 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            Potential field plot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="n">potential_field</span><span class="p">:</span>
-            <span class="n">potential_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_field_p</span><span class="p">[</span><span class="n">n_pf</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">potential_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">interpolator</span><span class="o">.</span><span class="n">potential_fields</span><span class="p">[</span><span class="n">n_pf</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;No potential field has been computed yet&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">plot_data</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">n_pf</span><span class="p">])</span>
@@ -229,6 +250,42 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">n_pf</span><span class="p">])</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="PlotData.annotate_plot"><a class="viewcode-back" href="../code.html#Visualization.PlotData.annotate_plot">[docs]</a>    <span class="k">def</span> <span class="nf">annotate_plot</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Annotate the plot of a given DataFrame using one of its columns</span>
+
+<span class="sd">        Should be called right after a DataFrame or series plot method,</span>
+<span class="sd">        before telling matplotlib to show the plot.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        frame : pandas.DataFrame</span>
+
+<span class="sd">        plot_col : str</span>
+<span class="sd">            The string identifying the column of frame that was plotted</span>
+
+<span class="sd">        label_col : str</span>
+<span class="sd">            The string identifying the column of frame to be used as label</span>
+
+<span class="sd">        kwargs:</span>
+<span class="sd">            Other key-word args that should be passed to plt.annotate</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        After calling this function you should call plt.show() to get the</span>
+<span class="sd">        results. This function only adds the annotations, it doesn&#39;t show</span>
+<span class="sd">        them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>  <span class="c1"># Make sure we have pyplot as plt</span>
+
+        <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="n">label_col</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">y</span><span class="p">]):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PlotData.export_vtk"><a class="viewcode-back" href="../code.html#Visualization.PlotData.export_vtk">[docs]</a>    <span class="k">def</span> <span class="nf">export_vtk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

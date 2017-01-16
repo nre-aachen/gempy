@@ -4,16 +4,17 @@ the potential field method.
 Tested on Ubuntu 14
 
 Created on 23/09/2016
-somehting
+
 @author: Miguel de la Varga
 """
-
 
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
+
+
 # TODO: inherit pygeomod classes
-#import sys, os
+# import sys, os
 
 class PlotData(object):
     """
@@ -29,17 +30,16 @@ class PlotData(object):
         verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0
     """
 
-    def __init__(self, _data, block=None, **kwargs):
+    def __init__(self, _data, **kwargs):
 
         self._data = _data
-        if block:
-            self._block = block
 
         if 'potential_field' in kwargs:
             self._potential_field_p = kwargs['potential_field']
 
-    # TODO planning the whole visualization scheme. Only data, potential field and block. 2D 3D? Improving the iteration
-    # with pandas framework
+            # TODO planning the whole visualization scheme. Only data, potential field
+            # and block. 2D 3D? Improving the iteration
+            # with pandas framework
         self._set_style()
 
     def _set_style(self):
@@ -49,12 +49,13 @@ class PlotData(object):
         """
 
         plt.style.use(['seaborn-white', 'seaborn-paper'])
-       # sns.set_context("paper")
-       # matplotlib.rc("font", family="Helvetica")
+        # sns.set_context("paper")
+        # matplotlib.rc("font", family="Helvetica")
 
     def plot_data(self, direction="y", series="all", **kwargs):
         """
-        Plot the projecton of the raw data (interfaces and foliations) in 2D following a specific directions
+        Plot the projecton of the raw data (interfaces and foliations) in 2D following a
+        specific directions
 
         Args:
             direction(str): xyz. Caartesian direction to be plotted
@@ -69,14 +70,14 @@ class PlotData(object):
         x, y, Gx, Gy = self._slice(direction)[4:]
 
         if series == "all":
-            series_to_plot_i = self._data.Interfaces[self._data.Interfaces["series"].
-                                                     isin(self._data.series.columns.values)]
-            series_to_plot_f = self._data.Foliations[self._data.Foliations["series"].
-                                                     isin(self._data.series.columns.values)]
+            series_to_plot_i = self._data.interfaces[self._data.interfaces["series"].
+                isin(self._data.series.columns.values)]
+            series_to_plot_f = self._data.foliations[self._data.foliations["series"].
+                isin(self._data.series.columns.values)]
 
         else:
-            series_to_plot_i = self._data.Interfaces[self._data.Interfaces["series"] == series]
-            series_to_plot_f = self._data.Foliations[self._data.Foliations["series"] == series]
+            series_to_plot_i = self._data.interfaces[self._data.interfaces["series"] == series]
+            series_to_plot_f = self._data.foliations[self._data.foliations["series"] == series]
 
         sns.lmplot(x, y,
                    data=series_to_plot_i,
@@ -127,7 +128,7 @@ class PlotData(object):
             raise AttributeError(str(direction) + "must be a cartesian direction, i.e. xyz")
         return _a, _b, _c, extent_val, x, y, Gx, Gy
 
-    def plot_block_section(self, cell_number=13, direction="y", interpolation='none', **kwargs):
+    def plot_block_section(self, cell_number=13, block=None, direction="y", interpolation='none', **kwargs):
         """
         Plot a section of the block model
 
@@ -144,7 +145,23 @@ class PlotData(object):
         Returns:
             Block plot
         """
-        plot_block = self._block.get_value().reshape(self._data.nx, self._data.ny, self._data.nz)
+        if block is not None:
+            import theano
+            import numpy
+            assert (type(block) is theano.tensor.sharedvar.TensorSharedVariable or
+                    type(block) is numpy.ndarray), \
+                'Block has to be a theano shared object or numpy array.'
+            if type(block) is numpy.ndarray:
+                _block = block
+            else:
+                _block = block.get_value()
+        else:
+            try:
+                _block = self._data.interpolator.block.get_value()
+            except AttributeError:
+                raise AttributeError('There is no block to plot')
+
+        plot_block = _block.reshape(self._data.nx, self._data.ny, self._data.nz)
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
 
         plt.imshow(plot_block[_a, _b, _c].T, origin="bottom", cmap="viridis",
@@ -154,7 +171,7 @@ class PlotData(object):
         plt.ylabel(y)
 
     def plot_potential_field(self, cell_number, potential_field=None, n_pf=0,
-                             direction="y", plot_data=True, serie="all", *args, **kwargs):
+                             direction="y", plot_data=True, series="all", *args, **kwargs):
         """
         Plot a potential field in a given direction.
 
@@ -169,8 +186,12 @@ class PlotData(object):
         Returns:
             Potential field plot
         """
+
         if not potential_field:
-            potential_field = self._potential_field_p[n_pf]
+            try:
+                potential_field = self._data.interpolator.potential_fields[n_pf]
+            except AttributeError:
+                raise AttributeError('No potential field has been computed yet')
 
         if plot_data:
             self.plot_data(direction, self._data.series.columns.values[n_pf])
@@ -186,6 +207,42 @@ class PlotData(object):
         plt.title(self._data.series.columns[n_pf])
         plt.xlabel(x)
         plt.ylabel(y)
+
+    @staticmethod
+    def annotate_plot(frame, label_col, x, y, **kwargs):
+        """
+        Annotate the plot of a given DataFrame using one of its columns
+
+        Should be called right after a DataFrame or series plot method,
+        before telling matplotlib to show the plot.
+
+        Parameters
+        ----------
+        frame : pandas.DataFrame
+
+        plot_col : str
+            The string identifying the column of frame that was plotted
+
+        label_col : str
+            The string identifying the column of frame to be used as label
+
+        kwargs:
+            Other key-word args that should be passed to plt.annotate
+
+        Returns
+        -------
+        None
+
+        Notes
+        -----
+        After calling this function you should call plt.show() to get the
+        results. This function only adds the annotations, it doesn't show
+        them.
+        """
+        import matplotlib.pyplot as plt  # Make sure we have pyplot as plt
+
+        for label, x, y in zip(frame[label_col], frame[x], frame[y]):
+            plt.annotate(label, xy=(x + 0.2, y + 0.15), **kwargs)
 
     def export_vtk(self):
         """

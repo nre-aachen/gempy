@@ -6,4 +6,4 @@ Tutorial
 
    ./Notebooks/Example_1_Sandstone_Project
    ./Notebooks/Example_2_Simple
-
+   ./Notebooks/Example_3_Simple_PyMC

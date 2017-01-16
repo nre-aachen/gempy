@@ -246,7 +246,7 @@ class GeomodellerClass:
 
             print ("\n")
             print (80*"-")
-            print ("Foliations in section %s:" % sec)
+            print ("foliations in section %s:" % sec)
             print (80*"-")
             foliations = self.get_foliations(self.section_dict[sec])
             if foliations == None:
@@ -506,9 +506,9 @@ class GeomodellerClass:
         """get all foliation data elements from a for section"""
         tmp_element = section_element.find("{"+self.xmlns+"}Structural2DData")
         # check in case there is no foliation defined in this section
-        # tmp_element2 = tmp_element.find("{"+self.xmlns+"}Foliations")
+        # tmp_element2 = tmp_element.find("{"+self.xmlns+"}foliations")
         try:
-            tmp_element2 = tmp_element.find("{"+self.xmlns+"}Foliations")
+            tmp_element2 = tmp_element.find("{"+self.xmlns+"}foliations")
         except AttributeError:
             return None
         try:
@@ -546,7 +546,7 @@ class GeomodellerClass:
         tmp_element = section_element.find("{"+self.xmlns+"}Structural2DData")
         # check in case there is no formation points defined in this section
         try:
-            tmp_element2 = tmp_element.find("{"+self.xmlns+"}Interfaces")
+            tmp_element2 = tmp_element.find("{"+self.xmlns+"}interfaces")
         except AttributeError:
             return None
         return tmp_element2.findall("{"+self.xmlns+"}Interface")
@@ -852,7 +852,7 @@ class GeomodellerClass:
         # Idea: stoachstic apporach to twt -> depth conversion: apply several
         # possible formulae for quality estimation of resulting model?
         struct_data = sec_element.find("{"+self.xmlns+"}Structural2DData")
-        interfaces = struct_data.find("{"+self.xmlns+"}Interfaces").findall("{"+self.xmlns+"}Interface")
+        interfaces = struct_data.find("{"+self.xmlns+"}interfaces").findall("{"+self.xmlns+"}Interface")
         # save data in list to create a plot to check validity of conversion
         t_list = []
         v_list = []
