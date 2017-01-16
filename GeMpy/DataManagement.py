@@ -1,6 +1,5 @@
 from __future__ import division
 
-
 import theano
 import theano.tensor as T
 import numpy as np
@@ -206,6 +205,14 @@ class DataManagement(object):
         self.foliations['G_z'] = np.cos(np.deg2rad(self.foliations["dip"])) * self.foliations["polarity"]
 
     # TODO set new interface/set
+
+    def i_set_data(self, dtype="foliations"):
+        import qgrid
+        qgrid.nbinstall(overwrite=True)
+        qgrid.set_defaults(show_toolbar=True)
+        assert dtype is 'foliations' or dtype is 'interfaces', 'dtype must be either foliations or interfaces'
+        qgrid.show_grid(self.get_raw_data(dtype=dtype))
+
 
     def get_raw_data(self, dtype='all'):
 

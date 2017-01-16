@@ -181,17 +181,15 @@ def plot_section(geo_data, cell_number, block=None, direction="y", **kwargs):
 
 def plot_potential_field(geo_data, cell_number, potential_field=None, n_pf=0,
                          direction="y", plot_data=True, series="all", *args, **kwargs):
+
     plot = PlotData(geo_data)
     plot.plot_potential_field(cell_number, potential_field=potential_field, n_pf=n_pf, direction=direction,
                               plot_data=plot_data, series=series, *args, **kwargs)
 
 
 def i_set_data(geo_data, dtype="foliations"):
-    import qgrid
-    qgrid.nbinstall(overwrite=True)
-    qgrid.set_defaults(show_toolbar=True)
-    assert dtype is 'foliations' or dtype is 'interfaces', 'dtype must be either foliations or interfaces'
-    qgrid.show_grid(get_raw_data(geo_data,dtype))
+
+    geo_data.i_set_data(dtype=dtype)
 
 
 def update_potential_fields(geo_data, verbose=0):

@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/.ipynb_checkpoints/Example_3_Simple_PyMC-checkpoint.ipynb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/.ipynb_checkpoints/Sandstone Testing new structure-checkpoint.ipynb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_3_Simple_PyMC.ipynb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/Sandstone Testing new structure.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/GeMpy.py" afterPath="$PROJECT_DIR$/GeMpy/GeMpy.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_2_Simple.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_2_Simple.ipynb" />
     </list>
     <ignored path="GeMpy.iws" />
@@ -40,25 +38,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GeMpy.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GeMpy.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-148">
-              <caret line="72" column="59" selection-start-line="72" selection-start-column="59" selection-end-line="72" selection-end-column="59" />
-              <folding>
-                <element signature="e#3887#5304#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="356">
+              <caret line="183" column="0" selection-start-line="183" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="External_communication.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/GeMpy/External_communication.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="252">
+              <caret line="14" column="7" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="429" column="19" selection-start-line="429" selection-start-column="19" selection-end-line="429" selection-end-column="19" />
+            <state relative-caret-position="3960">
+              <caret line="215" column="36" selection-start-line="215" selection-start-column="36" selection-end-line="215" selection-end-column="36" />
               <folding>
-                <element signature="e#2#15#0" expanded="true" />
+                <element signature="e#1#14#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -67,7 +73,7 @@
       <file leaf-file-name="Visualization.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
+            <state relative-caret-position="3478">
               <caret line="237" column="0" selection-start-line="237" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
               <folding>
                 <element signature="e#235#266#0" expanded="true" />
@@ -533,20 +539,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00001" summary="Finding out all the problems with float32 operations:&#10;- All the euclidean distances now are done in the CPU in float64&#10;- When the range is too low and I use the GPU there are some nan. I should correct this using switch&#10;&#10;Also I found a bug in the dips, they almost dont have any effect in the interpolation. I have to try to increase the rank of the universal part but I dont have too much faith&#10;">
-      <created>1473418269135</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1473418269135</updated>
-    </task>
-    <task id="LOCAL-00002" summary="added a matplotlib visualization of the potential field&#10;started the degree 2 of universal kriging&#10;">
-      <created>1473708013635</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1473708013635</updated>
-    </task>
     <task id="LOCAL-00003" summary="testing vs geomodeller">
       <created>1473884486462</created>
       <option name="number" value="00003" />
@@ -876,7 +868,21 @@
       <option name="project" value="LOCAL" />
       <updated>1484055644450</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="new notebooks">
+      <created>1484056413299</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1484056413345</updated>
+    </task>
+    <task id="LOCAL-00053" summary="solved interactive">
+      <created>1484058544838</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1484058544838</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TodoView">
@@ -890,9 +896,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.187251" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.187251" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17536534" sideWeight="0.49585405" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20987654" sideWeight="0.5051793" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946378" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -943,8 +949,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updating NRE" />
-    <MESSAGE value="Checking that the new branch is NRE" />
     <MESSAGE value="Corrected bug when importing interfaces" />
     <MESSAGE value="Change in requirements" />
     <MESSAGE value="Changes in docs" />
@@ -968,7 +972,9 @@
     <MESSAGE value="New structure following my brothers advices" />
     <MESSAGE value="last changes to GeMpy.py to leave it decent for Orleans" />
     <MESSAGE value="last changes to GeMpy.py to leave it decent for Orleans v2" />
-    <option name="LAST_COMMIT_MESSAGE" value="last changes to GeMpy.py to leave it decent for Orleans v2" />
+    <MESSAGE value="new notebooks" />
+    <MESSAGE value="solved interactive" />
+    <option name="LAST_COMMIT_MESSAGE" value="solved interactive" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1360,14 +1366,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GeMpy/External_communication.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/GeMpyMC.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -1380,7 +1378,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
+        <state relative-caret-position="3478">
           <caret line="237" column="0" selection-start-line="237" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
           <folding>
             <element signature="e#235#266#0" expanded="true" />
@@ -1389,22 +1387,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
+    <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="429" column="19" selection-start-line="429" selection-start-column="19" selection-end-line="429" selection-end-column="19" />
-          <folding>
-            <element signature="e#2#15#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="356">
+          <caret line="183" column="0" selection-start-line="183" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
+    <entry file="file://$PROJECT_DIR$/GeMpy/External_communication.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-148">
-          <caret line="72" column="59" selection-start-line="72" selection-start-column="59" selection-end-line="72" selection-end-column="59" />
+        <state relative-caret-position="252">
+          <caret line="14" column="7" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3960">
+          <caret line="215" column="36" selection-start-line="215" selection-start-column="36" selection-end-line="215" selection-end-column="36" />
           <folding>
-            <element signature="e#3887#5304#0" expanded="false" />
+            <element signature="e#1#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
