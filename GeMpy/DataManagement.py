@@ -468,8 +468,10 @@ class DataManagement(object):
                 self._data.foliations["formation"].str.contains(for_in_ser)]["polarity"].as_matrix()
 
             if for_in_ser.count("|") == 0:
-                layers = self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)].as_matrix()[
-                         :, :3]
+                #layers = self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)].as_matrix()[
+                #         :, :3]
+                layers = self._data.interfaces[self._data.interfaces["formation"] == for_in_ser]\
+                    [['X', 'Y', 'Z']].as_matrix()
                 rest_layer_points = layers[1:]
                 # TODO self.n_formation probably should not be self
                 self.number_of_points_per_formation_T.set_value(np.array(rest_layer_points.shape[0], ndmin=1))
@@ -504,6 +506,7 @@ class DataManagement(object):
 
                 if verbose > 2:
                     print('number_formations', n_formation)
+                    print('rest_layer_points', rest_layer_points)
 
             self.grad = self._block_export(dips_position, dip_angles, azimuth, polarity,
                                            rest_layer_points, ref_layer_points,
@@ -533,8 +536,10 @@ class DataManagement(object):
                 "polarity"].as_matrix()
 
             if for_in_ser.count("|") == 0:
-                layers = self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)].as_matrix()[
-                         :, :3]
+                #layers = self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)].as_matrix()[
+                #         :, :3]
+                layers = self._data.interfaces[self._data.interfaces["formation"] == for_in_ser] \
+                    [['X', 'Y', 'Z']].as_matrix()
                 rest_layer_points = layers[1:]
                 ref_layer_points = np.tile(layers[0], (np.shape(layers)[0] - 1, 1))
             else:
@@ -608,9 +613,8 @@ class DataManagement(object):
             #   grid points except those who have been simulated in a younger serie
             #   interfaces points to segment the lithologies
             yet_simulated = T.vector("boolean function that avoid to simulate twice a point of a different serie")
-            grid_val = T.vertical_stack((
-                                            self.grid_val_T * yet_simulated.reshape(
-                                                (yet_simulated.shape[0], 1))).nonzero_values().reshape((-1, 3)),
+            grid_val = T.vertical_stack((self.grid_val_T * yet_simulated.reshape(
+                                        (yet_simulated.shape[0], 1))).nonzero_values().reshape((-1, 3)),
                                         rest_layer_points)
 
             # ==========================================
@@ -805,7 +809,7 @@ class DataManagement(object):
 
                 # Gradients
                 n = dips_position.shape[0]
-                U_G = T.zeros((n * n_dimensions, n_dimensions ))
+                U_G = T.zeros((n * n_dimensions, n_dimensions))
                 # x
                 U_G = T.set_subtensor(
                     U_G[:n, 0], 1)
@@ -976,17 +980,18 @@ class DataManagement(object):
 
             # Contribution faults
            # f_1 = weights[-1, :] * T.lt(universal_matrix[0, :], 5) * 2 - 1
-            f_1 = 0
+         #   f_1 = 0
             # Potential field
             # Value of the potential field
-            Z_x = (sigma_0_grad + sigma_0_interf + f_0 + f_1)[:-rest_layer_points.shape[0]]
-            potential_field_interfaces = (sigma_0_grad + sigma_0_interf + f_0 + f_1)[-rest_layer_points.shape[0]:]
 
+            Z_x = (sigma_0_grad + sigma_0_interf + f_0)[:-rest_layer_points.shape[0]]
+            potential_field_interfaces = (sigma_0_grad + sigma_0_interf + f_0)[-rest_layer_points.shape[0]:]
+            printing = potential_field_interfaces
             # Theano function to calculate a potential field
             self._interpolate = theano.function(
                 [dips_position, dip_angles, azimuth, polarity, rest_layer_points, ref_layer_points,
                  theano.In(yet_simulated, value=np.ones_like(self._grid.grid[:, 0]))],
-                [Z_x, G_x, G_y, G_z, potential_field_interfaces, C_matrix, DK_parameters],
+                [Z_x, G_x, G_y, G_z, potential_field_interfaces, C_matrix, printing],
                 on_unused_input="warn", profile=True, allow_input_downcast=True)
 
             # =======================================================================
@@ -1014,7 +1019,8 @@ class DataManagement(object):
             potential_field_unique, updates1 = theano.scan(fn=average_potential,
                                                            outputs_info=None,
                                                            sequences=dict(
-                                                               input=T.concatenate((T.stack(0),
+                                                               input=T.concatenate(
+                                                                   (T.stack(0),
                                                                     self.number_of_points_per_formation_T)),
                                                                taps=[0, 1]),
                                                            non_sequences=potential_field_interfaces)
@@ -1044,6 +1050,6 @@ class DataManagement(object):
 
             # Theano function to update the block
             self._block_export = theano.function([dips_position, dip_angles, azimuth, polarity, rest_layer_points,
-                                                  ref_layer_points, n_formation, yet_simulated], None,
+                                                  ref_layer_points, n_formation, yet_simulated], printing,
                                                  updates=[(self.block, potential_field_contribution)],
                                                  on_unused_input="warn", profile=True, allow_input_downcast=True)
