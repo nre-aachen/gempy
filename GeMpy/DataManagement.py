@@ -84,7 +84,6 @@ class DataManagement(object):
         self._set_formations()
         self.set_series()
 
-
     def set_foliations(self, foliat_Dataframe, append=False):
 
         assert set(['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation']).issubset(
@@ -596,7 +595,7 @@ class DataManagement(object):
             # Calculating the dimensions of the
             length_of_CG = dips_position.shape[0] * n_dimensions
             length_of_CGI = rest_layer_points.shape[0]
-            length_of_U_I = grade_universal + 1
+            length_of_U_I = grade_universal
             length_of_C = length_of_CG + length_of_CGI + length_of_U_I
 
             # Extra parameters
@@ -806,7 +805,7 @@ class DataManagement(object):
 
                 # Gradients
                 n = dips_position.shape[0]
-                U_G = T.zeros((n * n_dimensions, n_dimensions + 1))
+                U_G = T.zeros((n * n_dimensions, n_dimensions ))
                 # x
                 U_G = T.set_subtensor(
                     U_G[:n, 0], 1)
@@ -819,14 +818,14 @@ class DataManagement(object):
                     U_G[n * 2: n * 3, 2], 1
                 )
 
-                U_G = T.set_subtensor(U_G[:, -1], [0, 0, 0, 0, 0, 0])
+            #    U_G = T.set_subtensor(U_G[:, -1], [0, 0, 0, 0, 0, 0])
 
                 # Interface
                 U_I = -hx * gi_reescale
 
-                hxf = (T.lt(rest_layer_points[:, 0], 5) - T.lt(ref_layer_points[:, 0], 5))*2 + 1
+            #    hxf = (T.lt(rest_layer_points[:, 0], 5) - T.lt(ref_layer_points[:, 0], 5))*2 + 1
 
-                U_I = T.horizontal_stack(U_I, T.stack(hxf).T)
+            #    U_I = T.horizontal_stack(U_I, T.stack(hxf).T)
 
             elif self.u_grade_T.get_value() == 9:
                 # ==========================
@@ -923,7 +922,7 @@ class DataManagement(object):
 
             # Creation of a matrix of dimensions equal to the grid with the weights for every point (big 4D matrix in
             # ravel form)
-            weights = T.tile(DK_parameters, (grid_val.shape[0] , 1)).T
+            weights = T.tile(DK_parameters, (grid_val.shape[0], 1)).T
 
             # Gradient contribution
             sigma_0_grad = T.sum(
@@ -971,13 +970,13 @@ class DataManagement(object):
                 gi_rescale_aux = T.set_subtensor(gi_rescale_aux[:3], 1)
                 _aux_magic_term = T.tile(gi_rescale_aux[:grade_universal], (grid_val.shape[0], 1)).T
                 f_0 = (T.sum(
-                    weights[-length_of_U_I:-1, :] * gi_reescale * _aux_magic_term *
+                    weights[-length_of_U_I:, :] * gi_reescale * _aux_magic_term *
                     universal_matrix[:grade_universal]
                     , axis=0))
 
             # Contribution faults
-            f_1 = weights[-1, :] * T.lt(universal_matrix[0, :], 5) * 2 - 1
-
+           # f_1 = weights[-1, :] * T.lt(universal_matrix[0, :], 5) * 2 - 1
+            f_1 = 0
             # Potential field
             # Value of the potential field
             Z_x = (sigma_0_grad + sigma_0_interf + f_0 + f_1)[:-rest_layer_points.shape[0]]
