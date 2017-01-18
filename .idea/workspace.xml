@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/Risk analysis model.ipynb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/input_data/foliations_risk.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/input_data/interfaces_risk.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,11 +39,11 @@
       <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="567">
-              <caret line="614" column="81" lean-forward="true" selection-start-line="614" selection-start-column="81" selection-end-line="614" selection-end-column="81" />
+            <state relative-caret-position="549">
+              <caret line="1060" column="35" lean-forward="false" selection-start-line="1060" selection-start-column="35" selection-end-line="1060" selection-end-column="35" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
-                <element signature="e#40381#43099#0" expanded="false" />
+                <element signature="e#40882#43600#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -227,36 +224,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="DataManagement.py" />
               <option name="myItemType" value="com.jetbrains.python.projectView.PyFileNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DataManagement" />
-              <option name="myItemType" value="com.jetbrains.python.projectView.PyElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DataManagement.py" />
-              <option name="myItemType" value="com.jetbrains.python.projectView.PyFileNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DataManagement" />
-              <option name="myItemType" value="com.jetbrains.python.projectView.PyElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="InterpolatorClass" />
-              <option name="myItemType" value="com.jetbrains.python.projectView.PyElementNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -560,13 +527,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Setup created">
-      <created>1477057457786</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1477057457786</updated>
     </task>
     <task id="LOCAL-00007" summary="Reducing space">
       <created>1477061564429</created>
@@ -904,7 +864,14 @@
       <option name="project" value="LOCAL" />
       <updated>1484673745471</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="nothing">
+      <created>1484730420742</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1484730420744</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TodoView">
@@ -974,7 +941,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="More changes in docs" />
     <MESSAGE value="More changes in docs 2" />
     <MESSAGE value="More changes in docs 3" />
     <MESSAGE value="More changes in docs 4" />
@@ -999,7 +965,8 @@
     <MESSAGE value="going on at home" />
     <MESSAGE value="Spaghetti code for a fault example deleted" />
     <MESSAGE value="solved bug with [:3]" />
-    <option name="LAST_COMMIT_MESSAGE" value="solved bug with [:3]" />
+    <MESSAGE value="nothing" />
+    <option name="LAST_COMMIT_MESSAGE" value="nothing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1297,11 +1264,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="614" column="81" lean-forward="true" selection-start-line="614" selection-start-column="81" selection-end-line="614" selection-end-column="81" />
+        <state relative-caret-position="549">
+          <caret line="1060" column="35" lean-forward="false" selection-start-line="1060" selection-start-column="35" selection-end-line="1060" selection-end-column="35" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
-            <element signature="e#40381#43099#0" expanded="false" />
+            <element signature="e#40882#43600#0" expanded="false" />
           </folding>
         </state>
       </provider>

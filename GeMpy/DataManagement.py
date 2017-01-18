@@ -295,7 +295,7 @@ class DataManagement(object):
 
             verbose = kwargs.get('verbose', 0)
 
-            theano.config.optimizer = 'fast_compile'
+            theano.config.optimizer = 'None'
             theano.config.exception_verbosity = 'high'
             theano.config.compute_test_value = 'ignore'
 
@@ -737,6 +737,14 @@ class DataManagement(object):
                 perpendicularity_matrix[dips_position.shape[0] * 2:dips_position.shape[0] * 3,
                 dips_position.shape[0] * 2:dips_position.shape[0] * 3], 1)
 
+
+           # printing = (self.c_o_T * i_reescale * (
+           #     (SED_rest_rest < self.a_T) *  # Rest - Rest Covariances Matrix
+            #printing = (1 - 7 * (SED_rest_rest / self.a_T) ** 2 +
+            #     35 / 4 * (SED_rest_rest / self.a_T) ** 3 -
+            #     7 / 2 * (SED_rest_rest / self.a_T) ** 5 +
+            #     3 / 4 * (SED_rest_rest / self.a_T) ** 7)
+            printing = SED_rest_rest*self.a_T
             # ==========================
             # Creating covariance Matrix
             # ==========================
@@ -761,7 +769,9 @@ class DataManagement(object):
                  (1 - 7 * (SED_ref_ref / self.a_T) ** 2 +
                   35 / 4 * (SED_ref_ref / self.a_T) ** 3 -
                   7 / 2 * (SED_ref_ref / self.a_T) ** 5 +
-                  3 / 4 * (SED_ref_ref / self.a_T) ** 7)))) + 10e-9
+                  3 / 4 * (SED_ref_ref / self.a_T) ** 7)))) #'+ 10e-6
+
+            SED_dips_dips = T.switch(T.eq(SED_dips_dips, 0), 1, SED_dips_dips)
 
             # Covariance matrix for gradients at every xyz direction and their cross-covariances
             C_G = T.switch(
@@ -985,7 +995,7 @@ class DataManagement(object):
 
             Z_x = (sigma_0_grad + sigma_0_interf + f_0)[:-rest_layer_points.shape[0]]
             potential_field_interfaces = (sigma_0_grad + sigma_0_interf + f_0)[-rest_layer_points.shape[0]:]
-            printing = potential_field_interfaces
+
             # Theano function to calculate a potential field
             self._interpolate = theano.function(
                 [dips_position, dip_angles, azimuth, polarity, rest_layer_points, ref_layer_points,
@@ -998,8 +1008,8 @@ class DataManagement(object):
             # ========================================================================
 
             # Aux shared parameters
-            infinite_pos = theano.shared(np.float32(np.inf))
-            infinite_neg = theano.shared(np.float32(-np.inf))
+           # infinite_pos = theano.shared(np.float32(np.inf))
+           # infinite_neg = theano.shared(np.float32(-np.inf))
 
             # Value of the lithology-segment
             n_formation = T.vector("The assigned number of the lithologies in this serie")
@@ -1024,6 +1034,9 @@ class DataManagement(object):
                                                                taps=[0, 1]),
                                                            non_sequences=potential_field_interfaces)
 
+            infinite_pos = T.max(potential_field_unique) + 10
+            infinite_neg = T.min(potential_field_unique) - 10
+
             # Loop to segment the distinct lithologies
             potential_field_iter = T.concatenate((T.stack(infinite_pos),
                                                   potential_field_unique,
@@ -1044,11 +1057,26 @@ class DataManagement(object):
                 block.sum(axis=0))
 
             # Some gradient testing
-            # grad = T.jacobian(potential_field_contribution.sum(), rest_layer_points)
-            # grad = T.grad(azimuth[0], potential_field_contribution)
+            # grad = T.jacobian(T.flatten(printing), rest_layer_points)
+            grad = T.grad(T.sum(Z_x), self.a_T)
+            from theano.compile.nanguardmode import NanGuardMode
+
+            def detect_nan(i, node, fn):
+                for output in fn.outputs:
+                    if (not isinstance(output[0], np.random.RandomState) and
+                            np.isnan(output[0]).any()):
+                        print('*** NaN detected ***')
+                        theano.printing.debugprint(node)
+                        print('Inputs : %s' % [input[0] for input in fn.inputs])
+                        print('Outputs: %s' % [output[0] for output in fn.outputs])
+                        break
 
             # Theano function to update the block
             self._block_export = theano.function([dips_position, dip_angles, azimuth, polarity, rest_layer_points,
-                                                  ref_layer_points, n_formation, yet_simulated], printing,
+                                                  ref_layer_points, n_formation, yet_simulated], grad,
                                                  updates=[(self.block, potential_field_contribution)],
-                                                 on_unused_input="warn", profile=True, allow_input_downcast=True)
+                                                 on_unused_input="warn", profile=True, allow_input_downcast=True,)
+                                             #   mode=theano.compile.MonitorMode(
+                                             #       post_func=detect_nan))
+                                              #    mode=NanGuardMode(nan_is_error=True, inf_is_error=True,
+                                              #                     big_is_error=True))
