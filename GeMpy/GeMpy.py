@@ -91,7 +91,7 @@ def set_data_series(geo_data, series_distribution=None, order_series=None,
     geo_data.set_series(series_distribution=series_distribution, order=order_series)
     try:
         if update_p_field:
-            geo_data.interpolator.update_potential_fields()
+            geo_data.interpolator.compute_potential_fields()
     except AttributeError:
         pass
 
@@ -107,7 +107,7 @@ def set_interfaces(geo_data, interf_Dataframe, append=False, update_p_field = Tr
         geo_data.interpolator._grid = geo_data.grid
        # geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid)
         if update_p_field:
-            geo_data.interpolator.update_potential_fields()
+            geo_data.interpolator.compute_potential_fields()
     except AttributeError:
         pass
 
@@ -120,7 +120,7 @@ def set_foliations(geo_data, foliat_Dataframe, append=False, update_p_field=True
         geo_data.interpolator._grid = geo_data.grid
       #  geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid)
         if update_p_field:
-            geo_data.interpolator.update_potential_fields()
+            geo_data.interpolator.compute_potential_fields()
     except AttributeError:
         pass
 
@@ -144,7 +144,8 @@ def set_grid(geo_data, extent=None, resolution=None, grid_type="regular_3D", **k
     geo_data.grid = geo_data.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
 
 
-def set_interpolator(geo_data, compile_theano=False, *args, **kwargs):
+def set_interpolator(geo_data, compile_theano=False, compute_block_model=True,
+                     compute_potential_field=False, *args, **kwargs):
     """
     Method to initialize the class interpolator. All the constant parameters for the interpolation can be passed
     as args, otherwise they will take the default value (TODO: documentation of the dafault values)
@@ -170,6 +171,8 @@ def set_interpolator(geo_data, compile_theano=False, *args, **kwargs):
 
     if not getattr(geo_data, 'interpolator', None) or compile_theano:
         geo_data.interpolator = geo_data.InterpolatorClass(geo_data, geo_data.grid, compile_theano=True,
+                                                           compute_block_model=compute_block_model,
+                                                           compute_potential_field=compute_potential_field,
                                                            *args, **kwargs)
     else:
         geo_data.interpolator._data = geo_data
@@ -200,5 +203,5 @@ def plot_potential_field(geo_data, cell_number, potential_field=None, n_pf=0,
                               *args, **kwargs)
 
 
-def update_potential_fields(geo_data, verbose=0):
-    geo_data.interpolator.update_potential_fields(verbose=verbose)
+def compute_potential_fields(geo_data, verbose=0):
+    geo_data.interpolator.compute_potential_fields(verbose=verbose)
