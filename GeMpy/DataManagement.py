@@ -5,7 +5,7 @@ import theano.tensor as T
 import numpy as np
 import sys, os
 import pandas as pn
-import theanograf as tg
+import theanograf
 from Visualization import PlotData
 
 
@@ -71,32 +71,83 @@ class DataManagement(object):
         # Create default grid object. (Is this necessary now?)
         self.grid = self.create_grid(extent=None, resolution=None, grid_type="regular_3D", **kwargs)
 
-    def set_interfaces(self, interf_Dataframe, append=False):
+    def _set_formations(self):
+        """
+        Function to import the formations that will be used later on. By default all the formations in the tables are
+        chosen.
 
-        assert set(['X', 'Y', 'Z', 'formation']).issubset(interf_Dataframe.columns), \
-            "One or more columns do not match with the expected values " + str(interf_Dataframe.columns)
+        Returns:
+             pandas.core.frame.DataFrame: Data frame with the raw data
 
-        if append:
-            self.interfaces = self.interfaces.append(interf_Dataframe)
-        else:
-            self.interfaces = interf_Dataframe
+        """
 
-        self._set_formations()
-        self.set_series()
+        try:
+            # foliations may or may not be in all formations so we need to use interfaces
+            self.formations = self.interfaces["formation"].unique()
 
-    def set_foliations(self, foliat_Dataframe, append=False):
+            # TODO: Trying to make this more elegant?
+            for el in self.formations:
+                for check in self.formations:
+                    assert (el not in check or el == check), "One of the formations name contains other" \
+                                                             " string. Please rename." + str(el) + " in " + str(
+                        check)
 
-        assert set(['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation']).issubset(
-            foliat_Dataframe.columns), "One or more columns do not match with the expected values " +\
-                                       str(foliat_Dataframe.columns)
-        if append:
-            self.foliations = self.foliations.append(foliat_Dataframe)
-        else:
-            self.foliations = foliat_Dataframe
+                    # TODO: Add the possibility to change the name in pandas directly
+                    # (adding just a 1 in the contained string)
+        except AttributeError:
+            pass
 
-        self._set_formations()
-        self.set_series()
-        self.calculate_gradient()
+    def calculate_gradient(self):
+        """
+        Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations
+
+        Returns:
+            self.foliations: extra columns with components xyz of the unity vector.
+        """
+
+        self.foliations['G_x'] = np.sin(np.deg2rad(self.foliations["dip"])) * \
+                                 np.sin(np.deg2rad(self.foliations["azimuth"])) * self.foliations["polarity"]
+        self.foliations['G_y'] = np.sin(np.deg2rad(self.foliations["dip"])) * \
+                                 np.cos(np.deg2rad(self.foliations["azimuth"])) * self.foliations["polarity"]
+        self.foliations['G_z'] = np.cos(np.deg2rad(self.foliations["dip"])) * self.foliations["polarity"]
+
+    # TODO set new interface/set
+
+    def create_grid(self, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
+        """
+        Method to initialize the class grid. So far is really simple and only has the regular grid type
+
+        Args:
+            grid_type (str): regular_3D or regular_2D (I am not even sure if regular 2D still working)
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            self.grid(GeMpy_core.grid): Object that contain different grids
+        """
+        if not extent:
+            extent = self.extent
+        if not resolution:
+            resolution = self.resolution
+
+        return self.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
+
+    def get_raw_data(self, dtype='all'):
+
+        import pandas as _pn
+        if dtype == 'foliations':
+            raw_data = self.foliations
+        elif dtype == 'interfaces':
+            raw_data = self.interfaces
+        elif dtype == 'all':
+            raw_data = _pn.concat([self.interfaces, self.foliations], keys=['interfaces', 'foliations'])
+        return raw_data
+
+    def i_set_data(self, dtype="foliations"):
+        import qgrid
+        qgrid.nbinstall(overwrite=True)
+        qgrid.set_defaults(show_toolbar=True)
+        assert dtype is 'foliations' or dtype is 'interfaces', 'dtype must be either foliations or interfaces'
+        qgrid.show_grid(self.get_raw_data(dtype=dtype))
 
     @staticmethod
     def load_data_csv(data_type, path=os.getcwd(), **kwargs):
@@ -123,35 +174,34 @@ class DataManagement(object):
         else:
             raise NameError('Data type not understood. Try interfaces or foliations')
 
-            # TODO if we load different data the Interpolator parameters must be also updated:  Research how and implement
+        # TODO if we load different data the Interpolator parameters must be also updated:  Research how and implement
 
-    def _set_formations(self):
-        """
-        Function to import the formations that will be used later on. By default all the formations in the tables are
-        chosen.
+    def set_interfaces(self, interf_Dataframe, append=False):
 
-        Returns:
-             pandas.core.frame.DataFrame: Data frame with the raw data
+        assert set(['X', 'Y', 'Z', 'formation']).issubset(interf_Dataframe.columns), \
+            "One or more columns do not match with the expected values " + str(interf_Dataframe.columns)
 
-        """
-      #  try:
-      #      getattr(self, "formations")
-      #  except AttributeError:
-        try:
-            # foliations may or may not be in all formations so we need to use interfaces
-            self.formations = self.interfaces["formation"].unique()
+        if append:
+            self.interfaces = self.interfaces.append(interf_Dataframe)
+        else:
+            self.interfaces = interf_Dataframe
 
-            # TODO: Trying to make this more elegant?
-            for el in self.formations:
-                for check in self.formations:
-                    assert (el not in check or el == check), "One of the formations name contains other" \
-                                                             " string. Please rename." + str(el) + " in " + str(
-                        check)
+        self._set_formations()
+        self.set_series()
 
-                    # TODO: Add the possibility to change the name in pandas directly
-                    # (adding just a 1 in the contained string)
-        except AttributeError:
-            pass
+    def set_foliations(self, foliat_Dataframe, append=False):
+
+        assert set(['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation']).issubset(
+            foliat_Dataframe.columns), "One or more columns do not match with the expected values " +\
+                                       str(foliat_Dataframe.columns)
+        if append:
+            self.foliations = self.foliations.append(foliat_Dataframe)
+        else:
+            self.foliations = foliat_Dataframe
+
+        self._set_formations()
+        self.set_series()
+        self.calculate_gradient()
 
     def set_series(self, series_distribution=None, order=None):
         """
@@ -188,40 +238,6 @@ class DataManagement(object):
 
         self.series = _series
         return _series
-
-    def calculate_gradient(self):
-        """
-        Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations
-
-        Returns:
-            self.foliations: extra columns with components xyz of the unity vector.
-        """
-
-        self.foliations['G_x'] = np.sin(np.deg2rad(self.foliations["dip"])) * \
-                                 np.sin(np.deg2rad(self.foliations["azimuth"])) * self.foliations["polarity"]
-        self.foliations['G_y'] = np.sin(np.deg2rad(self.foliations["dip"])) * \
-                                 np.cos(np.deg2rad(self.foliations["azimuth"])) * self.foliations["polarity"]
-        self.foliations['G_z'] = np.cos(np.deg2rad(self.foliations["dip"])) * self.foliations["polarity"]
-
-    # TODO set new interface/set
-
-    def i_set_data(self, dtype="foliations"):
-        import qgrid
-        qgrid.nbinstall(overwrite=True)
-        qgrid.set_defaults(show_toolbar=True)
-        assert dtype is 'foliations' or dtype is 'interfaces', 'dtype must be either foliations or interfaces'
-        qgrid.show_grid(self.get_raw_data(dtype=dtype))
-
-    def get_raw_data(self, dtype='all'):
-
-        import pandas as _pn
-        if dtype == 'foliations':
-            raw_data = self.foliations
-        elif dtype == 'interfaces':
-            raw_data = self.interfaces
-        elif dtype == 'all':
-            raw_data = _pn.concat([self.interfaces, self.foliations], keys=['interfaces', 'foliations'])
-        return raw_data
 
     class GridClass(object):
         """
@@ -260,24 +276,6 @@ class DataManagement(object):
 
             return np.vstack(map(np.ravel, g)).T.astype("float32")
 
-    def create_grid(self, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
-        """
-        Method to initialize the class grid. So far is really simple and only has the regular grid type
-
-        Args:
-            grid_type (str): regular_3D or regular_2D (I am not even sure if regular 2D still working)
-            **kwargs: Arbitrary keyword arguments.
-
-        Returns:
-            self.grid(GeMpy_core.grid): Object that contain different grids
-        """
-        if not extent:
-            extent = self.extent
-        if not resolution:
-            resolution = self.resolution
-
-        return self.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
-
     class InterpolatorClass(object):
         """
         Class which contain all needed methods to perform potential field implicit modelling in theano
@@ -299,6 +297,7 @@ class DataManagement(object):
             theano.config.optimizer = 'None'
             theano.config.exception_verbosity = 'high'
             theano.config.compute_test_value = 'ignore'
+            u_grade = kwargs.get('u_grade', 2)
 
             self._data = _data
 
@@ -307,20 +306,20 @@ class DataManagement(object):
             else:
                 self._grid = _grid
 
-            self._set_constant_parameteres(_data, _grid, **kwargs)
+            self.tg = theanograf.TheanoGraph(u_grade)
+            self.set_theano_shared_parameteres(_data, _grid, **kwargs)
 
             if compute_potential_field:
+
                 self.potential_fields = []
                 self._interpolate = self.compile_potential_field_function()
-
-                # -------------------------
                 self.potential_fields = [self.compute_potential_fields(i, verbose=verbose)
                                          for i in np.arange(len(self._data.series.columns))]
 
             if compute_block_model:
 
                 self._block_export = self.compile_block_model_function()
-                self.compute_block_model()
+                self.block = self.compute_block_model()
 
         def _aux_computations_block_model(self, for_in_ser, n_formation, verbose=0):
             """
@@ -340,9 +339,9 @@ class DataManagement(object):
                 if verbose > 0:
                     print(yet_simulated, (yet_simulated == 0).sum())
             except AttributeError:
-                yet_simulated = np.ones_like(self._data.grid[:, 0], dtype="int8")
+                yet_simulated = np.ones_like(self._grid.grid[:, 0], dtype="int8")
                 print("I am in the except")
-            # TODO: change [:,:3] that is positional based for XYZ so is more consistent
+
             dips_position = self._data.foliations[
                 self._data.foliations["formation"].str.contains(for_in_ser)] \
                 [['X', 'Y', 'Z']].as_matrix()
@@ -354,8 +353,7 @@ class DataManagement(object):
                 self._data.foliations["formation"].str.contains(for_in_ser)]["polarity"].as_matrix()
 
             if for_in_ser.count("|") == 0:
-                # layers = self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)].as_matrix()[
-                #         :, :3]
+
                 layers = self._data.interfaces[self._data.interfaces["formation"] == for_in_ser] \
                     [['X', 'Y', 'Z']].as_matrix()
                 rest_layer_points = layers[1:]
@@ -376,7 +374,7 @@ class DataManagement(object):
                 for i in layers[1:]:
                     rest_layer_points = np.vstack((rest_layer_points, i[1:]))
                     rest_dim = np.append(rest_dim, rest_dim[-1] + i[1:].shape[0])
-                self.number_of_points_per_formation_T.set_value(rest_dim)
+                self.tg.number_of_points_per_formation_T.set_value(rest_dim)
                 ref_layer_points = np.vstack((np.tile(i[0], (np.shape(i)[0] - 1, 1)) for i in layers))
 
             if verbose > 0:
@@ -388,7 +386,7 @@ class DataManagement(object):
                           "foliations ",
                           self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)])
 
-                    # self.grad is none so far. I have it for further research in the calculation of the Jacobian matrix
+            # self.grad is none so far. I have it for further research in the calculation of the Jacobian matrix
 
                 if verbose > 2:
                     print('number_formations', n_formation)
@@ -447,14 +445,13 @@ class DataManagement(object):
                           "\n foliations \n",
                           self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)])
 
-            self.Z_x, G_x, G_y, G_z, self.potential_interfaces, self.C, self.DK = self._interpolate(
+            self.Z_x, self.potential_interfaces, self.C, self.DK = self._interpolate(
                 dips_position, dip_angles, azimuth, polarity,
-                rest_layer_points, ref_layer_points, self.u_grade)[:]
+                rest_layer_points, ref_layer_points)[:]
 
             potential_field = self.Z_x.reshape(self._data.nx, self._data.ny, self._data.nz)
 
             if verbose > 2:
-                print("Gradients: ", G_x, G_y, G_z)
                 print("Dual Kriging weights: ", self.DK)
             if verbose > 3:
                 print("C_matrix: ", self.C)
@@ -473,7 +470,7 @@ class DataManagement(object):
                 _formations_in_serie = "|".join(self._data.series[series_name].drop_duplicates())
             return _formations_in_serie
 
-        def _set_constant_parameteres(self, _data, _grid, **kwargs):
+        def set_theano_shared_parameteres(self, _data, _grid, **kwargs):
             """
             Basic interpolator parameters. Also here it is possible to change some flags of theano
             :param range_var: Range of the variogram, it is recommended the distance of the longest diagonal
@@ -486,7 +483,7 @@ class DataManagement(object):
             c_o = kwargs.get('c_o', None)
             nugget_effect = kwargs.get('nugget_effect', 0.01)
             rescaling_factor = kwargs.get('rescaling_factor', None)
-            self.u_grade = u_grade
+
             if not range_var:
                 range_var = np.sqrt((_data.xmax - _data.xmin) ** 2 +
                                     (_data.ymax - _data.ymin) ** 2 +
@@ -495,22 +492,18 @@ class DataManagement(object):
                 c_o = range_var ** 2 / 14 / 3
 
             # Creation of shared variables
-          #  tg.nx_T = theano.shared(_data.nx, "Resolution in x axis")
-          #  tg.ny_T = theano.shared(_data.ny, "Resolution in y axis")
-          #  tg.nz_T = theano.shared(_data.nz, "Resolution in z axis")
-           # tg.a_T = theano.shared(range_var, "range", allow_downcast=True)
-           # tg.c_o_T = theano.shared(c_o, "covariance at 0", allow_downcast=True)
-           # tg.nugget_effect_grad_T = theano.shared(nugget_effect, "nugget effect of the grade", allow_downcast=True)
-            tg.a_T.set_value(range_var)
-            tg.c_o_T.set_value(c_o)
-            tg.nugget_effect_grad_T.set_value(nugget_effect)
+
+            self.tg.a_T.set_value(range_var)
+            self.tg.c_o_T.set_value(c_o)
+            self.tg.nugget_effect_grad_T.set_value(nugget_effect)
+
             assert (0 <= u_grade <= 2)
 
             if u_grade == 0:
                 print('I am here')
-                tg.u_grade_T.set_value(u_grade)# = theano.shared(u_grade, "grade of the universal drift", allow_downcast=True)
+                self.tg.u_grade_T.set_value(u_grade)
             else:
-                tg.u_grade_T.set_value(3**u_grade)# = theano.shared(3 ** u_grade, allow_downcast=True)
+                self.tg.u_grade_T.set_value(3**u_grade)
             # TODO: To be sure what is the mathematical meaning of this
 
             if not rescaling_factor:
@@ -518,45 +511,44 @@ class DataManagement(object):
                 min_coord = pn.concat([_data.foliations, _data.interfaces]).min()[['X', 'Y', 'Z']]
                 rescaling_factor = np.max(max_coord - min_coord)
 
-            tg.rescaling_factor_T.set_value(rescaling_factor)# = theano.shared(rescaling_factor, "rescaling factor", allow_downcast=True)
-          #  tg.number_of_points_per_formation_T.set_value = theano.shared(np.zeros(2),
-           #                                                       "Vector. Number of formations in the serie")
+            self.tg.rescaling_factor_T.set_value(rescaling_factor)
 
             _universal_matrix = np.vstack((_grid.grid.T,
                                            (_grid.grid ** 2).T,
                                            _grid.grid[:, 0] * _grid.grid[:, 1],
                                            _grid.grid[:, 0] * _grid.grid[:, 2],
                                            _grid.grid[:, 1] * _grid.grid[:, 2]))
-         #   tg.universal_matrix_T = theano.shared(_universal_matrix + 1e-10, "universal matrix")
-            tg.universal_matrix_T.set_value(_universal_matrix + 1e-10)
-            tg.final_block.set_value(np.zeros_like(_grid.grid[:, 0])) # = theano.shared(np.zeros_like(_grid.grid[:, 0]), "Final block computed")
-            # tg.grid_val_T = theano.shared(_grid.grid + 1e-10, "Positions of the points to interpolate")
-            tg.grid_val_T.set_value(_grid.grid + 10e-6)
 
-        def _get_constant_parameters(self):
-            """
-            Deprecated?
+            self.tg.universal_matrix_T.set_value(_universal_matrix + 1e-10)
+            self.tg.final_block.set_value(np.zeros_like(_grid.grid[:, 0]))
+            self.tg.grid_val_T.set_value(_grid.grid + 10e-6)
 
-            Returns:
-
-            """
-            return self.a_T, self.c_o_T, self.nugget_effect_grad_T
+     #    def _get_constant_parameters(self):
+     #        """
+     #        Deprecated?
+     #
+     #        Returns:
+     #
+     #        """
+     #        return self.a_T, self.c_o_T, self.nugget_effect_grad_T
 
         def compile_potential_field_function(self):
             self._interpolate = theano.function(
-                [tg.dips_position, tg.dip_angles, tg.azimuth, tg.polarity, tg.rest_layer_points,
-                 tg.ref_layer_points, tg.u_grade_T, theano.In(tg.yet_simulated, value=np.ones_like(self._grid.grid[:, 0]))],
-                [tg.Z_x, tg.G_x, tg.G_y, tg.G_z, tg.potential_field_interfaces, tg.C_matrix, tg.printing],
+                [self.tg.dips_position, self.tg.dip_angles, self.tg.azimuth, self.tg.polarity, self.tg.rest_layer_points,
+                 self.tg.ref_layer_points, theano.In(self.tg.yet_simulated, value=np.ones_like(self._grid.grid[:, 0]))],
+                [self.tg.Z_x, self.tg.potential_field_interfaces,
+                 self.tg.C_matrix, self.tg.DK_parameters],
                 on_unused_input="warn", profile=True, allow_input_downcast=True)
             return self._interpolate
 
         def compile_block_model_function(self):
 
-            self._block_export = theano.function([tg.dips_position, tg.dip_angles, tg.azimuth, tg.polarity,
-                                                  tg.rest_layer_points, tg.ref_layer_points, tg.n_formation,
-                                                  tg.yet_simulated],
+            self._block_export = theano.function([self.tg.dips_position, self.tg.dip_angles, self.tg.azimuth,
+                                                  self.tg.polarity, self.tg.rest_layer_points,
+                                                  self.tg.ref_layer_points, self.tg.n_formation,
+                                                  self.tg.yet_simulated],
                                                  None,
-                                                 updates=[(tg.final_block, tg.potential_field_contribution)],
+                                                 updates=[(self.tg.final_block, self.tg.potential_field_contribution)],
                                                  on_unused_input="warn", profile=True, allow_input_downcast=True,)
             #   mode=theano.compile.MonitorMode(
             #   post_func=detect_nan))
@@ -565,9 +557,9 @@ class DataManagement(object):
 
             return self._block_export
 
-        def update_potential_fields(self, verbose=0):
-            self.potential_fields = [self.compute_potential_fields(i, verbose=verbose)
-                                     for i in np.arange(len(self._data.series.columns))]
+      #  def update_potential_fields(self, verbose=0):
+      #      self.potential_fields = [self.compute_potential_fields(i, verbose=verbose)
+      #                               for i in np.arange(len(self._data.series.columns))]
 
         def compute_block_model(self, series_number="all", verbose=0):
             """
@@ -593,7 +585,7 @@ class DataManagement(object):
                 self.grad = self._aux_computations_block_model(formations_in_serie, np.array(n_formation, ndmin=1),
                                                                verbose=verbose)
 
-                return self.block
+                return self.tg.final_block
 
         def compute_potential_fields(self, series_name="all", verbose=0):
             """

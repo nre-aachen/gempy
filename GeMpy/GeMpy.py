@@ -166,6 +166,9 @@ def set_interpolator(geo_data, compile_theano=False, compute_block_model=True,
         self.Plot(GeMpy_core.PlotData): Object to visualize data and results. It gets updated.
     """
 
+    if 'u_grade' in kwargs:
+        compile_theano = True
+
     if not getattr(geo_data, 'grid', None):
         set_grid(geo_data)
 
@@ -177,7 +180,7 @@ def set_interpolator(geo_data, compile_theano=False, compute_block_model=True,
     else:
         geo_data.interpolator._data = geo_data
         geo_data.interpolator._grid = geo_data.grid
-        geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid, **kwargs)
+        geo_data.interpolator.set_theano_shared_parameteres(geo_data, geo_data.interpolator._grid, **kwargs)
 
 
 def plot_data(geo_data, direction="y", series="all", **kwargs):
