@@ -38,11 +38,11 @@ def compute_block_model(geo_data, series_number="all",
         warnings.warn('Using default interpolation values')
         set_interpolator(geo_data)
 
-    geo_data.interpolator.block.set_value(_np.zeros_like(geo_data.grid.grid[:, 0]))
+    geo_data.interpolator.tg.final_block.set_value(_np.zeros_like(geo_data.grid.grid[:, 0]))
 
     geo_data.interpolator.compute_block_model(series_number=series_number, verbose=verbose)
 
-    return geo_data.interpolator.block
+    return geo_data.interpolator.tg.final_block
 
 
 def get_grid(geo_data):
@@ -165,6 +165,11 @@ def set_interpolator(geo_data, compile_theano=False, compute_block_model=True,
         self.Interpolator (GeMpy_core.Interpolator): Object to perform the potential field method
         self.Plot(GeMpy_core.PlotData): Object to visualize data and results. It gets updated.
     """
+    import theano
+    theano.config.optimizer = 'None'
+    theano.config.exception_verbosity = 'high'
+    theano.config.compute_test_value = 'ignore'
+
 
     if 'u_grade' in kwargs:
         compile_theano = True

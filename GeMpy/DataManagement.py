@@ -8,6 +8,10 @@ import pandas as pn
 import theanograf
 from Visualization import PlotData
 
+theano.config.optimizer = 'None'
+theano.config.exception_verbosity = 'high'
+theano.config.compute_test_value = 'ignore'
+
 
 class DataManagement(object):
     """
@@ -34,6 +38,10 @@ class DataManagement(object):
                  resolution=[50, 50, 50],
                  path_i=None, path_f=None,
                  **kwargs):
+        theano.config.optimizer = 'None'
+        theano.config.exception_verbosity = 'high'
+        theano.config.compute_test_value = 'ignore'
+
 
         # Deprecated
         self.xmin = extent[0]
@@ -293,28 +301,66 @@ class DataManagement(object):
                      compute_potential_field=False, *args, **kwargs):
 
             verbose = kwargs.get('verbose', 0)
+            rescaling_factor = kwargs.get('rescaling_factor', None)
 
             theano.config.optimizer = 'None'
             theano.config.exception_verbosity = 'high'
             theano.config.compute_test_value = 'ignore'
             u_grade = kwargs.get('u_grade', 2)
 
-            self._data = _data
+            if not rescaling_factor:
+                max_coord = pn.concat(
+                    [_data.foliations, _data.interfaces]).max()[['X', 'Y', 'Z']]
+                min_coord = pn.concat(
+                    [_data.foliations, _data.interfaces]).min()[['X', 'Y', 'Z']]
+                self.rescaling_factor = np.max(max_coord - min_coord)
 
+
+
+            """
+            # Moving data
+            import copy
+            _data_moved = copy.copy(_data)
+
+            _data_moved.interfaces[['X', 'Y', 'Z']] = (
+                _data_moved.interfaces[['X', 'Y', 'Z']] -
+                _data_moved.interfaces.min()[['X', 'Y', 'Z']]) + 0.0001
+
+            _data_moved.foliations[['X', 'Y', 'Z']] = (
+                _data_moved.foliations[['X', 'Y', 'Z']] -
+                _data_moved.foliations.min()[['X', 'Y', 'Z']]) + 0.0001
+            """
+
+
+            """
             if not _grid:
-                self._grid = _data.grid
+                self._grid_scaled = copy.copy(_data.grid)
+
             else:
-                self._grid = _grid
+                self._grid_scaled = copy.copy(_grid)
+
+            # Rescaling input data and grid
+            self._data_scaled = copy.copy(_data)
+            self._data_scaled.interfaces[['X', 'Y', 'Z']] = (_data_moved.interfaces[['X', 'Y', 'Z']] /
+                                                             self.rescaling_factor)
+
+            self._data_scaled.foliations[['X', 'Y', 'Z']] = (_data_moved.foliations[['X', 'Y', 'Z']] /
+                                                             self.rescaling_factor)
+
+            self._grid_scaled.grid = (_grid.grid - _grid.grid.min(axis=0)) / self.rescaling_factor + 0.0001
+            """
+            from IPython.core.debugger import Tracer
 
             self.tg = theanograf.TheanoGraph(u_grade)
-            self.set_theano_shared_parameteres(_data, _grid, **kwargs)
+
+            self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, **kwargs)
 
             if compute_potential_field:
 
                 self.potential_fields = []
                 self._interpolate = self.compile_potential_field_function()
                 self.potential_fields = [self.compute_potential_fields(i, verbose=verbose)
-                                         for i in np.arange(len(self._data.series.columns))]
+                                         for i in np.arange(len(self._data_scaled.series.columns))]
 
             if compute_block_model:
 
@@ -335,37 +381,37 @@ class DataManagement(object):
             """
             # TODO Probably here I should add some asserts for sanity check
             try:
-                yet_simulated = (self.block.get_value() == 0) * 1
+                yet_simulated = (self.tg.final_block.get_value() == 0) * 1
                 if verbose > 0:
                     print(yet_simulated, (yet_simulated == 0).sum())
             except AttributeError:
                 yet_simulated = np.ones_like(self._grid.grid[:, 0], dtype="int8")
                 print("I am in the except")
 
-            dips_position = self._data.foliations[
-                self._data.foliations["formation"].str.contains(for_in_ser)] \
+            dips_position = self._data_scaled.foliations[
+                self._data_scaled.foliations["formation"].str.contains(for_in_ser)] \
                 [['X', 'Y', 'Z']].as_matrix()
-            dip_angles = self._data.foliations[
-                self._data.foliations["formation"].str.contains(for_in_ser)]["dip"].as_matrix()
-            azimuth = self._data.foliations[
-                self._data.foliations["formation"].str.contains(for_in_ser)]["azimuth"].as_matrix()
-            polarity = self._data.foliations[
-                self._data.foliations["formation"].str.contains(for_in_ser)]["polarity"].as_matrix()
+            dip_angles = self._data_scaled.foliations[
+                self._data_scaled.foliations["formation"].str.contains(for_in_ser)]["dip"].as_matrix()
+            azimuth = self._data_scaled.foliations[
+                self._data_scaled.foliations["formation"].str.contains(for_in_ser)]["azimuth"].as_matrix()
+            polarity = self._data_scaled.foliations[
+                self._data_scaled.foliations["formation"].str.contains(for_in_ser)]["polarity"].as_matrix()
 
             if for_in_ser.count("|") == 0:
 
-                layers = self._data.interfaces[self._data.interfaces["formation"] == for_in_ser] \
+                layers = self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == for_in_ser] \
                     [['X', 'Y', 'Z']].as_matrix()
                 rest_layer_points = layers[1:]
                 # TODO self.n_formation probably should not be self
-                self.number_of_points_per_formation_T.set_value(np.array(rest_layer_points.shape[0], ndmin=1))
+                self.tg.number_of_points_per_formation_T.set_value(np.array(rest_layer_points.shape[0], ndmin=1))
                 ref_layer_points = np.tile(layers[0], (np.shape(layers)[0] - 1, 1))
             else:
                 # TODO: This is ugly
                 layers_list = []
                 for formation in for_in_ser.split("|"):
                     layers_list.append(
-                        self._data.interfaces[self._data.interfaces["formation"] == formation]
+                        self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == formation]
                         [['X', 'Y', 'Z']].as_matrix())
                 layers = np.asarray(layers_list)
 
@@ -381,10 +427,10 @@ class DataManagement(object):
                 print("The serie formations are %s" % for_in_ser)
                 if verbose > 1:
                     print("The formations are: \n"
-                          "Layers ", self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)],
+                          "Layers ", self._data_scaled.interfaces[self._data_scaled.interfaces["formation"].str.contains(for_in_ser)],
                           " \n "
                           "foliations ",
-                          self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)])
+                          self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)])
 
             # self.grad is none so far. I have it for further research in the calculation of the Jacobian matrix
 
@@ -392,9 +438,23 @@ class DataManagement(object):
                     print('number_formations', n_formation)
                     print('rest_layer_points', rest_layer_points)
 
-            return self._block_export(dips_position, dip_angles, azimuth, polarity,
-                                      rest_layer_points, ref_layer_points,
-                                      n_formation, yet_simulated)
+            if not getattr(self, '_block_export', None):
+                self.compile_block_model_function()
+
+            res = self._block_export(dips_position, dip_angles, azimuth, polarity,
+                                     rest_layer_points, ref_layer_points,
+                                     n_formation, yet_simulated)
+
+            if verbose > 2:
+                print('number of unique lithologies in the final block model',
+                      np.unique(self.tg.final_block.get_value()))
+
+            self.input_parameters = [dips_position, dip_angles, azimuth, polarity,
+                                     rest_layer_points, ref_layer_points,
+                                     n_formation, yet_simulated]
+            return res
+
+
 
         def _aux_computations_potential_field(self, for_in_ser, verbose=0):
             """
@@ -409,20 +469,20 @@ class DataManagement(object):
             """
 
             # TODO: change [:,:3] that is positional based for XYZ so is more consistent
-            dips_position = self._data.foliations[
-                self._data.foliations["formation"].str.contains(for_in_ser)] \
+            dips_position = self._data_scaled.foliations[
+                self._data_scaled.foliations["formation"].str.contains(for_in_ser)] \
                 [['X', 'Y', 'Z']].as_matrix()
-            dip_angles = self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)][
+            dip_angles = self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)][
                 "dip"].as_matrix()
-            azimuth = self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)][
+            azimuth = self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)][
                 "azimuth"].as_matrix()
-            polarity = self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)][
+            polarity = self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)][
                 "polarity"].as_matrix()
 
             if for_in_ser.count("|") == 0:
-                # layers = self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)].as_matrix()[
+                # layers = self._data_scaled.interfaces[self._data_scaled.interfaces["formation"].str.contains(for_in_ser)].as_matrix()[
                 #         :, :3]
-                layers = self._data.interfaces[self._data.interfaces["formation"] == for_in_ser] \
+                layers = self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == for_in_ser] \
                     [['X', 'Y', 'Z']].as_matrix()
                 rest_layer_points = layers[1:]
                 ref_layer_points = np.tile(layers[0], (np.shape(layers)[0] - 1, 1))
@@ -430,7 +490,7 @@ class DataManagement(object):
                 layers_list = []
                 for formation in for_in_ser.split("|"):
                     layers_list.append(
-                        self._data.interfaces[self._data.interfaces["formation"] == formation]
+                        self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == formation]
                         [['X', 'Y', 'Z']].as_matrix())
                 layers = np.asarray(layers_list)
                 rest_layer_points = np.vstack((i[1:] for i in layers))
@@ -441,20 +501,22 @@ class DataManagement(object):
                 if verbose > 1:
                     print("The formations are: \n"
                           "Layers \n",
-                          self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)],
+                          self._data_scaled.interfaces[self._data_scaled.interfaces["formation"].str.contains(for_in_ser)],
                           "\n foliations \n",
-                          self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)])
+                          self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)])
 
-            self.Z_x, self.potential_interfaces, self.C, self.DK = self._interpolate(
+            potential_field_results = self._interpolate(
                 dips_position, dip_angles, azimuth, polarity,
                 rest_layer_points, ref_layer_points)[:]
 
-            potential_field = self.Z_x.reshape(self._data.nx, self._data.ny, self._data.nz)
+            self.Z_x, self.results = potential_field_results[0], potential_field_results[1:]
+
+            potential_field = self.Z_x.reshape(self._data_scaled.nx, self._data_scaled.ny, self._data_scaled.nz)
 
             if verbose > 2:
-                print("Dual Kriging weights: ", self.DK)
+                print("Dual Kriging weights: ", self.results[2])
             if verbose > 3:
-                print("C_matrix: ", self.C)
+                print("C_matrix: ", self.results[1])
 
             return potential_field
 
@@ -465,12 +527,12 @@ class DataManagement(object):
             :return: formations of a given serie in string separeted by |
             """
             if type(series_name) == int or type(series_name) == np.int64:
-                _formations_in_serie = "|".join(self._data.series.ix[:, series_name].drop_duplicates())
+                _formations_in_serie = "|".join(self._data_scaled.series.ix[:, series_name].drop_duplicates())
             elif type(series_name) == str:
-                _formations_in_serie = "|".join(self._data.series[series_name].drop_duplicates())
+                _formations_in_serie = "|".join(self._data_scaled.series[series_name].drop_duplicates())
             return _formations_in_serie
 
-        def set_theano_shared_parameteres(self, _data, _grid, **kwargs):
+        def set_theano_shared_parameteres(self, _data_rescaled, _grid_rescaled, **kwargs):
             """
             Basic interpolator parameters. Also here it is possible to change some flags of theano
             :param range_var: Range of the variogram, it is recommended the distance of the longest diagonal
@@ -484,15 +546,17 @@ class DataManagement(object):
             nugget_effect = kwargs.get('nugget_effect', 0.01)
             rescaling_factor = kwargs.get('rescaling_factor', None)
 
+            print("I am in the set theano shared", _data_rescaled, _data_rescaled.interfaces.head())
+
             if not range_var:
-                range_var = np.sqrt((_data.xmax - _data.xmin) ** 2 +
-                                    (_data.ymax - _data.ymin) ** 2 +
-                                    (_data.zmax - _data.zmin) ** 2)
+                range_var = np.sqrt((_data_rescaled.xmax - _data_rescaled.xmin) ** 2 +
+                                    (_data_rescaled.ymax - _data_rescaled.ymin) ** 2 +
+                                    (_data_rescaled.zmax - _data_rescaled.zmin) ** 2)
             if not c_o:
                 c_o = range_var ** 2 / 14 / 3
 
             # Creation of shared variables
-
+            print('range_var, c_o', range_var, c_o)
             self.tg.a_T.set_value(range_var)
             self.tg.c_o_T.set_value(c_o)
             self.tg.nugget_effect_grad_T.set_value(nugget_effect)
@@ -506,22 +570,17 @@ class DataManagement(object):
                 self.tg.u_grade_T.set_value(3**u_grade)
             # TODO: To be sure what is the mathematical meaning of this
 
-            if not rescaling_factor:
-                max_coord = pn.concat([_data.foliations, _data.interfaces]).max()[['X', 'Y', 'Z']]
-                min_coord = pn.concat([_data.foliations, _data.interfaces]).min()[['X', 'Y', 'Z']]
-                rescaling_factor = np.max(max_coord - min_coord)
+            self.tg.c_resc.set_value(self.rescaling_factor)
 
-            self.tg.rescaling_factor_T.set_value(rescaling_factor)
-
-            _universal_matrix = np.vstack((_grid.grid.T,
-                                           (_grid.grid ** 2).T,
-                                           _grid.grid[:, 0] * _grid.grid[:, 1],
-                                           _grid.grid[:, 0] * _grid.grid[:, 2],
-                                           _grid.grid[:, 1] * _grid.grid[:, 2]))
+            _universal_matrix = np.vstack((_grid_rescaled.grid.T,
+                                           (_grid_rescaled.grid ** 2).T,
+                                           _grid_rescaled.grid[:, 0] * _grid_rescaled.grid[:, 1],
+                                           _grid_rescaled.grid[:, 0] * _grid_rescaled.grid[:, 2],
+                                           _grid_rescaled.grid[:, 1] * _grid_rescaled.grid[:, 2]))
 
             self.tg.universal_matrix_T.set_value(_universal_matrix + 1e-10)
-            self.tg.final_block.set_value(np.zeros_like(_grid.grid[:, 0]))
-            self.tg.grid_val_T.set_value(_grid.grid + 10e-6)
+            self.tg.final_block.set_value(np.zeros_like(_grid_rescaled.grid[:, 0]))
+            self.tg.grid_val_T.set_value(_grid_rescaled.grid + 10e-6)
 
      #    def _get_constant_parameters(self):
      #        """
@@ -534,10 +593,11 @@ class DataManagement(object):
 
         def compile_potential_field_function(self):
             self._interpolate = theano.function(
-                [self.tg.dips_position, self.tg.dip_angles, self.tg.azimuth, self.tg.polarity, self.tg.rest_layer_points,
-                 self.tg.ref_layer_points, theano.In(self.tg.yet_simulated, value=np.ones_like(self._grid.grid[:, 0]))],
+                [self.tg.dips_position, self.tg.dip_angles, self.tg.azimuth, self.tg.polarity,
+                 self.tg.rest_layer_points, self.tg.ref_layer_points,
+                 theano.In(self.tg.yet_simulated, value=np.ones_like(self._grid_scaled.grid[:, 0]))],
                 [self.tg.Z_x, self.tg.potential_field_interfaces,
-                 self.tg.C_matrix, self.tg.DK_parameters],
+                 self.tg.C_matrix, self.tg.DK_parameters, self.tg.printing],
                 on_unused_input="warn", profile=True, allow_input_downcast=True)
             return self._interpolate
 
@@ -559,7 +619,7 @@ class DataManagement(object):
 
       #  def update_potential_fields(self, verbose=0):
       #      self.potential_fields = [self.compute_potential_fields(i, verbose=verbose)
-      #                               for i in np.arange(len(self._data.series.columns))]
+      #                               for i in np.arange(len(self._data_scaled.series.columns))]
 
         def compute_block_model(self, series_number="all", verbose=0):
             """
@@ -575,17 +635,17 @@ class DataManagement(object):
             """
 
             if series_number == "all":
-                series_number = np.arange(len(self._data.series.columns))
+                series_number = np.arange(len(self._data_scaled.series.columns))
             for i in series_number:
                 formations_in_serie = self._select_serie(i)
                 # Number assigned to each formation
-                n_formation = np.squeeze(np.where(np.in1d(self._data.formations, self._data.series.ix[:, i]))) + 1
+                n_formation = np.squeeze(np.where(np.in1d(self._data_scaled.formations, self._data_scaled.series.ix[:, i]))) + 1
                 if verbose > 0:
                     print(n_formation)
                 self.grad = self._aux_computations_block_model(formations_in_serie, np.array(n_formation, ndmin=1),
                                                                verbose=verbose)
-
-                return self.tg.final_block
+          #  self.block = self.tg.final_block
+            return self.tg.final_block
 
         def compute_potential_fields(self, series_name="all", verbose=0):
             """
@@ -602,7 +662,8 @@ class DataManagement(object):
 
             #assert series_name is not "all", "Compute potential field only returns one potential field at the time"
             if series_name is 'all':
-                for i in np.arange(len(self._data.series.columns)):
+                self.potential_fields = []
+                for i in np.arange(len(self._data_scaled.series.columns)):
                     formations_in_serie = self._select_serie(i)
                     self.potential_fields.append(self._aux_computations_potential_field(formations_in_serie,
                                                                                         verbose=verbose))
@@ -643,8 +704,8 @@ class DataManagement(object):
         #     length_of_C = length_of_CG + length_of_CGI + length_of_U_I
         #
         #     # Extra parameters
-        #     i_reescale = 1 / (self.rescaling_factor_T ** 2)
-        #     gi_reescale = 1 / self.rescaling_factor_T
+        #     i_reescale = 1 / (self.c_resc ** 2)
+        #     gi_reescale = 1 / self.c_resc
         #
         #     # TODO: Check that the distances does not go nuts when I use too large numbers
         #

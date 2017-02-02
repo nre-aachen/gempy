@@ -157,7 +157,7 @@ class PlotData(object):
                 _block = block.get_value()
         else:
             try:
-                _block = self._data.interpolator.block.get_value()
+                _block = self._data.interpolator.tg.final_block.get_value()
             except AttributeError:
                 raise AttributeError('There is no block to plot')
 

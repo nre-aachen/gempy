@@ -11,14 +11,22 @@ import theano.tensor as T
 import numpy as np
 # from .DataManagement import DataManagement.Interpolator
 
+theano.config.optimizer = 'None'
+theano.config.exception_verbosity = 'high'
+theano.config.compute_test_value = 'ignore'
 
 class TheanoGraph:
+    theano.config.optimizer = 'None'
+    theano.config.exception_verbosity = 'high'
+    theano.config.compute_test_value = 'ignore'
     def __init__(self, u_grade):
+
+        from IPython.core.debugger import Tracer
+       # this one triggers the debugger
 
         theano.config.optimizer = 'None'
         theano.config.exception_verbosity = 'high'
         theano.config.compute_test_value = 'ignore'
-
 
         # Creation of symbolic variables
         self.dips_position = T.matrix("Position of the dips")
@@ -30,7 +38,7 @@ class TheanoGraph:
 
         self.u_grade_T = theano.shared(u_grade, "grade of the universal drift", allow_downcast=True)
 
-        self.rescaling_factor_T = theano.shared(1, "Rescaling factor", allow_downcast=True)
+        self.c_resc = theano.shared(1, "Rescaling factor", allow_downcast=True)
         self.grid_val_T = theano.shared(np.array([[0, 0., 0.],
                                                   [0, 0., 0.204082]]), allow_downcast=True)
 
@@ -61,8 +69,8 @@ class TheanoGraph:
         length_of_C = length_of_CG + length_of_CGI + length_of_U_I
 
         # Extra parameters
-        i_reescale = 1 / (self.rescaling_factor_T ** 2)
-        gi_reescale = 1 / self.rescaling_factor_T
+        i_reescale = 1 / (self.c_resc ** 2)
+        gi_reescale = 1 / self.c_resc
 
         # TODO: Check that the distances does not go nuts when I use too large numbers
 
@@ -80,10 +88,10 @@ class TheanoGraph:
         # Auxiliary tile for dips and transformation to float 64 of variables in order to calculate
         #  precise euclidian
         # distances
-        _aux_dips_pos = T.tile(self.dips_position, (n_dimensions, 1)).astype("float64")
-        _aux_rest_layer_points = self.rest_layer_points.astype("float64")
-        _aux_ref_layer_points = self.ref_layer_points.astype("float64")
-        _aux_grid_val = grid_val.astype("float64")
+        _aux_dips_pos = T.tile(self.dips_position, (n_dimensions, 1))#.astype("float64")
+        _aux_rest_layer_points = self.rest_layer_points#.astype("float64")
+        _aux_ref_layer_points = self.ref_layer_points#.astype("float64")
+        _aux_grid_val = grid_val#.astype("float64")
 
         # Calculation of euclidian distances giving back float32
         SED_rest_rest = (T.sqrt(
@@ -136,6 +144,8 @@ class TheanoGraph:
             (_aux_ref_layer_points ** 2).sum(1).reshape((_aux_ref_layer_points.shape[0], 1)) +
             (_aux_grid_val ** 2).sum(1).reshape((1, _aux_grid_val.shape[0])) -
             2 * _aux_ref_layer_points.dot(_aux_grid_val.T))).astype("float32")
+
+        self.printing = SED_dips_dips
 
         # Cartesian distances between dips positions
         h_u = T.vertical_stack(
@@ -520,6 +530,3 @@ class TheanoGraph:
         # grad = T.jacobian(T.flatten(printing), rest_layer_points)
         grad = T.grad(T.sum(self.Z_x), self.a_T)
         #from theano.compile.nanguardmode import NanGuardMode
-
-
-
