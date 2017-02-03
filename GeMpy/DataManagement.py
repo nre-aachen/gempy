@@ -34,7 +34,8 @@ class DataManagement(object):
 
     # TODO: Data management using pandas, find an easy way to add values
     # TODO: Probably at some point I will have to make an static and dynamic data classes
-    def __init__(self, extent,
+    def __init__(self,
+                 extent,
                  resolution=[50, 50, 50],
                  path_i=None, path_f=None,
                  **kwargs):
@@ -44,19 +45,19 @@ class DataManagement(object):
 
 
         # Deprecated
-        self.xmin = extent[0]
-        self.xmax = extent[1]
-        self.ymin = extent[2]
-        self.ymax = extent[3]
-        self.zmin = extent[4]
-        self.zmax = extent[5]
-        self.nx = resolution[0]
-        self.ny = resolution[1]
-        self.nz = resolution[2]
+        # self.xmin = extent[0]
+        # self.xmax = extent[1]
+        # self.ymin = extent[2]
+        # self.ymax = extent[3]
+        # self.zmin = extent[4]
+        # self.zmax = extent[5]
+        # self.nx = resolution[0]
+        # self.ny = resolution[1]
+        # self.nz = resolution[2]
         # -------------------
 
-        self.extent = extent
-        self.resolution = resolution
+        self.extent = np.array(extent)
+        self.resolution = np.array(resolution)
 
         # TODO choose the default source of data. So far only
         if path_f:
@@ -74,6 +75,7 @@ class DataManagement(object):
 
         self._set_formations()
         self.series = self.set_series()
+        self.set_formation_number()
         self.calculate_gradient()
 
         # Create default grid object. (Is this necessary now?)
@@ -196,6 +198,7 @@ class DataManagement(object):
 
         self._set_formations()
         self.set_series()
+        self.set_formation_number()
 
     def set_foliations(self, foliat_Dataframe, append=False):
 
@@ -209,6 +212,7 @@ class DataManagement(object):
 
         self._set_formations()
         self.set_series()
+        self.set_formation_number()
         self.calculate_gradient()
 
     def set_series(self, series_distribution=None, order=None):
@@ -242,10 +246,26 @@ class DataManagement(object):
             % self.formations
 
         self.interfaces["series"] = [(i == _series).sum().argmax() for i in self.interfaces["formation"]]
+        self.interfaces["order_series"] = [(i == _series).sum().as_matrix().argmax()
+                                           for i in self.interfaces["formation"]]
+        self.interfaces.sort_values(by='order_series', inplace=True)
+
         self.foliations["series"] = [(i == _series).sum().argmax() for i in self.foliations["formation"]]
+        self.foliations["order_series"] = [(i == _series).sum().as_matrix().argmax()
+                                           for i in self.foliations["formation"]]
+        self.foliations.sort_values(by='order_series', inplace=True)
 
         self.series = _series
         return _series
+
+    def set_formation_number(self):
+        try:
+            ip_addresses = self.interfaces["formation"].unique()
+            ip_dict = dict(zip(ip_addresses, range(len(ip_addresses))))
+            self.interfaces['formation number'] = self.interfaces['formation'].replace(ip_dict)
+            self.foliations['formation number'] = self.foliations['formation'].replace(ip_dict)
+        except ValueError:
+            pass
 
     class GridClass(object):
         """
@@ -297,7 +317,7 @@ class DataManagement(object):
             verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0
         """
 
-        def __init__(self, _data, _grid=None, compute_block_model=True,
+        def __init__(self, _data_scaled, _grid_scaled=None, compute_block_model=True,
                      compute_potential_field=False, *args, **kwargs):
 
             verbose = kwargs.get('verbose', 0)
@@ -308,53 +328,21 @@ class DataManagement(object):
             theano.config.compute_test_value = 'ignore'
             u_grade = kwargs.get('u_grade', 2)
 
-            if not rescaling_factor:
-                max_coord = pn.concat(
-                    [_data.foliations, _data.interfaces]).max()[['X', 'Y', 'Z']]
-                min_coord = pn.concat(
-                    [_data.foliations, _data.interfaces]).min()[['X', 'Y', 'Z']]
-                self.rescaling_factor = np.max(max_coord - min_coord)
+            self._data_scaled = _data_scaled
 
-
-
-            """
-            # Moving data
-            import copy
-            _data_moved = copy.copy(_data)
-
-            _data_moved.interfaces[['X', 'Y', 'Z']] = (
-                _data_moved.interfaces[['X', 'Y', 'Z']] -
-                _data_moved.interfaces.min()[['X', 'Y', 'Z']]) + 0.0001
-
-            _data_moved.foliations[['X', 'Y', 'Z']] = (
-                _data_moved.foliations[['X', 'Y', 'Z']] -
-                _data_moved.foliations.min()[['X', 'Y', 'Z']]) + 0.0001
-            """
-
-
-            """
-            if not _grid:
-                self._grid_scaled = copy.copy(_data.grid)
-
+            # In case someone wants to provide a grid
+            if not _grid_scaled:
+                self._grid_scaled = _data_scaled.grid
             else:
-                self._grid_scaled = copy.copy(_grid)
+                self._grid_scaled = _grid_scaled
 
-            # Rescaling input data and grid
-            self._data_scaled = copy.copy(_data)
-            self._data_scaled.interfaces[['X', 'Y', 'Z']] = (_data_moved.interfaces[['X', 'Y', 'Z']] /
-                                                             self.rescaling_factor)
-
-            self._data_scaled.foliations[['X', 'Y', 'Z']] = (_data_moved.foliations[['X', 'Y', 'Z']] /
-                                                             self.rescaling_factor)
-
-            self._grid_scaled.grid = (_grid.grid - _grid.grid.min(axis=0)) / self.rescaling_factor + 0.0001
-            """
-            from IPython.core.debugger import Tracer
-
+            # Importing the theano graph
             self.tg = theanograf.TheanoGraph(u_grade)
 
+            # Setting theano parameters
             self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, **kwargs)
 
+            # Choosing if compute something directly
             if compute_potential_field:
 
                 self.potential_fields = []
@@ -366,6 +354,111 @@ class DataManagement(object):
 
                 self._block_export = self.compile_block_model_function()
                 self.block = self.compute_block_model()
+
+        def _data_prep(self):
+
+            # We order the pandas table
+            self._data_scaled.interfaces.sort_values(by='order_series', inplace=True)
+            self._data_scaled.interfaces.sort_values(by='formation number', inplace=True)
+            self._data_scaled.foliations.sort_values(by='order_series', inplace=True)
+            self._data_scaled.foliations.sort_values(by='formation number', inplace=True)
+
+            # Size of every formation, SHARED
+            len_interfaces = np.asarray(
+                [np.sum(self._data_scaled.interfaces['formation number'] == i)
+                 for i in self._data_scaled.interfaces['formation number'].unique()])
+
+            # TODO: do I need this? PYTHON
+            len_foliations = np.asarray(
+                [np.sum(self._data_scaled.foliations['formation number'] == i)
+                 for i in self._data_scaled.foliations['formation number'].unique()])
+
+            # Size of every series SHARED
+            len_series_i = np.asarray(
+                [np.sum(self._data_scaled.interfaces['order_series'] == i)
+                 for i in self._data_scaled.interfaces['order_series'].unique()])
+
+            len_series_f = np.asarray(
+                [np.sum(self._data_scaled.foliations['order_series'] == i)
+                 for i in self._data_scaled.foliations['order_series'].unique()])
+
+            # Position of the first term of every layer PYTHON
+            ref_position = np.insert(len_interfaces[:-1], 0, 0).cumsum()
+
+            # Rest layers matrix # VAR
+            rest_layer_points = self._data_scaled.interfaces.drop(ref_position)
+
+            # Ref layers matrix #VAR
+            aux_1 = self._data_scaled.interfaces.iloc[ref_position][['X', 'Y', 'Z']].as_matrix()
+            ref_layer_points = np.zeros((0, 3))
+
+            for e, i in enumerate(len_interfaces):
+                ref_layer_points = np.vstack((ref_layer_points,
+                                              np.tile(aux_1[e], (i - 1, 1))))
+
+            # Foliations, VAR
+
+            dips_position = self._data_scaled.foliations['X', 'Y', 'Z'].as_matrix()
+            dip_angles = self._data_scaled.foliations["dip"].as_matrix()
+            azimuth = self._data_scaled.foliations["azimuth"].as_matrix()
+            polarity = self._data_scaled.foliations["polarity"].as_matrix()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         def _aux_computations_block_model(self, for_in_ser, n_formation, verbose=0):
             """
@@ -386,7 +479,7 @@ class DataManagement(object):
                     print(yet_simulated, (yet_simulated == 0).sum())
             except AttributeError:
                 yet_simulated = np.ones_like(self._grid.grid[:, 0], dtype="int8")
-                print("I am in the except")
+               # print("I am in the except")
 
             dips_position = self._data_scaled.foliations[
                 self._data_scaled.foliations["formation"].str.contains(for_in_ser)] \
@@ -505,13 +598,24 @@ class DataManagement(object):
                           "\n foliations \n",
                           self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)])
 
+            self.tg.C_matrix.eval({self.tg.dips_position: dips_position,
+                                   #    'self.dip_angles': dip_angles,
+                                   #   'self.azimuth': azimuth,
+                                   #  'self.polarity': polarity,
+                                   self.tg.rest_layer_points: rest_layer_points,
+                                   self.tg.ref_layer_points: ref_layer_points})
+
+
+
             potential_field_results = self._interpolate(
                 dips_position, dip_angles, azimuth, polarity,
                 rest_layer_points, ref_layer_points)[:]
 
             self.Z_x, self.results = potential_field_results[0], potential_field_results[1:]
 
-            potential_field = self.Z_x.reshape(self._data_scaled.nx, self._data_scaled.ny, self._data_scaled.nz)
+            potential_field = self.Z_x.reshape(self._data_scaled.resolution[0],
+                                               self._data_scaled.resolution[1],
+                                               self._data_scaled.resolution[2])
 
             if verbose > 2:
                 print("Dual Kriging weights: ", self.results[2])
@@ -546,17 +650,19 @@ class DataManagement(object):
             nugget_effect = kwargs.get('nugget_effect', 0.01)
             rescaling_factor = kwargs.get('rescaling_factor', None)
 
-            print("I am in the set theano shared", _data_rescaled, _data_rescaled.interfaces.head())
+          #  print("I am in the set theano shared", _data_rescaled, _data_rescaled.interfaces.head())
 
             if not range_var:
-                range_var = np.sqrt((_data_rescaled.xmax - _data_rescaled.xmin) ** 2 +
-                                    (_data_rescaled.ymax - _data_rescaled.ymin) ** 2 +
-                                    (_data_rescaled.zmax - _data_rescaled.zmin) ** 2)
+                range_var = np.sqrt((_data_rescaled.extent[0] - _data_rescaled.extent[1]) ** 2 +
+                                    (_data_rescaled.extent[2] - _data_rescaled.extent[3]) ** 2 +
+                                    (_data_rescaled.extent[4] - _data_rescaled.extent[5]) ** 2)
             if not c_o:
                 c_o = range_var ** 2 / 14 / 3
 
+            from IPython.core.debugger import Tracer
+
             # Creation of shared variables
-            print('range_var, c_o', range_var, c_o)
+         #   print('range_var, c_o', range_var, c_o)
             self.tg.a_T.set_value(range_var)
             self.tg.c_o_T.set_value(c_o)
             self.tg.nugget_effect_grad_T.set_value(nugget_effect)
@@ -564,13 +670,12 @@ class DataManagement(object):
             assert (0 <= u_grade <= 2)
 
             if u_grade == 0:
-                print('I am here')
                 self.tg.u_grade_T.set_value(u_grade)
             else:
                 self.tg.u_grade_T.set_value(3**u_grade)
             # TODO: To be sure what is the mathematical meaning of this
 
-            self.tg.c_resc.set_value(self.rescaling_factor)
+            self.tg.c_resc.set_value(1)
 
             _universal_matrix = np.vstack((_grid_rescaled.grid.T,
                                            (_grid_rescaled.grid ** 2).T,
@@ -578,7 +683,7 @@ class DataManagement(object):
                                            _grid_rescaled.grid[:, 0] * _grid_rescaled.grid[:, 2],
                                            _grid_rescaled.grid[:, 1] * _grid_rescaled.grid[:, 2]))
 
-            self.tg.universal_matrix_T.set_value(_universal_matrix + 1e-10)
+            self.tg.universal_grid_matrix_T.set_value(_universal_matrix + 1e-10)
             self.tg.final_block.set_value(np.zeros_like(_grid_rescaled.grid[:, 0]))
             self.tg.grid_val_T.set_value(_grid_rescaled.grid + 10e-6)
 
@@ -672,512 +777,3 @@ class DataManagement(object):
                 self.potential_fields = self._aux_computations_potential_field(formations_in_serie, verbose=verbose)
 
             return self.potential_fields
-
-
-
-        # def theano_compilation_3D(self):
-        #     """
-        #     Function that generates the symbolic code to perform the interpolation. Calling this function creates
-        #      both the theano functions for the potential field and the block.
-        #
-        #     Returns:
-        #         theano function for the potential field
-        #         theano function for the block
-        #     """
-        #
-        #     # Creation of symbolic variables
-        #     dips_position = T.matrix("Position of the dips")
-        #     dip_angles = T.vector("Angle of every dip")
-        #     azimuth = T.vector("Azimuth")
-        #     polarity = T.vector("Polarity")
-        #     ref_layer_points = T.matrix("Reference points for every layer")
-        #     rest_layer_points = T.matrix("Rest of the points of the layers")
-        #
-        #     # Init values
-        #     n_dimensions = 3
-        #     grade_universal = self.u_grade_T
-        #
-        #     # Calculating the dimensions of the
-        #     length_of_CG = dips_position.shape[0] * n_dimensions
-        #     length_of_CGI = rest_layer_points.shape[0]
-        #     length_of_U_I = grade_universal
-        #     length_of_C = length_of_CG + length_of_CGI + length_of_U_I
-        #
-        #     # Extra parameters
-        #     i_reescale = 1 / (self.c_resc ** 2)
-        #     gi_reescale = 1 / self.c_resc
-        #
-        #     # TODO: Check that the distances does not go nuts when I use too large numbers
-        #
-        #     # Here we create the array with the points to simulate:
-        #     #   grid points except those who have been simulated in a younger serie
-        #     #   interfaces points to segment the lithologies
-        #     yet_simulated = T.vector("boolean function that avoid to simulate twice a point of a different serie")
-        #     grid_val = T.vertical_stack((self.grid_val_T * yet_simulated.reshape(
-        #                                 (yet_simulated.shape[0], 1))).nonzero_values().reshape((-1, 3)),
-        #                                 rest_layer_points)
-        #
-        #     # ==========================================
-        #     # Calculation of Cartesian and Euclidian distances
-        #     # ===========================================
-        #     # Auxiliary tile for dips and transformation to float 64 of variables in order to calculate
-        #     #  precise euclidian
-        #     # distances
-        #     _aux_dips_pos = T.tile(dips_position, (n_dimensions, 1)).astype("float64")
-        #     _aux_rest_layer_points = rest_layer_points.astype("float64")
-        #     _aux_ref_layer_points = ref_layer_points.astype("float64")
-        #     _aux_grid_val = grid_val.astype("float64")
-        #
-        #     # Calculation of euclidian distances giving back float32
-        #     SED_rest_rest = (T.sqrt(
-        #         (_aux_rest_layer_points ** 2).sum(1).reshape((_aux_rest_layer_points.shape[0], 1)) +
-        #         (_aux_rest_layer_points ** 2).sum(1).reshape((1, _aux_rest_layer_points.shape[0])) -
-        #         2 * _aux_rest_layer_points.dot(_aux_rest_layer_points.T))).astype("float32")
-        #
-        #     SED_ref_rest = (T.sqrt(
-        #         (_aux_ref_layer_points ** 2).sum(1).reshape((_aux_ref_layer_points.shape[0], 1)) +
-        #         (_aux_rest_layer_points ** 2).sum(1).reshape((1, _aux_rest_layer_points.shape[0])) -
-        #         2 * _aux_ref_layer_points.dot(_aux_rest_layer_points.T))).astype("float32")
-        #
-        #     SED_rest_ref = (T.sqrt(
-        #         (_aux_rest_layer_points ** 2).sum(1).reshape((_aux_rest_layer_points.shape[0], 1)) +
-        #         (_aux_ref_layer_points ** 2).sum(1).reshape((1, _aux_ref_layer_points.shape[0])) -
-        #         2 * _aux_rest_layer_points.dot(_aux_ref_layer_points.T))).astype("float32")
-        #
-        #     SED_ref_ref = (T.sqrt(
-        #         (_aux_ref_layer_points ** 2).sum(1).reshape((_aux_ref_layer_points.shape[0], 1)) +
-        #         (_aux_ref_layer_points ** 2).sum(1).reshape((1, _aux_ref_layer_points.shape[0])) -
-        #         2 * _aux_ref_layer_points.dot(_aux_ref_layer_points.T))).astype("float32")
-        #
-        #     SED_dips_dips = (T.sqrt(
-        #         (_aux_dips_pos ** 2).sum(1).reshape((_aux_dips_pos.shape[0], 1)) +
-        #         (_aux_dips_pos ** 2).sum(1).reshape((1, _aux_dips_pos.shape[0])) -
-        #         2 * _aux_dips_pos.dot(_aux_dips_pos.T))).astype("float32")
-        #
-        #     SED_dips_rest = (T.sqrt(
-        #         (_aux_dips_pos ** 2).sum(1).reshape((_aux_dips_pos.shape[0], 1)) +
-        #         (_aux_rest_layer_points ** 2).sum(1).reshape((1, _aux_rest_layer_points.shape[0])) -
-        #         2 * _aux_dips_pos.dot(_aux_rest_layer_points.T))).astype("float32")
-        #
-        #     SED_dips_ref = (T.sqrt(
-        #         (_aux_dips_pos ** 2).sum(1).reshape((_aux_dips_pos.shape[0], 1)) +
-        #         (_aux_ref_layer_points ** 2).sum(1).reshape((1, _aux_ref_layer_points.shape[0])) -
-        #         2 * _aux_dips_pos.dot(_aux_ref_layer_points.T))).astype("float32")
-        #
-        #     # Calculating euclidian distances between the point to simulate and the avalible data
-        #     SED_dips_SimPoint = (T.sqrt(
-        #         (_aux_dips_pos ** 2).sum(1).reshape((_aux_dips_pos.shape[0], 1)) +
-        #         (_aux_grid_val ** 2).sum(1).reshape((1, _aux_grid_val.shape[0])) -
-        #         2 * _aux_dips_pos.dot(_aux_grid_val.T))).astype("float32")
-        #
-        #     SED_rest_SimPoint = (T.sqrt(
-        #         (_aux_rest_layer_points ** 2).sum(1).reshape((_aux_rest_layer_points.shape[0], 1)) +
-        #         (_aux_grid_val ** 2).sum(1).reshape((1, _aux_grid_val.shape[0])) -
-        #         2 * _aux_rest_layer_points.dot(_aux_grid_val.T))).astype("float32")
-        #
-        #     SED_ref_SimPoint = (T.sqrt(
-        #         (_aux_ref_layer_points ** 2).sum(1).reshape((_aux_ref_layer_points.shape[0], 1)) +
-        #         (_aux_grid_val ** 2).sum(1).reshape((1, _aux_grid_val.shape[0])) -
-        #         2 * _aux_ref_layer_points.dot(_aux_grid_val.T))).astype("float32")
-        #
-        #     # Cartesian distances between dips positions
-        #     h_u = T.vertical_stack(
-        #         T.tile(dips_position[:, 0] - dips_position[:, 0].reshape((dips_position[:, 0].shape[0], 1)),
-        #                n_dimensions),
-        #         T.tile(dips_position[:, 1] - dips_position[:, 1].reshape((dips_position[:, 1].shape[0], 1)),
-        #                n_dimensions),
-        #         T.tile(dips_position[:, 2] - dips_position[:, 2].reshape((dips_position[:, 2].shape[0], 1)),
-        #                n_dimensions))
-        #
-        #     h_v = h_u.T
-        #
-        #     # Cartesian distances between dips and interface points
-        #     # Rest
-        #     hu_rest = T.vertical_stack(
-        #         (dips_position[:, 0] - rest_layer_points[:, 0].reshape((rest_layer_points[:, 0].shape[0], 1))).T,
-        #         (dips_position[:, 1] - rest_layer_points[:, 1].reshape((rest_layer_points[:, 1].shape[0], 1))).T,
-        #         (dips_position[:, 2] - rest_layer_points[:, 2].reshape((rest_layer_points[:, 2].shape[0], 1))).T
-        #     )
-        #
-        #     # Reference point
-        #     hu_ref = T.vertical_stack(
-        #         (dips_position[:, 0] - ref_layer_points[:, 0].reshape((ref_layer_points[:, 0].shape[0], 1))).T,
-        #         (dips_position[:, 1] - ref_layer_points[:, 1].reshape((ref_layer_points[:, 1].shape[0], 1))).T,
-        #         (dips_position[:, 2] - ref_layer_points[:, 2].reshape((ref_layer_points[:, 2].shape[0], 1))).T
-        #     )
-        #
-        #     # Cartesian distances between reference points and rest
-        #     hx = T.stack(
-        #         (rest_layer_points[:, 0] - ref_layer_points[:, 0]),
-        #         (rest_layer_points[:, 1] - ref_layer_points[:, 1]),
-        #         (rest_layer_points[:, 2] - ref_layer_points[:, 2])
-        #     ).T
-        #
-        #     # Cartesian distances between the point to simulate and the dips
-        #     hu_SimPoint = T.vertical_stack(
-        #         (dips_position[:, 0] - grid_val[:, 0].reshape((grid_val[:, 0].shape[0], 1))).T,
-        #         (dips_position[:, 1] - grid_val[:, 1].reshape((grid_val[:, 1].shape[0], 1))).T,
-        #         (dips_position[:, 2] - grid_val[:, 2].reshape((grid_val[:, 2].shape[0], 1))).T
-        #     )
-        #
-        #     # Perpendicularity matrix. Boolean matrix to separate cross-covariance and
-        #     # every gradient direction covariance
-        #     perpendicularity_matrix = T.zeros_like(SED_dips_dips)
-        #
-        #     # Cross-covariances of x
-        #     perpendicularity_matrix = T.set_subtensor(
-        #         perpendicularity_matrix[0:dips_position.shape[0], 0:dips_position.shape[0]], 1)
-        #
-        #     # Cross-covariances of y
-        #     perpendicularity_matrix = T.set_subtensor(
-        #         perpendicularity_matrix[dips_position.shape[0]:dips_position.shape[0] * 2,
-        #         dips_position.shape[0]:dips_position.shape[0] * 2], 1)
-        #
-        #     # Cross-covariances of y
-        #     perpendicularity_matrix = T.set_subtensor(
-        #         perpendicularity_matrix[dips_position.shape[0] * 2:dips_position.shape[0] * 3,
-        #         dips_position.shape[0] * 2:dips_position.shape[0] * 3], 1)
-        #
-        #
-        #    # printing = (self.c_o_T * i_reescale * (
-        #    #     (SED_rest_rest < self.a_T) *  # Rest - Rest Covariances Matrix
-        #     #printing = (1 - 7 * (SED_rest_rest / self.a_T) ** 2 +
-        #     #     35 / 4 * (SED_rest_rest / self.a_T) ** 3 -
-        #     #     7 / 2 * (SED_rest_rest / self.a_T) ** 5 +
-        #     #     3 / 4 * (SED_rest_rest / self.a_T) ** 7)
-        #     printing = SED_rest_rest*self.a_T
-        #     # ==========================
-        #     # Creating covariance Matrix
-        #     # ==========================
-        #     # Covariance matrix for interfaces
-        #     C_I = (self.c_o_T * i_reescale * (
-        #         (SED_rest_rest < self.a_T) *  # Rest - Rest Covariances Matrix
-        #         (1 - 7 * (SED_rest_rest / self.a_T) ** 2 +
-        #          35 / 4 * (SED_rest_rest / self.a_T) ** 3 -
-        #          7 / 2 * (SED_rest_rest / self.a_T) ** 5 +
-        #          3 / 4 * (SED_rest_rest / self.a_T) ** 7) -
-        #         ((SED_ref_rest < self.a_T) *  # Reference - Rest
-        #          (1 - 7 * (SED_ref_rest / self.a_T) ** 2 +
-        #           35 / 4 * (SED_ref_rest / self.a_T) ** 3 -
-        #           7 / 2 * (SED_ref_rest / self.a_T) ** 5 +
-        #           3 / 4 * (SED_ref_rest / self.a_T) ** 7)) -
-        #         ((SED_rest_ref < self.a_T) *  # Rest - Reference
-        #          (1 - 7 * (SED_rest_ref / self.a_T) ** 2 +
-        #           35 / 4 * (SED_rest_ref / self.a_T) ** 3 -
-        #           7 / 2 * (SED_rest_ref / self.a_T) ** 5 +
-        #           3 / 4 * (SED_rest_ref / self.a_T) ** 7)) +
-        #         ((SED_ref_ref < self.a_T) *  # Reference - References
-        #          (1 - 7 * (SED_ref_ref / self.a_T) ** 2 +
-        #           35 / 4 * (SED_ref_ref / self.a_T) ** 3 -
-        #           7 / 2 * (SED_ref_ref / self.a_T) ** 5 +
-        #           3 / 4 * (SED_ref_ref / self.a_T) ** 7)))) #'+ 10e-6
-        #
-        #     SED_dips_dips = T.switch(T.eq(SED_dips_dips, 0), 1, SED_dips_dips)
-        #
-        #     # Covariance matrix for gradients at every xyz direction and their cross-covariances
-        #     C_G = T.switch(
-        #         T.eq(SED_dips_dips, 0),  # This is the condition
-        #         0,  # If true it is equal to 0. This is how a direction affect another
-        #         (  # else, following Chiles book
-        #             (h_u * h_v / SED_dips_dips ** 2) *
-        #             ((
-        #                  (SED_dips_dips < self.a_T) *  # first derivative
-        #                  (-self.c_o_T * ((-14 / self.a_T ** 2) + 105 / 4 * SED_dips_dips / self.a_T ** 3 -
-        #                                  35 / 2 * SED_dips_dips ** 3 / self.a_T ** 5 +
-        #                                  21 / 4 * SED_dips_dips ** 5 / self.a_T ** 7))) +
-        #              (SED_dips_dips < self.a_T) *  # Second derivative
-        #              self.c_o_T * 7 * (9 * SED_dips_dips ** 5 - 20 * self.a_T ** 2 * SED_dips_dips ** 3 +
-        #                                15 * self.a_T ** 4 * SED_dips_dips - 4 * self.a_T ** 5) / (2 * self.a_T ** 7)) -
-        #             (perpendicularity_matrix *
-        #              (SED_dips_dips < self.a_T) *  # first derivative
-        #              self.c_o_T * ((-14 / self.a_T ** 2) + 105 / 4 * SED_dips_dips / self.a_T ** 3 -
-        #                            35 / 2 * SED_dips_dips ** 3 / self.a_T ** 5 +
-        #                            21 / 4 * SED_dips_dips ** 5 / self.a_T ** 7)))
-        #     )
-        #
-        #     # Setting nugget effect of the gradients
-        #     # TODO: This function can be substitued by simply adding the nugget effect to the diag
-        #     C_G = T.fill_diagonal(C_G, -self.c_o_T * (-14 / self.a_T ** 2) + self.nugget_effect_grad_T)
-        #
-        #     # Cross-Covariance gradients-interfaces
-        #     C_GI = gi_reescale * (
-        #         (hu_rest *
-        #          (SED_dips_rest < self.a_T) *  # first derivative
-        #          (- self.c_o_T * ((-14 / self.a_T ** 2) + 105 / 4 * SED_dips_rest / self.a_T ** 3 -
-        #                           35 / 2 * SED_dips_rest ** 3 / self.a_T ** 5 +
-        #                           21 / 4 * SED_dips_rest ** 5 / self.a_T ** 7))) -
-        #         (hu_ref *
-        #          (SED_dips_ref < self.a_T) *  # first derivative
-        #          (- self.c_o_T * ((-14 / self.a_T ** 2) + 105 / 4 * SED_dips_ref / self.a_T ** 3 -
-        #                           35 / 2 * SED_dips_ref ** 3 / self.a_T ** 5 +
-        #                           21 / 4 * SED_dips_ref ** 5 / self.a_T ** 7)))
-        #     ).T
-        #
-        #     if self.u_grade_T.get_value() == 3:
-        #         # ==========================
-        #         # Condition of universality 1 degree
-        #
-        #         # Gradients
-        #         n = dips_position.shape[0]
-        #         U_G = T.zeros((n * n_dimensions, n_dimensions))
-        #         # x
-        #         U_G = T.set_subtensor(
-        #             U_G[:n, 0], 1)
-        #         # y
-        #         U_G = T.set_subtensor(
-        #             U_G[n:n * 2, 1], 1
-        #         )
-        #         # z
-        #         U_G = T.set_subtensor(
-        #             U_G[n * 2: n * 3, 2], 1
-        #         )
-        #
-        #     #    U_G = T.set_subtensor(U_G[:, -1], [0, 0, 0, 0, 0, 0])
-        #
-        #         # Interface
-        #         U_I = -hx * gi_reescale
-        #
-        #     #    hxf = (T.lt(rest_layer_points[:, 0], 5) - T.lt(ref_layer_points[:, 0], 5))*2 + 1
-        #
-        #     #    U_I = T.horizontal_stack(U_I, T.stack(hxf).T)
-        #
-        #     elif self.u_grade_T.get_value() == 9:
-        #         # ==========================
-        #         # Condition of universality 2 degree
-        #         # Gradients
-        #
-        #         n = dips_position.shape[0]
-        #         U_G = T.zeros((n * n_dimensions, 3 * n_dimensions))
-        #         # x
-        #         U_G = T.set_subtensor(U_G[:n, 0], 1)
-        #         # y
-        #         U_G = T.set_subtensor(U_G[n * 1:n * 2, 1], 1)
-        #         # z
-        #         U_G = T.set_subtensor(U_G[n * 2: n * 3, 2], 1)
-        #         # x**2
-        #         U_G = T.set_subtensor(U_G[:n, 3], 2 * gi_reescale * dips_position[:, 0])
-        #         # y**2
-        #         U_G = T.set_subtensor(U_G[n * 1:n * 2, 4], 2 * gi_reescale * dips_position[:, 1])
-        #         # z**2
-        #         U_G = T.set_subtensor(U_G[n * 2: n * 3, 5], 2 * gi_reescale * dips_position[:, 2])
-        #         # xy
-        #         U_G = T.set_subtensor(U_G[:n, 6], gi_reescale * dips_position[:, 1])  # This is y
-        #         U_G = T.set_subtensor(U_G[n * 1:n * 2, 6], gi_reescale * dips_position[:, 0])  # This is x
-        #         # xz
-        #         U_G = T.set_subtensor(U_G[:n, 7], gi_reescale * dips_position[:, 2])  # This is z
-        #         U_G = T.set_subtensor(U_G[n * 2: n * 3, 7], gi_reescale * dips_position[:, 0])  # This is x
-        #         # yz
-        #         U_G = T.set_subtensor(U_G[n * 1:n * 2, 8], gi_reescale * dips_position[:, 2])  # This is z
-        #         U_G = T.set_subtensor(U_G[n * 2:n * 3, 8], gi_reescale * dips_position[:, 1])  # This is y
-        #
-        #         # Interface
-        #         U_I = - T.stack(
-        #             gi_reescale * (rest_layer_points[:, 0] - ref_layer_points[:, 0]), # x
-        #             gi_reescale * (rest_layer_points[:, 1] - ref_layer_points[:, 1]), # y
-        #             gi_reescale * (rest_layer_points[:, 2] - ref_layer_points[:, 2]), # z
-        #             gi_reescale ** 2 * (rest_layer_points[:, 0] ** 2 - ref_layer_points[:, 0] ** 2), # xx
-        #             gi_reescale ** 2 * (rest_layer_points[:, 1] ** 2 - ref_layer_points[:, 1] ** 2), # yy
-        #             gi_reescale ** 2 * (rest_layer_points[:, 2] ** 2 - ref_layer_points[:, 2] ** 2), # zz
-        #             gi_reescale ** 2 * (rest_layer_points[:, 0] * rest_layer_points[:, 1] - ref_layer_points[:, 0] *
-        #                                 ref_layer_points[:, 1]),
-        #             gi_reescale ** 2 * (rest_layer_points[:, 0] * rest_layer_points[:, 2] - ref_layer_points[:, 0] *
-        #                                 ref_layer_points[:, 2]),
-        #             gi_reescale ** 2 * (rest_layer_points[:, 1] * rest_layer_points[:, 2] - ref_layer_points[:, 1] *
-        #                                 ref_layer_points[:, 2]),
-        #         ).T
-        #
-        #
-        #
-        #     # =================================
-        #     # Creation of the Covariance Matrix
-        #     # =================================
-        #     C_matrix = T.zeros((length_of_C, length_of_C ))
-        #
-        #     # First row of matrices
-        #     C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, 0:length_of_CG], C_G)
-        #
-        #     C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, length_of_CG:length_of_CG + length_of_CGI], C_GI.T)
-        #
-        #     if not self.u_grade_T.get_value() == 0:
-        #         C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, -length_of_U_I:], U_G)
-        #
-        #     # Second row of matrices
-        #     C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI, 0:length_of_CG], C_GI)
-        #     C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI,
-        #                                length_of_CG:length_of_CG + length_of_CGI], C_I)
-        #
-        #     if not self.u_grade_T.get_value() == 0:
-        #         C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI, -length_of_U_I:], U_I)
-        #
-        #         # Third row of matrices
-        #         C_matrix = T.set_subtensor(C_matrix[-length_of_U_I:, 0:length_of_CG], U_G.T)
-        #         C_matrix = T.set_subtensor(C_matrix[-length_of_U_I:, length_of_CG:length_of_CG + length_of_CGI], U_I.T)
-        #
-        #     # =====================
-        #     # Creation of the gradients G vector
-        #     # Calculation of the cartesian components of the dips assuming the unit module
-        #     G_x = T.sin(T.deg2rad(dip_angles)) * T.sin(T.deg2rad(azimuth)) * polarity
-        #     G_y = T.sin(T.deg2rad(dip_angles)) * T.cos(T.deg2rad(azimuth)) * polarity
-        #     G_z = T.cos(T.deg2rad(dip_angles)) * polarity
-        #
-        #     G = T.concatenate((G_x, G_y, G_z))
-        #
-        #     # Creation of the Dual Kriging vector
-        #     b = T.zeros_like(C_matrix[:, 0])
-        #     b = T.set_subtensor(b[0:G.shape[0]], G)
-        #
-        #     # Solving the kriging system
-        #     # TODO: look for an eficient way to substitute nlianlg by a theano operation
-        #     DK_parameters = T.dot(T.nlinalg.matrix_inverse(C_matrix), b)
-        #
-        #     # ==============
-        #     # Interpolator
-        #     # ==============
-        #
-        #     # Creation of a matrix of dimensions equal to the grid with the weights for every point (big 4D matrix in
-        #     # ravel form)
-        #     weights = T.tile(DK_parameters, (grid_val.shape[0], 1)).T
-        #
-        #     # Gradient contribution
-        #     sigma_0_grad = T.sum(
-        #         (weights[:length_of_CG, :] *
-        #          gi_reescale *
-        #          (-hu_SimPoint *
-        #           (SED_dips_SimPoint < self.a_T) *  # first derivative
-        #           (- self.c_o_T * ((-14 / self.a_T ** 2) + 105 / 4 * SED_dips_SimPoint / self.a_T ** 3 -
-        #                            35 / 2 * SED_dips_SimPoint ** 3 / self.a_T ** 5 +
-        #                            21 / 4 * SED_dips_SimPoint ** 5 / self.a_T ** 7)))),
-        #         axis=0)
-        #
-        #     # Interface contribution
-        #     sigma_0_interf = (T.sum(
-        #         -weights[length_of_CG:length_of_CG + length_of_CGI, :] *
-        #         (self.c_o_T * i_reescale * (
-        #             (SED_rest_SimPoint < self.a_T) *  # SimPoint - Rest Covariances Matrix
-        #             (1 - 7 * (SED_rest_SimPoint / self.a_T) ** 2 +
-        #              35 / 4 * (SED_rest_SimPoint / self.a_T) ** 3 -
-        #              7 / 2 * (SED_rest_SimPoint / self.a_T) ** 5 +
-        #              3 / 4 * (SED_rest_SimPoint / self.a_T) ** 7) -
-        #             ((SED_ref_SimPoint < self.a_T) *  # SimPoint- Ref
-        #              (1 - 7 * (SED_ref_SimPoint / self.a_T) ** 2 +
-        #               35 / 4 * (SED_ref_SimPoint / self.a_T) ** 3 -
-        #               7 / 2 * (SED_ref_SimPoint / self.a_T) ** 5 +
-        #               3 / 4 * (SED_ref_SimPoint / self.a_T) ** 7)))), axis=0))
-        #
-        #     # Universal drift contribution
-        #     # Universal terms used to calculate f0
-        #     _universal_terms_layers = T.horizontal_stack(
-        #         rest_layer_points,
-        #         (rest_layer_points ** 2),
-        #         T.stack((rest_layer_points[:, 0] * rest_layer_points[:, 1],
-        #                  rest_layer_points[:, 0] * rest_layer_points[:, 2],
-        #                  rest_layer_points[:, 1] * rest_layer_points[:, 2]), axis=1)).T
-        #
-        #     universal_matrix = T.horizontal_stack(
-        #         (self.universal_matrix_T * yet_simulated).nonzero_values().reshape((9, -1)),
-        #         _universal_terms_layers)
-        #
-        #     if self.u_grade_T.get_value() == 0:
-        #         f_0 = 0
-        #     else:
-        #         gi_rescale_aux = T.repeat(gi_reescale, 9)
-        #         gi_rescale_aux = T.set_subtensor(gi_rescale_aux[:3], 1)
-        #         _aux_magic_term = T.tile(gi_rescale_aux[:grade_universal], (grid_val.shape[0], 1)).T
-        #         f_0 = (T.sum(
-        #             weights[-length_of_U_I:, :] * gi_reescale * _aux_magic_term *
-        #             universal_matrix[:grade_universal]
-        #             , axis=0))
-        #
-        #     # Contribution faults
-        #    # f_1 = weights[-1, :] * T.lt(universal_matrix[0, :], 5) * 2 - 1
-        #  #   f_1 = 0
-        #     # Potential field
-        #     # Value of the potential field
-        #
-        #     Z_x = (sigma_0_grad + sigma_0_interf + f_0)[:-rest_layer_points.shape[0]]
-        #     potential_field_interfaces = (sigma_0_grad + sigma_0_interf + f_0)[-rest_layer_points.shape[0]:]
-        #
-        #     # Theano function to calculate a potential field
-        #     self._interpolate = theano.function(
-        #         [dips_position, dip_angles, azimuth, polarity, rest_layer_points, ref_layer_points,
-        #          theano.In(yet_simulated, value=np.ones_like(self._grid.grid[:, 0]))],
-        #         [Z_x, G_x, G_y, G_z, potential_field_interfaces, C_matrix, printing],
-        #         on_unused_input="warn", profile=True, allow_input_downcast=True)
-        #
-        #     # =======================================================================
-        #     #               CODE TO EXPORT THE BLOCK DIRECTLY
-        #     # ========================================================================
-        #
-        #     # Aux shared parameters
-        #    # infinite_pos = theano.shared(np.float32(np.inf))
-        #    # infinite_neg = theano.shared(np.float32(-np.inf))
-        #
-        #     # Value of the lithology-segment
-        #     n_formation = T.vector("The assigned number of the lithologies in this serie")
-        #
-        #     # Loop to obtain the average Zx for every intertace
-        #     def average_potential(dim_a, dim_b, pfi):
-        #         """
-        #
-        #         :param dim: size of the rest values vector per formation
-        #         :param pfi: the values of all the rest values potentials
-        #         :return: average of the potential per formation
-        #         """
-        #         average = pfi[T.cast(dim_a, "int32"): T.cast(dim_b, "int32")].sum() / (dim_b - dim_a)
-        #         return average
-        #
-        #     potential_field_unique, updates1 = theano.scan(fn=average_potential,
-        #                                                    outputs_info=None,
-        #                                                    sequences=dict(
-        #                                                        input=T.concatenate(
-        #                                                            (T.stack(0),
-        #                                                             self.number_of_points_per_formation_T)),
-        #                                                        taps=[0, 1]),
-        #                                                    non_sequences=potential_field_interfaces)
-        #
-        #     infinite_pos = T.max(potential_field_unique) + 10
-        #     infinite_neg = T.min(potential_field_unique) - 10
-        #
-        #     # Loop to segment the distinct lithologies
-        #     potential_field_iter = T.concatenate((T.stack(infinite_pos),
-        #                                           potential_field_unique,
-        #                                           T.stack(infinite_neg)))
-        #
-        #     def compare(a, b, n_formation, Zx):
-        #         return T.le(Zx, a) * T.ge(Zx, b) * n_formation
-        #
-        #     block, updates2 = theano.scan(fn=compare,
-        #                                   outputs_info=None,
-        #                                   sequences=[dict(input=potential_field_iter, taps=[0, 1]),
-        #                                              n_formation],
-        #                                   non_sequences=Z_x)
-        #
-        #     # Adding to the block the contribution of the potential field
-        #     potential_field_contribution = T.set_subtensor(
-        #         self.block[T.nonzero(T.cast(yet_simulated, "int8"))[0]],
-        #         block.sum(axis=0))
-        #
-        #     # Some gradient testing
-        #     # grad = T.jacobian(T.flatten(printing), rest_layer_points)
-        #     # grad = T.grad(T.sum(Z_x), self.a_T)
-        #     from theano.compile.nanguardmode import NanGuardMode
-        #
-        #     def detect_nan(i, node, fn):
-        #         for output in fn.outputs:
-        #             if (not isinstance(output[0], np.random.RandomState) and
-        #                     np.isnan(output[0]).any()):
-        #                 print('*** NaN detected ***')
-        #                 theano.printing.debugprint(node)
-        #                 print('Inputs : %s' % [input[0] for input in fn.inputs])
-        #                 print('Outputs: %s' % [output[0] for output in fn.outputs])
-        #                 break
-        #
-        #     # Theano function to update the block
-        #     self._block_export = theano.function([dips_position, dip_angles, azimuth, polarity, rest_layer_points,
-        #                                           ref_layer_points, n_formation, yet_simulated], None,
-        #                                          updates=[(self.block, potential_field_contribution)],
-        #                                          on_unused_input="warn", profile=True, allow_input_downcast=True,)
-        #                                      #   mode=theano.compile.MonitorMode(
-        #                                      #       post_func=detect_nan))
-        #                                       #    mode=NanGuardMode(nan_is_error=True, inf_is_error=True,
-        #                                       #                     big_is_error=True))

@@ -102,28 +102,30 @@ class PlotData(object):
         Slice the 3D array (blocks or potential field) in the specific direction selected in the plotting functions
 
         """
-        _a, _b, _c = slice(0, self._data.nx), slice(0, self._data.ny), slice(0, self._data.nz)
+        _a, _b, _c = (slice(0, self._data.resolution[0]),
+                      slice(0, self._data.resolution[1]),
+                      slice(0, self._data.resolution[2]))
         if direction == "x":
             _a = cell_number
             x = "Y"
             y = "Z"
             Gx = "G_y"
             Gy = "G_z"
-            extent_val = self._data.ymin, self._data.ymax, self._data.zmin, self._data.zmax
+            extent_val = self._data.extent[3], self._data.extent[2], self._data.extent[5], self._data.extent[4]
         elif direction == "y":
             _b = cell_number
             x = "X"
             y = "Z"
             Gx = "G_x"
             Gy = "G_z"
-            extent_val = self._data.xmin, self._data.xmax, self._data.zmin, self._data.zmax
+            extent_val = self._data.extent[1], self._data.extent[0], self._data.extent[5], self._data.extent[4]
         elif direction == "z":
             _c = cell_number
             x = "X"
             y = "Y"
             Gx = "G_x"
             Gy = "G_y"
-            extent_val = self._data.xmin, self._data.xmax, self._data.ymin, self._data.ymax
+            extent_val = self._data.extent[1], self._data.extent[0], self._data.extent[3], self._data.extent[2]
         else:
             raise AttributeError(str(direction) + "must be a cartesian direction, i.e. xyz")
         return _a, _b, _c, extent_val, x, y, Gx, Gy
@@ -161,7 +163,7 @@ class PlotData(object):
             except AttributeError:
                 raise AttributeError('There is no block to plot')
 
-        plot_block = _block.reshape(self._data.nx, self._data.ny, self._data.nz)
+        plot_block = _block.reshape(self._data.resolution[0], self._data.resolution[1], self._data.resolution[2])
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
 
         plt.imshow(plot_block[_a, _b, _c].T, origin="bottom", cmap="viridis",

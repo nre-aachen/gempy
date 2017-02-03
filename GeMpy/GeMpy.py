@@ -15,11 +15,51 @@ this is only to test git 3
 # import theano.tensor as T
 import numpy as _np
 # import sys, os
-# import pandas as pn
+import pandas as pn
 
 from Visualization import PlotData
 from DataManagement import DataManagement
+from IPython.core.debugger import Tracer
 
+
+def rescale_data(geo_data, rescaling_factor=None, *args, **kwargs):
+
+    max_coord = pn.concat(
+        [geo_data.foliations, geo_data.interfaces]).max()[['X', 'Y', 'Z']]
+    min_coord = pn.concat(
+        [geo_data.foliations, geo_data.interfaces]).min()[['X', 'Y', 'Z']]
+
+    if not rescaling_factor:
+        rescaling_factor = 2*_np.max(max_coord - min_coord)
+
+    centers = (max_coord+min_coord)/2
+
+    new_coord_interfaces = (geo_data.interfaces[['X', 'Y', 'Z']] -
+                           centers) / rescaling_factor + 0.5001
+
+    new_coord_foliations = (geo_data.foliations[['X', 'Y', 'Z']] -
+                           centers) / rescaling_factor + 0.5001
+
+   # new_coord_grid = (geo_data.grid.grid - geo_data.grid.grid.min(axis=0)) / rescaling_factor + 0.5001
+
+   # new_coord_extent = _np.array(((geo_data.extent[:2] - centers[0]) / rescaling_factor + 0.5001,
+   #                               (geo_data.extent[2:4] - centers[1]) / rescaling_factor + 0.5001,
+   #                               (geo_data.extent[4:6] - centers[2]) / rescaling_factor + 0.5001))
+    #new_coord_extent[:2] = _np.asarray((geo_data.extent[:2] - centers[0]) / rescaling_factor + 0.5001)
+    #new_coord_extent[2:4] = _np.asarray((geo_data.extent[2:4] - centers[1]) / rescaling_factor + 0.5001)
+    #new_coord_extent[4:6] = _np.asarray((geo_data.extent[4:6] - centers[2]) / rescaling_factor + 0.5001)
+
+    new_coord_extent = (geo_data.extent - _np.repeat(centers,2)) / rescaling_factor + 0.5001
+    import copy
+    geo_data_rescaled = copy.copy(geo_data)
+    geo_data_rescaled.interfaces[['X', 'Y', 'Z']] = new_coord_interfaces
+    geo_data_rescaled.foliations[['X', 'Y', 'Z']] = new_coord_foliations
+    geo_data_rescaled.extent = new_coord_extent.as_matrix()
+
+    geo_data_rescaled.create_grid()
+
+
+    return geo_data_rescaled
 
 def compute_block_model(geo_data, series_number="all",
                         series_distribution=None, order_series=None,
@@ -165,11 +205,8 @@ def set_interpolator(geo_data, compile_theano=False, compute_block_model=True,
         self.Interpolator (GeMpy_core.Interpolator): Object to perform the potential field method
         self.Plot(GeMpy_core.PlotData): Object to visualize data and results. It gets updated.
     """
-    import theano
-    theano.config.optimizer = 'None'
-    theano.config.exception_verbosity = 'high'
-    theano.config.compute_test_value = 'ignore'
 
+    rescaling_factor = kwargs.get('rescaling_factor', None)
 
     if 'u_grade' in kwargs:
         compile_theano = True
@@ -177,15 +214,19 @@ def set_interpolator(geo_data, compile_theano=False, compute_block_model=True,
     if not getattr(geo_data, 'grid', None):
         set_grid(geo_data)
 
-    if not getattr(geo_data, 'interpolator', None) or compile_theano:
-        geo_data.interpolator = geo_data.InterpolatorClass(geo_data, geo_data.grid, compile_theano=True,
-                                                           compute_block_model=compute_block_model,
-                                                           compute_potential_field=compute_potential_field,
-                                                           *args, **kwargs)
+    geo_data_int = rescale_data(geo_data, rescaling_factor=rescaling_factor)
+
+    if not getattr(geo_data_int, 'interpolator', None) or compile_theano:
+        geo_data_int.interpolator = geo_data_int.InterpolatorClass(geo_data_int, geo_data_int.grid, compile_theano=True,
+                                                                   compute_block_model=compute_block_model,
+                                                                   compute_potential_field=compute_potential_field,
+                                                                   *args, **kwargs)
     else:
-        geo_data.interpolator._data = geo_data
-        geo_data.interpolator._grid = geo_data.grid
-        geo_data.interpolator.set_theano_shared_parameteres(geo_data, geo_data.interpolator._grid, **kwargs)
+        geo_data_int.interpolator._data = geo_data_int
+        geo_data_int.interpolator._grid = geo_data_int.grid
+        geo_data_int.interpolator.set_theano_shared_parameteres(geo_data_int, geo_data_int.interpolator._grid, **kwargs)
+
+    return geo_data_int
 
 
 def plot_data(geo_data, direction="y", series="all", **kwargs):
