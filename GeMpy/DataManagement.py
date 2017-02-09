@@ -43,19 +43,6 @@ class DataManagement(object):
         theano.config.exception_verbosity = 'high'
         theano.config.compute_test_value = 'ignore'
 
-
-        # Deprecated
-        # self.xmin = extent[0]
-        # self.xmax = extent[1]
-        # self.ymin = extent[2]
-        # self.ymax = extent[3]
-        # self.zmin = extent[4]
-        # self.zmax = extent[5]
-        # self.nx = resolution[0]
-        # self.ny = resolution[1]
-        # self.nz = resolution[2]
-        # -------------------
-
         self.extent = np.array(extent)
         self.resolution = np.array(resolution)
 
@@ -134,6 +121,7 @@ class DataManagement(object):
         Returns:
             self.grid(GeMpy_core.grid): Object that contain different grids
         """
+
         if not extent:
             extent = self.extent
         if not resolution:
@@ -261,7 +249,7 @@ class DataManagement(object):
     def set_formation_number(self):
         try:
             ip_addresses = self.interfaces["formation"].unique()
-            ip_dict = dict(zip(ip_addresses, range(len(ip_addresses))))
+            ip_dict = dict(zip(ip_addresses, range(1, len(ip_addresses)+1)))
             self.interfaces['formation number'] = self.interfaces['formation'].replace(ip_dict)
             self.foliations['formation number'] = self.foliations['formation'].replace(ip_dict)
         except ValueError:
@@ -302,6 +290,7 @@ class DataManagement(object):
                 np.linspace(self._grid_ext[4], self._grid_ext[5], self._grid_res[2], dtype="float32"), indexing="ij"
             )
 
+          #  self.grid = np.vstack(map(np.ravel, g)).T.astype("float32")
             return np.vstack(map(np.ravel, g)).T.astype("float32")
 
     class InterpolatorClass(object):
@@ -317,7 +306,7 @@ class DataManagement(object):
             verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0
         """
 
-        def __init__(self, _data_scaled, _grid_scaled=None, compute_block_model=True,
+        def __init__(self, _data_scaled, _grid_scaled=None, compute_block_model=False,
                      compute_potential_field=False, *args, **kwargs):
 
             verbose = kwargs.get('verbose', 0)
@@ -337,10 +326,12 @@ class DataManagement(object):
                 self._grid_scaled = _grid_scaled
 
             # Importing the theano graph
-            self.tg = theanograf.TheanoGraph(u_grade)
+            self.tg = theanograf.TheanoGraph_pro(u_grade)
 
             # Setting theano parameters
             self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, **kwargs)
+            self.data_prep()
+
 
             # Choosing if compute something directly
             if compute_potential_field:
@@ -355,7 +346,7 @@ class DataManagement(object):
                 self._block_export = self.compile_block_model_function()
                 self.block = self.compute_block_model()
 
-        def _data_prep(self):
+        def data_prep(self):
 
             # We order the pandas table
             self._data_scaled.interfaces.sort_values(by='order_series', inplace=True)
@@ -363,31 +354,48 @@ class DataManagement(object):
             self._data_scaled.foliations.sort_values(by='order_series', inplace=True)
             self._data_scaled.foliations.sort_values(by='formation number', inplace=True)
 
+
+
+
             # Size of every formation, SHARED
             len_interfaces = np.asarray(
                 [np.sum(self._data_scaled.interfaces['formation number'] == i)
                  for i in self._data_scaled.interfaces['formation number'].unique()])
+
+            # Position of the first term of every layer PYTHON
+            ref_position = np.insert(len_interfaces[:-1], 0, 0).cumsum()
+
+            pandas_rest_layer_points = self._data_scaled.interfaces.drop(ref_position)
+
+            # Size of every layer in rests
+            len_rest_form = (len_interfaces - 1)
+            self.tg.number_of_points_per_formation_T.set_value(len_rest_form)
 
             # TODO: do I need this? PYTHON
             len_foliations = np.asarray(
                 [np.sum(self._data_scaled.foliations['formation number'] == i)
                  for i in self._data_scaled.foliations['formation number'].unique()])
 
+            self.pandas_rest = pandas_rest_layer_points
             # Size of every series SHARED
             len_series_i = np.asarray(
-                [np.sum(self._data_scaled.interfaces['order_series'] == i)
-                 for i in self._data_scaled.interfaces['order_series'].unique()])
+                [np.sum(pandas_rest_layer_points['order_series'] == i)
+                 for i in pandas_rest_layer_points['order_series'].unique()])
+
+            # We add the 0 at the beginning and set the shared value
+            self.tg.len_series_i.set_value(np.insert(len_series_i, 0, 0).cumsum())
 
             len_series_f = np.asarray(
                 [np.sum(self._data_scaled.foliations['order_series'] == i)
                  for i in self._data_scaled.foliations['order_series'].unique()])
 
-            # Position of the first term of every layer PYTHON
-            ref_position = np.insert(len_interfaces[:-1], 0, 0).cumsum()
+            self.tg.len_series_f.set_value(np.insert(len_series_f, 0, 0).cumsum())
 
             # Rest layers matrix # VAR
-            rest_layer_points = self._data_scaled.interfaces.drop(ref_position)
+            rest_layer_points = pandas_rest_layer_points[['X', 'Y', 'Z']].as_matrix()
 
+            # TODO delete
+            self.rest_layer_points = rest_layer_points
             # Ref layers matrix #VAR
             aux_1 = self._data_scaled.interfaces.iloc[ref_position][['X', 'Y', 'Z']].as_matrix()
             ref_layer_points = np.zeros((0, 3))
@@ -396,247 +404,22 @@ class DataManagement(object):
                 ref_layer_points = np.vstack((ref_layer_points,
                                               np.tile(aux_1[e], (i - 1, 1))))
 
+            self.ref_layer_points = ref_layer_points
+
             # Foliations, VAR
 
-            dips_position = self._data_scaled.foliations['X', 'Y', 'Z'].as_matrix()
+            dips_position = self._data_scaled.foliations[['X', 'Y', 'Z']].as_matrix()
             dip_angles = self._data_scaled.foliations["dip"].as_matrix()
             azimuth = self._data_scaled.foliations["azimuth"].as_matrix()
             polarity = self._data_scaled.foliations["polarity"].as_matrix()
 
+            idl = (dips_position, dip_angles, azimuth, polarity,
+                   ref_layer_points, rest_layer_points)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        def _aux_computations_block_model(self, for_in_ser, n_formation, verbose=0):
-            """
-            Private function with the bridge steps from the selection of serie to the input in theano
-
-            Args:
-                for_in_ser: array with the formation for the series to interpolate
-                n_formation: number of formation in the series
-                verbose: verbosity
-
-            Returns:
-                self.block(theano shared[numpy.ndarray]): 3D block with the corresponding formations
-            """
-            # TODO Probably here I should add some asserts for sanity check
-            try:
-                yet_simulated = (self.tg.final_block.get_value() == 0) * 1
-                if verbose > 0:
-                    print(yet_simulated, (yet_simulated == 0).sum())
-            except AttributeError:
-                yet_simulated = np.ones_like(self._grid.grid[:, 0], dtype="int8")
-               # print("I am in the except")
-
-            dips_position = self._data_scaled.foliations[
-                self._data_scaled.foliations["formation"].str.contains(for_in_ser)] \
-                [['X', 'Y', 'Z']].as_matrix()
-            dip_angles = self._data_scaled.foliations[
-                self._data_scaled.foliations["formation"].str.contains(for_in_ser)]["dip"].as_matrix()
-            azimuth = self._data_scaled.foliations[
-                self._data_scaled.foliations["formation"].str.contains(for_in_ser)]["azimuth"].as_matrix()
-            polarity = self._data_scaled.foliations[
-                self._data_scaled.foliations["formation"].str.contains(for_in_ser)]["polarity"].as_matrix()
-
-            if for_in_ser.count("|") == 0:
-
-                layers = self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == for_in_ser] \
-                    [['X', 'Y', 'Z']].as_matrix()
-                rest_layer_points = layers[1:]
-                # TODO self.n_formation probably should not be self
-                self.tg.number_of_points_per_formation_T.set_value(np.array(rest_layer_points.shape[0], ndmin=1))
-                ref_layer_points = np.tile(layers[0], (np.shape(layers)[0] - 1, 1))
-            else:
-                # TODO: This is ugly
-                layers_list = []
-                for formation in for_in_ser.split("|"):
-                    layers_list.append(
-                        self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == formation]
-                        [['X', 'Y', 'Z']].as_matrix())
-                layers = np.asarray(layers_list)
-
-                rest_layer_points = layers[0][1:]
-                rest_dim = np.array(layers[0][1:].shape[0], ndmin=1)
-                for i in layers[1:]:
-                    rest_layer_points = np.vstack((rest_layer_points, i[1:]))
-                    rest_dim = np.append(rest_dim, rest_dim[-1] + i[1:].shape[0])
-                self.tg.number_of_points_per_formation_T.set_value(rest_dim)
-                ref_layer_points = np.vstack((np.tile(i[0], (np.shape(i)[0] - 1, 1)) for i in layers))
-
-            if verbose > 0:
-                print("The serie formations are %s" % for_in_ser)
-                if verbose > 1:
-                    print("The formations are: \n"
-                          "Layers ", self._data_scaled.interfaces[self._data_scaled.interfaces["formation"].str.contains(for_in_ser)],
-                          " \n "
-                          "foliations ",
-                          self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)])
-
-            # self.grad is none so far. I have it for further research in the calculation of the Jacobian matrix
-
-                if verbose > 2:
-                    print('number_formations', n_formation)
-                    print('rest_layer_points', rest_layer_points)
-
-            if not getattr(self, '_block_export', None):
-                self.compile_block_model_function()
-
-            res = self._block_export(dips_position, dip_angles, azimuth, polarity,
-                                     rest_layer_points, ref_layer_points,
-                                     n_formation, yet_simulated)
-
-            if verbose > 2:
-                print('number of unique lithologies in the final block model',
-                      np.unique(self.tg.final_block.get_value()))
-
-            self.input_parameters = [dips_position, dip_angles, azimuth, polarity,
-                                     rest_layer_points, ref_layer_points,
-                                     n_formation, yet_simulated]
-            return res
-
-
-
-        def _aux_computations_potential_field(self, for_in_ser, verbose=0):
-            """
-            Private function with the bridge steps from the selection of serie to the input in theano
-
-            Args:
-                for_in_ser: array with the formation for the series to interpolate
-                verbose: verbosity
-
-            Returns:
-                numpy.ndarray: 3D array with the potential field
-            """
-
-            # TODO: change [:,:3] that is positional based for XYZ so is more consistent
-            dips_position = self._data_scaled.foliations[
-                self._data_scaled.foliations["formation"].str.contains(for_in_ser)] \
-                [['X', 'Y', 'Z']].as_matrix()
-            dip_angles = self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)][
-                "dip"].as_matrix()
-            azimuth = self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)][
-                "azimuth"].as_matrix()
-            polarity = self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)][
-                "polarity"].as_matrix()
-
-            if for_in_ser.count("|") == 0:
-                # layers = self._data_scaled.interfaces[self._data_scaled.interfaces["formation"].str.contains(for_in_ser)].as_matrix()[
-                #         :, :3]
-                layers = self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == for_in_ser] \
-                    [['X', 'Y', 'Z']].as_matrix()
-                rest_layer_points = layers[1:]
-                ref_layer_points = np.tile(layers[0], (np.shape(layers)[0] - 1, 1))
-            else:
-                layers_list = []
-                for formation in for_in_ser.split("|"):
-                    layers_list.append(
-                        self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == formation]
-                        [['X', 'Y', 'Z']].as_matrix())
-                layers = np.asarray(layers_list)
-                rest_layer_points = np.vstack((i[1:] for i in layers))
-                ref_layer_points = np.vstack((np.tile(i[0], (np.shape(i)[0] - 1, 1)) for i in layers))
-
-            if verbose > 0:
-                print("The serie formations are %s" % for_in_ser)
-                if verbose > 1:
-                    print("The formations are: \n"
-                          "Layers \n",
-                          self._data_scaled.interfaces[self._data_scaled.interfaces["formation"].str.contains(for_in_ser)],
-                          "\n foliations \n",
-                          self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)])
-
-            self.tg.C_matrix.eval({self.tg.dips_position: dips_position,
-                                   #    'self.dip_angles': dip_angles,
-                                   #   'self.azimuth': azimuth,
-                                   #  'self.polarity': polarity,
-                                   self.tg.rest_layer_points: rest_layer_points,
-                                   self.tg.ref_layer_points: ref_layer_points})
-
-
-
-            potential_field_results = self._interpolate(
-                dips_position, dip_angles, azimuth, polarity,
-                rest_layer_points, ref_layer_points)[:]
-
-            self.Z_x, self.results = potential_field_results[0], potential_field_results[1:]
-
-            potential_field = self.Z_x.reshape(self._data_scaled.resolution[0],
-                                               self._data_scaled.resolution[1],
-                                               self._data_scaled.resolution[2])
-
-            if verbose > 2:
-                print("Dual Kriging weights: ", self.results[2])
-            if verbose > 3:
-                print("C_matrix: ", self.results[1])
-
-            return potential_field
-
-        def _select_serie(self, series_name=0):
-            """
-            Return the formations of a given serie in string
-            :param series_name: name or argument of the serie. Default first of the list
-            :return: formations of a given serie in string separeted by |
-            """
-            if type(series_name) == int or type(series_name) == np.int64:
-                _formations_in_serie = "|".join(self._data_scaled.series.ix[:, series_name].drop_duplicates())
-            elif type(series_name) == str:
-                _formations_in_serie = "|".join(self._data_scaled.series[series_name].drop_duplicates())
-            return _formations_in_serie
+            return idl
 
         def set_theano_shared_parameteres(self, _data_rescaled, _grid_rescaled, **kwargs):
+
             """
             Basic interpolator parameters. Also here it is possible to change some flags of theano
             :param range_var: Range of the variogram, it is recommended the distance of the longest diagonal
@@ -650,19 +433,17 @@ class DataManagement(object):
             nugget_effect = kwargs.get('nugget_effect', 0.01)
             rescaling_factor = kwargs.get('rescaling_factor', None)
 
-          #  print("I am in the set theano shared", _data_rescaled, _data_rescaled.interfaces.head())
-
             if not range_var:
                 range_var = np.sqrt((_data_rescaled.extent[0] - _data_rescaled.extent[1]) ** 2 +
                                     (_data_rescaled.extent[2] - _data_rescaled.extent[3]) ** 2 +
                                     (_data_rescaled.extent[4] - _data_rescaled.extent[5]) ** 2)
+
             if not c_o:
                 c_o = range_var ** 2 / 14 / 3
 
             from IPython.core.debugger import Tracer
 
             # Creation of shared variables
-         #   print('range_var, c_o', range_var, c_o)
             self.tg.a_T.set_value(range_var)
             self.tg.c_o_T.set_value(c_o)
             self.tg.nugget_effect_grad_T.set_value(nugget_effect)
@@ -686,94 +467,341 @@ class DataManagement(object):
             self.tg.universal_grid_matrix_T.set_value(_universal_matrix + 1e-10)
             self.tg.final_block.set_value(np.zeros_like(_grid_rescaled.grid[:, 0]))
             self.tg.grid_val_T.set_value(_grid_rescaled.grid + 10e-6)
+            self.tg.n_formation.set_value(np.insert(_data_rescaled.interfaces['formation number'].unique(), 0, 0)[::-1])
 
-     #    def _get_constant_parameters(self):
-     #        """
-     #        Deprecated?
-     #
-     #        Returns:
-     #
-     #        """
-     #        return self.a_T, self.c_o_T, self.nugget_effect_grad_T
 
-        def compile_potential_field_function(self):
-            self._interpolate = theano.function(
-                [self.tg.dips_position, self.tg.dip_angles, self.tg.azimuth, self.tg.polarity,
-                 self.tg.rest_layer_points, self.tg.ref_layer_points,
-                 theano.In(self.tg.yet_simulated, value=np.ones_like(self._grid_scaled.grid[:, 0]))],
-                [self.tg.Z_x, self.tg.potential_field_interfaces,
-                 self.tg.C_matrix, self.tg.DK_parameters, self.tg.printing],
-                on_unused_input="warn", profile=True, allow_input_downcast=True)
-            return self._interpolate
 
-        def compile_block_model_function(self):
 
-            self._block_export = theano.function([self.tg.dips_position, self.tg.dip_angles, self.tg.azimuth,
-                                                  self.tg.polarity, self.tg.rest_layer_points,
-                                                  self.tg.ref_layer_points, self.tg.n_formation,
-                                                  self.tg.yet_simulated],
-                                                 None,
-                                                 updates=[(self.tg.final_block, self.tg.potential_field_contribution)],
-                                                 on_unused_input="warn", profile=True, allow_input_downcast=True,)
-            #   mode=theano.compile.MonitorMode(
-            #   post_func=detect_nan))
-            #    mode=NanGuardMode(nan_is_error=True, inf_is_error=True,
-            #                     big_is_error=True))
 
-            return self._block_export
 
-      #  def update_potential_fields(self, verbose=0):
-      #      self.potential_fields = [self.compute_potential_fields(i, verbose=verbose)
-      #                               for i in np.arange(len(self._data_scaled.series.columns))]
 
-        def compute_block_model(self, series_number="all", verbose=0):
-            """
-            Method to compute the block model for the given series using data provided in the DataManagement object
 
-            Args:
-                series_number(str or int): series to interpolate
-                verbose(int): level of verbosity during the computation
 
-            Returns:
-                self.block(theano shared[numpy.ndarray]): 3D block with the corresponding formations
 
-            """
 
-            if series_number == "all":
-                series_number = np.arange(len(self._data_scaled.series.columns))
-            for i in series_number:
-                formations_in_serie = self._select_serie(i)
-                # Number assigned to each formation
-                n_formation = np.squeeze(np.where(np.in1d(self._data_scaled.formations, self._data_scaled.series.ix[:, i]))) + 1
-                if verbose > 0:
-                    print(n_formation)
-                self.grad = self._aux_computations_block_model(formations_in_serie, np.array(n_formation, ndmin=1),
-                                                               verbose=verbose)
-          #  self.block = self.tg.final_block
-            return self.tg.final_block
 
-        def compute_potential_fields(self, series_name="all", verbose=0):
-            """
-            Compute an individual potential field.
 
-            Args:
-                series_name (str or int): name or number of series to interpolate
-                verbose(int): int level of verbosity during the computation
 
-            Returns:
-                numpy.ndarray: 3D array with the potential field
 
-            """
 
-            #assert series_name is not "all", "Compute potential field only returns one potential field at the time"
-            if series_name is 'all':
-                self.potential_fields = []
-                for i in np.arange(len(self._data_scaled.series.columns)):
-                    formations_in_serie = self._select_serie(i)
-                    self.potential_fields.append(self._aux_computations_potential_field(formations_in_serie,
-                                                                                        verbose=verbose))
-            else:
-                formations_in_serie = self._select_serie(series_name)
-                self.potential_fields = self._aux_computations_potential_field(formations_in_serie, verbose=verbose)
 
-            return self.potential_fields
+
+    #     """
+    #     def _aux_computations_block_model(self, for_in_ser, n_formation, verbose=0):
+    #         """
+    #         Private function with the bridge steps from the selection of serie to the input in theano
+    #
+    #         Args:
+    #             for_in_ser: array with the formation for the series to interpolate
+    #             n_formation: number of formation in the series
+    #             verbose: verbosity
+    #
+    #         Returns:
+    #             self.block(theano shared[numpy.ndarray]): 3D block with the corresponding formations
+    #         """
+    #         # TODO Probably here I should add some asserts for sanity check
+    #         try:
+    #             yet_simulated = (self.tg.final_block.get_value() == 0) * 1
+    #             if verbose > 0:
+    #                 print(yet_simulated, (yet_simulated == 0).sum())
+    #         except AttributeError:
+    #             yet_simulated = np.ones_like(self._grid.grid[:, 0], dtype="int8")
+    #            # print("I am in the except")
+    #
+    #         dips_position_tiled = self._data_scaled.foliations[
+    #             self._data_scaled.foliations["formation"].str.contains(for_in_ser)] \
+    #             [['X', 'Y', 'Z']].as_matrix()
+    #         dip_angles = self._data_scaled.foliations[
+    #             self._data_scaled.foliations["formation"].str.contains(for_in_ser)]["dip"].as_matrix()
+    #         azimuth = self._data_scaled.foliations[
+    #             self._data_scaled.foliations["formation"].str.contains(for_in_ser)]["azimuth"].as_matrix()
+    #         polarity = self._data_scaled.foliations[
+    #             self._data_scaled.foliations["formation"].str.contains(for_in_ser)]["polarity"].as_matrix()
+    #
+    #         if for_in_ser.count("|") == 0:
+    #
+    #             layers = self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == for_in_ser] \
+    #                 [['X', 'Y', 'Z']].as_matrix()
+    #             rest_layer_points = layers[1:]
+    #             # TODO self.n_formation probably should not be self
+    #             self.tg.number_of_points_per_formation_T.set_value(np.array(rest_layer_points.shape[0], ndmin=1))
+    #             ref_layer_points = np.tile(layers[0], (np.shape(layers)[0] - 1, 1))
+    #         else:
+    #             # TODO: This is ugly
+    #             layers_list = []
+    #             for formation in for_in_ser.split("|"):
+    #                 layers_list.append(
+    #                     self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == formation]
+    #                     [['X', 'Y', 'Z']].as_matrix())
+    #             layers = np.asarray(layers_list)
+    #
+    #             rest_layer_points = layers[0][1:]
+    #             rest_dim = np.array(layers[0][1:].shape[0], ndmin=1)
+    #             for i in layers[1:]:
+    #                 rest_layer_points = np.vstack((rest_layer_points, i[1:]))
+    #                 rest_dim = np.append(rest_dim, rest_dim[-1] + i[1:].shape[0])
+    #             self.tg.number_of_points_per_formation_T.set_value(rest_dim)
+    #             ref_layer_points = np.vstack((np.tile(i[0], (np.shape(i)[0] - 1, 1)) for i in layers))
+    #
+    #         if verbose > 0:
+    #             print("The serie formations are %s" % for_in_ser)
+    #             if verbose > 1:
+    #                 print("The formations are: \n"
+    #                       "Layers ", self._data_scaled.interfaces[self._data_scaled.interfaces["formation"].str.contains(for_in_ser)],
+    #                       " \n "
+    #                       "foliations ",
+    #                       self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)])
+    #
+    #         # self.grad is none so far. I have it for further research in the calculation of the Jacobian matrix
+    #
+    #             if verbose > 2:
+    #                 print('number_formations', n_formation)
+    #                 print('rest_layer_points', rest_layer_points)
+    #
+    #         if not getattr(self, '_block_export', None):
+    #             self.compile_block_model_function()
+    #
+    #         res = self._block_export(dips_position_tiled, dip_angles, azimuth, polarity,
+    #                                  rest_layer_points, ref_layer_points,
+    #                                  n_formation, yet_simulated)
+    #
+    #         if verbose > 2:
+    #             print('number of unique lithologies in the final block model',
+    #                   np.unique(self.tg.final_block.get_value()))
+    #
+    #         self.input_parameters = [dips_position_tiled, dip_angles, azimuth, polarity,
+    #                                  rest_layer_points, ref_layer_points,
+    #                                  n_formation, yet_simulated]
+    #         return res
+    #
+    #
+    #
+    #     def _aux_computations_potential_field(self, for_in_ser, verbose=0):
+    #         """
+    #         Private function with the bridge steps from the selection of serie to the input in theano
+    #
+    #         Args:
+    #             for_in_ser: array with the formation for the series to interpolate
+    #             verbose: verbosity
+    #
+    #         Returns:
+    #             numpy.ndarray: 3D array with the potential field
+    #         """
+    #
+    #         # TODO: change [:,:3] that is positional based for XYZ so is more consistent
+    #         dips_position_tiled = self._data_scaled.foliations[
+    #             self._data_scaled.foliations["formation"].str.contains(for_in_ser)] \
+    #             [['X', 'Y', 'Z']].as_matrix()
+    #         dip_angles = self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)][
+    #             "dip"].as_matrix()
+    #         azimuth = self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)][
+    #             "azimuth"].as_matrix()
+    #         polarity = self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)][
+    #             "polarity"].as_matrix()
+    #
+    #         if for_in_ser.count("|") == 0:
+    #             # layers = self._data_scaled.interfaces[self._data_scaled.interfaces["formation"].str.contains(for_in_ser)].as_matrix()[
+    #             #         :, :3]
+    #             layers = self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == for_in_ser] \
+    #                 [['X', 'Y', 'Z']].as_matrix()
+    #             rest_layer_points = layers[1:]
+    #             ref_layer_points = np.tile(layers[0], (np.shape(layers)[0] - 1, 1))
+    #         else:
+    #             layers_list = []
+    #             for formation in for_in_ser.split("|"):
+    #                 layers_list.append(
+    #                     self._data_scaled.interfaces[self._data_scaled.interfaces["formation"] == formation]
+    #                     [['X', 'Y', 'Z']].as_matrix())
+    #             layers = np.asarray(layers_list)
+    #             rest_layer_points = np.vstack((i[1:] for i in layers))
+    #             ref_layer_points = np.vstack((np.tile(i[0], (np.shape(i)[0] - 1, 1)) for i in layers))
+    #
+    #         if verbose > 0:
+    #             print("The serie formations are %s" % for_in_ser)
+    #             if verbose > 1:
+    #                 print("The formations are: \n"
+    #                       "Layers \n",
+    #                       self._data_scaled.interfaces[self._data_scaled.interfaces["formation"].str.contains(for_in_ser)],
+    #                       "\n foliations \n",
+    #                       self._data_scaled.foliations[self._data_scaled.foliations["formation"].str.contains(for_in_ser)])
+    #
+    #         self.tg.C_matrix.eval({self.tg.dips_position_tiled: dips_position_tiled,
+    #                                #    'self.dip_angles': dip_angles,
+    #                                #   'self.azimuth': azimuth,
+    #                                #  'self.polarity': polarity,
+    #                                self.tg.rest_layer_points: rest_layer_points,
+    #                                self.tg.ref_layer_points: ref_layer_points})
+    #
+    #
+    #
+    #         potential_field_results = self._interpolate(
+    #             dips_position_tiled, dip_angles, azimuth, polarity,
+    #             rest_layer_points, ref_layer_points)[:]
+    #
+    #         self.Z_x, self.results = potential_field_results[0], potential_field_results[1:]
+    #
+    #         potential_field = self.Z_x.reshape(self._data_scaled.resolution[0],
+    #                                            self._data_scaled.resolution[1],
+    #                                            self._data_scaled.resolution[2])
+    #
+    #         if verbose > 2:
+    #             print("Dual Kriging weights: ", self.results[2])
+    #         if verbose > 3:
+    #             print("C_matrix: ", self.results[1])
+    #
+    #         return potential_field
+    #
+    #     def _select_serie(self, series_name=0):
+    #         """
+    #         Return the formations of a given serie in string
+    #         :param series_name: name or argument of the serie. Default first of the list
+    #         :return: formations of a given serie in string separeted by |
+    #         """
+    #         if type(series_name) == int or type(series_name) == np.int64:
+    #             _formations_in_serie = "|".join(self._data_scaled.series.ix[:, series_name].drop_duplicates())
+    #         elif type(series_name) == str:
+    #             _formations_in_serie = "|".join(self._data_scaled.series[series_name].drop_duplicates())
+    #         return _formations_in_serie
+    #
+    #     def set_theano_shared_parameteres(self, _data_rescaled, _grid_rescaled, **kwargs):
+    #         """
+    #         Basic interpolator parameters. Also here it is possible to change some flags of theano
+    #         :param range_var: Range of the variogram, it is recommended the distance of the longest diagonal
+    #         :param c_o: Sill of the variogram
+    #         """
+    #         # TODO: update Docstrig
+    #
+    #         u_grade = kwargs.get('u_grade', 2)
+    #         range_var = kwargs.get('range_var', None)
+    #         c_o = kwargs.get('c_o', None)
+    #         nugget_effect = kwargs.get('nugget_effect', 0.01)
+    #         rescaling_factor = kwargs.get('rescaling_factor', None)
+    #
+    #       #  print("I am in the set theano shared", _data_rescaled, _data_rescaled.interfaces.head())
+    #
+    #         if not range_var:
+    #             range_var = np.sqrt((_data_rescaled.extent[0] - _data_rescaled.extent[1]) ** 2 +
+    #                                 (_data_rescaled.extent[2] - _data_rescaled.extent[3]) ** 2 +
+    #                                 (_data_rescaled.extent[4] - _data_rescaled.extent[5]) ** 2)
+    #         if not c_o:
+    #             c_o = range_var ** 2 / 14 / 3
+    #
+    #         from IPython.core.debugger import Tracer
+    #
+    #         # Creation of shared variables
+    #      #   print('range_var, c_o', range_var, c_o)
+    #         self.tg.a_T.set_value(range_var)
+    #         self.tg.c_o_T.set_value(c_o)
+    #         self.tg.nugget_effect_grad_T.set_value(nugget_effect)
+    #
+    #         assert (0 <= u_grade <= 2)
+    #
+    #         if u_grade == 0:
+    #             self.tg.u_grade_T.set_value(u_grade)
+    #         else:
+    #             self.tg.u_grade_T.set_value(3**u_grade)
+    #         # TODO: To be sure what is the mathematical meaning of this
+    #
+    #         self.tg.c_resc.set_value(1)
+    #
+    #         _universal_matrix = np.vstack((_grid_rescaled.grid.T,
+    #                                        (_grid_rescaled.grid ** 2).T,
+    #                                        _grid_rescaled.grid[:, 0] * _grid_rescaled.grid[:, 1],
+    #                                        _grid_rescaled.grid[:, 0] * _grid_rescaled.grid[:, 2],
+    #                                        _grid_rescaled.grid[:, 1] * _grid_rescaled.grid[:, 2]))
+    #
+    #         self.tg.universal_grid_matrix_T.set_value(_universal_matrix + 1e-10)
+    #         self.tg.final_block.set_value(np.zeros_like(_grid_rescaled.grid[:, 0]))
+    #         self.tg.grid_val_T.set_value(_grid_rescaled.grid + 10e-6)
+    #
+    #  #    def _get_constant_parameters(self):
+    #  #        """
+    #  #        Deprecated?
+    #  #
+    #  #        Returns:
+    #  #
+    #  #        """
+    #  #        return self.a_T, self.c_o_T, self.nugget_effect_grad_T
+    #
+    #     def compile_potential_field_function(self):
+    #         self._interpolate = theano.function(
+    #             [self.tg.dips_position_tiled, self.tg.dip_angles, self.tg.azimuth, self.tg.polarity,
+    #              self.tg.rest_layer_points, self.tg.ref_layer_points,
+    #              theano.In(self.tg.yet_simulated, value=np.ones_like(self._grid_scaled.grid[:, 0]))],
+    #             [self.tg.Z_x, self.tg.potential_field_interfaces,
+    #              self.tg.C_matrix, self.tg.DK_parameters, self.tg.printing],
+    #             on_unused_input="warn", profile=True, allow_input_downcast=True)
+    #         return self._interpolate
+    #
+    #     def compile_block_model_function(self):
+    #
+    #         self._block_export = theano.function([self.tg.dips_position_tiled, self.tg.dip_angles, self.tg.azimuth,
+    #                                               self.tg.polarity, self.tg.rest_layer_points,
+    #                                               self.tg.ref_layer_points, self.tg.n_formation,
+    #                                               self.tg.yet_simulated],
+    #                                              None,
+    #                                              updates=[(self.tg.final_block, self.tg.potential_field_contribution)],
+    #                                              on_unused_input="warn", profile=True, allow_input_downcast=True,)
+    #         #   mode=theano.compile.MonitorMode(
+    #         #   post_func=detect_nan))
+    #         #    mode=NanGuardMode(nan_is_error=True, inf_is_error=True,
+    #         #                     big_is_error=True))
+    #
+    #         return self._block_export
+    #
+    #   #  def update_potential_fields(self, verbose=0):
+    #   #      self.potential_fields = [self.compute_potential_fields(i, verbose=verbose)
+    #   #                               for i in np.arange(len(self._data_scaled.series.columns))]
+    #
+    #     def compute_block_model(self, series_number="all", verbose=0):
+    #         """
+    #         Method to compute the block model for the given series using data provided in the DataManagement object
+    #
+    #         Args:
+    #             series_number(str or int): series to interpolate
+    #             verbose(int): level of verbosity during the computation
+    #
+    #         Returns:
+    #             self.block(theano shared[numpy.ndarray]): 3D block with the corresponding formations
+    #
+    #         """
+    #
+    #         if series_number == "all":
+    #             series_number = np.arange(len(self._data_scaled.series.columns))
+    #         for i in series_number:
+    #             formations_in_serie = self._select_serie(i)
+    #             # Number assigned to each formation
+    #             n_formation = np.squeeze(np.where(np.in1d(self._data_scaled.formations, self._data_scaled.series.ix[:, i]))) + 1
+    #             if verbose > 0:
+    #                 print(n_formation)
+    #             self.grad = self._aux_computations_block_model(formations_in_serie, np.array(n_formation, ndmin=1),
+    #                                                            verbose=verbose)
+    #       #  self.block = self.tg.final_block
+    #         return self.tg.final_block
+    #
+    #     def compute_potential_fields(self, series_name="all", verbose=0):
+    #         """
+    #         Compute an individual potential field.
+    #
+    #         Args:
+    #             series_name (str or int): name or number of series to interpolate
+    #             verbose(int): int level of verbosity during the computation
+    #
+    #         Returns:
+    #             numpy.ndarray: 3D array with the potential field
+    #
+    #         """
+    #
+    #         #assert series_name is not "all", "Compute potential field only returns one potential field at the time"
+    #         if series_name is 'all':
+    #             self.potential_fields = []
+    #             for i in np.arange(len(self._data_scaled.series.columns)):
+    #                 formations_in_serie = self._select_serie(i)
+    #                 self.potential_fields.append(self._aux_computations_potential_field(formations_in_serie,
+    #                                                                                     verbose=verbose))
+    #         else:
+    #             formations_in_serie = self._select_serie(series_name)
+    #             self.potential_fields = self._aux_computations_potential_field(formations_in_serie, verbose=verbose)
+    #
+    #         return self.potential_fields
+    #

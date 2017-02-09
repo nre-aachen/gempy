@@ -118,7 +118,7 @@ class PlotData(object):
             y = "Z"
             Gx = "G_x"
             Gy = "G_z"
-            extent_val = self._data.extent[1], self._data.extent[0], self._data.extent[5], self._data.extent[4]
+            extent_val = self._data.extent[0], self._data.extent[1], self._data.extent[4], self._data.extent[5]
         elif direction == "z":
             _c = cell_number
             x = "X"
@@ -130,7 +130,8 @@ class PlotData(object):
             raise AttributeError(str(direction) + "must be a cartesian direction, i.e. xyz")
         return _a, _b, _c, extent_val, x, y, Gx, Gy
 
-    def plot_block_section(self, cell_number=13, block=None, direction="y", interpolation='none', **kwargs):
+    def plot_block_section(self, cell_number=13, block=None, direction="y", interpolation='none',
+                           plot_data = False, **kwargs):
         """
         Plot a section of the block model
 
@@ -166,9 +167,14 @@ class PlotData(object):
         plot_block = _block.reshape(self._data.resolution[0], self._data.resolution[1], self._data.resolution[2])
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
 
+
+        if plot_data:
+            self.plot_data(direction, 'all')
+
         plt.imshow(plot_block[_a, _b, _c].T, origin="bottom", cmap="viridis",
                    extent=extent_val,
                    interpolation=interpolation, **kwargs)
+
         plt.xlabel(x)
         plt.ylabel(y)
 

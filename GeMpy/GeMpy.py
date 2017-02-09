@@ -51,12 +51,12 @@ def rescale_data(geo_data, rescaling_factor=None, *args, **kwargs):
 
     new_coord_extent = (geo_data.extent - _np.repeat(centers,2)) / rescaling_factor + 0.5001
     import copy
-    geo_data_rescaled = copy.copy(geo_data)
+    geo_data_rescaled = copy.deepcopy(geo_data)
     geo_data_rescaled.interfaces[['X', 'Y', 'Z']] = new_coord_interfaces
     geo_data_rescaled.foliations[['X', 'Y', 'Z']] = new_coord_foliations
     geo_data_rescaled.extent = new_coord_extent.as_matrix()
-
-    geo_data_rescaled.create_grid()
+    geo_data_rescaled.grid = geo_data_rescaled.create_grid(extent=None, resolution=None,
+                                                           grid_type="regular_3D", **kwargs)
 
 
     return geo_data_rescaled

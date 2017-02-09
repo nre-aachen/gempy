@@ -1,5 +1,6 @@
-# Importing
+# Importing and data
 import theano.tensor as T
+import theano
 import sys, os
 
 sys.path.append("../GeMpy")
@@ -8,9 +9,9 @@ sys.path.append("../GeMpy")
 import GeMpy
 
 # Reloading (only for development purposes)
-#import importlib
+import importlib
 
-#importlib.reload(GeMpy)
+importlib.reload(GeMpy)
 
 # Usuful packages
 import numpy as np
@@ -24,10 +25,9 @@ os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 # Default options of printin
 np.set_printoptions(precision=6, linewidth=130, suppress=True)
 
-## Visualize data
 
 # Setting the extent
-geo_data = GeMpy.import_data([0, 10, 0, 10, 0, 10])
+geo_data = GeMpy.import_data([0, 10, 0, 10, 0, 10], [50, 50, 50])
 
 # =========================
 # DATA GENERATION IN PYTHON
@@ -101,6 +101,7 @@ GeMpy.set_foliations(geo_data, pn.DataFrame(data={
     "X": dip_pos_3[0],
     "Y": dip_pos_3[1],
     "Z": dip_pos_3[2],
+
     "azimuth": azimuth_3,
     "dip": dip_angle_3,
     "polarity": polarity_3,
@@ -112,5 +113,5 @@ GeMpy.set_data_series(geo_data, {'younger': ('Layer 1', 'Layer 2'),
 
 # GeMpy.plot_data(geo_data)
 
-GeMpy.set_interpolator(geo_data, u_grade=0, compute_potential_field=True, compute_block_model=False,
-                       verbose=4)
+data_interp = GeMpy.set_interpolator(geo_data, u_grade=0, compute_potential_field=False, compute_block_model=False,
+                                     verbose=0)
