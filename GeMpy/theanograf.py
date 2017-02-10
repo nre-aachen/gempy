@@ -11,7 +11,7 @@ import theano.tensor as T
 import numpy as np
 import sys
 
-theano.config.optimizer = 'fast_run'
+theano.config.optimizer = 'None'
 theano.config.exception_verbosity = 'high'
 theano.config.compute_test_value = 'ignore'
 theano.config.floatX = 'float32'
@@ -48,8 +48,10 @@ class TheanoGraph_pro(object):
         self.c_resc = theano.shared(1, "Rescaling factor", allow_downcast=True)
         self.grid_val_T = theano.shared(np.array([[0, 0., 0.],
                                                   [0, 0., 0.204082]]), allow_downcast=True)
-        self.final_block = theano.shared(np.zeros_like(np.array([0, 0., 0.])),
+
+        self.final_block = theano.shared(np.zeros(4),
                                          "Final block computed", allow_downcast=True)
+
         self.nugget_effect_grad_T = theano.shared(0.01, allow_downcast=True)
         self.number_of_points_per_formation_T = theano.shared(np.zeros(2), allow_downcast=True)
         self.a_T = theano.shared(1., allow_downcast=True)
@@ -68,6 +70,12 @@ class TheanoGraph_pro(object):
 
         # OTHER PARAMETERS
         # self.yet_simulated = T.vector("boolean function that avoid to simulate twice a point of a different serie")
+
+         #theano.shared(np.zeros_like(np.array([0, 0., 0.])),
+                            #             "Final block computed", allow_downcast=True)
+
+
+
         self.yet_simulated = self.yet_simulated_func()
 
        # self.grade_universal = self.u_grade_T
@@ -79,9 +87,19 @@ class TheanoGraph_pro(object):
     def testing(self):
         return self.rest_layer_points, self.ref_layer_points
 
-    def yet_simulated_func(self):
-        yet_simulated = T.ones((self.grid_val_T.shape[0], 1))
-        return yet_simulated
+    # def final_block_f(self, init=None):
+    #     if not init:
+    #         self.final_block = T.zeros((self.grid_val_T.shape[0], 1))
+    #     else:
+    #         self.final_block = init
+    #     return self.final_block
+
+    def yet_simulated_func(self, block=None):
+        if not block:
+            self.yet_simulated = T.eq(self.final_block, 0)
+        else:
+            self.yet_simulated = T.eq(block, 0)
+        return self.yet_simulated
 
     def input_parameters_list(self):
         ipl = [self.dips_position_all, self.dip_angles_all, self.azimuth_all, self.polarity_all,
@@ -474,14 +492,16 @@ class TheanoGraph_pro(object):
         Returns:
 
         """
-        self.yet_simulated = self.yet_simulated_func()
+        #yet_simulated = self.yet_simulated_func()
+
+        # Removing points no simulated
+        pns = (self.grid_val_T * self.yet_simulated.reshape((self.yet_simulated.shape[0], 1))).nonzero_values()
+      #  pns = theano.printing.Print('this is a very important value')(pns)
 
 
-        grid_val = T.vertical_stack((self.grid_val_T * self.yet_simulated.reshape(
-            (self.yet_simulated.shape[0], 1))).nonzero_values().reshape((-1, 3)),
-                                    self.rest_layer_points)
+        # Adding the interface points
+        grid_val = T.vertical_stack(pns.reshape((-1, 3)), self.rest_layer_points)
 
-        grid_val.name = '3D coordinates where we are going to interpolate'
         if verbose > 1:
             theano.printing.pydotprint(grid_val, outfile="graphs/" + sys._getframe().f_code.co_name + ".png",
                                        var_with_name_simple=True)
@@ -577,7 +597,7 @@ class TheanoGraph_pro(object):
         weights = self.extend_dual_kriging()
         length_of_U_I = self.matrices_shapes()[2]
         grid_val = self.x_to_interpolate()
-        self.yet_simulated = self.yet_simulated_func()
+        yet_simulated = self.yet_simulated_func()
 
         # Universal drift contribution
         # Universal terms used to calculate f0
@@ -693,14 +713,21 @@ class TheanoGraph_pro(object):
     def compute_a_potential_field(self,
                                   len_i_0, len_i_1,
                                   len_f_0, len_f_1,
-                                  n_form_per_serie_0, n_form_per_serie_1):
+                                  n_form_per_serie_0, n_form_per_serie_1,
+                                  final_block):
 
+        #self.final_block = final_block_init
+        yet_simulated = self.yet_simulated_func(final_block)
+        yet_cast = theano.printing.Print('yet cast')(T.cast(yet_simulated, "int8"))
+
+        # Theano shared
         self.number_of_points_per_formation_T = self.number_of_points_per_formation_T[n_form_per_serie_0: n_form_per_serie_1]
         self.n_formation = self.n_formation[n_form_per_serie_0: n_form_per_serie_1]
 
         self.dips_position = self.dips_position_all[len_f_0: len_f_1, :]
         self.dips_position_tiled = T.tile(self.dips_position, (self.n_dimensions, 1))
 
+        # Theano Var
         self.dip_angles = self.dip_angles_all[len_f_0: len_f_1]
         self.azimuth = self.azimuth_all[len_f_0: len_f_1]
         self.polarity = self.polarity_all[len_f_0: len_f_1]
@@ -708,17 +735,29 @@ class TheanoGraph_pro(object):
         self.ref_layer_points = self.ref_layer_points_all[len_i_0: len_i_1, :]
         self.rest_layer_points = self.rest_layer_points_all[len_i_0: len_i_1, :]
 
-        sol = self.block_series()
+        potential_field_contribution = self.block_series()
+        final_block = potential_field_contribution
 
-        return sol
+       # final_block = T.set_subtensor(
+       #     final_block[T.nonzero(T.cast(self.yet_simulated, "int8"))[0]],
+       #     potential_field_contribution)
+       # self.final_block = T.set_subtensor(
+       #        self.final_block[T.nonzero(T.cast(yet_simulated, "int8"))[0]],
+       #        potential_field_contribution.sum(axis=0))
+
+        return final_block
 
     def whole_block_model(self):
-        block_all_series, updates2 = theano.scan(
+
+        final_block_init = self.final_block
+        final_block_init.name = 'final block init'
+        all_series_blocks, updates2 = theano.scan(
             fn=self.compute_a_potential_field,
-            outputs_info=None,
+            #outputs_info=[{'initial': final_block_init, 'taps': [-1]}],
+            outputs_info=[final_block_init],
             sequences=[dict(input=self.len_series_i, taps=[0, 1]),
                        dict(input=self.len_series_f, taps=[0, 1]),
                        dict(input=theano.shared(np.insert([2, 1], 0, 0).cumsum()), taps=[0, 1])]
            )
 
-        return block_all_series
+        return all_series_blocks

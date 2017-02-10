@@ -465,7 +465,9 @@ class DataManagement(object):
                                            _grid_rescaled.grid[:, 1] * _grid_rescaled.grid[:, 2]))
 
             self.tg.universal_grid_matrix_T.set_value(_universal_matrix + 1e-10)
-            self.tg.final_block.set_value(np.zeros_like(_grid_rescaled.grid[:, 0]))
+            #self.tg.final_block.set_value(np.zeros_like(_grid_rescaled.grid[:, 0]))
+            self.tg.final_block.set_value(np.zeros((_grid_rescaled.grid.shape[0])))
+          #  self.tg.final_block.set_value(np.random.randint(0, 2, _grid_rescaled.grid.shape[0]))
             self.tg.grid_val_T.set_value(_grid_rescaled.grid + 10e-6)
             self.tg.n_formation.set_value(np.insert(_data_rescaled.interfaces['formation number'].unique(), 0, 0)[::-1])
 
