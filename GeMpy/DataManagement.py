@@ -303,16 +303,11 @@ class DataManagement(object):
             verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0
         """
 
-        def __init__(self, _data_scaled, _grid_scaled=None, compute_block_model=False,
-                     compute_potential_field=False, dtype = 'float32', *args, **kwargs):
+        def __init__(self, _data_scaled, _grid_scaled=None, *args, **kwargs):
 
             verbose = kwargs.get('verbose', 0)
             rescaling_factor = kwargs.get('rescaling_factor', None)
-
-            # theano.config.optimizer = 'None'
-            # theano.config.exception_verbosity = 'high'
-            # theano.config.compute_test_value = 'ignore'
-
+            dtype = kwargs.get('dtype', 'float32')
             self.dtype = dtype
 
             u_grade = kwargs.get('u_grade', 2)
@@ -326,25 +321,24 @@ class DataManagement(object):
                 self._grid_scaled = _grid_scaled
 
             # Importing the theano graph
-            self.tg = theanograf.TheanoGraph_pro(u_grade)
+            self.tg = theanograf.TheanoGraph_pro(u_grade, dtype=dtype, verbose=verbose)
 
             # Setting theano parameters
             self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, **kwargs)
             self.data_prep()
 
-
-            # Choosing if compute something directly
-            if compute_potential_field:
-
-                self.potential_fields = []
-                self._interpolate = self.compile_potential_field_function()
-                self.potential_fields = [self.compute_potential_fields(i, verbose=verbose)
-                                         for i in np.arange(len(self._data_scaled.series.columns))]
-
-            if compute_block_model:
-
-                self._block_export = self.compile_block_model_function()
-                self.block = self.compute_block_model()
+            # # Choosing if compute something directly
+            # if compute_potential_field:
+            #
+            #     self.potential_fields = []
+            #     self._interpolate = self.compile_potential_field_function()
+            #     self.potential_fields = [self.compute_potential_fields(i, verbose=verbose)
+            #                              for i in np.arange(len(self._data_scaled.series.columns))]
+            #
+            # if compute_block_model:
+            #
+            #     self._block_export = self.compile_block_model_function()
+            #     self.block = self.compute_block_model()
 
         def data_prep(self):
 
@@ -476,7 +470,8 @@ class DataManagement(object):
 
             self.tg.universal_grid_matrix_T.set_value(np.cast[self.dtype](_universal_matrix + 1e-10))
             #self.tg.final_block.set_value(np.zeros_like(_grid_rescaled.grid[:, 0]))
-            self.tg.final_block.set_value(np.zeros((_grid_rescaled.grid.shape[0])))
+            self.tg.final_block.set_value(np.zeros((_grid_rescaled.grid.shape[0]), dtype='int'))
+            self.tg.yet_simulated.set_value(np.ones((_grid_rescaled.grid.shape[0]), dtype='int'))
           #  self.tg.final_block.set_value(np.random.randint(0, 2, _grid_rescaled.grid.shape[0]))
             self.tg.grid_val_T.set_value(np.cast[self.dtype](_grid_rescaled.grid + 10e-6))
             self.tg.n_formation.set_value(np.insert(_data_rescaled.interfaces['formation number'].unique(),

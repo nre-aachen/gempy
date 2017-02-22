@@ -183,8 +183,7 @@ def set_grid(geo_data, extent=None, resolution=None, grid_type="regular_3D", **k
     geo_data.grid = geo_data.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
 
 
-def set_interpolator(geo_data, compile_theano=False, compute_block_model=True,
-                     compute_potential_field=False, *args, **kwargs):
+def set_interpolator(geo_data,  *args, **kwargs):
     """
     Method to initialize the class interpolator. All the constant parameters for the interpolation can be passed
     as args, otherwise they will take the default value (TODO: documentation of the dafault values)
@@ -216,9 +215,7 @@ def set_interpolator(geo_data, compile_theano=False, compute_block_model=True,
     geo_data_int = rescale_data(geo_data, rescaling_factor=rescaling_factor)
 
     if not getattr(geo_data_int, 'interpolator', None) or compile_theano:
-        geo_data_int.interpolator = geo_data_int.InterpolatorClass(geo_data_int, geo_data_int.grid, compile_theano=True,
-                                                                   compute_block_model=compute_block_model,
-                                                                   compute_potential_field=compute_potential_field,
+        geo_data_int.interpolator = geo_data_int.InterpolatorClass(geo_data_int, geo_data_int.grid,
                                                                    *args, **kwargs)
     else:
         geo_data_int.interpolator._data = geo_data_int

@@ -11,7 +11,7 @@ import theano.tensor as T
 import numpy as np
 import sys
 
-theano.config.optimizer = 'fast_run'
+theano.config.optimizer = 'fast_compile'
 theano.config.exception_verbosity = 'high'
 theano.config.compute_test_value = 'ignore'
 theano.config.floatX = 'float32'
@@ -19,16 +19,46 @@ theano.config.profile_memory = True
 
 
 class TheanoGraph_pro(object):
-    def __init__(self, u_grade, dtype='float32'):
-        # Init values
+    def __init__(self, u_grade, verbose=0, dtype='float32'):
+        # Debugging options
+
+        self.verbose = verbose
+
+        # Creation of symbolic parameters
+
+        # =============
+        # Constants
+        # =============
+        self.i_reescale = 4
+        self.gi_reescale = 2
         self.n_dimensions = 3
 
-        # Creation of symbolic variables
+        # ======================
+        # INITIALIZE SHARED
+        # ==================
+        self.u_grade_T = theano.shared(u_grade, "grade of the universal drift")
+        self.c_resc = theano.shared(np.cast[dtype](1), "Rescaling factor")
+        self.grid_val_T = theano.shared(np.cast[dtype](np.zeros((2, 3))))
+        self.a_T = theano.shared(np.cast[dtype](1.))
+        self.c_o_T = theano.shared(np.cast[dtype](1.))
+        self.final_block = theano.shared(np.zeros(3, dtype='int'), "Final block computed")
+        self.yet_simulated = theano.shared(np.ones(3, dtype='int'), "Points to be computed yet")
+
+        self.nugget_effect_grad_T = theano.shared(np.cast[dtype](0.01))
+
+        # Shape is 9x2, 9 drift funcitons and 2 points
+        self.universal_grid_matrix_T = theano.shared(np.cast[dtype](np.zeros((9,2))))
+
+        self.len_series_i = theano.shared(np.zeros(3, dtype='int'), 'Length of interfaces in every series')
+        self.len_series_f = theano.shared(np.zeros(3, dtype='int'), 'Length of foliations in every series')
+        self.n_formations_per_serie = theano.shared(np.zeros(3, dtype='int'), 'List with the number of formations')
+        self.n_formation = theano.shared(np.zeros(3, dtype='int'), "Value of the formation")
+        self.number_of_points_per_formation_T = theano.shared(np.zeros(3, dtype='int'))
+
         # ======================
         # VAR
         # ======================
         self.dips_position_all = T.matrix("Position of the dips")
-
         self.dip_angles_all = T.vector("Angle of every dip")
         self.azimuth_all = T.vector("Azimuth")
         self.polarity_all = T.vector("Polarity")
@@ -38,49 +68,14 @@ class TheanoGraph_pro(object):
         self.dips_position = self.dips_position_all
         self.dips_position_tiled = T.tile(self.dips_position, (self.n_dimensions, 1))
 
+        # These are subsets of the data for each series
         self.dip_angles = self.dip_angles_all
         self.azimuth = self.azimuth_all
         self.polarity = self.polarity_all
         self.ref_layer_points = self.ref_layer_points_all
         self.rest_layer_points = self.rest_layer_points_all
 
-        # ======================
-        # INITIALIZE SHARED
-        # ==================
-        self.u_grade_T = theano.shared(u_grade, "grade of the universal drift")
-        self.c_resc = theano.shared(np.cast[dtype](1), "Rescaling factor")
-        self.grid_val_T = theano.shared(np.cast[dtype](np.array([[0, 0., 0.],
-                                                                 [0, 0., 0.2]])))
-        self.a_T = theano.shared(np.cast[dtype](1.))
-        self.c_o_T = theano.shared(np.cast[dtype](1.))
-        self.final_block = theano.shared(np.zeros(4), "Final block computed")
-
-        self.nugget_effect_grad_T = theano.shared(np.cast[dtype](0.01))
-
-
-        # Value of the lithology-segment
-        #self.n_formation = T.vector("The assigned number of the lithologies in this serie")
-
-        # Shape is 9x2, 9 drift funcitons and 2 points
-        self.universal_grid_matrix_T = theano.shared(np.cast[dtype](
-            np.array([[0., 0.], [0., 0.], [0., 0.204082], [0., 0.],
-            [0., 0.], [0., 0.041649], [0., 0.], [0., 0.],
-            [0., 0.]])))
-
-        self.len_series_i = theano.shared(np.array([2, 4, 5]), 'Length of interfaces in every series')
-        self.len_series_f = theano.shared(np.array([2, 4, 5]), 'Length of foliations in every series')
-        self.n_formations_per_serie = theano.shared(np.array([0, 1, 2, 1]), 'List with the number of'
-                                                                            ' formations')
-        self.n_formation = theano.shared(np.array([8, 7, 6, 5]), "Value of the formation")
-        self.number_of_points_per_formation_T = theano.shared(np.zeros(2))
-
-        # OTHER PARAMETERS
-        # self.yet_simulated = T.vector("boolean function that avoid to simulate twice a point of a different serie"
-        self.yet_simulated = self.yet_simulated_func()
-
-        # Extra parameters
-        self.i_reescale = 4#1. / (self.c_resc ** 2)
-        self.gi_reescale = 2#1. / self.c_resc
+      #  self.yet_simulated = self.yet_simulated_func()
 
     def testing(self):
         return self.rest_layer_points, self.ref_layer_points
@@ -119,27 +114,6 @@ class TheanoGraph_pro(object):
 
     def cov_interfaces(self):
 
-        # Calculation of euclidian distances giving back float32
-        # SED_rest_rest = (T.sqrt(
-        #     (self.rest_layer_points ** 2).sum(1).reshape((self.rest_layer_points.shape[0], 1)) +
-        #     (self.rest_layer_points ** 2).sum(1).reshape((1, self.rest_layer_points.shape[0])) -
-        #     2 * self.rest_layer_points.dot(self.rest_layer_points.T)))
-        #
-        # SED_ref_rest = (T.sqrt(
-        #     (self.ref_layer_points ** 2).sum(1).reshape((self.ref_layer_points.shape[0], 1)) +
-        #     (self.rest_layer_points ** 2).sum(1).reshape((1, self.rest_layer_points.shape[0])) -
-        #     2 * self.ref_layer_points.dot(self.rest_layer_points.T)))
-        #
-        # SED_rest_ref = (T.sqrt(
-        #     (self.rest_layer_points ** 2).sum(1).reshape((self.rest_layer_points.shape[0], 1)) +
-        #     (self.ref_layer_points ** 2).sum(1).reshape((1, self.ref_layer_points.shape[0])) -
-        #     2 * self.rest_layer_points.dot(self.ref_layer_points.T)))
-        #
-        # SED_ref_ref = (T.sqrt(
-        #     (self.ref_layer_points ** 2).sum(1).reshape((self.ref_layer_points.shape[0], 1)) +
-        #     (self.ref_layer_points ** 2).sum(1).reshape((1, self.ref_layer_points.shape[0])) -
-        #     2 * self.ref_layer_points.dot(self.ref_layer_points.T)))
-
         sed_rest_rest = self.squared_euclidean_distances(self.rest_layer_points, self.rest_layer_points)
         sed_ref_rest = self.squared_euclidean_distances(self.ref_layer_points, self.rest_layer_points)
         sed_rest_ref = self.squared_euclidean_distances(self.rest_layer_points, self.ref_layer_points)
@@ -175,11 +149,6 @@ class TheanoGraph_pro(object):
 
     def cov_gradients(self, verbose=0):
 
-        # SED_dips_dips = (T.sqrt(
-        #     (self.dips_position_tiled ** 2).sum(1).reshape((self.dips_position_tiled.shape[0], 1)) +
-        #     (self.dips_position_tiled ** 2).sum(1).reshape((1, self.dips_position_tiled.shape[0])) -
-        #     2 * self.dips_position_tiled.dot(self.dips_position_tiled.T))).astype("float32")
-        #
         sed_dips_dips = self.squared_euclidean_distances(self.dips_position_tiled, self.dips_position_tiled)
 
         # Cartesian distances between dips positions
@@ -244,7 +213,7 @@ class TheanoGraph_pro(object):
 
         return C_G
 
-    def cov_interface_gradients(self, verbose=0):
+    def cov_interface_gradients(self):
 
         # SED_dips_rest = (T.sqrt(
         #     (self.dips_position_tiled ** 2).sum(1).reshape((self.dips_position_tiled.shape[0], 1)) +
@@ -296,7 +265,7 @@ class TheanoGraph_pro(object):
 
         C_GI.name = 'Covariance gradient interface'
 
-        if verbose > 1:
+        if str(sys._getframe().f_code.co_name)+'_g' in self.verbose:
             theano.printing.pydotprint(C_GI, outfile="graphs/" + sys._getframe().f_code.co_name + ".png",
                                        var_with_name_simple=True)
         return C_GI
@@ -311,7 +280,7 @@ class TheanoGraph_pro(object):
 
         return hx
 
-    def universal_matrix(self, verbose = 0):
+    def universal_matrix(self):
 
         U_I = None
         U_G = None
@@ -393,7 +362,7 @@ class TheanoGraph_pro(object):
                      self.ref_layer_points[:, 2]),
                  )).T
 
-        if verbose > 1:
+        if str(sys._getframe().f_code.co_name)+'_g' in self.verbose:
             theano.printing.pydotprint(U_I, outfile="graphs/" + sys._getframe().f_code.co_name + "_i.png",
                                        var_with_name_simple=True)
 
@@ -441,6 +410,8 @@ class TheanoGraph_pro(object):
         # TODO: deprecate
         self.C_matrix = C_matrix
 
+        if str(sys._getframe().f_code.co_name) in self.verbose:
+            C_matrix = theano.printing.Print('cov_function')(C_matrix)
         return C_matrix
 
     def b_vector(self, verbose = 0):
@@ -475,6 +446,9 @@ class TheanoGraph_pro(object):
         DK_parameters = theano.tensor.slinalg.solve(C_matrix,b)
         #T.dot(T.nlinalg.matrix_inverse(C_matrix), b)
         DK_parameters.name = 'Dual Kriging parameters'
+
+        if str(sys._getframe().f_code.co_name) in self.verbose:
+            DK_parameters = theano.printing.Print(DK_parameters.name )(DK_parameters)
         return DK_parameters
 
     def x_to_interpolate(self, verbose=0):
@@ -490,7 +464,6 @@ class TheanoGraph_pro(object):
         # Removing points no simulated
         pns = (self.grid_val_T * self.yet_simulated.reshape((self.yet_simulated.shape[0], 1))).nonzero_values()
       #  pns = theano.printing.Print('this is a very important value')(pns)
-
 
         # Adding the interface points
         grid_val = T.vertical_stack(pns.reshape((-1, 3)), self.rest_layer_points)
@@ -630,7 +603,7 @@ class TheanoGraph_pro(object):
     def potential_field_at_grid(self):
       #  self.yet_simulated_func()
         sigma_0_grad = self.gradient_contribution()
-        sigma_0_interf = self.interface_contribution()
+        sigma_0_interf = 0#self.interface_contribution()
         f_0 = self.universal_drift_contribution()
         length_of_CGI = self.matrices_shapes()[1]
 
@@ -669,6 +642,10 @@ class TheanoGraph_pro(object):
             non_sequences=potential_field_interfaces)
 
         potential_field_interfaces_unique.name = 'Value of the potential field at the interfaces'
+
+        if str(sys._getframe().f_code.co_name) in self.verbose:
+            potential_field_interfaces_unique = theano.printing.Print(potential_field_interfaces_unique.name)\
+                                                                      (potential_field_interfaces_unique)
         return potential_field_interfaces_unique
 
     def block_series(self):
@@ -687,7 +664,7 @@ class TheanoGraph_pro(object):
 
         # A tensor with the values to segment
         potential_field_iter = T.concatenate((T.stack([max_pot]),
-                                              potential_field_at_interfaces,
+                                              T.sort(potential_field_at_interfaces)[::-1],
                                               T.stack([min_pot])))
 
         # Loop to segment the distinct lithologies
@@ -703,16 +680,23 @@ class TheanoGraph_pro(object):
         partial_block = partial_block.sum(axis=0)
 
         partial_block.name = 'The chunk of block model of a specific series'
+        if str(sys._getframe().f_code.co_name) in self.verbose:
+            partial_block = theano.printing.Print(partial_block.name)(partial_block)
+
         return partial_block
 
-    def compute_a_potential_field(self,
-                                  len_i_0, len_i_1,
-                                  len_f_0, len_f_1,
-                                  n_form_per_serie_0, n_form_per_serie_1,
-                                  final_block):
+    def compute_a_series(self,
+                         len_i_0, len_i_1,
+                         len_f_0, len_f_1,
+                         n_form_per_serie_0, n_form_per_serie_1,
+                         final_block):
 
-        yet_simulated = self.yet_simulated_func(final_block)
-        yet_simulated.name = 'Yet simulated node'
+        # ==================
+        # Preparing the data
+        # ==================
+        self.yet_simulated = T.eq(final_block, 0)
+        #yet_simulated = self.yet_simulated_func(final_block)
+        self.yet_simulated.name = 'Yet simulated node'
 
         # Theano shared
         self.number_of_points_per_formation_T = self.number_of_points_per_formation_T[n_form_per_serie_0: n_form_per_serie_1]
@@ -729,10 +713,19 @@ class TheanoGraph_pro(object):
         self.ref_layer_points = self.ref_layer_points_all[len_i_0: len_i_1, :]
         self.rest_layer_points = self.rest_layer_points_all[len_i_0: len_i_1, :]
 
+        # Printing
+        if 'yet_simulated' in self.verbose:
+            self.yet_simulated = theano.printing.Print(self.yet_simulated.name)(self.yet_simulated)
+        if 'n_formation' in self.verbose:
+            self.n_formation = theano.printing.Print('n_formation')(self.n_formation)
+
+        # ====================
+        # Computing the series
+        # ====================
         potential_field_contribution = self.block_series()
         final_block = T.set_subtensor(
-               final_block[T.nonzero(T.cast(yet_simulated, "int8"))[0]],
-               potential_field_contribution)
+            final_block[T.nonzero(T.cast(self.yet_simulated, "int8"))[0]],
+            potential_field_contribution)
 
         return final_block
 
@@ -741,7 +734,7 @@ class TheanoGraph_pro(object):
         final_block_init = self.final_block
         final_block_init.name = 'final block init'
         all_series_blocks, updates2 = theano.scan(
-            fn=self.compute_a_potential_field,
+            fn=self.compute_a_series,
             outputs_info=[final_block_init],
             sequences=[dict(input=self.len_series_i, taps=[0, 1]),
                        dict(input=self.len_series_f, taps=[0, 1]),
