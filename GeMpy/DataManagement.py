@@ -8,9 +8,7 @@ import pandas as pn
 import theanograf
 from Visualization import PlotData
 
-theano.config.optimizer = 'None'
-theano.config.exception_verbosity = 'high'
-theano.config.compute_test_value = 'ignore'
+
 
 
 class DataManagement(object):
@@ -39,9 +37,6 @@ class DataManagement(object):
                  resolution=[50, 50, 50],
                  path_i=None, path_f=None,
                  **kwargs):
-        theano.config.optimizer = 'None'
-        theano.config.exception_verbosity = 'high'
-        theano.config.compute_test_value = 'ignore'
 
         self.extent = np.array(extent)
         self.resolution = np.array(resolution)
@@ -83,11 +78,11 @@ class DataManagement(object):
             self.formations = self.interfaces["formation"].unique()
 
             # TODO: Trying to make this more elegant?
-            for el in self.formations:
-                for check in self.formations:
-                    assert (el not in check or el == check), "One of the formations name contains other" \
-                                                             " string. Please rename." + str(el) + " in " + str(
-                        check)
+            # for el in self.formations:
+            #     for check in self.formations:
+            #         assert (el not in check or el == check), "One of the formations name contains other" \
+            #                                                  " string. Please rename." + str(el) + " in " + str(
+            #             check)
 
                     # TODO: Add the possibility to change the name in pandas directly
                     # (adding just a 1 in the contained string)
@@ -184,6 +179,7 @@ class DataManagement(object):
         else:
             self.interfaces = interf_Dataframe
 
+       # self.interfaces.reset_index(drop=False, inplace=True)
         self._set_formations()
         self.set_series()
         self.set_formation_number()
@@ -198,6 +194,7 @@ class DataManagement(object):
         else:
             self.foliations = foliat_Dataframe
 
+      #  self.foliations.reset_index(inplace=True, drop=True)
         self._set_formations()
         self.set_series()
         self.set_formation_number()
@@ -234,12 +231,12 @@ class DataManagement(object):
             % self.formations
 
         self.interfaces["series"] = [(i == _series).sum().argmax() for i in self.interfaces["formation"]]
-        self.interfaces["order_series"] = [(i == _series).sum().as_matrix().argmax()
+        self.interfaces["order_series"] = [(i == _series).sum().as_matrix().argmax() + 1
                                            for i in self.interfaces["formation"]]
         self.interfaces.sort_values(by='order_series', inplace=True)
 
         self.foliations["series"] = [(i == _series).sum().argmax() for i in self.foliations["formation"]]
-        self.foliations["order_series"] = [(i == _series).sum().as_matrix().argmax()
+        self.foliations["order_series"] = [(i == _series).sum().as_matrix().argmax() + 1
                                            for i in self.foliations["formation"]]
         self.foliations.sort_values(by='order_series', inplace=True)
 
@@ -307,14 +304,17 @@ class DataManagement(object):
         """
 
         def __init__(self, _data_scaled, _grid_scaled=None, compute_block_model=False,
-                     compute_potential_field=False, *args, **kwargs):
+                     compute_potential_field=False, dtype = 'float32', *args, **kwargs):
 
             verbose = kwargs.get('verbose', 0)
             rescaling_factor = kwargs.get('rescaling_factor', None)
 
-            theano.config.optimizer = 'None'
-            theano.config.exception_verbosity = 'high'
-            theano.config.compute_test_value = 'ignore'
+            # theano.config.optimizer = 'None'
+            # theano.config.exception_verbosity = 'high'
+            # theano.config.compute_test_value = 'ignore'
+
+            self.dtype = dtype
+
             u_grade = kwargs.get('u_grade', 2)
 
             self._data_scaled = _data_scaled
@@ -349,13 +349,16 @@ class DataManagement(object):
         def data_prep(self):
 
             # We order the pandas table
-            self._data_scaled.interfaces.sort_values(by='order_series', inplace=True)
-            self._data_scaled.interfaces.sort_values(by='formation number', inplace=True)
-            self._data_scaled.foliations.sort_values(by='order_series', inplace=True)
-            self._data_scaled.foliations.sort_values(by='formation number', inplace=True)
+            self._data_scaled.interfaces.sort_values(by=['order_series', 'formation number'],
+                                                     ascending=True, kind='mergesort',
+                                                     inplace=True)
 
+            self._data_scaled.foliations.sort_values(by=['order_series', 'formation number'],
+                                                     ascending=True, kind='mergesort',
+                                                     inplace=True)
 
-
+            # Drop works with the pandas indices so I DO need this thing working
+            self._data_scaled.interfaces.reset_index(drop=True, inplace=True)
 
             # Size of every formation, SHARED
             len_interfaces = np.asarray(
@@ -365,6 +368,7 @@ class DataManagement(object):
             # Position of the first term of every layer PYTHON
             ref_position = np.insert(len_interfaces[:-1], 0, 0).cumsum()
 
+            # Drop using pandas indeces
             pandas_rest_layer_points = self._data_scaled.interfaces.drop(ref_position)
 
             # Size of every layer in rests
@@ -396,7 +400,9 @@ class DataManagement(object):
 
             # TODO delete
             self.rest_layer_points = rest_layer_points
+
             # Ref layers matrix #VAR
+            # Calculation of the ref matrix and tile. Iloc works with the row number
             aux_1 = self._data_scaled.interfaces.iloc[ref_position][['X', 'Y', 'Z']].as_matrix()
             ref_layer_points = np.zeros((0, 3))
 
@@ -406,15 +412,19 @@ class DataManagement(object):
 
             self.ref_layer_points = ref_layer_points
 
-            # Foliations, VAR
+            # Check no reference points in rest points (at least in coor x)
+            assert not any(aux_1[:, 0]) in rest_layer_points[:, 0], \
+                'A reference point is in the rest list point. Check you do ' \
+                'not have duplicated values in your dataframes'
 
+            # Foliations, VAR
             dips_position = self._data_scaled.foliations[['X', 'Y', 'Z']].as_matrix()
             dip_angles = self._data_scaled.foliations["dip"].as_matrix()
             azimuth = self._data_scaled.foliations["azimuth"].as_matrix()
             polarity = self._data_scaled.foliations["polarity"].as_matrix()
 
-            idl = (dips_position, dip_angles, azimuth, polarity,
-                   ref_layer_points, rest_layer_points)
+            idl = [np.cast[self.dtype](xs) for xs in (dips_position, dip_angles, azimuth, polarity,
+                   ref_layer_points, rest_layer_points)]
 
             return idl
 
@@ -444,9 +454,9 @@ class DataManagement(object):
             from IPython.core.debugger import Tracer
 
             # Creation of shared variables
-            self.tg.a_T.set_value(range_var)
-            self.tg.c_o_T.set_value(c_o)
-            self.tg.nugget_effect_grad_T.set_value(nugget_effect)
+            self.tg.a_T.set_value(np.cast[self.dtype](range_var))
+            self.tg.c_o_T.set_value(np.cast[self.dtype](c_o))
+            self.tg.nugget_effect_grad_T.set_value(np.cast[self.dtype](nugget_effect))
 
             assert (0 <= u_grade <= 2)
 
@@ -455,7 +465,7 @@ class DataManagement(object):
             else:
                 self.tg.u_grade_T.set_value(3**u_grade)
             # TODO: To be sure what is the mathematical meaning of this
-
+            # TODO Deprecated
             self.tg.c_resc.set_value(1)
 
             _universal_matrix = np.vstack((_grid_rescaled.grid.T,
@@ -464,12 +474,19 @@ class DataManagement(object):
                                            _grid_rescaled.grid[:, 0] * _grid_rescaled.grid[:, 2],
                                            _grid_rescaled.grid[:, 1] * _grid_rescaled.grid[:, 2]))
 
-            self.tg.universal_grid_matrix_T.set_value(_universal_matrix + 1e-10)
+            self.tg.universal_grid_matrix_T.set_value(np.cast[self.dtype](_universal_matrix + 1e-10))
             #self.tg.final_block.set_value(np.zeros_like(_grid_rescaled.grid[:, 0]))
             self.tg.final_block.set_value(np.zeros((_grid_rescaled.grid.shape[0])))
           #  self.tg.final_block.set_value(np.random.randint(0, 2, _grid_rescaled.grid.shape[0]))
-            self.tg.grid_val_T.set_value(_grid_rescaled.grid + 10e-6)
-            self.tg.n_formation.set_value(np.insert(_data_rescaled.interfaces['formation number'].unique(), 0, 0)[::-1])
+            self.tg.grid_val_T.set_value(np.cast[self.dtype](_grid_rescaled.grid + 10e-6))
+            self.tg.n_formation.set_value(np.insert(_data_rescaled.interfaces['formation number'].unique(),
+                                                    0, 0)[::-1])
+
+            self.tg.n_formation.set_value(_data_rescaled.interfaces['formation number'].unique())
+
+            self.tg.n_formations_per_serie.set_value(
+                np.insert(_data_rescaled.interfaces.groupby('order_series').formation.nunique().values.cumsum(),
+                          0, 0))
 
 
 

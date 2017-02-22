@@ -57,9 +57,8 @@ def rescale_data(geo_data, rescaling_factor=None, *args, **kwargs):
     geo_data_rescaled.extent = new_coord_extent.as_matrix()
     geo_data_rescaled.grid = geo_data_rescaled.create_grid(extent=None, resolution=None,
                                                            grid_type="regular_3D", **kwargs)
-
-
     return geo_data_rescaled
+
 
 def compute_block_model(geo_data, series_number="all",
                         series_distribution=None, order_series=None,
@@ -139,7 +138,7 @@ def set_data_series(geo_data, series_distribution=None, order_series=None,
         return get_raw_data(geo_data)
 
 
-def set_interfaces(geo_data, interf_Dataframe, append=False, update_p_field = True):
+def set_interfaces(geo_data, interf_Dataframe, append=False, update_p_field=True):
     geo_data.set_interfaces(interf_Dataframe, append=append)
     # To update the interpolator parameters without calling a new object
     try:
