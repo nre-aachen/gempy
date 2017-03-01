@@ -16,7 +16,7 @@ this is only to test git 3
 import numpy as _np
 # import sys, os
 import pandas as pn
-
+import copy
 from Visualization import PlotData
 from DataManagement import DataManagement
 from IPython.core.debugger import Tracer
@@ -50,13 +50,14 @@ def rescale_data(geo_data, rescaling_factor=None, *args, **kwargs):
     #new_coord_extent[4:6] = _np.asarray((geo_data.extent[4:6] - centers[2]) / rescaling_factor + 0.5001)
 
     new_coord_extent = (geo_data.extent - _np.repeat(centers,2)) / rescaling_factor + 0.5001
-    import copy
+
     geo_data_rescaled = copy.deepcopy(geo_data)
     geo_data_rescaled.interfaces[['X', 'Y', 'Z']] = new_coord_interfaces
     geo_data_rescaled.foliations[['X', 'Y', 'Z']] = new_coord_foliations
     geo_data_rescaled.extent = new_coord_extent.as_matrix()
-    geo_data_rescaled.grid = geo_data_rescaled.create_grid(extent=None, resolution=None,
-                                                           grid_type="regular_3D", **kwargs)
+   # geo_data_rescaled.grid = geo_data_rescaled.create_grid(extent=None, resolution=None,
+   #                                                        grid_type="regular_3D", **kwargs)
+    geo_data_rescaled.grid.grid = (geo_data.grid.grid - centers.as_matrix()) /rescaling_factor + 0.5001
     return geo_data_rescaled
 
 
@@ -119,10 +120,30 @@ def import_data(extent, resolution=[50, 50, 50], **kwargs):
     return DataManagement(extent, resolution, **kwargs)
 
 
-def i_set_data(geo_data, dtype="foliations"):
+def i_set_data(geo_data, dtype="foliations", action="Open"):
 
-    geo_data.i_set_data(dtype=dtype)
+    if action == 'Close':
+        geo_data.i_close_set_data()
 
+    if action == 'Open':
+        geo_data.i_open_set_data(itype=dtype)
+
+
+def select_series(geo_data, series):
+    """
+    Return the formations of a given serie in string
+    :param series: list of int or list of str
+    :return: formations of a given serie in string separeted by |
+    """
+    new_geo_data = copy.deepcopy(geo_data)
+
+    if type(series) == int or type(series[0]) == int:
+        new_geo_data.interfaces = geo_data.interfaces[geo_data.interfaces['order_series'].isin(series)]
+        new_geo_data.foliations = geo_data.foliations[geo_data.foliations['order_series'].isin(series)]
+    elif type(series[0]) == str:
+        new_geo_data.interfaces = geo_data.interfaces[geo_data.interfaces['series'].isin(series)]
+        new_geo_data.foliations = geo_data.foliations[geo_data.foliations['series'].isin(series)]
+    return new_geo_data
 
 def set_data_series(geo_data, series_distribution=None, order_series=None,
                         update_p_field=True, verbose=0):
@@ -164,23 +185,28 @@ def set_foliations(geo_data, foliat_Dataframe, append=False, update_p_field=True
         pass
 
 
-def set_grid(geo_data, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
+def set_grid(geo_data, new_grid=None, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
     """
-    Method to initialize the class grid. So far is really simple and only has the regular grid type
+    Method to initialize the class new_grid. So far is really simple and only has the regular new_grid type
 
     Args:
         grid_type (str): regular_3D or regular_2D (I am not even sure if regular 2D still working)
         **kwargs: Arbitrary keyword arguments.
 
     Returns:
-        self.grid(GeMpy_core.grid): Object that contain different grids
+        self.new_grid(GeMpy_core.new_grid): Object that contain different grids
     """
-    if not extent:
-        extent = geo_data.extent
-    if not resolution:
-        resolution = geo_data.resolution
+    if new_grid:
+        assert new_grid.shape[1] is 3 and len(new_grid.shape) is 3, 'The shape of new grid must be (n,3) where n is' \
+                                                                    'the number of points of the grid'
+        geo_data.grid.grid = new_grid
+    else:
+        if not extent:
+            extent = geo_data.extent
+        if not resolution:
+            resolution = geo_data.resolution
 
-    geo_data.grid = geo_data.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
+        geo_data.grid = geo_data.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
 
 
 def set_interpolator(geo_data,  *args, **kwargs):
@@ -239,11 +265,11 @@ def plot_section(geo_data, cell_number, block=None, direction="y", **kwargs):
     return plot
 
 
-def plot_potential_field(geo_data, cell_number, potential_field=None, n_pf=0,
+def plot_potential_field(geo_data, potential_field, cell_number, n_pf=0,
                          direction="y", plot_data=True, series="all", *args, **kwargs):
 
     plot = PlotData(geo_data)
-    plot.plot_potential_field(cell_number, potential_field=potential_field, n_pf=n_pf,
+    plot.plot_potential_field( potential_field, cell_number, n_pf=n_pf,
                               direction=direction,  plot_data=plot_data, series=series,
                               *args, **kwargs)
 

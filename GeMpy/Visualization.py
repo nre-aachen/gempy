@@ -178,7 +178,7 @@ class PlotData(object):
         plt.xlabel(x)
         plt.ylabel(y)
 
-    def plot_potential_field(self, cell_number, potential_field=None, n_pf=0,
+    def plot_potential_field(self, potential_field, cell_number, n_pf=0,
                              direction="y", plot_data=True, series="all", *args, **kwargs):
         """
         Plot a potential field in a given direction.
@@ -195,17 +195,11 @@ class PlotData(object):
             Potential field plot
         """
 
-        if not potential_field:
-            try:
-                potential_field = self._data.interpolator.potential_fields[n_pf]
-            except AttributeError:
-                raise AttributeError('No potential field has been computed yet')
-
         if plot_data:
             self.plot_data(direction, self._data.series.columns.values[n_pf])
 
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
-        plt.contour(potential_field[_a, _b, _c].T, 12,
+        plt.contour(potential_field[_a, _b, _c].T, cell_number,
                     extent=extent_val, *args,
                     **kwargs)
 
