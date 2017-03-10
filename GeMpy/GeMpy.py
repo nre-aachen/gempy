@@ -196,8 +196,8 @@ def set_grid(geo_data, new_grid=None, extent=None, resolution=None, grid_type="r
     Returns:
         self.new_grid(GeMpy_core.new_grid): Object that contain different grids
     """
-    if new_grid:
-        assert new_grid.shape[1] is 3 and len(new_grid.shape) is 3, 'The shape of new grid must be (n,3) where n is' \
+    if new_grid is not None:
+        assert new_grid.shape[1] is 3 and len(new_grid.shape) is 2, 'The shape of new grid must be (n,3) where n is' \
                                                                     'the number of points of the grid'
         geo_data.grid.grid = new_grid
     else:

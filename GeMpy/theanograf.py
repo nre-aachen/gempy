@@ -19,8 +19,11 @@ theano.config.profile_memory = True
 
 
 class TheanoGraph_pro(object):
-    def __init__(self, u_grade=0, verbose=[0], dtype='float32'):
+    def __init__(self, u_grade=0, verbose=[0], dtype='float32', **kwargs):
         # Debugging options
+
+        # self.dips_position_all = kwargs.get('dips_position',
+        #                                     theano.shared(np.cast[dtype](np.zeros((2, 3))) ,"Position of the dips"))
 
         self.verbose = verbose
 
@@ -57,13 +60,22 @@ class TheanoGraph_pro(object):
 
         # ======================
         # VAR
-        # ======================
+        #======================
         self.dips_position_all = T.matrix("Position of the dips")
         self.dip_angles_all = T.vector("Angle of every dip")
         self.azimuth_all = T.vector("Azimuth")
         self.polarity_all = T.vector("Polarity")
         self.ref_layer_points_all = T.matrix("Reference points for every layer")
         self.rest_layer_points_all = T.matrix("Rest of the points of the layers")
+
+        #self.dips_position_all = theano.shared(np.cast[dtype](np.zeros((2, 3))) ,"Position of the dips")
+        # self.dip_angles_all = theano.shared(np.cast[dtype](np.zeros(2)), "Angle of every dip")
+        # self.azimuth_all = theano.shared(np.cast[dtype](np.zeros(2)), "Azimuth")
+        # self.polarity_all = theano.shared(np.cast[dtype](np.zeros(2)), "Polarity")
+        # self.ref_layer_points_all = theano.shared(np.cast[dtype](np.zeros((2, 3))) ,
+        #                                            "Reference points for every layer")
+        # self.rest_layer_points_all = theano.shared(np.cast[dtype](np.zeros((2, 3))) ,
+        #                                             "Rest of the points of the layers")
 
         self.dips_position = self.dips_position_all
         self.dips_position_tiled = T.tile(self.dips_position, (self.n_dimensions, 1))

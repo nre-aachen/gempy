@@ -157,8 +157,8 @@ class DataManagement(object):
 
     def i_close_set_data(self):
         self.pandas_frame.close()
-        self._set_formations()
-        self.series = self.set_series()
+        #self._set_formations()
+        #self.series = self.set_series()
         self.set_formation_number()
         self.calculate_gradient()
 
@@ -343,7 +343,7 @@ class DataManagement(object):
                 self._grid_scaled = _grid_scaled
 
             # Importing the theano graph
-            self.tg = theanograf.TheanoGraph_pro(u_grade, dtype=dtype, verbose=verbose)
+            self.tg = theanograf.TheanoGraph_pro(u_grade, dtype=dtype, verbose=verbose,)
 
             # Setting theano parameters
             self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, **kwargs)
