@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_4-Faults.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/theanograf.py" afterPath="$PROJECT_DIR$/GeMpy/theanograf.py" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,8 +44,8 @@
       <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
-              <caret line="895" column="61" lean-forward="false" selection-start-line="895" selection-start-column="61" selection-end-line="895" selection-end-column="61" />
+            <state relative-caret-position="4860">
+              <caret line="413" column="19" lean-forward="true" selection-start-line="413" selection-start-column="19" selection-end-line="413" selection-end-column="19" />
               <folding>
                 <element signature="e#4675#4843#0" expanded="false" />
                 <element signature="e#4890#5067#0" expanded="false" />
@@ -294,7 +293,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy" />
+              <option name="myItemId" value="Prototype Notebook" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -310,10 +309,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="GeMpy" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy.py" />
-              <option name="myItemType" value="com.jetbrains.python.projectView.PyFileNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -666,13 +661,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00018" summary="Tested GeMpy_core new structure">
-      <created>1480093882496</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1480093882496</updated>
-    </task>
     <task id="LOCAL-00019" summary="Documentation">
       <created>1480330413358</created>
       <option name="number" value="00019" />
@@ -1009,7 +997,14 @@
       <option name="project" value="LOCAL" />
       <updated>1489311781838</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="Infinite Faults Baby!!!!">
+      <created>1489319024849</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1489319024849</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1023,9 +1018,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1301" height="772" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.101195216" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22151394" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17438272" sideWeight="0.49243027" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29256967" sideWeight="0.5179283" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32908365" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1079,7 +1074,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Docs 0.963&#10;&#10;my hate increases" />
     <MESSAGE value="Docs 0.966&#10;&#10;No sense..." />
     <MESSAGE value="Docs 0.97&#10;&#10;seriously?" />
     <MESSAGE value="Docs 0.98&#10;&#10;This may be the last one?" />
@@ -1104,7 +1098,8 @@
     <MESSAGE value="pymc3 Running after almost two years and couple of thousands lines of code. Piece of cake" />
     <MESSAGE value="pymc3 Running notebook" />
     <MESSAGE value="Commit almost faults there. Solving the problem of where to interpolate the potential field" />
-    <option name="LAST_COMMIT_MESSAGE" value="Commit almost faults there. Solving the problem of where to interpolate the potential field" />
+    <MESSAGE value="Infinite Faults Baby!!!!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Infinite Faults Baby!!!!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1502,8 +1497,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="895" column="61" lean-forward="false" selection-start-line="895" selection-start-column="61" selection-end-line="895" selection-end-column="61" />
+        <state relative-caret-position="4860">
+          <caret line="413" column="19" lean-forward="true" selection-start-line="413" selection-start-column="19" selection-end-line="413" selection-end-column="19" />
           <folding>
             <element signature="e#4675#4843#0" expanded="false" />
             <element signature="e#4890#5067#0" expanded="false" />
