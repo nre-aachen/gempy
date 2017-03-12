@@ -269,7 +269,7 @@ def plot_potential_field(geo_data, potential_field, cell_number, n_pf=0,
                          direction="y", plot_data=True, series="all", *args, **kwargs):
 
     plot = PlotData(geo_data)
-    plot.plot_potential_field( potential_field, cell_number, n_pf=n_pf,
+    plot.plot_potential_field(potential_field, cell_number, n_pf=n_pf,
                               direction=direction,  plot_data=plot_data, series=series,
                               *args, **kwargs)
 

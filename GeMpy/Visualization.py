@@ -196,7 +196,7 @@ class PlotData(object):
         """
 
         if plot_data:
-            self.plot_data(direction, self._data.series.columns.values[n_pf])
+            self.plot_data(direction, self._data.interfaces['series'].unique()[n_pf])
 
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
         plt.contour(potential_field[_a, _b, _c].T, cell_number,
@@ -206,7 +206,7 @@ class PlotData(object):
         if 'colorbar' in kwargs:
             plt.colorbar()
 
-        plt.title(self._data.series.columns[n_pf])
+        plt.title(self._data.interfaces['series'].unique()[n_pf])
         plt.xlabel(x)
         plt.ylabel(y)
 

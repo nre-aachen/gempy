@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/GeMpy.iml" afterPath="$PROJECT_DIR$/.idea/GeMpy.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/GeMpy.py" afterPath="$PROJECT_DIR$/GeMpy/GeMpy.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/Visualization.py" afterPath="$PROJECT_DIR$/GeMpy/Visualization.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/theanograf.py" afterPath="$PROJECT_DIR$/GeMpy/theanograf.py" />
     </list>
     <ignored path="GeMpy.iws" />
@@ -45,28 +43,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1820">
-              <caret line="162" column="54" lean-forward="true" selection-start-line="162" selection-start-column="54" selection-end-line="162" selection-end-column="54" />
+            <state relative-caret-position="423">
+              <caret line="798" column="89" lean-forward="false" selection-start-line="798" selection-start-column="75" selection-end-line="798" selection-end-column="89" />
               <folding>
-                <element signature="e#11146#13469#0" expanded="false" />
-                <element signature="e#13527#13856#0" expanded="false" />
-                <element signature="e#13899#18457#0" expanded="false" />
-                <element signature="e#18501#20233#0" expanded="false" />
-                <element signature="e#20281#21159#0" expanded="false" />
-                <element signature="e#21199#21774#0" expanded="false" />
-                <element signature="e#21827#22746#0" expanded="false" />
-                <element signature="e#22791#23383#0" expanded="false" />
-                <element signature="e#23431#25116#0" expanded="false" />
-                <element signature="e#25165#26496#0" expanded="false" />
-                <element signature="e#26551#29080#0" expanded="false" />
-                <element signature="e#29127#29529#0" expanded="false" />
-                <element signature="e#29585#31131#0" expanded="false" />
-                <element signature="e#31169#32636#0" expanded="false" />
-                <element signature="e#32868#34502#0" expanded="false" />
-                <element signature="e#34546#35028#0" expanded="false" />
+                <element signature="e#4671#4839#0" expanded="false" />
+                <element signature="e#4886#5063#0" expanded="false" />
+                <element signature="e#5138#5340#0" expanded="false" />
+                <element signature="e#6408#8130#0" expanded="false" />
+                <element signature="e#11698#14021#0" expanded="false" />
+                <element signature="e#14079#14408#0" expanded="false" />
+                <element signature="e#15456#18293#0" expanded="false" />
+                <element signature="e#22903#23781#0" expanded="false" />
+                <element signature="e#23821#24396#0" expanded="false" />
+                <element signature="e#26170#27855#0" expanded="false" />
+                <element signature="e#27904#29235#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -75,24 +68,22 @@
       <file leaf-file-name="Visualization.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="401">
-              <caret line="54" column="0" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+            <state relative-caret-position="2880">
+              <caret line="211" column="0" lean-forward="false" selection-start-line="211" selection-start-column="0" selection-end-line="211" selection-end-column="0" />
               <folding>
                 <element signature="e#923#1252#0" expanded="false" />
                 <element signature="e#1288#1504#0" expanded="false" />
-                <element signature="e#1578#3089#0" expanded="false" />
                 <element signature="e#3148#4385#0" expanded="false" />
-                <element signature="e#4550#6306#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5274">
-              <caret line="345" column="87" lean-forward="false" selection-start-line="345" selection-start-column="87" selection-end-line="345" selection-end-column="87" />
+            <state relative-caret-position="1534">
+              <caret line="431" column="22" lean-forward="false" selection-start-line="431" selection-start-column="19" selection-end-line="431" selection-end-column="22" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
                 <element signature="e#3901#4611#0" expanded="false" />
@@ -100,6 +91,26 @@
                 <element signature="e#11580#11962#0" expanded="false" />
                 <element signature="e#12367#12687#0" expanded="false" />
                 <element signature="e#12743#13485#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GeMpy.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="436">
+              <caret line="273" column="30" lean-forward="false" selection-start-line="273" selection-start-column="30" selection-end-line="273" selection-end-column="30" />
+              <folding>
+                <element signature="e#2761#3432#0" expanded="false" />
+                <element signature="e#3644#4619#0" expanded="false" />
+                <element signature="e#4688#4817#0" expanded="false" />
+                <element signature="e#5735#6011#0" expanded="false" />
+                <element signature="e#6101#6562#0" expanded="false" />
+                <element signature="e#6248#6522#0" expanded="false" />
+                <element signature="e#6652#7113#0" expanded="false" />
+                <element signature="e#8176#9873#0" expanded="false" />
+                <element signature="e#9944#10076#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -118,13 +129,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>block</find>
-      <find>compute_potential_field</find>
-      <find>iloc</find>
-      <find>order_series</find>
-      <find>len_series_i</find>
-      <find>n_fo</find>
-      <find>self.n_form</find>
       <find>theano</find>
       <find>theano.con</find>
       <find>theano.conf</find>
@@ -148,6 +152,13 @@
       <find>universal_matrix_T</find>
       <find>grid_val_T</find>
       <find>inputvars</find>
+      <find>number_of_points_per_formation_T</find>
+      <find>self.number_of_points_per_formation_T</find>
+      <find>n_faults</find>
+      <find>self.n_formation_</find>
+      <find>self.n_formation</find>
+      <find>-length_of_faults</find>
+      <find>self.fault_matrix</find>
     </findStrings>
     <replaceStrings>
       <replace>compute_potential_field</replace>
@@ -178,7 +189,7 @@
     </push-targets>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/GeMpy/theanograf.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/GeMpy/theanograf.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -208,9 +219,9 @@
         <option value="$PROJECT_DIR$/GeMpy/debug.py" />
         <option value="$PROJECT_DIR$/GeMpy/debugging.py" />
         <option value="$PROJECT_DIR$/GeMpy/qgrid/grid.py" />
-        <option value="$PROJECT_DIR$/GeMpy/Visualization.py" />
-        <option value="$PROJECT_DIR$/GeMpy/GeMpy.py" />
         <option value="$PROJECT_DIR$/GeMpy/DataManagement.py" />
+        <option value="$PROJECT_DIR$/GeMpy/GeMpy.py" />
+        <option value="$PROJECT_DIR$/GeMpy/Visualization.py" />
         <option value="$PROJECT_DIR$/GeMpy/theanograf.py" />
       </list>
     </option>
@@ -262,6 +273,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -288,10 +301,26 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy.py" />
+              <option name="myItemType" value="com.jetbrains.python.projectView.PyFileNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -640,20 +669,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00015" summary="uploading desktop">
-      <created>1479896123040</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1479896123040</updated>
-    </task>
-    <task id="LOCAL-00016" summary="uploading desktop">
-      <created>1479897490564</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1479897490564</updated>
-    </task>
     <task id="LOCAL-00017" summary="Major changes in the structure. I need to test it further and adjust the inheritances">
       <created>1479930435548</created>
       <option name="number" value="00017" />
@@ -983,7 +998,21 @@
       <option name="project" value="LOCAL" />
       <updated>1488335927192</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="pymc3 Running after almost two years and couple of thousands lines of code. Piece of cake">
+      <created>1489147905276</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1489147905278</updated>
+    </task>
+    <task id="LOCAL-00066" summary="pymc3 Running notebook">
+      <created>1489147963663</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1489147963663</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TodoView">
@@ -999,7 +1028,7 @@
     <frame x="65" y="-4" width="1301" height="772" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13864543" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.101195216" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17438272" sideWeight="0.49243027" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29256967" sideWeight="0.5179283" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32908365" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1053,8 +1082,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Docs 0.95&#10;&#10;Images bug in the readme" />
-    <MESSAGE value="Docs 0.96&#10;&#10;The damn code is not displayed" />
     <MESSAGE value="Docs 0.962&#10;&#10;Why dont you want to install you son of" />
     <MESSAGE value="Docs 0.963&#10;&#10;my hate increases" />
     <MESSAGE value="Docs 0.966&#10;&#10;No sense..." />
@@ -1078,7 +1105,9 @@
     <MESSAGE value="sandstone working" />
     <MESSAGE value="solved order of potential field at boundaries bug" />
     <MESSAGE value="fixed u_grade = 0 bug with the shape of C_matrix and added more sensical rescaling of the grid" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed u_grade = 0 bug with the shape of C_matrix and added more sensical rescaling of the grid" />
+    <MESSAGE value="pymc3 Running after almost two years and couple of thousands lines of code. Piece of cake" />
+    <MESSAGE value="pymc3 Running notebook" />
+    <option name="LAST_COMMIT_MESSAGE" value="pymc3 Running notebook" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1093,11 +1122,16 @@
           <line>57</line>
           <option name="timeStamp" value="65" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GeMpy/theanograf.py</url>
+          <line>404</line>
+          <option name="timeStamp" value="70" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="70" />
+      <option name="time" value="72" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1397,16 +1431,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../pymc3-master/pymc3/model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2933">
+          <caret line="662" column="11" lean-forward="false" selection-start-line="662" selection-start-column="7" selection-end-line="662" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../pymc3-master/pymc3/sampling.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-770">
+          <caret line="420" column="0" lean-forward="false" selection-start-line="420" selection-start-column="0" selection-end-line="420" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../pymc3-master/pymc3/step_methods/hmc/nuts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5018">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../pymc3-master/pymc3/theanof.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2533">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2880">
+          <caret line="211" column="0" lean-forward="false" selection-start-line="211" selection-start-column="0" selection-end-line="211" selection-end-column="0" />
+          <folding>
+            <element signature="e#923#1252#0" expanded="false" />
+            <element signature="e#1288#1504#0" expanded="false" />
+            <element signature="e#3148#4385#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1926">
-          <caret line="199" column="66" lean-forward="false" selection-start-line="199" selection-start-column="66" selection-end-line="199" selection-end-column="66" />
+        <state relative-caret-position="436">
+          <caret line="273" column="30" lean-forward="false" selection-start-line="273" selection-start-column="30" selection-end-line="273" selection-end-column="30" />
           <folding>
-            <element signature="e#263#282#0" expanded="false" />
             <element signature="e#2761#3432#0" expanded="false" />
             <element signature="e#3644#4619#0" expanded="false" />
             <element signature="e#4688#4817#0" expanded="false" />
-            <element signature="e#4861#5596#0" expanded="false" />
             <element signature="e#5735#6011#0" expanded="false" />
             <element signature="e#6101#6562#0" expanded="false" />
             <element signature="e#6248#6522#0" expanded="false" />
@@ -1417,101 +1489,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../pymc3-master/pymc3/model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2933">
-          <caret line="662" column="11" lean-forward="false" selection-start-line="662" selection-start-column="7" selection-end-line="662" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#16#0" expanded="false" />
-            <element signature="e#600#963#0" expanded="false" />
-            <element signature="e#1093#2500#0" expanded="false" />
-            <element signature="e#2535#2782#0" expanded="false" />
-            <element signature="e#2825#3046#0" expanded="false" />
-            <element signature="e#3076#3931#0" expanded="false" />
-            <element signature="e#3963#4135#0" expanded="false" />
-            <element signature="e#4164#5805#0" expanded="false" />
-            <element signature="e#5841#6115#0" expanded="false" />
-            <element signature="e#6144#6610#0" expanded="false" />
-            <element signature="e#6639#7997#0" expanded="false" />
-            <element signature="e#8026#9029#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../pymc3-master/pymc3/sampling.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-770">
-          <caret line="420" column="0" lean-forward="false" selection-start-line="420" selection-start-column="0" selection-end-line="420" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#35#0" expanded="false" />
-            <element signature="e#893#2024#1" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../pymc3-master/pymc3/step_methods/hmc/nuts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5018">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#34#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../pymc3-master/pymc3/theanof.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2533">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="54" column="0" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
-          <folding>
-            <element signature="e#923#1252#0" expanded="false" />
-            <element signature="e#1288#1504#0" expanded="false" />
-            <element signature="e#1578#3089#0" expanded="false" />
-            <element signature="e#3148#4385#0" expanded="false" />
-            <element signature="e#4550#6306#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1820">
-          <caret line="162" column="54" lean-forward="true" selection-start-line="162" selection-start-column="54" selection-end-line="162" selection-end-column="54" />
-          <folding>
-            <element signature="e#11146#13469#0" expanded="false" />
-            <element signature="e#13527#13856#0" expanded="false" />
-            <element signature="e#13899#18457#0" expanded="false" />
-            <element signature="e#18501#20233#0" expanded="false" />
-            <element signature="e#20281#21159#0" expanded="false" />
-            <element signature="e#21199#21774#0" expanded="false" />
-            <element signature="e#21827#22746#0" expanded="false" />
-            <element signature="e#22791#23383#0" expanded="false" />
-            <element signature="e#23431#25116#0" expanded="false" />
-            <element signature="e#25165#26496#0" expanded="false" />
-            <element signature="e#26551#29080#0" expanded="false" />
-            <element signature="e#29127#29529#0" expanded="false" />
-            <element signature="e#29585#31131#0" expanded="false" />
-            <element signature="e#31169#32636#0" expanded="false" />
-            <element signature="e#32868#34502#0" expanded="false" />
-            <element signature="e#34546#35028#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5274">
-          <caret line="345" column="87" lean-forward="false" selection-start-line="345" selection-start-column="87" selection-end-line="345" selection-end-column="87" />
+        <state relative-caret-position="1534">
+          <caret line="431" column="22" lean-forward="false" selection-start-line="431" selection-start-column="19" selection-end-line="431" selection-end-column="22" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
             <element signature="e#3901#4611#0" expanded="false" />
@@ -1519,6 +1500,26 @@
             <element signature="e#11580#11962#0" expanded="false" />
             <element signature="e#12367#12687#0" expanded="false" />
             <element signature="e#12743#13485#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="423">
+          <caret line="798" column="89" lean-forward="false" selection-start-line="798" selection-start-column="75" selection-end-line="798" selection-end-column="89" />
+          <folding>
+            <element signature="e#4671#4839#0" expanded="false" />
+            <element signature="e#4886#5063#0" expanded="false" />
+            <element signature="e#5138#5340#0" expanded="false" />
+            <element signature="e#6408#8130#0" expanded="false" />
+            <element signature="e#11698#14021#0" expanded="false" />
+            <element signature="e#14079#14408#0" expanded="false" />
+            <element signature="e#15456#18293#0" expanded="false" />
+            <element signature="e#22903#23781#0" expanded="false" />
+            <element signature="e#23821#24396#0" expanded="false" />
+            <element signature="e#26170#27855#0" expanded="false" />
+            <element signature="e#27904#29235#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -11,7 +11,7 @@ import theano.tensor as T
 import numpy as np
 import sys
 
-theano.config.optimizer = 'fast_run'
+theano.config.optimizer = 'None'
 theano.config.exception_verbosity = 'high'
 theano.config.compute_test_value = 'ignore'
 theano.config.floatX = 'float32'
@@ -44,6 +44,10 @@ class TheanoGraph_pro(object):
         self.grid_val_T = theano.shared(np.cast[dtype](np.zeros((2, 3))))
         self.a_T = theano.shared(np.cast[dtype](1.))
         self.c_o_T = theano.shared(np.cast[dtype](1.))
+
+        # Deprecated?
+        self.n_faults = theano.shared(0, 'Number of faults to compute')#
+
         self.final_block = theano.shared(np.zeros(3, dtype='int'), "Final block computed")
         self.yet_simulated = theano.shared(np.ones(3, dtype='int'), "Points to be computed yet")
 
@@ -87,6 +91,10 @@ class TheanoGraph_pro(object):
         self.ref_layer_points = self.ref_layer_points_all
         self.rest_layer_points = self.rest_layer_points_all
 
+       # self.faults_matrix_i = T.zeros((0, self.rest_layer_points.shape[0]))
+       # self.faults_matrix_f = T.zeros((0, self.dips_position_tiled.shape[0]))
+
+        self.fault_matrix = T.zeros((0, self.grid_val_T.shape[0] + 2*self.ref_layer_points.shape[0]))
       #  self.yet_simulated = self.yet_simulated_func()
 
     def testing(self):
@@ -120,18 +128,21 @@ class TheanoGraph_pro(object):
         length_of_CG = self.dips_position_tiled.shape[0]
         length_of_CGI = self.rest_layer_points.shape[0]
         if self.u_grade_T.get_value() == 0:
-            length_of_U_I = 0
+            length_of_U_I = 0*self.u_grade_T
         else:
             length_of_U_I = 3**self.u_grade_T
-        length_of_C = length_of_CG + length_of_CGI + length_of_U_I
+
+        length_of_faults = self.fault_matrix.shape[0]
+        length_of_C = length_of_CG + length_of_CGI + length_of_U_I + length_of_faults
 
         if 'matrices_shapes' in self.verbose:
             length_of_CG = theano.printing.Print("length_of_CG")(length_of_CG)
             length_of_CGI = theano.printing.Print("length_of_CGI")(length_of_CGI)
             length_of_U_I = theano.printing.Print("length_of_U_I")(length_of_U_I)
+            length_of_faults = theano.printing.Print("length_of_faults")(length_of_faults)
             length_of_C = theano.printing.Print("length_of_C")(length_of_C)
 
-        return length_of_CG, length_of_CGI, length_of_U_I, length_of_C
+        return length_of_CG, length_of_CGI, length_of_U_I, length_of_faults, length_of_C
 
     def cov_interfaces(self):
 
@@ -391,13 +402,34 @@ class TheanoGraph_pro(object):
 
         return U_I, U_G
 
+    def faults_matrix(self):
+        """
+        This function creates the part of the graph that generates the faults function creating a "block model" at the
+        references and the rest of the points. Then this vector has to be appended to the covariance function
+        Returns:
+
+        """
+
+        #F_I = None
+        #F_G = None
+
+        lenght_of_CG, lenght_of_CGI = self.matrices_shapes()[:2]
+        F_I = self.fault_matrix[:, -2*lenght_of_CGI:-lenght_of_CGI] - self.fault_matrix[:, -lenght_of_CGI:]
+        F_G = T.zeros((self.fault_matrix.shape[0], lenght_of_CG))
+        # Set yet to simulate to 0
+        if str(sys._getframe().f_code.co_name) in self.verbose:
+            F_I = theano.printing.Print('Faults interfaces matrix')(F_I)
+
+        return F_I, F_G
+
     def covariance_matrix(self):
 
-        length_of_CG, length_of_CGI, length_of_U_I, length_of_C = self.matrices_shapes()
+        length_of_CG, length_of_CGI, length_of_U_I, length_of_faults, length_of_C = self.matrices_shapes()
         C_G = self.cov_gradients()
         C_I = self.cov_interfaces()
         C_GI = self.cov_interface_gradients()
         U_I, U_G = self.universal_matrix()
+        F_I, F_G = self.faults_matrix()
 
         # =================================
         # Creation of the Covariance Matrix
@@ -405,24 +437,53 @@ class TheanoGraph_pro(object):
         C_matrix = T.zeros((length_of_C, length_of_C))
 
         # First row of matrices
+        # Set C_G
         C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, 0:length_of_CG], C_G)
 
+        # Set CGI
         C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, length_of_CG:length_of_CG + length_of_CGI], C_GI.T)
 
+        # TODO see if this condition is necesary. I think that simply by choosing len = 0 of the universal should work
+        # (as I do in the fautls)
+        # Set UG
         if not self.u_grade_T.get_value() == 0:
-            C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, -length_of_U_I:], U_G)
+            C_matrix = T.set_subtensor(C_matrix[0:length_of_CG,
+                                       length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I], U_G)
+
+        # Set FG. I cannot use -index because when is -0 is equivalent to 0
+        C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, length_of_CG+length_of_CGI+length_of_U_I:], F_G.T)
 
         # Second row of matrices
+
+        # Set C_IG
         C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI, 0:length_of_CG], C_GI)
+
+        # Set C_I
         C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI,
                                    length_of_CG:length_of_CG + length_of_CGI], C_I)
 
+        # Set U_I
         if not self.u_grade_T.get_value() == 0:
-            C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI, -length_of_U_I:], U_I)
+            C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI,
+                                       length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I], U_I)
+
+        # Set F_I
+        C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI, length_of_CG+length_of_CGI+length_of_U_I:], F_I.T)
 
             # Third row of matrices
-            C_matrix = T.set_subtensor(C_matrix[-length_of_U_I:, 0:length_of_CG], U_G.T)
-            C_matrix = T.set_subtensor(C_matrix[-length_of_U_I:, length_of_CG:length_of_CG + length_of_CGI], U_I.T)
+            # Set U_G
+        if not self.u_grade_T.get_value() == 0:
+            C_matrix = T.set_subtensor(C_matrix[-length_of_U_I:-length_of_faults, 0:length_of_CG], U_G.T)
+
+            # Set U_I
+            C_matrix = T.set_subtensor(C_matrix[-length_of_U_I:-length_of_faults, length_of_CG:length_of_CG + length_of_CGI], U_I.T)
+
+        # Fourth row of matrices
+        # Set F_G
+        C_matrix = T.set_subtensor(C_matrix[length_of_CG+length_of_CGI+length_of_U_I:, 0:length_of_CG], F_G)
+
+        # Set F_I
+        C_matrix = T.set_subtensor(C_matrix[length_of_CG+length_of_CGI+length_of_U_I:, length_of_CG:length_of_CG + length_of_CGI], F_I)
 
         # TODO: deprecate
         self.C_matrix = C_matrix
@@ -482,8 +543,11 @@ class TheanoGraph_pro(object):
         pns = (self.grid_val_T * self.yet_simulated.reshape((self.yet_simulated.shape[0], 1))).nonzero_values()
       #  pns = theano.printing.Print('this is a very important value')(pns)
 
-        # Adding the interface points
+        # Adding the rest interface points
         grid_val = T.vertical_stack(pns.reshape((-1, 3)), self.rest_layer_points)
+
+        # Adding the ref interface points
+        grid_val = T.vertical_stack(grid_val, self.ref_layer_points)
 
         if verbose > 1:
             theano.printing.pydotprint(grid_val, outfile="graphs/" + sys._getframe().f_code.co_name + ".png",
@@ -621,6 +685,10 @@ class TheanoGraph_pro(object):
 
         if not type(f_0) == int:
             f_0.name = 'Contribution of the universal drift to the potential field at every point of the grid'
+
+        if str(sys._getframe().f_code.co_name) in self.verbose:
+            f_0 = theano.printing.Print('Universal terms contribution')(f_0)
+
         return f_0
 
     #  def contribution_faults(self):
@@ -630,16 +698,36 @@ class TheanoGraph_pro(object):
         # Potential field
         # Value of the potential field
 
+    def faults_contribution(self):
+
+        weights = self.extend_dual_kriging()
+        length_of_CG, length_of_CGI, length_of_U_I, length_of_faults, length_of_C = self.matrices_shapes()
+        grid_val = self.x_to_interpolate()
+        # Write a switch here
+        f_1 = T.sum(weights[length_of_CG+length_of_CGI+length_of_U_I:] * self.fault_matrix[grid_val.shape[0]:], axis=0)
+        # f_1 = T.switch(1, 2, 0)
+
+        f_1.name = 'Faults contribution'
+
+        if str(sys._getframe().f_code.co_name) in self.verbose:
+            f_1 = theano.printing.Print('Faults contribution')(f_1)
+
+        return f_1
+
     def potential_field_at_grid(self):
       #  self.yet_simulated_func()
         sigma_0_grad = self.gradient_contribution()
         sigma_0_interf = self.interface_contribution()
         f_0 = self.universal_drift_contribution()
+        f_1 = self.faults_contribution()
         length_of_CGI = self.matrices_shapes()[1]
 
-        Z_x = (sigma_0_grad + sigma_0_interf + f_0)[:-length_of_CGI]
+        Z_x = (sigma_0_grad + sigma_0_interf + f_0 + f_1)[:-2*length_of_CGI]
 
         Z_x.name = 'Value of the potential field at every point of the grid'
+
+        if str(sys._getframe().f_code.co_name) in self.verbose:
+            Z_x = theano.printing.Print('Potential field at grid')(Z_x)
         return Z_x
 
     def potential_field_at_interfaces(self):
@@ -647,11 +735,12 @@ class TheanoGraph_pro(object):
         sigma_0_grad = self.gradient_contribution()
         sigma_0_interf = self.interface_contribution()
         f_0 = self.universal_drift_contribution()
+        f_1 = self.faults_contribution()
         length_of_CGI = self.matrices_shapes()[1]
 
-        potential_field_interfaces = (sigma_0_grad + sigma_0_interf + f_0)[-length_of_CGI:]
+        potential_field_interfaces = (sigma_0_grad + sigma_0_interf + f_0 + f_1)[-2*length_of_CGI:-length_of_CGI]
 
-        npf = T.cumsum(T.concatenate((T.stack(0), self.number_of_points_per_formation_T)))
+        npf = T.cumsum(T.concatenate((T.stack(0), self.number_of_points_per_formation_T_op)))
 
         # Loop to obtain the average Zx for every intertace
         def average_potential(dim_a, dim_b, pfi):
@@ -707,7 +796,7 @@ class TheanoGraph_pro(object):
         partial_block, updates2 = theano.scan(
             fn=compare,
             outputs_info=None,
-            sequences=[dict(input=potential_field_iter, taps=[0, 1]), self.n_formation],
+            sequences=[dict(input=potential_field_iter, taps=[0, 1]), self.n_formation_op],
             non_sequences=Z_x)
 
         partial_block = partial_block.sum(axis=0)
@@ -718,12 +807,61 @@ class TheanoGraph_pro(object):
 
         return partial_block
 
+    def compute_a_fault(self,
+                         len_i_0, len_i_1,
+                         len_f_0, len_f_1,
+                         n_form_per_serie_0, n_form_per_serie_1
+                         ):
+
+        # to calculate the faults block I can set the yet simulated paramer to 0 so I do not use the whole grid
+
+
+        # THIS IS THE FINAL BLOCK. (DO I NEED TO LOOP THE FAULTS FIRST?)
+        # ==================
+        # Preparing the data
+        # ==================
+        #self.yet_simulated = T.eq(final_block, 0)
+        #yet_simulated = self.yet_simulated_func(final_block)
+        #self.yet_simulated.name = 'Yet simulated node'
+
+        # Theano shared
+        self.number_of_points_per_formation_T_op = self.number_of_points_per_formation_T[n_form_per_serie_0: n_form_per_serie_1]
+        self.n_formation_op = self.n_formation[n_form_per_serie_0: n_form_per_serie_1]
+
+        self.dips_position = self.dips_position_all[len_f_0: len_f_1, :]
+        self.dips_position_tiled = T.tile(self.dips_position, (self.n_dimensions, 1))
+
+        # Theano Var
+        self.dip_angles = self.dip_angles_all[len_f_0: len_f_1]
+        self.azimuth = self.azimuth_all[len_f_0: len_f_1]
+        self.polarity = self.polarity_all[len_f_0: len_f_1]
+
+        self.ref_layer_points = self.ref_layer_points_all[len_i_0: len_i_1, :]
+        self.rest_layer_points = self.rest_layer_points_all[len_i_0: len_i_1, :]
+
+
+
+
+        # ====================
+        # Computing the series
+        # ====================
+        faults_matrix = self.block_series()
+        #final_block = T.set_subtensor(
+        #    final_block[T.nonzero(T.cast(self.yet_simulated, "int8"))[0]],
+        #    potential_field_contribution)
+
+        return faults_matrix
+
     def compute_a_series(self,
                          len_i_0, len_i_1,
                          len_f_0, len_f_1,
                          n_form_per_serie_0, n_form_per_serie_1,
                          final_block):
 
+        # to calculate the faults block I can set the yet simulated paramer to 0 so I do not use the whole grid
+
+
+        # THIS IS THE FINAL BLOCK. (DO I NEED TO LOOP THE FAULTS FIRST?)
         # ==================
         # Preparing the data
         # ==================
@@ -732,8 +870,8 @@ class TheanoGraph_pro(object):
         self.yet_simulated.name = 'Yet simulated node'
 
         # Theano shared
-        self.number_of_points_per_formation_T = self.number_of_points_per_formation_T[n_form_per_serie_0: n_form_per_serie_1]
-        self.n_formation = self.n_formation[n_form_per_serie_0: n_form_per_serie_1]
+        self.number_of_points_per_formation_T_op = self.number_of_points_per_formation_T[n_form_per_serie_0: n_form_per_serie_1]
+        self.n_formation_op = self.n_formation[n_form_per_serie_0: n_form_per_serie_1]
 
         self.dips_position = self.dips_position_all[len_f_0: len_f_1, :]
         self.dips_position_tiled = T.tile(self.dips_position, (self.n_dimensions, 1))
@@ -750,7 +888,7 @@ class TheanoGraph_pro(object):
         if 'yet_simulated' in self.verbose:
             self.yet_simulated = theano.printing.Print(self.yet_simulated.name)(self.yet_simulated)
         if 'n_formation' in self.verbose:
-            self.n_formation = theano.printing.Print('n_formation')(self.n_formation)
+            self.n_formation_op = theano.printing.Print('n_formation')(self.n_formation_op)
 
         # ====================
         # Computing the series
@@ -762,16 +900,31 @@ class TheanoGraph_pro(object):
 
         return final_block
 
-    def whole_block_model(self):
+    def whole_block_model(self, n_faults=0):
 
         final_block_init = self.final_block
         final_block_init.name = 'final block init'
+       # a = theano.printing.Print('the thing')(self.len_series_i[:self.n_faults])
+
+        if n_faults != 0:
+            fault_matrix, updates3 = theano.scan(
+                fn=self.compute_a_fault,
+             #   outputs_info=[final_block_init],
+                sequences=[dict(input=self.len_series_i[:n_faults+1], taps=[0, 1]),
+                           dict(input=self.len_series_f[:n_faults+1], taps=[0, 1]),
+                           dict(input=self.n_formations_per_serie[:n_faults+1], taps=[0, 1])]
+                 )
+
+            self.fault_matrix = fault_matrix
+
+        # Here I am going to have to change the self.n_faults
+
         all_series_blocks, updates2 = theano.scan(
-            fn=self.compute_a_series,
-            outputs_info=[final_block_init],
-            sequences=[dict(input=self.len_series_i, taps=[0, 1]),
-                       dict(input=self.len_series_f, taps=[0, 1]),
-                       dict(input=self.n_formations_per_serie, taps=[0, 1])]
-           )
+             fn=self.compute_a_series,
+             outputs_info=[final_block_init],
+             sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
+                        dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
+                        dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1])]
+        )
 
         return all_series_blocks[-1]
