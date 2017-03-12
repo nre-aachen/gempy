@@ -56,10 +56,10 @@ class TheanoGraph_pro(object):
         # Shape is 9x2, 9 drift funcitons and 2 points
         self.universal_grid_matrix_T = theano.shared(np.cast[dtype](np.zeros((9, 2))))
 
-        self.len_series_i = theano.shared(np.zeros(3, dtype='int'), 'Length of interfaces in every series')
-        self.len_series_f = theano.shared(np.zeros(3, dtype='int'), 'Length of foliations in every series')
-        self.n_formations_per_serie = theano.shared(np.zeros(3, dtype='int'), 'List with the number of formations')
-        self.n_formation = theano.shared(np.zeros(3, dtype='int'), "Value of the formation")
+        self.len_series_i = theano.shared(np.arange(2, dtype='int'), 'Length of interfaces in every series')
+        self.len_series_f = theano.shared(np.arange(2, dtype='int'), 'Length of foliations in every series')
+        self.n_formations_per_serie = theano.shared(np.arange(3, dtype='int'), 'List with the number of formations')
+        self.n_formation = theano.shared(np.arange(2, dtype='int'), "Value of the formation")
         self.number_of_points_per_formation_T = theano.shared(np.zeros(3, dtype='int'))
 
         # ======================
@@ -544,10 +544,10 @@ class TheanoGraph_pro(object):
       #  pns = theano.printing.Print('this is a very important value')(pns)
 
         # Adding the rest interface points
-        grid_val = T.vertical_stack(pns.reshape((-1, 3)), self.rest_layer_points)
+        grid_val = T.vertical_stack(pns.reshape((-1, 3)), self.rest_layer_points_all)
 
         # Adding the ref interface points
-        grid_val = T.vertical_stack(grid_val, self.ref_layer_points)
+        grid_val = T.vertical_stack(grid_val, self.ref_layer_points_all)
 
         if verbose > 1:
             theano.printing.pydotprint(grid_val, outfile="graphs/" + sys._getframe().f_code.co_name + ".png",
@@ -704,7 +704,7 @@ class TheanoGraph_pro(object):
         length_of_CG, length_of_CGI, length_of_U_I, length_of_faults, length_of_C = self.matrices_shapes()
         grid_val = self.x_to_interpolate()
         # Write a switch here
-        f_1 = T.sum(weights[length_of_CG+length_of_CGI+length_of_U_I:] * self.fault_matrix[grid_val.shape[0]:], axis=0)
+        f_1 = T.sum(weights[length_of_CG+length_of_CGI+length_of_U_I:, :] * self.fault_matrix[:grid_val.shape[0]], axis=0)
         # f_1 = T.switch(1, 2, 0)
 
         f_1.name = 'Faults contribution'
@@ -722,7 +722,7 @@ class TheanoGraph_pro(object):
         f_1 = self.faults_contribution()
         length_of_CGI = self.matrices_shapes()[1]
 
-        Z_x = (sigma_0_grad + sigma_0_interf + f_0 + f_1)[:-2*length_of_CGI]
+        Z_x = (sigma_0_grad + sigma_0_interf + f_0 + f_1)#[:-2*self.rest_layer_points_all.shape[0]]
 
         Z_x.name = 'Value of the potential field at every point of the grid'
 
@@ -738,9 +738,9 @@ class TheanoGraph_pro(object):
         f_1 = self.faults_contribution()
         length_of_CGI = self.matrices_shapes()[1]
 
-        potential_field_interfaces = (sigma_0_grad + sigma_0_interf + f_0 + f_1)[-2*length_of_CGI:-length_of_CGI]
+        potential_field_interfaces = (sigma_0_grad + sigma_0_interf + f_0 + f_1)[-2*self.rest_layer_points_all.shape[0]:-self.rest_layer_points_all.shape[0]]
 
-        npf = T.cumsum(T.concatenate((T.stack(0), self.number_of_points_per_formation_T_op)))
+        npf = T.cumsum(T.concatenate((T.stack(0), self.number_of_points_per_formation_T)))
 
         # Loop to obtain the average Zx for every intertace
         def average_potential(dim_a, dim_b, pfi):
@@ -779,8 +779,8 @@ class TheanoGraph_pro(object):
         max_pot = T.max(Z_x)  #T.max(potential_field_unique) + 1
         min_pot = T.min(Z_x)   #T.min(potential_field_unique) - 1
 
-        potential_field_at_interfaces = self.potential_field_at_interfaces()
-
+        potential_field_at_interfaces = theano.printing.Print('Potential field')(self.potential_field_at_interfaces())
+        potential_field_at_interfaces = theano.printing.Print('Selected pt')(potential_field_at_interfaces[self.n_formation_op-1])
         # A tensor with the values to segment
         potential_field_iter = T.concatenate((T.stack([max_pot]),
                                               T.sort(potential_field_at_interfaces)[::-1],
@@ -893,7 +893,7 @@ class TheanoGraph_pro(object):
         # ====================
         # Computing the series
         # ====================
-        potential_field_contribution = self.block_series()
+        potential_field_contribution = self.block_series()[:-2*self.rest_layer_points_all.shape[0]]
         final_block = T.set_subtensor(
             final_block[T.nonzero(T.cast(self.yet_simulated, "int8"))[0]],
             potential_field_contribution)
@@ -915,7 +915,7 @@ class TheanoGraph_pro(object):
                            dict(input=self.n_formations_per_serie[:n_faults+1], taps=[0, 1])]
                  )
 
-            self.fault_matrix = fault_matrix
+            self.fault_matrix = theano.printing.Print('I am outside the faults')(fault_matrix)
 
         # Here I am going to have to change the self.n_faults
 
@@ -927,4 +927,4 @@ class TheanoGraph_pro(object):
                         dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1])]
         )
 
-        return all_series_blocks[-1]
+        return all_series_blocks

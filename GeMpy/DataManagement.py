@@ -55,7 +55,7 @@ class DataManagement(object):
 
         self._set_formations()
         self.series = self.set_series()
-        self.set_formation_number()
+        #self.set_formation_number()
         self.calculate_gradient()
 
         # Create default grid object. (Is this necessary now?)
@@ -159,7 +159,7 @@ class DataManagement(object):
         self.pandas_frame.close()
         #self._set_formations()
         #self.series = self.set_series()
-        self.set_formation_number()
+        #self.set_formation_number()
         self.calculate_gradient()
 
 
@@ -204,7 +204,7 @@ class DataManagement(object):
        # self.interfaces.reset_index(drop=False, inplace=True)
         self._set_formations()
         self.set_series()
-        self.set_formation_number()
+       # self.set_formation_number()
 
     def set_foliations(self, foliat_Dataframe, append=False):
 
@@ -219,7 +219,7 @@ class DataManagement(object):
       #  self.foliations.reset_index(inplace=True, drop=True)
         self._set_formations()
         self.set_series()
-        self.set_formation_number()
+       # self.set_formation_number()
         self.calculate_gradient()
 
     def set_series(self, series_distribution=None, order=None):
@@ -346,22 +346,35 @@ class DataManagement(object):
             self.tg = theanograf.TheanoGraph_pro(u_grade, dtype=dtype, verbose=verbose,)
 
             # Setting theano parameters
+            self.order_table()
             self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, **kwargs)
             self.data_prep()
 
-        def data_prep(self):
+        def set_formation_number(self):
+            try:
+                ip_addresses = self._data_scaled.interfaces["formation"].unique()
+                ip_dict = dict(zip(ip_addresses, range(1, len(ip_addresses) + 1)))
+                self._data_scaled.interfaces['formation number'] = self._data_scaled.interfaces['formation'].replace(ip_dict)
+                self._data_scaled.foliations['formation number'] = self._data_scaled.foliations['formation'].replace(ip_dict)
+            except ValueError:
+                pass
+
+        def order_table(self):
 
             # We order the pandas table
-            self._data_scaled.interfaces.sort_values(by=['order_series', 'formation number'],
+            self._data_scaled.interfaces.sort_values(by=['order_series'],  # , 'formation number'],
                                                      ascending=True, kind='mergesort',
                                                      inplace=True)
 
-            self._data_scaled.foliations.sort_values(by=['order_series', 'formation number'],
+            self._data_scaled.foliations.sort_values(by=['order_series'],  # , 'formation number'],
                                                      ascending=True, kind='mergesort',
                                                      inplace=True)
 
+            self.set_formation_number()
             # Drop works with the pandas indices so I DO need this thing working
             self._data_scaled.interfaces.reset_index(drop=True, inplace=True)
+
+        def data_prep(self):
 
             # Size of every formation, SHARED
             len_interfaces = np.asarray(
