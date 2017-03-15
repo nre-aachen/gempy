@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_4-Faults.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/theanograf.py" afterPath="$PROJECT_DIR$/GeMpy/theanograf.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_4-Faults.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_4-Faults.ipynb" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,19 +47,17 @@
       <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4860">
-              <caret line="413" column="19" lean-forward="true" selection-start-line="413" selection-start-column="19" selection-end-line="413" selection-end-column="19" />
+            <state relative-caret-position="249">
+              <caret line="791" column="51" lean-forward="false" selection-start-line="791" selection-start-column="51" selection-end-line="791" selection-end-column="51" />
               <folding>
-                <element signature="e#4675#4843#0" expanded="false" />
-                <element signature="e#4890#5067#0" expanded="false" />
-                <element signature="e#5142#5344#0" expanded="false" />
-                <element signature="e#6412#8134#0" expanded="false" />
-                <element signature="e#11702#14025#0" expanded="false" />
-                <element signature="e#14083#14412#0" expanded="false" />
-                <element signature="e#15460#18297#0" expanded="false" />
-                <element signature="e#22907#23785#0" expanded="false" />
-                <element signature="e#23825#24400#0" expanded="false" />
-                <element signature="e#26182#27867#0" expanded="false" />
+                <element signature="e#4683#4851#0" expanded="false" />
+                <element signature="e#4898#5075#0" expanded="false" />
+                <element signature="e#5150#5352#0" expanded="false" />
+                <element signature="e#6420#8142#0" expanded="false" />
+                <element signature="e#11710#14033#0" expanded="false" />
+                <element signature="e#14091#14420#0" expanded="false" />
+                <element signature="e#15468#18305#0" expanded="false" />
+                <element signature="e#26260#27945#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -79,8 +80,8 @@
       <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="493" column="81" lean-forward="false" selection-start-line="493" selection-start-column="81" selection-end-line="493" selection-end-column="81" />
+            <state relative-caret-position="364">
+              <caret line="379" column="73" lean-forward="false" selection-start-line="379" selection-start-column="73" selection-end-line="379" selection-end-column="73" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
                 <element signature="e#3902#4612#0" expanded="false" />
@@ -95,8 +96,8 @@
       <file leaf-file-name="GeMpy.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="436">
-              <caret line="273" column="30" lean-forward="false" selection-start-line="273" selection-start-column="30" selection-end-line="273" selection-end-column="30" />
+            <state relative-caret-position="-230">
+              <caret line="172" column="0" lean-forward="true" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
               <folding>
                 <element signature="e#2761#3432#0" expanded="false" />
                 <element signature="e#3644#4619#0" expanded="false" />
@@ -125,7 +126,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>set_valu</find>
       <find>map_low</find>
       <find>n_formation</find>
       <find>n_formations_per_serie</find>
@@ -155,6 +155,7 @@
       <find>self.n_formation_op</find>
       <find>Faults interfaces matrix</find>
       <find>set_formation_number</find>
+      <find>Potential field</find>
     </findStrings>
     <replaceStrings>
       <replace>compute_potential_field</replace>
@@ -229,10 +230,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
-    <option name="y" value="-4" />
+    <option name="x" value="1665" />
+    <option name="y" value="24" />
     <option name="width" value="1301" />
-    <option name="height" value="772" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -269,8 +270,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -661,13 +662,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00019" summary="Documentation">
-      <created>1480330413358</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1480330413358</updated>
-    </task>
     <task id="LOCAL-00020" summary="Documentation">
       <created>1480604313366</created>
       <option name="number" value="00020" />
@@ -1004,7 +998,14 @@
       <option name="project" value="LOCAL" />
       <updated>1489319024849</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="Faults notebook">
+      <created>1489319509736</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1489319509737</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1017,10 +1018,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1301" height="772" extended-state="6" />
-    <editor active="false" />
+    <frame x="1665" y="24" width="1301" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22151394" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.08047809" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17438272" sideWeight="0.49243027" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29256967" sideWeight="0.5179283" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32908365" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1074,7 +1075,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Docs 0.966&#10;&#10;No sense..." />
     <MESSAGE value="Docs 0.97&#10;&#10;seriously?" />
     <MESSAGE value="Docs 0.98&#10;&#10;This may be the last one?" />
     <MESSAGE value="Docs 0.981&#10;&#10;Nop it wasnt" />
@@ -1099,7 +1099,8 @@
     <MESSAGE value="pymc3 Running notebook" />
     <MESSAGE value="Commit almost faults there. Solving the problem of where to interpolate the potential field" />
     <MESSAGE value="Infinite Faults Baby!!!!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Infinite Faults Baby!!!!" />
+    <MESSAGE value="Faults notebook" />
+    <option name="LAST_COMMIT_MESSAGE" value="Faults notebook" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1465,8 +1466,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="436">
-          <caret line="273" column="30" lean-forward="false" selection-start-line="273" selection-start-column="30" selection-end-line="273" selection-end-column="30" />
+        <state relative-caret-position="-230">
+          <caret line="172" column="0" lean-forward="true" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
           <folding>
             <element signature="e#2761#3432#0" expanded="false" />
             <element signature="e#3644#4619#0" expanded="false" />
@@ -1483,8 +1484,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="493" column="81" lean-forward="false" selection-start-line="493" selection-start-column="81" selection-end-line="493" selection-end-column="81" />
+        <state relative-caret-position="364">
+          <caret line="379" column="73" lean-forward="false" selection-start-line="379" selection-start-column="73" selection-end-line="379" selection-end-column="73" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
             <element signature="e#3902#4612#0" expanded="false" />
@@ -1497,19 +1498,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4860">
-          <caret line="413" column="19" lean-forward="true" selection-start-line="413" selection-start-column="19" selection-end-line="413" selection-end-column="19" />
+        <state relative-caret-position="249">
+          <caret line="791" column="51" lean-forward="false" selection-start-line="791" selection-start-column="51" selection-end-line="791" selection-end-column="51" />
           <folding>
-            <element signature="e#4675#4843#0" expanded="false" />
-            <element signature="e#4890#5067#0" expanded="false" />
-            <element signature="e#5142#5344#0" expanded="false" />
-            <element signature="e#6412#8134#0" expanded="false" />
-            <element signature="e#11702#14025#0" expanded="false" />
-            <element signature="e#14083#14412#0" expanded="false" />
-            <element signature="e#15460#18297#0" expanded="false" />
-            <element signature="e#22907#23785#0" expanded="false" />
-            <element signature="e#23825#24400#0" expanded="false" />
-            <element signature="e#26182#27867#0" expanded="false" />
+            <element signature="e#4683#4851#0" expanded="false" />
+            <element signature="e#4898#5075#0" expanded="false" />
+            <element signature="e#5150#5352#0" expanded="false" />
+            <element signature="e#6420#8142#0" expanded="false" />
+            <element signature="e#11710#14033#0" expanded="false" />
+            <element signature="e#14091#14420#0" expanded="false" />
+            <element signature="e#15468#18305#0" expanded="false" />
+            <element signature="e#26260#27945#0" expanded="false" />
           </folding>
         </state>
       </provider>

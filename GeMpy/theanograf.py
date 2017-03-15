@@ -11,7 +11,7 @@ import theano.tensor as T
 import numpy as np
 import sys
 
-theano.config.optimizer = 'None'
+theano.config.optimizer = 'fast_compile'
 theano.config.exception_verbosity = 'high'
 theano.config.compute_test_value = 'ignore'
 theano.config.floatX = 'float32'
@@ -473,10 +473,10 @@ class TheanoGraph_pro(object):
             # Third row of matrices
             # Set U_G
         if not self.u_grade_T.get_value() == 0:
-            C_matrix = T.set_subtensor(C_matrix[-length_of_U_I:-length_of_faults, 0:length_of_CG], U_G.T)
+            C_matrix = T.set_subtensor(C_matrix[length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I, 0:length_of_CG], U_G.T)
 
             # Set U_I
-            C_matrix = T.set_subtensor(C_matrix[-length_of_U_I:-length_of_faults, length_of_CG:length_of_CG + length_of_CGI], U_I.T)
+            C_matrix = T.set_subtensor(C_matrix[length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I, length_of_CG:length_of_CG + length_of_CGI], U_I.T)
 
         # Fourth row of matrices
         # Set F_G
@@ -663,15 +663,15 @@ class TheanoGraph_pro(object):
             f_0 = 0
         else:
             _universal_terms_interfaces = T.horizontal_stack(
-                self.rest_layer_points,
-                (self.rest_layer_points ** 2),
-                T.stack((self.rest_layer_points[:, 0] * self.rest_layer_points[:, 1],
-                         self.rest_layer_points[:, 0] * self.rest_layer_points[:, 2],
-                         self.rest_layer_points[:, 1] * self.rest_layer_points[:, 2]), axis=1)).T
+                self.rest_layer_points_all,
+                (self.rest_layer_points_all ** 2),
+                T.stack((self.rest_layer_points_all[:, 0] * self.rest_layer_points_all[:, 1],
+                         self.rest_layer_points_all[:, 0] * self.rest_layer_points_all[:, 2],
+                         self.rest_layer_points_all[:, 1] * self.rest_layer_points_all[:, 2]), axis=1)).T
 
             universal_grid_interfaces_matrix = T.horizontal_stack(
                 (self.universal_grid_matrix_T * self.yet_simulated).nonzero_values().reshape((9, -1)),
-                _universal_terms_interfaces)
+                T.tile(_universal_terms_interfaces, (1, 2)))
 
             #universal_grid_interfaces_matrix = T.vertical_stack(self.universal_grid_matrix_T, self.rest_layer_points)
 
@@ -704,7 +704,7 @@ class TheanoGraph_pro(object):
         length_of_CG, length_of_CGI, length_of_U_I, length_of_faults, length_of_C = self.matrices_shapes()
         grid_val = self.x_to_interpolate()
         # Write a switch here
-        f_1 = T.sum(weights[length_of_CG+length_of_CGI+length_of_U_I:, :] * self.fault_matrix[:grid_val.shape[0]], axis=0)
+        f_1 = T.sum(weights[length_of_CG+length_of_CGI+length_of_U_I:, :] * self.fault_matrix[:, :grid_val.shape[0]], axis=0)
         # f_1 = T.switch(1, 2, 0)
 
         f_1.name = 'Faults contribution'
@@ -779,8 +779,7 @@ class TheanoGraph_pro(object):
         max_pot = T.max(Z_x)  #T.max(potential_field_unique) + 1
         min_pot = T.min(Z_x)   #T.min(potential_field_unique) - 1
 
-        potential_field_at_interfaces = theano.printing.Print('Potential field')(self.potential_field_at_interfaces())
-        potential_field_at_interfaces = theano.printing.Print('Selected pt')(potential_field_at_interfaces[self.n_formation_op-1])
+        potential_field_at_interfaces = self.potential_field_at_interfaces()[self.n_formation_op-1]
         # A tensor with the values to segment
         potential_field_iter = T.concatenate((T.stack([max_pot]),
                                               T.sort(potential_field_at_interfaces)[::-1],
@@ -788,6 +787,12 @@ class TheanoGraph_pro(object):
 
         if "potential_field_iter" in self.verbose:
             potential_field_iter = theano.printing.Print("potential_field_iter")(potential_field_iter)
+
+        if "potential_field_at_interfaces":
+            potential_field_at_interfaces = theano.printing.Print('Potential field')(
+                self.potential_field_at_interfaces())
+            potential_field_at_interfaces = theano.printing.Print('Selected pt')(
+                potential_field_at_interfaces[self.n_formation_op - 1])
 
         # Loop to segment the distinct lithologies
         def compare(a, b, n_formation, Zx):
@@ -927,4 +932,4 @@ class TheanoGraph_pro(object):
                         dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1])]
         )
 
-        return all_series_blocks
+        return all_series_blocks[-1]

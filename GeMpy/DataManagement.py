@@ -371,6 +371,16 @@ class DataManagement(object):
                                                      inplace=True)
 
             self.set_formation_number()
+
+            # We order the pandas table
+            self._data_scaled.interfaces.sort_values(by=['order_series', 'formation number'],
+                                                     ascending=True, kind='mergesort',
+                                                     inplace=True)
+
+            self._data_scaled.foliations.sort_values(by=['order_series', 'formation number'],
+                                                     ascending=True, kind='mergesort',
+                                                     inplace=True)
+
             # Drop works with the pandas indices so I DO need this thing working
             self._data_scaled.interfaces.reset_index(drop=True, inplace=True)
 
