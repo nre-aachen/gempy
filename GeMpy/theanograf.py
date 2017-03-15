@@ -714,7 +714,7 @@ class TheanoGraph_pro(object):
 
         return f_1
 
-    def potential_field_at_grid(self):
+    def potential_field_at_all(self):
       #  self.yet_simulated_func()
         sigma_0_grad = self.gradient_contribution()
         sigma_0_interf = self.interface_contribution()
@@ -774,7 +774,7 @@ class TheanoGraph_pro(object):
 
         """
 
-        Z_x = self.potential_field_at_grid()
+        Z_x = self.potential_field_at_all()
 
         max_pot = T.max(Z_x)  #T.max(potential_field_unique) + 1
         min_pot = T.min(Z_x)   #T.min(potential_field_unique) - 1
