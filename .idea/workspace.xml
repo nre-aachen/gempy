@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
+    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="DataManagement Documentation update">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/GeMpy.py" afterPath="$PROJECT_DIR$/GeMpy/GeMpy.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/theanograf.py" afterPath="$PROJECT_DIR$/GeMpy/theanograf.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_3-PyMC3.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_3-PyMC3.ipynb" />
     </list>
     <ignored path="GeMpy.iws" />
@@ -46,17 +45,10 @@
       <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="501">
-              <caret line="919" column="54" lean-forward="false" selection-start-line="919" selection-start-column="43" selection-end-line="919" selection-end-column="54" />
+            <state relative-caret-position="519">
+              <caret line="721" column="18" lean-forward="true" selection-start-line="720" selection-start-column="85" selection-end-line="721" selection-end-column="18" />
               <folding>
-                <element signature="e#4683#4851#0" expanded="false" />
-                <element signature="e#4898#5075#0" expanded="false" />
-                <element signature="e#5150#5352#0" expanded="false" />
-                <element signature="e#6420#8142#0" expanded="false" />
-                <element signature="e#11710#14033#0" expanded="false" />
-                <element signature="e#14091#14420#0" expanded="false" />
-                <element signature="e#15468#18305#0" expanded="false" />
-                <element signature="e#26260#27945#0" expanded="false" />
+                <element signature="e#19177#22014#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -79,8 +71,8 @@
       <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4227">
-              <caret line="559" column="53" lean-forward="true" selection-start-line="559" selection-start-column="53" selection-end-line="559" selection-end-column="53" />
+            <state relative-caret-position="6189">
+              <caret line="644" column="43" lean-forward="false" selection-start-line="644" selection-start-column="20" selection-end-line="644" selection-end-column="43" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
                 <element signature="e#3146#3174#0" expanded="false" />
@@ -134,13 +126,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>self.yet_simulated_func()</find>
-      <find>yet_simulated_func()</find>
-      <find>self.ref_layer_points_all</find>
-      <find>self.verbose</find>
-      <find>qgrd</find>
-      <find>toolbar</find>
-      <find>export</find>
       <find>qgr</find>
       <find>set_inter</find>
       <find>i_open</find>
@@ -162,8 +147,15 @@
       <find>self.formations</find>
       <find>set_formation_number</find>
       <find>Potential field</find>
-      <find>self.ref_layer_points</find>
       <find>n_formation</find>
+      <find>self.n_faults</find>
+      <find>self.c_resc</find>
+      <find>yet_simulated_func</find>
+      <find>cartesian_dist_reference_to_rest</find>
+      <find>self.C_matrix</find>
+      <find>_universal_terms_interfaces</find>
+      <find>self.ref_layer_points</find>
+      <find>universal_grid_matrix_T</find>
     </findStrings>
     <replaceStrings>
       <replace>compute_potential_field</replace>
@@ -226,8 +218,8 @@
         <option value="$PROJECT_DIR$/GeMpy/qgrid/grid.py" />
         <option value="$PROJECT_DIR$/GeMpy/GeMpy.py" />
         <option value="$PROJECT_DIR$/GeMpy/Visualization.py" />
-        <option value="$PROJECT_DIR$/GeMpy/theanograf.py" />
         <option value="$PROJECT_DIR$/GeMpy/DataManagement.py" />
+        <option value="$PROJECT_DIR$/GeMpy/theanograf.py" />
       </list>
     </option>
   </component>
@@ -692,13 +684,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00022" summary="Updating NRE">
-      <created>1480941065434</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1480941065434</updated>
-    </task>
     <task id="LOCAL-00023" summary="Checking that the new branch is NRE">
       <created>1481723825466</created>
       <option name="number" value="00023" />
@@ -1035,7 +1020,14 @@
       <option name="project" value="LOCAL" />
       <updated>1489561420937</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="DataManagement Documentation update">
+      <created>1489572809815</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1489572809815</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1105,7 +1097,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Docs 0.981&#10;&#10;Nop it wasnt" />
     <MESSAGE value="Docs 0.984&#10;&#10;This is going to be IT" />
     <MESSAGE value="New structure following my brothers advices" />
     <MESSAGE value="last changes to GeMpy.py to leave it decent for Orleans" />
@@ -1130,7 +1121,8 @@
     <MESSAGE value="Faults notebook" />
     <MESSAGE value="debugging faults" />
     <MESSAGE value="Update of notebook examples" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update of notebook examples" />
+    <MESSAGE value="DataManagement Documentation update" />
+    <option name="LAST_COMMIT_MESSAGE" value="DataManagement Documentation update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1145,16 +1137,11 @@
           <line>57</line>
           <option name="timeStamp" value="65" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/GeMpy/theanograf.py</url>
-          <line>404</line>
-          <option name="timeStamp" value="70" />
-        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="73" />
+      <option name="time" value="75" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1494,23 +1481,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="919" column="54" lean-forward="false" selection-start-line="919" selection-start-column="43" selection-end-line="919" selection-end-column="54" />
-          <folding>
-            <element signature="e#4683#4851#0" expanded="false" />
-            <element signature="e#4898#5075#0" expanded="false" />
-            <element signature="e#5150#5352#0" expanded="false" />
-            <element signature="e#6420#8142#0" expanded="false" />
-            <element signature="e#11710#14033#0" expanded="false" />
-            <element signature="e#14091#14420#0" expanded="false" />
-            <element signature="e#15468#18305#0" expanded="false" />
-            <element signature="e#26260#27945#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="616">
@@ -1528,10 +1498,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="519">
+          <caret line="721" column="18" lean-forward="true" selection-start-line="720" selection-start-column="85" selection-end-line="721" selection-end-column="18" />
+          <folding>
+            <element signature="e#19177#22014#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4227">
-          <caret line="559" column="53" lean-forward="true" selection-start-line="559" selection-start-column="53" selection-end-line="559" selection-end-column="53" />
+        <state relative-caret-position="6189">
+          <caret line="644" column="43" lean-forward="false" selection-start-line="644" selection-start-column="20" selection-end-line="644" selection-end-column="43" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
             <element signature="e#3146#3174#0" expanded="false" />
