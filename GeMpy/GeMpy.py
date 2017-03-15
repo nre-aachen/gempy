@@ -90,7 +90,7 @@ def get_grid(geo_data):
 
 
 def get_raw_data(geo_data, dtype='all'):
-    return geo_data.get_raw_data(dtype=dtype)
+    return geo_data.get_raw_data(itype=dtype)
 
 
 def import_data(extent, resolution=[50, 50, 50], **kwargs):
