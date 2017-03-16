@@ -57,7 +57,8 @@ class DataManagement(object):
             self.interfaces = pn.DataFrame(columns=['X', 'Y', 'Z', 'formation', 'series'])
 
 
-        # DEP- self._set_formations()
+        # DEP-
+        self._set_formations()
 
         # If not provided set default series
         self.series = self.set_series()
@@ -69,31 +70,31 @@ class DataManagement(object):
         # Create default grid object. TODO: (Is this necessary now?)
         self.grid = self.create_grid(extent=None, resolution=None, grid_type="regular_3D", **kwargs)
 
-    # def _set_formations(self):
-    #     """
-    #     -DEPRECATED- Function to import the formations that will be used later on. By default all the formations in the tables are
-    #     chosen.
-    #
-    #     Returns:
-    #          pandas.core.frame.DataFrame: Data frame with the raw data
-    #
-    #     """
-    #
-    #     try:
-    #         # foliations may or may not be in all formations so we need to use interfaces
-    #         self.formations = self.interfaces["formation"].unique()
-    #
-    #         # TODO: Trying to make this more elegant?
-    #         # for el in self.formations:
-    #         #     for check in self.formations:
-    #         #         assert (el not in check or el == check), "One of the formations name contains other" \
-    #         #                                                  " string. Please rename." + str(el) + " in " + str(
-    #         #             check)
-    #
-    #                 # TODO: Add the possibility to change the name in pandas directly
-    #                 # (adding just a 1 in the contained string)
-    #     except AttributeError:
-    #         pass
+    def _set_formations(self):
+        """
+        -DEPRECATED- Function to import the formations that will be used later on. By default all the formations in the tables are
+        chosen.
+
+        Returns:
+             pandas.core.frame.DataFrame: Data frame with the raw data
+
+        """
+
+        try:
+            # foliations may or may not be in all formations so we need to use interfaces
+            self.formations = self.interfaces["formation"].unique()
+
+            # TODO: Trying to make this more elegant?
+            # for el in self.formations:
+            #     for check in self.formations:
+            #         assert (el not in check or el == check), "One of the formations name contains other" \
+            #                                                  " string. Please rename." + str(el) + " in " + str(
+            #             check)
+
+                    # TODO: Add the possibility to change the name in pandas directly
+                    # (adding just a 1 in the contained string)
+        except AttributeError:
+            pass
 
     def calculate_gradient(self):
         """

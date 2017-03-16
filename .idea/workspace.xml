@@ -3,7 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/GeMpy.py" afterPath="$PROJECT_DIR$/GeMpy/GeMpy.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/theanograf.py" afterPath="$PROJECT_DIR$/GeMpy/theanograf.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_3-PyMC3.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_3-PyMC3.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_4-Faults.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_4-Faults.ipynb" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,8 +49,8 @@
       <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="855">
-              <caret line="1121" column="9" lean-forward="true" selection-start-line="1121" selection-start-column="9" selection-end-line="1121" selection-end-column="9" />
+            <state relative-caret-position="531">
+              <caret line="1103" column="23" lean-forward="true" selection-start-line="1103" selection-start-column="23" selection-end-line="1103" selection-end-column="23" />
               <folding>
                 <element signature="e#19173#22010#0" expanded="false" />
               </folding>
@@ -70,24 +75,23 @@
       <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="879">
-              <caret line="53" column="78" lean-forward="false" selection-start-line="53" selection-start-column="78" selection-end-line="53" selection-end-column="78" />
+            <state relative-caret-position="272">
+              <caret line="60" column="8" lean-forward="false" selection-start-line="60" selection-start-column="8" selection-end-line="60" selection-end-column="8" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
-                <element signature="e#3146#3174#0" expanded="false" />
-                <element signature="e#4314#5024#0" expanded="false" />
-                <element signature="e#5125#5714#0" expanded="false" />
-                <element signature="e#5765#6448#0" expanded="false" />
-                <element signature="e#6509#8392#0" expanded="false" />
-                <element signature="e#8435#9254#0" expanded="false" />
-                <element signature="e#9344#10376#0" expanded="false" />
-                <element signature="e#10448#11222#0" expanded="false" />
-                <element signature="e#11294#12183#0" expanded="false" />
-                <element signature="e#12257#14989#0" expanded="false" />
-                <element signature="e#15035#15806#0" expanded="false" />
-                <element signature="e#15845#17348#0" expanded="false" />
-                <element signature="e#16230#16550#0" expanded="false" />
-                <element signature="e#16606#17348#0" expanded="false" />
+                <element signature="e#4257#4967#0" expanded="false" />
+                <element signature="e#5068#5657#0" expanded="false" />
+                <element signature="e#5708#6391#0" expanded="false" />
+                <element signature="e#6452#8335#0" expanded="false" />
+                <element signature="e#9287#10319#0" expanded="false" />
+                <element signature="e#10391#11165#0" expanded="false" />
+                <element signature="e#11237#12126#0" expanded="false" />
+                <element signature="e#12200#14932#0" expanded="false" />
+                <element signature="e#15788#17291#0" expanded="false" />
+                <element signature="e#16173#16493#0" expanded="false" />
+                <element signature="e#16549#17291#0" expanded="false" />
+                <marker date="1489644392209" expanded="false" signature="8368:9197" ph="..." />
+                <marker date="1489644392209" expanded="false" signature="14969:15749" ph="..." />
               </folding>
             </state>
           </provider>
@@ -96,17 +100,16 @@
       <file leaf-file-name="GeMpy.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="616">
-              <caret line="243" column="66" lean-forward="false" selection-start-line="243" selection-start-column="49" selection-end-line="243" selection-end-column="66" />
+            <state relative-caret-position="-666">
+              <caret line="5" column="22" lean-forward="true" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
               <folding>
-                <element signature="e#2761#3432#0" expanded="false" />
-                <element signature="e#3644#4619#0" expanded="false" />
-                <element signature="e#4688#4817#0" expanded="false" />
-                <element signature="e#5735#6011#0" expanded="false" />
-                <element signature="e#6101#6562#0" expanded="false" />
-                <element signature="e#6248#6522#0" expanded="false" />
-                <element signature="e#6652#7113#0" expanded="false" />
-                <element signature="e#9944#10076#0" expanded="false" />
+                <element signature="e#3097#4072#0" expanded="false" />
+                <element signature="e#4141#4270#0" expanded="false" />
+                <element signature="e#5188#5464#0" expanded="false" />
+                <element signature="e#5554#6015#0" expanded="false" />
+                <element signature="e#5701#5975#0" expanded="false" />
+                <element signature="e#6105#6566#0" expanded="false" />
+                <element signature="e#9397#9529#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -215,8 +218,8 @@
         <option value="$PROJECT_DIR$/GeMpy/debug.py" />
         <option value="$PROJECT_DIR$/GeMpy/debugging.py" />
         <option value="$PROJECT_DIR$/GeMpy/qgrid/grid.py" />
-        <option value="$PROJECT_DIR$/GeMpy/GeMpy.py" />
         <option value="$PROJECT_DIR$/GeMpy/Visualization.py" />
+        <option value="$PROJECT_DIR$/GeMpy/GeMpy.py" />
         <option value="$PROJECT_DIR$/GeMpy/DataManagement.py" />
         <option value="$PROJECT_DIR$/GeMpy/theanograf.py" />
       </list>
@@ -683,13 +686,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00024" summary="Corrected bug when importing interfaces">
-      <created>1482229527562</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1482229527562</updated>
-    </task>
     <task id="LOCAL-00025" summary="Change in requirements">
       <created>1482401134806</created>
       <option name="number" value="00025" />
@@ -1026,7 +1022,14 @@
       <option name="project" value="LOCAL" />
       <updated>1489585193051</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="theanograf documentation at 100% beta">
+      <created>1489643554887</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1489643554887</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1096,7 +1099,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="New structure following my brothers advices" />
     <MESSAGE value="last changes to GeMpy.py to leave it decent for Orleans" />
     <MESSAGE value="last changes to GeMpy.py to leave it decent for Orleans v2" />
     <MESSAGE value="new notebooks" />
@@ -1121,7 +1123,8 @@
     <MESSAGE value="Update of notebook examples" />
     <MESSAGE value="DataManagement Documentation update" />
     <MESSAGE value="theanograf documentation at 80%" />
-    <option name="LAST_COMMIT_MESSAGE" value="theanograf documentation at 80%" />
+    <MESSAGE value="theanograf documentation at 100% beta" />
+    <option name="LAST_COMMIT_MESSAGE" value="theanograf documentation at 100% beta" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1482,49 +1485,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="243" column="66" lean-forward="false" selection-start-line="243" selection-start-column="49" selection-end-line="243" selection-end-column="66" />
+        <state relative-caret-position="-666">
+          <caret line="5" column="22" lean-forward="true" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
           <folding>
-            <element signature="e#2761#3432#0" expanded="false" />
-            <element signature="e#3644#4619#0" expanded="false" />
-            <element signature="e#4688#4817#0" expanded="false" />
-            <element signature="e#5735#6011#0" expanded="false" />
-            <element signature="e#6101#6562#0" expanded="false" />
-            <element signature="e#6248#6522#0" expanded="false" />
-            <element signature="e#6652#7113#0" expanded="false" />
-            <element signature="e#9944#10076#0" expanded="false" />
+            <element signature="e#3097#4072#0" expanded="false" />
+            <element signature="e#4141#4270#0" expanded="false" />
+            <element signature="e#5188#5464#0" expanded="false" />
+            <element signature="e#5554#6015#0" expanded="false" />
+            <element signature="e#5701#5975#0" expanded="false" />
+            <element signature="e#6105#6566#0" expanded="false" />
+            <element signature="e#9397#9529#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="879">
-          <caret line="53" column="78" lean-forward="false" selection-start-line="53" selection-start-column="78" selection-end-line="53" selection-end-column="78" />
+        <state relative-caret-position="272">
+          <caret line="60" column="8" lean-forward="false" selection-start-line="60" selection-start-column="8" selection-end-line="60" selection-end-column="8" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
-            <element signature="e#3146#3174#0" expanded="false" />
-            <element signature="e#4314#5024#0" expanded="false" />
-            <element signature="e#5125#5714#0" expanded="false" />
-            <element signature="e#5765#6448#0" expanded="false" />
-            <element signature="e#6509#8392#0" expanded="false" />
-            <element signature="e#8435#9254#0" expanded="false" />
-            <element signature="e#9344#10376#0" expanded="false" />
-            <element signature="e#10448#11222#0" expanded="false" />
-            <element signature="e#11294#12183#0" expanded="false" />
-            <element signature="e#12257#14989#0" expanded="false" />
-            <element signature="e#15035#15806#0" expanded="false" />
-            <element signature="e#15845#17348#0" expanded="false" />
-            <element signature="e#16230#16550#0" expanded="false" />
-            <element signature="e#16606#17348#0" expanded="false" />
+            <element signature="e#4257#4967#0" expanded="false" />
+            <element signature="e#5068#5657#0" expanded="false" />
+            <element signature="e#5708#6391#0" expanded="false" />
+            <element signature="e#6452#8335#0" expanded="false" />
+            <element signature="e#9287#10319#0" expanded="false" />
+            <element signature="e#10391#11165#0" expanded="false" />
+            <element signature="e#11237#12126#0" expanded="false" />
+            <element signature="e#12200#14932#0" expanded="false" />
+            <element signature="e#15788#17291#0" expanded="false" />
+            <element signature="e#16173#16493#0" expanded="false" />
+            <element signature="e#16549#17291#0" expanded="false" />
+            <marker date="1489644392209" expanded="false" signature="8368:9197" ph="..." />
+            <marker date="1489644392209" expanded="false" signature="14969:15749" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="1121" column="9" lean-forward="true" selection-start-line="1121" selection-start-column="9" selection-end-line="1121" selection-end-column="9" />
+        <state relative-caret-position="531">
+          <caret line="1103" column="23" lean-forward="true" selection-start-line="1103" selection-start-column="23" selection-end-line="1103" selection-end-column="23" />
           <folding>
             <element signature="e#19173#22010#0" expanded="false" />
           </folding>

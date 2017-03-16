@@ -22,8 +22,16 @@ from DataManagement import DataManagement
 from IPython.core.debugger import Tracer
 
 
-def rescale_data(geo_data, rescaling_factor=None, *args, **kwargs):
+def rescale_data(geo_data, rescaling_factor=None):
+    """
+    Rescale the data of a DataManagement object between 0 and 1 due to stability problem of the float32.
+    Args:
+        geo_data: DataManagement object with the real scale data
+        rescaling_factor(float): factor of the rescaling. Default to maximum distance in one the axis
 
+    Returns:
+
+    """
     max_coord = pn.concat(
         [geo_data.foliations, geo_data.interfaces]).max()[['X', 'Y', 'Z']]
     min_coord = pn.concat(
@@ -40,49 +48,39 @@ def rescale_data(geo_data, rescaling_factor=None, *args, **kwargs):
     new_coord_foliations = (geo_data.foliations[['X', 'Y', 'Z']] -
                            centers) / rescaling_factor + 0.5001
 
-   # new_coord_grid = (geo_data.grid.grid - geo_data.grid.grid.min(axis=0)) / rescaling_factor + 0.5001
-
-   # new_coord_extent = _np.array(((geo_data.extent[:2] - centers[0]) / rescaling_factor + 0.5001,
-   #                               (geo_data.extent[2:4] - centers[1]) / rescaling_factor + 0.5001,
-   #                               (geo_data.extent[4:6] - centers[2]) / rescaling_factor + 0.5001))
-    #new_coord_extent[:2] = _np.asarray((geo_data.extent[:2] - centers[0]) / rescaling_factor + 0.5001)
-    #new_coord_extent[2:4] = _np.asarray((geo_data.extent[2:4] - centers[1]) / rescaling_factor + 0.5001)
-    #new_coord_extent[4:6] = _np.asarray((geo_data.extent[4:6] - centers[2]) / rescaling_factor + 0.5001)
-
     new_coord_extent = (geo_data.extent - _np.repeat(centers,2)) / rescaling_factor + 0.5001
 
     geo_data_rescaled = copy.deepcopy(geo_data)
     geo_data_rescaled.interfaces[['X', 'Y', 'Z']] = new_coord_interfaces
     geo_data_rescaled.foliations[['X', 'Y', 'Z']] = new_coord_foliations
     geo_data_rescaled.extent = new_coord_extent.as_matrix()
-   # geo_data_rescaled.grid = geo_data_rescaled.create_grid(extent=None, resolution=None,
-   #                                                        grid_type="regular_3D", **kwargs)
+
     geo_data_rescaled.grid.grid = (geo_data.grid.grid - centers.as_matrix()) /rescaling_factor + 0.5001
     return geo_data_rescaled
 
-
-def compute_block_model(geo_data, series_number="all",
-                        series_distribution=None, order_series=None,
-                        extent=None, resolution=None, grid_type="regular_3D",
-                        verbose=0, **kwargs):
-
-    if extent or resolution:
-        set_grid(geo_data, extent=extent, resolution=resolution, grid_type=grid_type, **kwargs)
-
-    if series_distribution:
-        set_data_series(geo_data, series_distribution=series_distribution, order_series=order_series, verbose=0)
-
-    if not getattr(geo_data, 'interpolator', None):
-        import warnings
-
-        warnings.warn('Using default interpolation values')
-        set_interpolator(geo_data)
-
-    geo_data.interpolator.tg.final_block.set_value(_np.zeros_like(geo_data.grid.grid[:, 0]))
-
-    geo_data.interpolator.compute_block_model(series_number=series_number, verbose=verbose)
-
-    return geo_data.interpolator.tg.final_block
+# TODO needs to be updated
+# def compute_block_model(geo_data, series_number="all",
+#                         series_distribution=None, order_series=None,
+#                         extent=None, resolution=None, grid_type="regular_3D",
+#                         verbose=0, **kwargs):
+#
+#     if extent or resolution:
+#         set_grid(geo_data, extent=extent, resolution=resolution, grid_type=grid_type, **kwargs)
+#
+#     if series_distribution:
+#         set_data_series(geo_data, series_distribution=series_distribution, order_series=order_series, verbose=0)
+#
+#     if not getattr(geo_data, 'interpolator', None):
+#         import warnings
+#
+#         warnings.warn('Using default interpolation values')
+#         set_interpolator(geo_data)
+#
+#     geo_data.interpolator.tg.final_block.set_value(_np.zeros_like(geo_data.grid.grid[:, 0]))
+#
+#     geo_data.interpolator.compute_block_model(series_number=series_number, verbose=verbose)
+#
+#     return geo_data.interpolator.tg.final_block
 
 
 def get_grid(geo_data):

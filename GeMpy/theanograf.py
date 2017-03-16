@@ -1109,6 +1109,9 @@ class TheanoGraph_pro(object):
                            dict(input=self.len_series_f[:n_faults+1], taps=[0, 1]),
                            dict(input=self.n_formations_per_serie[:n_faults+1], taps=[0, 1])]
                  )
+
+            self.fault_matrix = fault_matrix
+
             if 'faults block' in self.verbose:
                 self.fault_matrix = theano.printing.Print('I am outside the faults')(fault_matrix)
 
