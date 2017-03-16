@@ -11,7 +11,7 @@ import theano.tensor as T
 import numpy as np
 import sys
 
-theano.config.optimizer = 'fast_compile'
+theano.config.optimizer = 'fast_run'
 theano.config.exception_verbosity = 'high'
 theano.config.compute_test_value = 'ignore'
 theano.config.floatX = 'float32'
@@ -900,17 +900,22 @@ class TheanoGraph_pro(object):
 
     def block_series(self):
         """
-        Returns a list with the chunks of block models per series
+        Compute the part of the block model of a given series (dictated by the bool array yet to be computed)
         Returns:
-
+            theano.tensor.vector: Value of lithology at every interpolated point
         """
 
+        # Graph to compute the potential field
         Z_x = self.potential_field_at_all()
 
+        # Max and min values of the potential field.
+        # TODO this may be expensive because I guess that is a sort algorithm. We just need a +inf and -inf... I guess
         max_pot = T.max(Z_x)  #T.max(potential_field_unique) + 1
         min_pot = T.min(Z_x)   #T.min(potential_field_unique) - 1
 
+        # Value of the potential field at the interfaces of the computed series
         potential_field_at_interfaces = self.potential_field_at_interfaces()[self.n_formation_op-1]
+
         # A tensor with the values to segment
         potential_field_iter = T.concatenate((T.stack([max_pot]),
                                               T.sort(potential_field_at_interfaces)[::-1],
@@ -927,6 +932,19 @@ class TheanoGraph_pro(object):
 
         # Loop to segment the distinct lithologies
         def compare(a, b, n_formation, Zx):
+            """
+            Treshold of the points to interpolate given 2 potential field values. TODO: This function is the one we
+            need to change for a sigmoid function
+            Args:
+                a (scalar): Upper limit of the potential field
+                b (scalar): Lower limit of the potential field
+                n_formation (scalar): Value given to the segmentation, i.e. lithology number
+                Zx (vector): Potential field values at all the interpolated points
+
+            Returns:
+                theano.tensor.vector: segmented values
+            """
+
             return T.le(Zx, a) * T.ge(Zx, b) * n_formation
 
         partial_block, updates2 = theano.scan(
@@ -935,8 +953,10 @@ class TheanoGraph_pro(object):
             sequences=[dict(input=potential_field_iter, taps=[0, 1]), self.n_formation_op],
             non_sequences=Z_x)
 
+        # For every formation we get a vector so we need to sum compress them to one dimension
         partial_block = partial_block.sum(axis=0)
 
+        # Add name to the theano node
         partial_block.name = 'The chunk of block model of a specific series'
         if str(sys._getframe().f_code.co_name) in self.verbose:
             partial_block = theano.printing.Print(partial_block.name)(partial_block)
@@ -948,22 +968,39 @@ class TheanoGraph_pro(object):
                          len_f_0, len_f_1,
                          n_form_per_serie_0, n_form_per_serie_1
                          ):
+        """
+        Function that loops each fault, generating a potential field for each on them with the respective block model
+        Args:
+            len_i_0: Lenght of rest of previous series
+            len_i_1: Lenght of rest for the computed series
+            len_f_0: Lenght of dips of previous series
+            len_f_1: Length of dips of the computed series
+            n_form_per_serie_0: Number of formations of previous series
+            n_form_per_serie_1: Number of formations of the computed series
 
-        # to calculate the faults block I can set the yet simulated paramer to 0 so I do not use the whole grid
+        Returns:
+            theano.tensor.matrix: block model derived from the faults that afterwards is used as a drift for the "real"
+            data
+        """
 
-
-        # THIS IS THE FINAL BLOCK. (DO I NEED TO LOOP THE FAULTS FIRST?)
+        # THIS IS THE FAULTS BLOCK.
         # ==================
         # Preparing the data
         # ==================
+
+        # TODO in order to make faults networks I will have to activate the yet simulated. The idea is that first we
+        # compute the youngest fault and consecutively the others
+
+        # -DEP- Until I add network faults
         #self.yet_simulated = T.eq(final_block, 0)
         #yet_simulated = self.yet_simulated_func(final_block)
         #self.yet_simulated.name = 'Yet simulated node'
 
+        # Slice the matrices for the corresponding series
+
         # Theano shared
         self.number_of_points_per_formation_T_op = self.number_of_points_per_formation_T[n_form_per_serie_0: n_form_per_serie_1]
         self.n_formation_op = self.n_formation[n_form_per_serie_0: n_form_per_serie_1]
-
         self.dips_position = self.dips_position_all[len_f_0: len_f_1, :]
         self.dips_position_tiled = T.tile(self.dips_position, (self.n_dimensions, 1))
 
@@ -976,12 +1013,12 @@ class TheanoGraph_pro(object):
         self.rest_layer_points = self.rest_layer_points_all[len_i_0: len_i_1, :]
 
 
-
-
         # ====================
         # Computing the series
         # ====================
         faults_matrix = self.block_series()
+
+        # -DEP- Until I add network faults
         #final_block = T.set_subtensor(
         #    final_block[T.nonzero(T.cast(self.yet_simulated, "int8"))[0]],
         #    potential_field_contribution)
@@ -994,15 +1031,26 @@ class TheanoGraph_pro(object):
                          n_form_per_serie_0, n_form_per_serie_1,
                          final_block):
 
-        # to calculate the faults block I can set the yet simulated paramer to 0 so I do not use the whole grid
+        """
+        Function that loops each series, generating a potential field for each on them with the respective block model
+        Args:
+             len_i_0: Lenght of rest of previous series
+             len_i_1: Lenght of rest for the computed series
+             len_f_0: Lenght of dips of previous series
+             len_f_1: Length of dips of the computed series
+             n_form_per_serie_0: Number of formations of previous series
+             n_form_per_serie_1: Number of formations of the computed series
 
+        Returns:
+             theano.tensor.matrix: final block model
+        """
 
-        # THIS IS THE FINAL BLOCK. (DO I NEED TO LOOP THE FAULTS FIRST?)
+        # THIS IS THE FINAL BLOCK. (DO I NEED TO LOOP THE FAULTS FIRST? Yes you do)
         # ==================
         # Preparing the data
         # ==================
+        # Vector that controls the points that have been simulated in previous iterations
         self.yet_simulated = T.eq(final_block, 0)
-        #yet_simulated = self.yet_simulated_func(final_block)
         self.yet_simulated.name = 'Yet simulated node'
 
         # Theano shared
@@ -1038,23 +1086,33 @@ class TheanoGraph_pro(object):
 
     def whole_block_model(self, n_faults=0):
 
+        """
+        Final function that loops first all the faults, then uses that result in the final block and loops again the
+        series
+        Args:
+            n_faults (int): Number of faults to extract the correct values from the big input matrices
+
+        Returns:
+            theano.tensor.vector: Final block model with the segmented lithologies
+        """
+
+        # we initialize the final block
         final_block_init = self.final_block
         final_block_init.name = 'final block init'
-       # a = theano.printing.Print('the thing')(self.len_series_i[:self.n_faults])
 
+        # Check if there are faults and loop them to create the Faults block
         if n_faults != 0:
             fault_matrix, updates3 = theano.scan(
                 fn=self.compute_a_fault,
-             #   outputs_info=[final_block_init],
+             #   outputs_info=[final_block_init],   This line may be used for the faults network
                 sequences=[dict(input=self.len_series_i[:n_faults+1], taps=[0, 1]),
                            dict(input=self.len_series_f[:n_faults+1], taps=[0, 1]),
                            dict(input=self.n_formations_per_serie[:n_faults+1], taps=[0, 1])]
                  )
+            if 'faults block' in self.verbose:
+                self.fault_matrix = theano.printing.Print('I am outside the faults')(fault_matrix)
 
-            self.fault_matrix = theano.printing.Print('I am outside the faults')(fault_matrix)
-
-        # Here I am going to have to change the self.n_faults
-
+        # Loop the series to create the Final block
         all_series_blocks, updates2 = theano.scan(
              fn=self.compute_a_series,
              outputs_info=[final_block_init],
