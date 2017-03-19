@@ -11,7 +11,7 @@ import theano.tensor as T
 import numpy as np
 import sys
 
-theano.config.optimizer = 'fast_run'
+theano.config.optimizer = 'fast_compile'
 theano.config.exception_verbosity = 'high'
 theano.config.compute_test_value = 'ignore'
 theano.config.floatX = 'float32'
@@ -605,6 +605,7 @@ class TheanoGraph_pro(object):
 
         # Creation of the Dual Kriging vector
         b = T.zeros((length_of_C,))
+       # G = T.tile(G, (1, 1)
         b = T.set_subtensor(b[0:G.shape[0]], G)
 
         if verbose > 1:
@@ -628,8 +629,10 @@ class TheanoGraph_pro(object):
         # Solving the kriging system
         # TODO: look for an eficient way to substitute nlianlg by a theano operation
         import theano.tensor.slinalg
-        DK_parameters = theano.tensor.slinalg.solve(C_matrix, b)
-
+        b2 = T.tile(b, (1,1)).T
+        DK_parameters = theano.tensor.slinalg.solve(C_matrix, b2)
+        DK_parameters = DK_parameters.reshape((DK_parameters.shape[0],))
+      #  DK_parameters = T.dot(T.nlinalg.matrix_inverse(C_matrix), b)
         # Add name to the theano node
         DK_parameters.name = 'Dual Kriging parameters'
 
