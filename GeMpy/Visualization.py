@@ -102,33 +102,36 @@ class PlotData(object):
         Slice the 3D array (blocks or potential field) in the specific direction selected in the plotting functions
 
         """
-        _a, _b, _c = slice(0, self._data.nx), slice(0, self._data.ny), slice(0, self._data.nz)
+        _a, _b, _c = (slice(0, self._data.resolution[0]),
+                      slice(0, self._data.resolution[1]),
+                      slice(0, self._data.resolution[2]))
         if direction == "x":
             _a = cell_number
             x = "Y"
             y = "Z"
             Gx = "G_y"
             Gy = "G_z"
-            extent_val = self._data.ymin, self._data.ymax, self._data.zmin, self._data.zmax
+            extent_val = self._data.extent[3], self._data.extent[2], self._data.extent[5], self._data.extent[4]
         elif direction == "y":
             _b = cell_number
             x = "X"
             y = "Z"
             Gx = "G_x"
             Gy = "G_z"
-            extent_val = self._data.xmin, self._data.xmax, self._data.zmin, self._data.zmax
+            extent_val = self._data.extent[0], self._data.extent[1], self._data.extent[4], self._data.extent[5]
         elif direction == "z":
             _c = cell_number
             x = "X"
             y = "Y"
             Gx = "G_x"
             Gy = "G_y"
-            extent_val = self._data.xmin, self._data.xmax, self._data.ymin, self._data.ymax
+            extent_val = self._data.extent[1], self._data.extent[0], self._data.extent[3], self._data.extent[2]
         else:
             raise AttributeError(str(direction) + "must be a cartesian direction, i.e. xyz")
         return _a, _b, _c, extent_val, x, y, Gx, Gy
 
-    def plot_block_section(self, cell_number=13, block=None, direction="y", interpolation='none', **kwargs):
+    def plot_block_section(self, cell_number=13, block=None, direction="y", interpolation='none',
+                           plot_data = False, **kwargs):
         """
         Plot a section of the block model
 
@@ -157,20 +160,25 @@ class PlotData(object):
                 _block = block.get_value()
         else:
             try:
-                _block = self._data.interpolator.block.get_value()
+                _block = self._data.interpolator.tg.final_block.get_value()
             except AttributeError:
                 raise AttributeError('There is no block to plot')
 
-        plot_block = _block.reshape(self._data.nx, self._data.ny, self._data.nz)
+        plot_block = _block.reshape(self._data.resolution[0], self._data.resolution[1], self._data.resolution[2])
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
+
+
+        if plot_data:
+            self.plot_data(direction, 'all')
 
         plt.imshow(plot_block[_a, _b, _c].T, origin="bottom", cmap="viridis",
                    extent=extent_val,
                    interpolation=interpolation, **kwargs)
+
         plt.xlabel(x)
         plt.ylabel(y)
 
-    def plot_potential_field(self, cell_number, potential_field=None, n_pf=0,
+    def plot_potential_field(self, potential_field, cell_number, n_pf=0,
                              direction="y", plot_data=True, series="all", *args, **kwargs):
         """
         Plot a potential field in a given direction.
@@ -187,24 +195,18 @@ class PlotData(object):
             Potential field plot
         """
 
-        if not potential_field:
-            try:
-                potential_field = self._data.interpolator.potential_fields[n_pf]
-            except AttributeError:
-                raise AttributeError('No potential field has been computed yet')
-
         if plot_data:
-            self.plot_data(direction, self._data.series.columns.values[n_pf])
+            self.plot_data(direction, self._data.interfaces['series'].unique()[n_pf])
 
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
-        plt.contour(potential_field[_a, _b, _c].T, 12,
+        plt.contour(potential_field[_a, _b, _c].T, cell_number,
                     extent=extent_val, *args,
                     **kwargs)
 
         if 'colorbar' in kwargs:
             plt.colorbar()
 
-        plt.title(self._data.series.columns[n_pf])
+        plt.title(self._data.interfaces['series'].unique()[n_pf])
         plt.xlabel(x)
         plt.ylabel(y)
 

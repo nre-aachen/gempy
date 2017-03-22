@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Code &mdash; GeMpy 2 documentation</title>
+    <title>Code &#8212; GeMpy 2 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,17 +17,20 @@
         VERSION:     '2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="GeMpy 2 documentation" href="GeMpy Introduction.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Example 3: Simple model PyMC" href="Notebooks/Example_3_Simple_PyMC.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -43,8 +46,6 @@
   <div class="section" id="code">
 <h1>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul class="simple">
-</ul>
 </div>
 <span class="target" id="module-Visualization"></span><p>Module with classes and methods to visualized structural geology data and potential fields of the regional modelling based on
 the potential field method.
@@ -69,7 +70,7 @@ Tested on Ubuntu 14</p>
 <tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
 <tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
 <li><strong>potential_field</strong> (<em>numpy.ndarray</em>) &#8211; 3D array containing a individual potential field</li>
-<li><strong>verbose</strong> (<em>int</em>) &#8211; Level of verbosity during the execution of the functions (up to 5). Default 0</li>
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Level of verbosity during the execution of the functions (up to 5). Default 0</li>
 </ul>
 </td>
 </tr>
@@ -87,8 +88,8 @@ before telling matplotlib to show the plot.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>frame</strong> (<em>pandas.DataFrame</em>) &#8211; </li>
-<li><strong>plot_col</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The string identifying the column of frame that was plotted</li>
-<li><strong>label_col</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The string identifying the column of frame to be used as label</li>
+<li><strong>plot_col</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The string identifying the column of frame that was plotted</li>
+<li><strong>label_col</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The string identifying the column of frame to be used as label</li>
 <li><strong>kwargs</strong> &#8211; Other key-word args that should be passed to plt.annotate</li>
 </ul>
 </td>
@@ -96,7 +97,7 @@ before telling matplotlib to show the plot.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/constants.html#None" title="(in Python v2.7)">None</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)">None</a></p>
 </td>
 </tr>
 </tbody>
@@ -116,15 +117,15 @@ them.</p>
 
 <dl class="method">
 <dt id="Visualization.PlotData.plot_block_section">
-<code class="descname">plot_block_section</code><span class="sig-paren">(</span><em>cell_number=13</em>, <em>block=None</em>, <em>direction='y'</em>, <em>interpolation='none'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Visualization.html#PlotData.plot_block_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Visualization.PlotData.plot_block_section" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot_block_section</code><span class="sig-paren">(</span><em>cell_number=13</em>, <em>block=None</em>, <em>direction='y'</em>, <em>interpolation='none'</em>, <em>plot_data=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Visualization.html#PlotData.plot_block_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Visualization.PlotData.plot_block_section" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a section of the block model</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>cell_number</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; position of the array to plot</li>
-<li><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; xyz. Caartesian direction to be plotted
+<li><strong>cell_number</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; position of the array to plot</li>
+<li><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; xyz. Caartesian direction to be plotted
 interpolation(str): Type of interpolation of plt.imshow. Default &#8216;none&#8217;.  Acceptable values are &#8216;none&#8217;
 ,&#8217;nearest&#8217;, &#8216;bilinear&#8217;, &#8216;bicubic&#8217;,
 &#8216;spline16&#8217;, &#8216;spline36&#8217;, &#8216;hanning&#8217;, &#8216;hamming&#8217;, &#8216;hermite&#8217;, &#8216;kaiser&#8217;,
@@ -151,8 +152,8 @@ specific directions</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; xyz. Caartesian direction to be plotted</li>
-<li><strong>series</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; series to plot</li>
+<li><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; xyz. Caartesian direction to be plotted</li>
+<li><strong>series</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; series to plot</li>
 <li><strong>**kwargs</strong> &#8211; seaborn lmplot key arguments. (TODO: adding the link to them)</li>
 </ul>
 </td>
@@ -166,17 +167,17 @@ specific directions</p>
 
 <dl class="method">
 <dt id="Visualization.PlotData.plot_potential_field">
-<code class="descname">plot_potential_field</code><span class="sig-paren">(</span><em>cell_number</em>, <em>potential_field=None</em>, <em>n_pf=0</em>, <em>direction='y'</em>, <em>plot_data=True</em>, <em>series='all'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Visualization.html#PlotData.plot_potential_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Visualization.PlotData.plot_potential_field" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot_potential_field</code><span class="sig-paren">(</span><em>potential_field</em>, <em>cell_number</em>, <em>n_pf=0</em>, <em>direction='y'</em>, <em>plot_data=True</em>, <em>series='all'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Visualization.html#PlotData.plot_potential_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Visualization.PlotData.plot_potential_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a potential field in a given direction.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>cell_number</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; position of the array to plot</li>
-<li><strong>potential_field</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the potential field (or series) to plot</li>
-<li><strong>n_pf</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of the  potential field (or series) to plot</li>
-<li><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; xyz. Caartesian direction to be plotted</li>
+<li><strong>cell_number</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; position of the array to plot</li>
+<li><strong>potential_field</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the potential field (or series) to plot</li>
+<li><strong>n_pf</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of the  potential field (or series) to plot</li>
+<li><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; xyz. Caartesian direction to be plotted</li>
 <li><strong>serie</strong> &#8211; <em>Deprecated</em></li>
 <li><strong>**kwargs</strong> &#8211; plt.contour kwargs</li>
 </ul>
@@ -219,15 +220,15 @@ specific directions</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/code.txt"
+      <li><a href="_sources/code.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -241,11 +242,11 @@ specific directions</p>
       &copy;2016, Miguel de la Varga. NRE-RWTH team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
-      <a href="_sources/code.txt"
+      <a href="_sources/code.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
