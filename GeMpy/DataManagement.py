@@ -1,17 +1,16 @@
 from __future__ import division
 
-import theano
-import theano.tensor as T
-import numpy as np
-import sys, os
-import pandas as pn
+import os
+import sys
 
-from Visualization import PlotData
+import numpy as np
+import pandas as pn
+import theanograf
 
 
 class DataManagement(object):
     """
-    Class to import the raw data of the model and set data classifications into formations and series
+    -DOCS NOT UPDATED- Class to import the raw data of the model and set data classifications into formations and series
 
     Args:
         extent (list):  [x_min, x_max, y_min, y_max, z_min, z_max]
@@ -30,72 +29,185 @@ class DataManagement(object):
 
     # TODO: Data management using pandas, find an easy way to add values
     # TODO: Probably at some point I will have to make an static and dynamic data classes
-    def __init__(self, extent,
+    def __init__(self,
+                 extent,
                  resolution=[50, 50, 50],
                  path_i=None, path_f=None,
                  **kwargs):
 
-        # Deprecated
-        self.xmin = extent[0]
-        self.xmax = extent[1]
-        self.ymin = extent[2]
-        self.ymax = extent[3]
-        self.zmin = extent[4]
-        self.zmax = extent[5]
-        self.nx = resolution[0]
-        self.ny = resolution[1]
-        self.nz = resolution[2]
-        # -------------------
+        # Set extent and resolution
+        self.extent = np.array(extent)
+        self.resolution = np.array(resolution)
 
-        self.extent = extent
-        self.resolution = resolution
-
-        # TODO choose the default source of data. So far only
+        # TODO choose the default source of data. So far only csv
+        # Create the pandas dataframes
         if path_f:
             self.foliations = self.load_data_csv(data_type="foliations", path=path_f, **kwargs)
             assert set(['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation']).issubset(self.foliations.columns), \
                 "One or more columns do not match with the expected values " + str(self.foliations.columns)
         else:
-            self.foliations = pn.DataFrame(columns=['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation', 'series'])
+            # if we dont read a csv we create an empty dataframe with the columns that have to be filled
+            self.foliations = pn.DataFrame(columns=['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity',
+                                                    'formation', 'series'])
         if path_i:
             self.interfaces = self.load_data_csv(data_type="interfaces", path=path_i, **kwargs)
             assert set(['X', 'Y', 'Z', 'formation']).issubset(self.interfaces.columns), \
                 "One or more columns do not match with the expected values " + str(self.interfaces.columns)
         else:
-            self.interfaces = pn.DataFrame(columns=['X', 'Y', 'Z', 'formation'])
+            self.interfaces = pn.DataFrame(columns=['X', 'Y', 'Z', 'formation', 'series'])
 
+
+        # DEP-
         self._set_formations()
+
+        # If not provided set default series
         self.series = self.set_series()
+        # DEP- self.set_formation_number()
+
+        # Compute gradients given azimuth and dips to plot data
         self.calculate_gradient()
 
-        # Create default grid object. (Is this necessary now?)
+        # Create default grid object. TODO: (Is this necessary now?)
         self.grid = self.create_grid(extent=None, resolution=None, grid_type="regular_3D", **kwargs)
 
-    def set_interfaces(self, interf_Dataframe, append=False):
+    def _set_formations(self):
+        """
+        -DEPRECATED- Function to import the formations that will be used later on. By default all the formations in the tables are
+        chosen.
 
-        assert set(['X', 'Y', 'Z', 'formation']).issubset(interf_Dataframe.columns), \
-            "One or more columns do not match with the expected values " + str(interf_Dataframe.columns)
+        Returns:
+             pandas.core.frame.DataFrame: Data frame with the raw data
 
-        if append:
-            self.interfaces = self.interfaces.append(interf_Dataframe)
-        else:
-            self.interfaces = interf_Dataframe
+        """
 
-        self._set_formations()
-        self.set_series()
+        try:
+            # foliations may or may not be in all formations so we need to use interfaces
+            self.formations = self.interfaces["formation"].unique()
 
-    def set_foliations(self, foliat_Dataframe, append=False):
+            # TODO: Trying to make this more elegant?
+            # for el in self.formations:
+            #     for check in self.formations:
+            #         assert (el not in check or el == check), "One of the formations name contains other" \
+            #                                                  " string. Please rename." + str(el) + " in " + str(
+            #             check)
 
-        assert set(['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation']).issubset(
-            foliat_Dataframe.columns), "One or more columns do not match with the expected values " +\
-                                       str(foliat_Dataframe.columns)
-        if append:
-            self.foliations = self.foliations.append(foliat_Dataframe)
-        else:
-            self.foliations = foliat_Dataframe
+                    # TODO: Add the possibility to change the name in pandas directly
+                    # (adding just a 1 in the contained string)
+        except AttributeError:
+            pass
 
-        self._set_formations()
-        self.set_series()
+    def calculate_gradient(self):
+        """
+        Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations
+
+        Returns:
+            self.foliations: extra columns with components xyz of the unity vector.
+        """
+
+        self.foliations['G_x'] = np.sin(np.deg2rad(self.foliations["dip"])) * \
+                                 np.sin(np.deg2rad(self.foliations["azimuth"])) * self.foliations["polarity"]
+        self.foliations['G_y'] = np.sin(np.deg2rad(self.foliations["dip"])) * \
+                                 np.cos(np.deg2rad(self.foliations["azimuth"])) * self.foliations["polarity"]
+        self.foliations['G_z'] = np.cos(np.deg2rad(self.foliations["dip"])) * self.foliations["polarity"]
+
+    def create_grid(self, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
+        """
+        Method to initialize the class grid. So far is really simple and only has the regular grid type
+
+        Args:
+            grid_type (str): regular_3D or regular_2D (I am not even sure if regular 2D still working)
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            self.grid(GeMpy_core.grid): Object that contain different grids
+        """
+
+        if not extent:
+            extent = self.extent
+        if not resolution:
+            resolution = self.resolution
+
+        return self.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
+
+    def get_raw_data(self, itype='all'):
+        """
+        Method that returns the interfaces and foliations pandas Dataframes. Can return both at the same time or only
+        one of the two
+        Args:
+            itype: input data type, either 'foliations', 'interfaces' or 'all' for both.
+
+        Returns:
+            pandas.core.frame.DataFrame: Data frame with the raw data
+
+        """
+        import pandas as _pn
+        if itype == 'foliations':
+            raw_data = self.foliations
+        elif itype == 'interfaces':
+            raw_data = self.interfaces
+        elif itype == 'all':
+            raw_data = _pn.concat([self.interfaces, self.foliations], keys=['interfaces', 'foliations'])
+        return raw_data
+
+    def i_open_set_data(self, itype="foliations"):
+        """
+        Method to have interactive pandas tables in jupyter notebooks. The idea is to use this method to interact with
+         the table and i_close_set_data to recompute the parameters that depend on the changes made. I did not find a
+         easier solution than calling two different methods.
+        Args:
+            itype: input data type, either 'foliations' or 'interfaces'
+
+        Returns:
+            pandas.core.frame.DataFrame: Data frame with the changed data on real time
+        """
+
+        # if the data frame is empty the interactive table is bugged. Therefore I create a default raw when the method
+        # is called
+        if self.foliations.empty:
+            self.foliations = pn.DataFrame(
+                np.array([0., 0., 0., 0., 0., 1., 'Default Formation', 'Default series']).reshape(1, 8),
+                columns=['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation', 'series']).\
+                convert_objects(convert_numeric=True)
+
+        if self.interfaces.empty:
+            self.interfaces = pn.DataFrame(
+                np.array([0, 0, 0, 'Default Formation', 'Default series']).reshape(1, 5),
+                columns=['X', 'Y', 'Z', 'formation', 'series']).convert_objects(convert_numeric=True)
+
+        # TODO leave qgrid as a dependency since in the end I did not change the code of the package
+        import qgrid
+
+        # Setting some options
+        qgrid.nbinstall(overwrite=True)
+        qgrid.set_defaults(show_toolbar=True)
+        assert itype is 'foliations' or itype is 'interfaces', 'itype must be either foliations or interfaces'
+
+        import warnings
+        warnings.warn('Remember to call i_close_set_data after the editing.')
+
+        # We kind of set the show grid to a variable so we can close it afterwards
+        self.pandas_frame = qgrid.show_grid(self.get_raw_data(itype=itype))
+
+        # TODO set
+
+    def i_close_set_data(self):
+
+        """
+        Method to have interactive pandas tables in jupyter notebooks. The idea is to use this method to interact with
+         the table and i_close_set_data to recompute the parameters that depend on the changes made. I did not find a
+         easier solution than calling two different methods.
+        Args:
+            itype: input data type, either 'foliations' or 'interfaces'
+
+        Returns:
+            pandas.core.frame.DataFrame: Data frame with the changed data on real time
+        """
+        # We close it to guarantee that after this method it is not possible further modifications
+        self.pandas_frame.close()
+        # -DEP- self._set_formations()
+        # -DEP- self.set_formation_number()
+        # Set parameters
+        self.series = self.set_series()
         self.calculate_gradient()
 
     @staticmethod
@@ -123,35 +235,49 @@ class DataManagement(object):
         else:
             raise NameError('Data type not understood. Try interfaces or foliations')
 
-            # TODO if we load different data the Interpolator parameters must be also updated:  Research how and implement
+        # TODO if we load different data the Interpolator parameters must be also updated. Prob call gradients and
+        # series
 
-    def _set_formations(self):
+    def set_interfaces(self, interf_Dataframe, append=False):
         """
-        Function to import the formations that will be used later on. By default all the formations in the tables are
-        chosen.
-
-        Returns:
-             pandas.core.frame.DataFrame: Data frame with the raw data
-
+        Method to change or append a Dataframe to interfaces in place.
+        Args:
+            interf_Dataframe: pandas.core.frame.DataFrame with the data
+            append: Bool: if you want to append the new data frame or substitute it
         """
-      #  try:
-      #      getattr(self, "formations")
-      #  except AttributeError:
-        try:
-            # foliations may or may not be in all formations so we need to use interfaces
-            self.formations = self.interfaces["formation"].unique()
+        assert set(['X', 'Y', 'Z', 'formation']).issubset(interf_Dataframe.columns), \
+            "One or more columns do not match with the expected values " + str(interf_Dataframe.columns)
 
-            # TODO: Trying to make this more elegant?
-            for el in self.formations:
-                for check in self.formations:
-                    assert (el not in check or el == check), "One of the formations name contains other" \
-                                                             " string. Please rename." + str(el) + " in " + str(
-                        check)
+        if append:
+            self.interfaces = self.interfaces.append(interf_Dataframe)
+        else:
+            self.interfaces = interf_Dataframe
 
-                    # TODO: Add the possibility to change the name in pandas directly
-                    # (adding just a 1 in the contained string)
-        except AttributeError:
-            pass
+       #-DEP- self.interfaces.reset_index(drop=False, inplace=True)
+       #-DEP- self._set_formations()
+        self.set_series()
+       #-DEP- self.set_formation_number()
+
+    def set_foliations(self, foliat_Dataframe, append=False):
+        """
+          Method to change or append a Dataframe to foliations in place.
+          Args:
+              interf_Dataframe: pandas.core.frame.DataFrame with the data
+              append: Bool: if you want to append the new data frame or substitute it
+          """
+        assert set(['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation']).issubset(
+            foliat_Dataframe.columns), "One or more columns do not match with the expected values " +\
+                                       str(foliat_Dataframe.columns)
+        if append:
+            self.foliations = self.foliations.append(foliat_Dataframe)
+        else:
+            self.foliations = foliat_Dataframe
+
+        #-DEP- self.interfaces.reset_index(drop=False, inplace=True)
+        #-DEP- self._set_formations()
+        self.set_series()
+        #-DEP- self.set_formation_number()
+        self.calculate_gradient()
 
     def set_series(self, series_distribution=None, order=None):
         """
@@ -169,63 +295,63 @@ class DataManagement(object):
         """
 
         if series_distribution is None:
-            # TODO: Possibly we have to debug this function
-            _series = {"Default serie": self.formations}
+            # set to default series
+            # TODO see if some of the formations have already a series and not overwrite
+            _series = {"Default serie": self.interfaces["formation"].unique()}
 
         else:
             assert type(series_distribution) is dict, "series_distribution must be a dictionary, " \
                                                       "see Docstring for more information"
+
+            # TODO if self.series exist already maybe we should append instead of overwrite
             _series = series_distribution
+
+        # The order of the series is very important since it dictates which one is on top of the stratigraphic pile
+        # If it is not given we take the dictionaries keys. NOTICE that until python 3.6 these keys are pretty much
+        # random
         if not order:
             order = _series.keys()
+
+        # We create a dataframe with the links
         _series = pn.DataFrame(data=_series, columns=order)
-        assert np.count_nonzero(np.unique(_series.values)) is len(self.formations), \
-            "series_distribution must have the same number of values as number of formations %s." \
-            % self.formations
 
+        # Now we fill the column series in the interfaces and foliations tables with the correspondant series and
+        # assigned number to the series
         self.interfaces["series"] = [(i == _series).sum().argmax() for i in self.interfaces["formation"]]
+        self.interfaces["order_series"] = [(i == _series).sum().as_matrix().argmax() + 1
+                                           for i in self.interfaces["formation"]]
         self.foliations["series"] = [(i == _series).sum().argmax() for i in self.foliations["formation"]]
+        self.foliations["order_series"] = [(i == _series).sum().as_matrix().argmax() + 1
+                                           for i in self.foliations["formation"]]
 
+        # We sort the series altough is only important for the computation (we will do it again just before computing)
+        self.interfaces.sort_values(by='order_series', inplace=True)
+        self.foliations.sort_values(by='order_series', inplace=True)
+
+        # Save the dataframe in a property
         self.series = _series
+
         return _series
 
-    def calculate_gradient(self):
+    def set_formation_number(self):
         """
-        Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations
+        Set a unique number to each formation. NOTE: this method is getting deprecated since the user does not need
+        to know it and also now the numbers must be set in the order of the series as well. Therefore this method
+        has been moved to the interpolator class as preprocessing
 
-        Returns:
-            self.foliations: extra columns with components xyz of the unity vector.
+        Returns: Column in the interfaces and foliations dataframes
         """
-
-        self.foliations['G_x'] = np.sin(np.deg2rad(self.foliations["dip"])) * \
-                                 np.sin(np.deg2rad(self.foliations["azimuth"])) * self.foliations["polarity"]
-        self.foliations['G_y'] = np.sin(np.deg2rad(self.foliations["dip"])) * \
-                                 np.cos(np.deg2rad(self.foliations["azimuth"])) * self.foliations["polarity"]
-        self.foliations['G_z'] = np.cos(np.deg2rad(self.foliations["dip"])) * self.foliations["polarity"]
-
-    # TODO set new interface/set
-
-    def i_set_data(self, dtype="foliations"):
-        import qgrid
-        qgrid.nbinstall(overwrite=True)
-        qgrid.set_defaults(show_toolbar=True)
-        assert dtype is 'foliations' or dtype is 'interfaces', 'dtype must be either foliations or interfaces'
-        qgrid.show_grid(self.get_raw_data(dtype=dtype))
-
-    def get_raw_data(self, dtype='all'):
-
-        import pandas as _pn
-        if dtype == 'foliations':
-            raw_data = self.foliations
-        elif dtype == 'interfaces':
-            raw_data = self.interfaces
-        elif dtype == 'all':
-            raw_data = _pn.concat([self.interfaces, self.foliations], keys=['interfaces', 'foliations'])
-        return raw_data
+        try:
+            ip_addresses = self.interfaces["formation"].unique()
+            ip_dict = dict(zip(ip_addresses, range(1, len(ip_addresses)+1)))
+            self.interfaces['formation number'] = self.interfaces['formation'].replace(ip_dict)
+            self.foliations['formation number'] = self.foliations['formation'].replace(ip_dict)
+        except ValueError:
+            pass
 
     class GridClass(object):
         """
-        Class with set of functions to generate grids
+        -DOCS NOT UPDATED- Class with set of functions to generate grids
 
         Args:
             extent (list):  [x_min, x_max, y_min, y_max, z_min, z_max]
@@ -258,29 +384,12 @@ class DataManagement(object):
                 np.linspace(self._grid_ext[4], self._grid_ext[5], self._grid_res[2], dtype="float32"), indexing="ij"
             )
 
+          #  self.grid = np.vstack(map(np.ravel, g)).T.astype("float32")
             return np.vstack(map(np.ravel, g)).T.astype("float32")
-
-    def create_grid(self, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
-        """
-        Method to initialize the class grid. So far is really simple and only has the regular grid type
-
-        Args:
-            grid_type (str): regular_3D or regular_2D (I am not even sure if regular 2D still working)
-            **kwargs: Arbitrary keyword arguments.
-
-        Returns:
-            self.grid(GeMpy_core.grid): Object that contain different grids
-        """
-        if not extent:
-            extent = self.extent
-        if not resolution:
-            resolution = self.resolution
-
-        return self.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
 
     class InterpolatorClass(object):
         """
-        Class which contain all needed methods to perform potential field implicit modelling in theano
+        -DOCS NOT UPDATED- Class which contain all needed methods to perform potential field implicit modelling in theano
 
         Args:
             _data(GeMpy_core.DataManagement): All values of a DataManagement object
@@ -291,764 +400,264 @@ class DataManagement(object):
             verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0
         """
 
-        def __init__(self, _data, _grid=None, *args, **kwargs):
+        def __init__(self, _data_scaled, _grid_scaled=None, *args, **kwargs):
 
-            verbose = kwargs.get('verbose', 0)
+            # verbose is a list of strings. See theanograph
+            verbose = kwargs.get('verbose', [0])
+            # -DEP-rescaling_factor = kwargs.get('rescaling_factor', None)
 
-            theano.config.optimizer = 'fast_compile'
-            theano.config.exception_verbosity = 'high'
-            theano.config.compute_test_value = 'ignore'
+            # Here we can change the dtype for stability and GPU vs CPU
+            dtype = kwargs.get('dtype', 'float32')
+            self.dtype = dtype
 
-            self._data = _data
+            # Drift grade
+            u_grade = kwargs.get('u_grade', 2)
 
-            if not _grid:
-                self._grid = _data.grid
+            # We hide the scaled copy of DataManagement object from the user. The scaling happens in GeMpy what is a
+            # bit weird. Maybe at some point I should bring the function to this module
+            self._data_scaled = _data_scaled
+
+            # In case someone wants to provide a grid otherwise we extract it from the DataManagement object.
+            if not _grid_scaled:
+                self._grid_scaled = _data_scaled.grid
             else:
-                self._grid = _grid
+                self._grid_scaled = _grid_scaled
 
-            self._set_constant_parameteres(_data, _grid, **kwargs)
+            # Importing the theano graph. The methods of this object generate different parts of graph.
+            # See theanograf doc
+            self.tg = theanograf.TheanoGraph_pro(u_grade, dtype=dtype, verbose=verbose,)
 
-            self.theano_compilation_3D()
-            # -------------------------
-            self.potential_fields = [self.compute_potential_field(i, verbose=verbose)
-                                     for i in np.arange(len(self._data.series.columns))]
+            # Sorting data in case the user provides it unordered
+            self.order_table()
 
-        def update_potential_fields(self, verbose=0):
-            self.potential_fields = [self.compute_potential_field(i, verbose=verbose)
-                                     for i in np.arange(len(self._data.series.columns))]
+            # Setting theano parameters
+            self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, **kwargs)
 
-        def _select_serie(self, series_name=0):
+            # Extracting data from the pandas dataframe to numpy array in the required form for the theano function
+            self.data_prep()
+
+        def set_formation_number(self):
             """
-            Return the formations of a given serie in string
-            :param series_name: name or argument of the serie. Default first of the list
-            :return: formations of a given serie in string separeted by |
-            """
-            if type(series_name) == int or type(series_name) == np.int64:
-                _formations_in_serie = "|".join(self._data.series.ix[:, series_name].drop_duplicates())
-            elif type(series_name) == str:
-                _formations_in_serie = "|".join(self._data.series[series_name].drop_duplicates())
-            return _formations_in_serie
+                    Set a unique number to each formation. NOTE: this method is getting deprecated since the user does not need
+                    to know it and also now the numbers must be set in the order of the series as well. Therefore this method
+                    has been moved to the interpolator class as preprocessing
 
-        def _set_constant_parameteres(self, _data, _grid, **kwargs):
+            Returns: Column in the interfaces and foliations dataframes
             """
-            Basic interpolator parameters. Also here it is possible to change some flags of theano
-            :param range_var: Range of the variogram, it is recommended the distance of the longest diagonal
-            :param c_o: Sill of the variogram
-            """
-            # TODO: update Docstrig
+            try:
+                ip_addresses = self._data_scaled.interfaces["formation"].unique()
+                ip_dict = dict(zip(ip_addresses, range(1, len(ip_addresses) + 1)))
+                self._data_scaled.interfaces['formation number'] = self._data_scaled.interfaces['formation'].replace(ip_dict)
+                self._data_scaled.foliations['formation number'] = self._data_scaled.foliations['formation'].replace(ip_dict)
+            except ValueError:
+                pass
 
+        def order_table(self):
+            """
+            First we sort the dataframes by the series age. Then we set a unique number for every formation and resort
+            the formations. All inplace
+            """
+
+            # We order the pandas table by series
+            self._data_scaled.interfaces.sort_values(by=['order_series'],  # , 'formation number'],
+                                                     ascending=True, kind='mergesort',
+                                                     inplace=True)
+
+            self._data_scaled.foliations.sort_values(by=['order_series'],  # , 'formation number'],
+                                                     ascending=True, kind='mergesort',
+                                                     inplace=True)
+
+            # Give formation number
+            self.set_formation_number()
+
+            # We order the pandas table by formation (also by series in case something weird happened)
+            self._data_scaled.interfaces.sort_values(by=['order_series', 'formation number'],
+                                                     ascending=True, kind='mergesort',
+                                                     inplace=True)
+
+            self._data_scaled.foliations.sort_values(by=['order_series', 'formation number'],
+                                                     ascending=True, kind='mergesort',
+                                                     inplace=True)
+
+            # Pandas dataframe set an index to every row when the dataframe is created. Sorting the table does not reset
+            # the index. For some of the methods (pn.drop) we have to apply afterwards we need to reset these indeces
+            self._data_scaled.interfaces.reset_index(drop=True, inplace=True)
+
+        def data_prep(self):
+            """
+            Ideally this method will extract the data from the pandas dataframes to individual numpy arrays to be input
+            of the theano function. However since some of the shared parameters are function of these arrays shape I also
+            set them here
+            Returns:
+                idl (list): List of arrays which are the input for the theano function:
+                    - numpy.array: dips_position
+                    - numpy.array: dip_angles
+                    - numpy.array: azimuth
+                    - numpy.array: polarity
+                    - numpy.array: ref_layer_points
+                    - numpy.array: rest_layer_points
+            """
+            # Array containing the size of every formation. Interfaces
+            len_interfaces = np.asarray(
+                [np.sum(self._data_scaled.interfaces['formation number'] == i)
+                 for i in self._data_scaled.interfaces['formation number'].unique()])
+
+            # Size of every layer in rests. SHARED (for theano)
+            len_rest_form = (len_interfaces - 1)
+            self.tg.number_of_points_per_formation_T.set_value(len_rest_form)
+
+            # Position of the first point of every layer
+            ref_position = np.insert(len_interfaces[:-1], 0, 0).cumsum()
+
+            # Drop the reference points using pandas indeces to get just the rest_layers array
+            pandas_rest_layer_points = self._data_scaled.interfaces.drop(ref_position)
+
+            # TODO: do I need this? PYTHON
+            # DEP- because per series the foliations do not belong to a formation but to the whole series
+            # len_foliations = np.asarray(
+            #     [np.sum(self._data_scaled.foliations['formation number'] == i)
+            #      for i in self._data_scaled.foliations['formation number'].unique()])
+
+            # -DEP- I think this was just a kind of print to know what was going on
+            #self.pandas_rest = pandas_rest_layer_points
+
+            # Array containing the size of every series. Interfaces.
+            len_series_i = np.asarray(
+                [np.sum(pandas_rest_layer_points['order_series'] == i)
+                 for i in pandas_rest_layer_points['order_series'].unique()])
+
+            # Cumulative length of the series. We add the 0 at the beginning and set the shared value. SHARED
+            self.tg.len_series_i.set_value(np.insert(len_series_i, 0, 0).cumsum())
+
+            # Array containing the size of every series. Foliations.
+            len_series_f = np.asarray(
+                [np.sum(self._data_scaled.foliations['order_series'] == i)
+                 for i in self._data_scaled.foliations['order_series'].unique()])
+
+            # Cumulative length of the series. We add the 0 at the beginning and set the shared value. SHARED
+            self.tg.len_series_f.set_value(np.insert(len_series_f, 0, 0).cumsum())
+
+            # Rest layers matrix # PYTHON VAR
+            rest_layer_points = pandas_rest_layer_points[['X', 'Y', 'Z']].as_matrix()
+
+            # TODO delete
+            # -DEP- Again i was just a check point
+            # self.rest_layer_points = rest_layer_points
+
+            # Ref layers matrix #VAR
+            # Calculation of the ref matrix and tile. Iloc works with the row number
+            # Here we extract the reference points
+            aux_1 = self._data_scaled.interfaces.iloc[ref_position][['X', 'Y', 'Z']].as_matrix()
+
+            # We initialize the matrix
+            ref_layer_points = np.zeros((0, 3))
+
+            # TODO I hate loop it has to be a better way
+            # Tiling very reference points as many times as rest of the points we have
+            for e, i in enumerate(len_interfaces):
+                ref_layer_points = np.vstack((ref_layer_points, np.tile(aux_1[e], (i - 1, 1))))
+
+            # -DEP- was just a check point
+            #self.ref_layer_points = ref_layer_points
+
+            # Check no reference points in rest points (at least in coor x)
+            assert not any(aux_1[:, 0]) in rest_layer_points[:, 0], \
+                'A reference point is in the rest list point. Check you do ' \
+                'not have duplicated values in your dataframes'
+
+            # Foliations, this ones I tile them inside theano. PYTHON VAR
+            dips_position = self._data_scaled.foliations[['X', 'Y', 'Z']].as_matrix()
+            dip_angles = self._data_scaled.foliations["dip"].as_matrix()
+            azimuth = self._data_scaled.foliations["azimuth"].as_matrix()
+            polarity = self._data_scaled.foliations["polarity"].as_matrix()
+
+            # Set all in a list casting them in the chosen dtype
+            idl = [np.cast[self.dtype](xs) for xs in (dips_position, dip_angles, azimuth, polarity,
+                   ref_layer_points, rest_layer_points)]
+
+            return idl
+
+        def set_theano_shared_parameteres(self, _data_rescaled, _grid_rescaled, **kwargs):
+            """
+            Here we create most of the kriging parameters. The user can pass them as kwargs otherwise we pick the
+            default values from the DataManagement info. The share variables are set in place. All the parameters here
+            are independent of the input data so this function only has to be called if you change the extent or grid or
+            if you want to change one the kriging parameters.
+            Args:
+                _data_rescaled: DataManagement object
+                _grid_rescaled: Grid object
+            Keyword Args:
+                u_grade (int): Drift grade. Default to 2.
+                range_var (float): Range of the variogram. Default 3D diagonal of the extent
+                c_o (float): Covariance at lag 0. Default range_var ** 2 / 14 / 3. See my paper when I write it
+                nugget_effect (flaot): Nugget effect of foliations. Default to 0.01
+            """
+
+            # Kwargs
             u_grade = kwargs.get('u_grade', 2)
             range_var = kwargs.get('range_var', None)
             c_o = kwargs.get('c_o', None)
             nugget_effect = kwargs.get('nugget_effect', 0.01)
-            rescaling_factor = kwargs.get('rescaling_factor', None)
 
+            # -DEP- Now I rescale the data so we do not need this
+            # rescaling_factor = kwargs.get('rescaling_factor', None)
+
+            # Default range
             if not range_var:
-                range_var = np.sqrt((_data.xmax - _data.xmin) ** 2 +
-                                    (_data.ymax - _data.ymin) ** 2 +
-                                    (_data.zmax - _data.zmin) ** 2)
+                range_var = np.sqrt((_data_rescaled.extent[0] - _data_rescaled.extent[1]) ** 2 +
+                                    (_data_rescaled.extent[2] - _data_rescaled.extent[3]) ** 2 +
+                                    (_data_rescaled.extent[4] - _data_rescaled.extent[5]) ** 2)
+
+            # Default covariance at 0
             if not c_o:
                 c_o = range_var ** 2 / 14 / 3
 
-            # Creation of shared variables
-            self.nx_T = theano.shared(_data.nx, "Resolution in x axis")
-            self.ny_T = theano.shared(_data.ny, "Resolution in y axis")
-            self.nz_T = theano.shared(_data.nz, "Resolution in z axis")
-            self.a_T = theano.shared(range_var, "range", allow_downcast=True)
-            self.c_o_T = theano.shared(c_o, "covariance at 0", allow_downcast=True)
-            self.nugget_effect_grad_T = theano.shared(nugget_effect, "nugget effect of the grade", allow_downcast=True)
-
+            # Asserting that the drift grade is in this range
             assert (0 <= u_grade <= 2)
 
+            # Creating the drift matrix. TODO find the official name of this matrix?
+            _universal_matrix = np.vstack((_grid_rescaled.grid.T,
+                                           (_grid_rescaled.grid ** 2).T,
+                                           _grid_rescaled.grid[:, 0] * _grid_rescaled.grid[:, 1],
+                                           _grid_rescaled.grid[:, 0] * _grid_rescaled.grid[:, 2],
+                                           _grid_rescaled.grid[:, 1] * _grid_rescaled.grid[:, 2]))
+
+            # Setting shared variables
+            # Range
+            self.tg.a_T.set_value(np.cast[self.dtype](range_var))
+            # Covariance at 0
+            self.tg.c_o_T.set_value(np.cast[self.dtype](c_o))
+            # Foliations nugget effect
+            self.tg.nugget_effect_grad_T.set_value(np.cast[self.dtype](nugget_effect))
+
+            # TODO change the drift to the same style I have the faults so I do not need to do this
+            # Drift grade
             if u_grade == 0:
-                self.u_grade_T = theano.shared(u_grade, "grade of the universal drift", allow_downcast=True)
+                self.tg.u_grade_T.set_value(u_grade)
             else:
-                self.u_grade_T = theano.shared(3 ** u_grade, allow_downcast=True)
-            # TODO: To be sure what is the mathematical meaning of this
-
-            if not rescaling_factor:
-                max_coord = pn.concat([_data.foliations, _data.interfaces]).max()[['X', 'Y', 'Z']]
-                min_coord = pn.concat([_data.foliations, _data.interfaces]).min()[['X', 'Y', 'Z']]
-                rescaling_factor = np.max(max_coord - min_coord)
-
-            self.rescaling_factor_T = theano.shared(rescaling_factor, "rescaling factor", allow_downcast=True)
-            self.number_of_points_per_formation_T = theano.shared(np.zeros(2),
-                                                                  "Vector. Number of formations in the serie")
-
-            _universal_matrix = np.vstack((_grid.grid.T,
-                                           (_grid.grid ** 2).T,
-                                           _grid.grid[:, 0] * _grid.grid[:, 1],
-                                           _grid.grid[:, 0] * _grid.grid[:, 2],
-                                           _grid.grid[:, 1] * _grid.grid[:, 2]))
-            self.universal_matrix_T = theano.shared(_universal_matrix + 1e-10, "universal matrix")
-
-            self.block = theano.shared(np.zeros_like(_grid.grid[:, 0]), "Final block computed")
-            self.grid_val_T = theano.shared(_grid.grid + 1e-10, "Positions of the points to interpolate")
-
-        def _get_constant_parameters(self):
-            """
-            Deprecated?
-
-            Returns:
-
-            """
-            return self.a_T, self.c_o_T, self.nugget_effect_grad_T
-
-        def compute_block_model(self, series_number="all", verbose=0):
-            """
-            Method to compute the block model for the given series using data provided in the DataManagement object
-
-            Args:
-                series_number(str or int): series to interpolate
-                verbose(int): level of verbosity during the computation
-
-            Returns:
-                self.block(theano shared[numpy.ndarray]): 3D block with the corresponding formations
-
-            """
-
-            if series_number == "all":
-                series_number = np.arange(len(self._data.series.columns))
-            for i in series_number:
-                formations_in_serie = self._select_serie(i)
-                # Number assigned to each formation
-                n_formation = np.squeeze(np.where(np.in1d(self._data.formations, self._data.series.ix[:, i]))) + 1
-                if verbose > 0:
-                    print(n_formation)
-                self._aux_computations_block_model(formations_in_serie, np.array(n_formation, ndmin=1),
-                                                   verbose=verbose)
-
-        def compute_potential_field(self, series_name=0, verbose=0):
-            """
-            Compute an individual potential field.
-
-            Args:
-                series_name (str or int): name or number of series to interpolate
-                verbose(int): int level of verbosity during the computation
-
-            Returns:
-                numpy.ndarray: 3D array with the potential field
-
-            """
-
-            assert series_name is not "all", "Compute potential field only returns one potential field at the time"
-            formations_in_serie = self._select_serie(series_name)
-            return self._aux_computations_potential_field(formations_in_serie, verbose=verbose)
-
-        def _aux_computations_block_model(self, for_in_ser, n_formation, verbose=0):
-            """
-            Private function with the bridge steps from the selection of serie to the input in theano
-
-            Args:
-                for_in_ser: array with the formation for the series to interpolate
-                n_formation: number of formation in the series
-                verbose: verbosity
-
-            Returns:
-                self.block(theano shared[numpy.ndarray]): 3D block with the corresponding formations
-            """
-            # TODO Probably here I should add some asserts for sanity check
-            try:
-                yet_simulated = (self.block.get_value() == 0) * 1
-                if verbose > 0:
-                    print(yet_simulated, (yet_simulated == 0).sum())
-            except AttributeError:
-                yet_simulated = np.ones_like(self._data.grid[:, 0], dtype="int8")
-                print("I am in the except")
-            # TODO: change [:,:3] that is positional based for XYZ so is more consistent
-            dips_position = self._data.foliations[
-                                self._data.foliations["formation"].str.contains(for_in_ser)]\
-                                [['X', 'Y', 'Z']].as_matrix()
-            dip_angles = self._data.foliations[
-                self._data.foliations["formation"].str.contains(for_in_ser)]["dip"].as_matrix()
-            azimuth = self._data.foliations[
-                self._data.foliations["formation"].str.contains(for_in_ser)]["azimuth"].as_matrix()
-            polarity = self._data.foliations[
-                self._data.foliations["formation"].str.contains(for_in_ser)]["polarity"].as_matrix()
-
-            if for_in_ser.count("|") == 0:
-                #layers = self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)].as_matrix()[
-                #         :, :3]
-                layers = self._data.interfaces[self._data.interfaces["formation"] == for_in_ser]\
-                    [['X', 'Y', 'Z']].as_matrix()
-                rest_layer_points = layers[1:]
-                # TODO self.n_formation probably should not be self
-                self.number_of_points_per_formation_T.set_value(np.array(rest_layer_points.shape[0], ndmin=1))
-                ref_layer_points = np.tile(layers[0], (np.shape(layers)[0] - 1, 1))
-            else:
-                # TODO: This is ugly
-                layers_list = []
-                for formation in for_in_ser.split("|"):
-                    layers_list.append(
-                        self._data.interfaces[self._data.interfaces["formation"] == formation]
-                        [['X', 'Y', 'Z']].as_matrix())
-                layers = np.asarray(layers_list)
-
-                rest_layer_points = layers[0][1:]
-                rest_dim = np.array(layers[0][1:].shape[0], ndmin=1)
-                for i in layers[1:]:
-                    rest_layer_points = np.vstack((rest_layer_points, i[1:]))
-                    rest_dim = np.append(rest_dim, rest_dim[-1] + i[1:].shape[0])
-                self.number_of_points_per_formation_T.set_value(rest_dim)
-                ref_layer_points = np.vstack((np.tile(i[0], (np.shape(i)[0] - 1, 1)) for i in layers))
-
-            if verbose > 0:
-                print("The serie formations are %s" % for_in_ser)
-                if verbose > 1:
-                    print("The formations are: \n"
-                          "Layers ", self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)],
-                          " \n "
-                          "foliations ",
-                          self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)])
-
-                    # self.grad is none so far. I have it for further research in the calculation of the Jacobian matrix
-
-                if verbose > 2:
-                    print('number_formations', n_formation)
-                    print('rest_layer_points', rest_layer_points)
-
-            self.grad = self._block_export(dips_position, dip_angles, azimuth, polarity,
-                                           rest_layer_points, ref_layer_points,
-                                           n_formation, yet_simulated)
-
-        def _aux_computations_potential_field(self, for_in_ser, verbose=0):
-            """
-            Private function with the bridge steps from the selection of serie to the input in theano
-
-            Args:
-                for_in_ser: array with the formation for the series to interpolate
-                verbose: verbosity
-
-            Returns:
-                numpy.ndarray: 3D array with the potential field
-            """
-
-            # TODO: change [:,:3] that is positional based for XYZ so is more consistent
-            dips_position = self._data.foliations[
-                                self._data.foliations["formation"].str.contains(for_in_ser)]\
-                                [['X', 'Y', 'Z']].as_matrix()
-            dip_angles = self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)][
-                "dip"].as_matrix()
-            azimuth = self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)][
-                "azimuth"].as_matrix()
-            polarity = self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)][
-                "polarity"].as_matrix()
-
-            if for_in_ser.count("|") == 0:
-                #layers = self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)].as_matrix()[
-                #         :, :3]
-                layers = self._data.interfaces[self._data.interfaces["formation"] == for_in_ser] \
-                    [['X', 'Y', 'Z']].as_matrix()
-                rest_layer_points = layers[1:]
-                ref_layer_points = np.tile(layers[0], (np.shape(layers)[0] - 1, 1))
-            else:
-                layers_list = []
-                for formation in for_in_ser.split("|"):
-                    layers_list.append(
-                        self._data.interfaces[self._data.interfaces["formation"] == formation]
-                        [['X', 'Y', 'Z']].as_matrix())
-                layers = np.asarray(layers_list)
-                rest_layer_points = np.vstack((i[1:] for i in layers))
-                ref_layer_points = np.vstack((np.tile(i[0], (np.shape(i)[0] - 1, 1)) for i in layers))
-
-            if verbose > 0:
-                print("The serie formations are %s" % for_in_ser)
-                if verbose > 1:
-                    print("The formations are: \n"
-                          "Layers \n",
-                          self._data.interfaces[self._data.interfaces["formation"].str.contains(for_in_ser)],
-                          "\n foliations \n",
-                          self._data.foliations[self._data.foliations["formation"].str.contains(for_in_ser)])
-
-            self.Z_x, G_x, G_y, G_z, self.potential_interfaces, self.C, self.DK = self._interpolate(
-                dips_position, dip_angles, azimuth, polarity,
-                rest_layer_points, ref_layer_points)[:]
-
-            potential_field = self.Z_x.reshape(self._data.nx, self._data.ny, self._data.nz)
-
-            if verbose > 2:
-                print("Gradients: ", G_x, G_y, G_z)
-                print("Dual Kriging weights: ", self.DK)
-            if verbose > 3:
-                print("C_matrix: ", self.C)
-
-            return potential_field
-
-        def theano_compilation_3D(self):
-            """
-            Function that generates the symbolic code to perform the interpolation. Calling this function creates
-             both the theano functions for the potential field and the block.
-
-            Returns:
-                theano function for the potential field
-                theano function for the block
-            """
-
-            # Creation of symbolic variables
-            dips_position = T.matrix("Position of the dips")
-            dip_angles = T.vector("Angle of every dip")
-            azimuth = T.vector("Azimuth")
-            polarity = T.vector("Polarity")
-            ref_layer_points = T.matrix("Reference points for every layer")
-            rest_layer_points = T.matrix("Rest of the points of the layers")
-
-            # Init values
-            n_dimensions = 3
-            grade_universal = self.u_grade_T
-
-            # Calculating the dimensions of the
-            length_of_CG = dips_position.shape[0] * n_dimensions
-            length_of_CGI = rest_layer_points.shape[0]
-            length_of_U_I = grade_universal
-            length_of_C = length_of_CG + length_of_CGI + length_of_U_I
-
-            # Extra parameters
-            i_reescale = 1 / (self.rescaling_factor_T ** 2)
-            gi_reescale = 1 / self.rescaling_factor_T
-
-            # TODO: Check that the distances does not go nuts when I use too large numbers
-
-            # Here we create the array with the points to simulate:
-            #   grid points except those who have been simulated in a younger serie
-            #   interfaces points to segment the lithologies
-            yet_simulated = T.vector("boolean function that avoid to simulate twice a point of a different serie")
-            grid_val = T.vertical_stack((self.grid_val_T * yet_simulated.reshape(
-                                        (yet_simulated.shape[0], 1))).nonzero_values().reshape((-1, 3)),
-                                        rest_layer_points)
-
-            # ==========================================
-            # Calculation of Cartesian and Euclidian distances
-            # ===========================================
-            # Auxiliary tile for dips and transformation to float 64 of variables in order to calculate
-            #  precise euclidian
-            # distances
-            _aux_dips_pos = T.tile(dips_position, (n_dimensions, 1)).astype("float64")
-            _aux_rest_layer_points = rest_layer_points.astype("float64")
-            _aux_ref_layer_points = ref_layer_points.astype("float64")
-            _aux_grid_val = grid_val.astype("float64")
-
-            # Calculation of euclidian distances giving back float32
-            SED_rest_rest = (T.sqrt(
-                (_aux_rest_layer_points ** 2).sum(1).reshape((_aux_rest_layer_points.shape[0], 1)) +
-                (_aux_rest_layer_points ** 2).sum(1).reshape((1, _aux_rest_layer_points.shape[0])) -
-                2 * _aux_rest_layer_points.dot(_aux_rest_layer_points.T))).astype("float32")
-
-            SED_ref_rest = (T.sqrt(
-                (_aux_ref_layer_points ** 2).sum(1).reshape((_aux_ref_layer_points.shape[0], 1)) +
-                (_aux_rest_layer_points ** 2).sum(1).reshape((1, _aux_rest_layer_points.shape[0])) -
-                2 * _aux_ref_layer_points.dot(_aux_rest_layer_points.T))).astype("float32")
-
-            SED_rest_ref = (T.sqrt(
-                (_aux_rest_layer_points ** 2).sum(1).reshape((_aux_rest_layer_points.shape[0], 1)) +
-                (_aux_ref_layer_points ** 2).sum(1).reshape((1, _aux_ref_layer_points.shape[0])) -
-                2 * _aux_rest_layer_points.dot(_aux_ref_layer_points.T))).astype("float32")
-
-            SED_ref_ref = (T.sqrt(
-                (_aux_ref_layer_points ** 2).sum(1).reshape((_aux_ref_layer_points.shape[0], 1)) +
-                (_aux_ref_layer_points ** 2).sum(1).reshape((1, _aux_ref_layer_points.shape[0])) -
-                2 * _aux_ref_layer_points.dot(_aux_ref_layer_points.T))).astype("float32")
-
-            SED_dips_dips = (T.sqrt(
-                (_aux_dips_pos ** 2).sum(1).reshape((_aux_dips_pos.shape[0], 1)) +
-                (_aux_dips_pos ** 2).sum(1).reshape((1, _aux_dips_pos.shape[0])) -
-                2 * _aux_dips_pos.dot(_aux_dips_pos.T))).astype("float32")
-
-            SED_dips_rest = (T.sqrt(
-                (_aux_dips_pos ** 2).sum(1).reshape((_aux_dips_pos.shape[0], 1)) +
-                (_aux_rest_layer_points ** 2).sum(1).reshape((1, _aux_rest_layer_points.shape[0])) -
-                2 * _aux_dips_pos.dot(_aux_rest_layer_points.T))).astype("float32")
-
-            SED_dips_ref = (T.sqrt(
-                (_aux_dips_pos ** 2).sum(1).reshape((_aux_dips_pos.shape[0], 1)) +
-                (_aux_ref_layer_points ** 2).sum(1).reshape((1, _aux_ref_layer_points.shape[0])) -
-                2 * _aux_dips_pos.dot(_aux_ref_layer_points.T))).astype("float32")
-
-            # Calculating euclidian distances between the point to simulate and the avalible data
-            SED_dips_SimPoint = (T.sqrt(
-                (_aux_dips_pos ** 2).sum(1).reshape((_aux_dips_pos.shape[0], 1)) +
-                (_aux_grid_val ** 2).sum(1).reshape((1, _aux_grid_val.shape[0])) -
-                2 * _aux_dips_pos.dot(_aux_grid_val.T))).astype("float32")
-
-            SED_rest_SimPoint = (T.sqrt(
-                (_aux_rest_layer_points ** 2).sum(1).reshape((_aux_rest_layer_points.shape[0], 1)) +
-                (_aux_grid_val ** 2).sum(1).reshape((1, _aux_grid_val.shape[0])) -
-                2 * _aux_rest_layer_points.dot(_aux_grid_val.T))).astype("float32")
-
-            SED_ref_SimPoint = (T.sqrt(
-                (_aux_ref_layer_points ** 2).sum(1).reshape((_aux_ref_layer_points.shape[0], 1)) +
-                (_aux_grid_val ** 2).sum(1).reshape((1, _aux_grid_val.shape[0])) -
-                2 * _aux_ref_layer_points.dot(_aux_grid_val.T))).astype("float32")
-
-            # Cartesian distances between dips positions
-            h_u = T.vertical_stack(
-                T.tile(dips_position[:, 0] - dips_position[:, 0].reshape((dips_position[:, 0].shape[0], 1)),
-                       n_dimensions),
-                T.tile(dips_position[:, 1] - dips_position[:, 1].reshape((dips_position[:, 1].shape[0], 1)),
-                       n_dimensions),
-                T.tile(dips_position[:, 2] - dips_position[:, 2].reshape((dips_position[:, 2].shape[0], 1)),
-                       n_dimensions))
-
-            h_v = h_u.T
-
-            # Cartesian distances between dips and interface points
-            # Rest
-            hu_rest = T.vertical_stack(
-                (dips_position[:, 0] - rest_layer_points[:, 0].reshape((rest_layer_points[:, 0].shape[0], 1))).T,
-                (dips_position[:, 1] - rest_layer_points[:, 1].reshape((rest_layer_points[:, 1].shape[0], 1))).T,
-                (dips_position[:, 2] - rest_layer_points[:, 2].reshape((rest_layer_points[:, 2].shape[0], 1))).T
-            )
-
-            # Reference point
-            hu_ref = T.vertical_stack(
-                (dips_position[:, 0] - ref_layer_points[:, 0].reshape((ref_layer_points[:, 0].shape[0], 1))).T,
-                (dips_position[:, 1] - ref_layer_points[:, 1].reshape((ref_layer_points[:, 1].shape[0], 1))).T,
-                (dips_position[:, 2] - ref_layer_points[:, 2].reshape((ref_layer_points[:, 2].shape[0], 1))).T
-            )
-
-            # Cartesian distances between reference points and rest
-            hx = T.stack(
-                (rest_layer_points[:, 0] - ref_layer_points[:, 0]),
-                (rest_layer_points[:, 1] - ref_layer_points[:, 1]),
-                (rest_layer_points[:, 2] - ref_layer_points[:, 2])
-            ).T
-
-            # Cartesian distances between the point to simulate and the dips
-            hu_SimPoint = T.vertical_stack(
-                (dips_position[:, 0] - grid_val[:, 0].reshape((grid_val[:, 0].shape[0], 1))).T,
-                (dips_position[:, 1] - grid_val[:, 1].reshape((grid_val[:, 1].shape[0], 1))).T,
-                (dips_position[:, 2] - grid_val[:, 2].reshape((grid_val[:, 2].shape[0], 1))).T
-            )
-
-            # Perpendicularity matrix. Boolean matrix to separate cross-covariance and
-            # every gradient direction covariance
-            perpendicularity_matrix = T.zeros_like(SED_dips_dips)
-
-            # Cross-covariances of x
-            perpendicularity_matrix = T.set_subtensor(
-                perpendicularity_matrix[0:dips_position.shape[0], 0:dips_position.shape[0]], 1)
-
-            # Cross-covariances of y
-            perpendicularity_matrix = T.set_subtensor(
-                perpendicularity_matrix[dips_position.shape[0]:dips_position.shape[0] * 2,
-                dips_position.shape[0]:dips_position.shape[0] * 2], 1)
-
-            # Cross-covariances of y
-            perpendicularity_matrix = T.set_subtensor(
-                perpendicularity_matrix[dips_position.shape[0] * 2:dips_position.shape[0] * 3,
-                dips_position.shape[0] * 2:dips_position.shape[0] * 3], 1)
-
-            # ==========================
-            # Creating covariance Matrix
-            # ==========================
-            # Covariance matrix for interfaces
-            C_I = (self.c_o_T * i_reescale * (
-                (SED_rest_rest < self.a_T) *  # Rest - Rest Covariances Matrix
-                (1 - 7 * (SED_rest_rest / self.a_T) ** 2 +
-                 35 / 4 * (SED_rest_rest / self.a_T) ** 3 -
-                 7 / 2 * (SED_rest_rest / self.a_T) ** 5 +
-                 3 / 4 * (SED_rest_rest / self.a_T) ** 7) -
-                ((SED_ref_rest < self.a_T) *  # Reference - Rest
-                 (1 - 7 * (SED_ref_rest / self.a_T) ** 2 +
-                  35 / 4 * (SED_ref_rest / self.a_T) ** 3 -
-                  7 / 2 * (SED_ref_rest / self.a_T) ** 5 +
-                  3 / 4 * (SED_ref_rest / self.a_T) ** 7)) -
-                ((SED_rest_ref < self.a_T) *  # Rest - Reference
-                 (1 - 7 * (SED_rest_ref / self.a_T) ** 2 +
-                  35 / 4 * (SED_rest_ref / self.a_T) ** 3 -
-                  7 / 2 * (SED_rest_ref / self.a_T) ** 5 +
-                  3 / 4 * (SED_rest_ref / self.a_T) ** 7)) +
-                ((SED_ref_ref < self.a_T) *  # Reference - References
-                 (1 - 7 * (SED_ref_ref / self.a_T) ** 2 +
-                  35 / 4 * (SED_ref_ref / self.a_T) ** 3 -
-                  7 / 2 * (SED_ref_ref / self.a_T) ** 5 +
-                  3 / 4 * (SED_ref_ref / self.a_T) ** 7)))) + 10e-9
-
-            # Covariance matrix for gradients at every xyz direction and their cross-covariances
-            C_G = T.switch(
-                T.eq(SED_dips_dips, 0),  # This is the condition
-                0,  # If true it is equal to 0. This is how a direction affect another
-                (  # else, following Chiles book
-                    (h_u * h_v / SED_dips_dips ** 2) *
-                    ((
-                         (SED_dips_dips < self.a_T) *  # first derivative
-                         (-self.c_o_T * ((-14 / self.a_T ** 2) + 105 / 4 * SED_dips_dips / self.a_T ** 3 -
-                                         35 / 2 * SED_dips_dips ** 3 / self.a_T ** 5 +
-                                         21 / 4 * SED_dips_dips ** 5 / self.a_T ** 7))) +
-                     (SED_dips_dips < self.a_T) *  # Second derivative
-                     self.c_o_T * 7 * (9 * SED_dips_dips ** 5 - 20 * self.a_T ** 2 * SED_dips_dips ** 3 +
-                                       15 * self.a_T ** 4 * SED_dips_dips - 4 * self.a_T ** 5) / (2 * self.a_T ** 7)) -
-                    (perpendicularity_matrix *
-                     (SED_dips_dips < self.a_T) *  # first derivative
-                     self.c_o_T * ((-14 / self.a_T ** 2) + 105 / 4 * SED_dips_dips / self.a_T ** 3 -
-                                   35 / 2 * SED_dips_dips ** 3 / self.a_T ** 5 +
-                                   21 / 4 * SED_dips_dips ** 5 / self.a_T ** 7)))
-            )
-
-            # Setting nugget effect of the gradients
-            # TODO: This function can be substitued by simply adding the nugget effect to the diag
-            C_G = T.fill_diagonal(C_G, -self.c_o_T * (-14 / self.a_T ** 2) + self.nugget_effect_grad_T)
-
-            # Cross-Covariance gradients-interfaces
-            C_GI = gi_reescale * (
-                (hu_rest *
-                 (SED_dips_rest < self.a_T) *  # first derivative
-                 (- self.c_o_T * ((-14 / self.a_T ** 2) + 105 / 4 * SED_dips_rest / self.a_T ** 3 -
-                                  35 / 2 * SED_dips_rest ** 3 / self.a_T ** 5 +
-                                  21 / 4 * SED_dips_rest ** 5 / self.a_T ** 7))) -
-                (hu_ref *
-                 (SED_dips_ref < self.a_T) *  # first derivative
-                 (- self.c_o_T * ((-14 / self.a_T ** 2) + 105 / 4 * SED_dips_ref / self.a_T ** 3 -
-                                  35 / 2 * SED_dips_ref ** 3 / self.a_T ** 5 +
-                                  21 / 4 * SED_dips_ref ** 5 / self.a_T ** 7)))
-            ).T
-
-            if self.u_grade_T.get_value() == 3:
-                # ==========================
-                # Condition of universality 1 degree
-
-                # Gradients
-                n = dips_position.shape[0]
-                U_G = T.zeros((n * n_dimensions, n_dimensions))
-                # x
-                U_G = T.set_subtensor(
-                    U_G[:n, 0], 1)
-                # y
-                U_G = T.set_subtensor(
-                    U_G[n:n * 2, 1], 1
-                )
-                # z
-                U_G = T.set_subtensor(
-                    U_G[n * 2: n * 3, 2], 1
-                )
-
-            #    U_G = T.set_subtensor(U_G[:, -1], [0, 0, 0, 0, 0, 0])
-
-                # Interface
-                U_I = -hx * gi_reescale
-
-            #    hxf = (T.lt(rest_layer_points[:, 0], 5) - T.lt(ref_layer_points[:, 0], 5))*2 + 1
-
-            #    U_I = T.horizontal_stack(U_I, T.stack(hxf).T)
-
-            elif self.u_grade_T.get_value() == 9:
-                # ==========================
-                # Condition of universality 2 degree
-                # Gradients
-
-                n = dips_position.shape[0]
-                U_G = T.zeros((n * n_dimensions, 3 * n_dimensions))
-                # x
-                U_G = T.set_subtensor(U_G[:n, 0], 1)
-                # y
-                U_G = T.set_subtensor(U_G[n * 1:n * 2, 1], 1)
-                # z
-                U_G = T.set_subtensor(U_G[n * 2: n * 3, 2], 1)
-                # x**2
-                U_G = T.set_subtensor(U_G[:n, 3], 2 * gi_reescale * dips_position[:, 0])
-                # y**2
-                U_G = T.set_subtensor(U_G[n * 1:n * 2, 4], 2 * gi_reescale * dips_position[:, 1])
-                # z**2
-                U_G = T.set_subtensor(U_G[n * 2: n * 3, 5], 2 * gi_reescale * dips_position[:, 2])
-                # xy
-                U_G = T.set_subtensor(U_G[:n, 6], gi_reescale * dips_position[:, 1])  # This is y
-                U_G = T.set_subtensor(U_G[n * 1:n * 2, 6], gi_reescale * dips_position[:, 0])  # This is x
-                # xz
-                U_G = T.set_subtensor(U_G[:n, 7], gi_reescale * dips_position[:, 2])  # This is z
-                U_G = T.set_subtensor(U_G[n * 2: n * 3, 7], gi_reescale * dips_position[:, 0])  # This is x
-                # yz
-                U_G = T.set_subtensor(U_G[n * 1:n * 2, 8], gi_reescale * dips_position[:, 2])  # This is z
-                U_G = T.set_subtensor(U_G[n * 2:n * 3, 8], gi_reescale * dips_position[:, 1])  # This is y
-
-                # Interface
-                U_I = - T.stack(
-                    gi_reescale * (rest_layer_points[:, 0] - ref_layer_points[:, 0]), # x
-                    gi_reescale * (rest_layer_points[:, 1] - ref_layer_points[:, 1]), # y
-                    gi_reescale * (rest_layer_points[:, 2] - ref_layer_points[:, 2]), # z
-                    gi_reescale ** 2 * (rest_layer_points[:, 0] ** 2 - ref_layer_points[:, 0] ** 2), # xx
-                    gi_reescale ** 2 * (rest_layer_points[:, 1] ** 2 - ref_layer_points[:, 1] ** 2), # yy
-                    gi_reescale ** 2 * (rest_layer_points[:, 2] ** 2 - ref_layer_points[:, 2] ** 2), # zz
-                    gi_reescale ** 2 * (rest_layer_points[:, 0] * rest_layer_points[:, 1] - ref_layer_points[:, 0] *
-                                        ref_layer_points[:, 1]),
-                    gi_reescale ** 2 * (rest_layer_points[:, 0] * rest_layer_points[:, 2] - ref_layer_points[:, 0] *
-                                        ref_layer_points[:, 2]),
-                    gi_reescale ** 2 * (rest_layer_points[:, 1] * rest_layer_points[:, 2] - ref_layer_points[:, 1] *
-                                        ref_layer_points[:, 2]),
-                ).T
-
-
-
-            # =================================
-            # Creation of the Covariance Matrix
-            # =================================
-            C_matrix = T.zeros((length_of_C, length_of_C ))
-
-            # First row of matrices
-            C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, 0:length_of_CG], C_G)
-
-            C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, length_of_CG:length_of_CG + length_of_CGI], C_GI.T)
-
-            if not self.u_grade_T.get_value() == 0:
-                C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, -length_of_U_I:], U_G)
-
-            # Second row of matrices
-            C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI, 0:length_of_CG], C_GI)
-            C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI,
-                                       length_of_CG:length_of_CG + length_of_CGI], C_I)
-
-            if not self.u_grade_T.get_value() == 0:
-                C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI, -length_of_U_I:], U_I)
-
-                # Third row of matrices
-                C_matrix = T.set_subtensor(C_matrix[-length_of_U_I:, 0:length_of_CG], U_G.T)
-                C_matrix = T.set_subtensor(C_matrix[-length_of_U_I:, length_of_CG:length_of_CG + length_of_CGI], U_I.T)
-
-            # =====================
-            # Creation of the gradients G vector
-            # Calculation of the cartesian components of the dips assuming the unit module
-            G_x = T.sin(T.deg2rad(dip_angles)) * T.sin(T.deg2rad(azimuth)) * polarity
-            G_y = T.sin(T.deg2rad(dip_angles)) * T.cos(T.deg2rad(azimuth)) * polarity
-            G_z = T.cos(T.deg2rad(dip_angles)) * polarity
-
-            G = T.concatenate((G_x, G_y, G_z))
-
-            # Creation of the Dual Kriging vector
-            b = T.zeros_like(C_matrix[:, 0])
-            b = T.set_subtensor(b[0:G.shape[0]], G)
-
-            # Solving the kriging system
-            # TODO: look for an eficient way to substitute nlianlg by a theano operation
-            DK_parameters = T.dot(T.nlinalg.matrix_inverse(C_matrix), b)
-
-            # ==============
-            # Interpolator
-            # ==============
-
-            # Creation of a matrix of dimensions equal to the grid with the weights for every point (big 4D matrix in
-            # ravel form)
-            weights = T.tile(DK_parameters, (grid_val.shape[0], 1)).T
-
-            # Gradient contribution
-            sigma_0_grad = T.sum(
-                (weights[:length_of_CG, :] *
-                 gi_reescale *
-                 (-hu_SimPoint *
-                  (SED_dips_SimPoint < self.a_T) *  # first derivative
-                  (- self.c_o_T * ((-14 / self.a_T ** 2) + 105 / 4 * SED_dips_SimPoint / self.a_T ** 3 -
-                                   35 / 2 * SED_dips_SimPoint ** 3 / self.a_T ** 5 +
-                                   21 / 4 * SED_dips_SimPoint ** 5 / self.a_T ** 7)))),
-                axis=0)
-
-            # Interface contribution
-            sigma_0_interf = (T.sum(
-                -weights[length_of_CG:length_of_CG + length_of_CGI, :] *
-                (self.c_o_T * i_reescale * (
-                    (SED_rest_SimPoint < self.a_T) *  # SimPoint - Rest Covariances Matrix
-                    (1 - 7 * (SED_rest_SimPoint / self.a_T) ** 2 +
-                     35 / 4 * (SED_rest_SimPoint / self.a_T) ** 3 -
-                     7 / 2 * (SED_rest_SimPoint / self.a_T) ** 5 +
-                     3 / 4 * (SED_rest_SimPoint / self.a_T) ** 7) -
-                    ((SED_ref_SimPoint < self.a_T) *  # SimPoint- Ref
-                     (1 - 7 * (SED_ref_SimPoint / self.a_T) ** 2 +
-                      35 / 4 * (SED_ref_SimPoint / self.a_T) ** 3 -
-                      7 / 2 * (SED_ref_SimPoint / self.a_T) ** 5 +
-                      3 / 4 * (SED_ref_SimPoint / self.a_T) ** 7)))), axis=0))
-
-            # Universal drift contribution
-            # Universal terms used to calculate f0
-            _universal_terms_layers = T.horizontal_stack(
-                rest_layer_points,
-                (rest_layer_points ** 2),
-                T.stack((rest_layer_points[:, 0] * rest_layer_points[:, 1],
-                         rest_layer_points[:, 0] * rest_layer_points[:, 2],
-                         rest_layer_points[:, 1] * rest_layer_points[:, 2]), axis=1)).T
-
-            universal_matrix = T.horizontal_stack(
-                (self.universal_matrix_T * yet_simulated).nonzero_values().reshape((9, -1)),
-                _universal_terms_layers)
-
-            if self.u_grade_T.get_value() == 0:
-                f_0 = 0
-            else:
-                gi_rescale_aux = T.repeat(gi_reescale, 9)
-                gi_rescale_aux = T.set_subtensor(gi_rescale_aux[:3], 1)
-                _aux_magic_term = T.tile(gi_rescale_aux[:grade_universal], (grid_val.shape[0], 1)).T
-                f_0 = (T.sum(
-                    weights[-length_of_U_I:, :] * gi_reescale * _aux_magic_term *
-                    universal_matrix[:grade_universal]
-                    , axis=0))
-
-            # Contribution faults
-           # f_1 = weights[-1, :] * T.lt(universal_matrix[0, :], 5) * 2 - 1
-         #   f_1 = 0
-            # Potential field
-            # Value of the potential field
-
-            Z_x = (sigma_0_grad + sigma_0_interf + f_0)[:-rest_layer_points.shape[0]]
-            potential_field_interfaces = (sigma_0_grad + sigma_0_interf + f_0)[-rest_layer_points.shape[0]:]
-            printing = potential_field_interfaces
-            # Theano function to calculate a potential field
-            self._interpolate = theano.function(
-                [dips_position, dip_angles, azimuth, polarity, rest_layer_points, ref_layer_points,
-                 theano.In(yet_simulated, value=np.ones_like(self._grid.grid[:, 0]))],
-                [Z_x, G_x, G_y, G_z, potential_field_interfaces, C_matrix, printing],
-                on_unused_input="warn", profile=True, allow_input_downcast=True)
-
-            # =======================================================================
-            #               CODE TO EXPORT THE BLOCK DIRECTLY
-            # ========================================================================
-
-            # Aux shared parameters
-            infinite_pos = theano.shared(np.float32(np.inf))
-            infinite_neg = theano.shared(np.float32(-np.inf))
-
-            # Value of the lithology-segment
-            n_formation = T.vector("The assigned number of the lithologies in this serie")
-
-            # Loop to obtain the average Zx for every intertace
-            def average_potential(dim_a, dim_b, pfi):
-                """
-
-                :param dim: size of the rest values vector per formation
-                :param pfi: the values of all the rest values potentials
-                :return: average of the potential per formation
-                """
-                average = pfi[T.cast(dim_a, "int32"): T.cast(dim_b, "int32")].sum() / (dim_b - dim_a)
-                return average
-
-            potential_field_unique, updates1 = theano.scan(fn=average_potential,
-                                                           outputs_info=None,
-                                                           sequences=dict(
-                                                               input=T.concatenate(
-                                                                   (T.stack(0),
-                                                                    self.number_of_points_per_formation_T)),
-                                                               taps=[0, 1]),
-                                                           non_sequences=potential_field_interfaces)
-
-            # Loop to segment the distinct lithologies
-            potential_field_iter = T.concatenate((T.stack(infinite_pos),
-                                                  potential_field_unique,
-                                                  T.stack(infinite_neg)))
-
-            def compare(a, b, n_formation, Zx):
-                return T.le(Zx, a) * T.ge(Zx, b) * n_formation
-
-            block, updates2 = theano.scan(fn=compare,
-                                          outputs_info=None,
-                                          sequences=[dict(input=potential_field_iter, taps=[0, 1]),
-                                                     n_formation],
-                                          non_sequences=Z_x)
-
-            # Adding to the block the contribution of the potential field
-            potential_field_contribution = T.set_subtensor(
-                self.block[T.nonzero(T.cast(yet_simulated, "int8"))[0]],
-                block.sum(axis=0))
-
-            # Some gradient testing
-            # grad = T.jacobian(potential_field_contribution.sum(), rest_layer_points)
-            # grad = T.grad(azimuth[0], potential_field_contribution)
-
-            # Theano function to update the block
-            self._block_export = theano.function([dips_position, dip_angles, azimuth, polarity, rest_layer_points,
-                                                  ref_layer_points, n_formation, yet_simulated], printing,
-                                                 updates=[(self.block, potential_field_contribution)],
-                                                 on_unused_input="warn", profile=True, allow_input_downcast=True)
+                self.tg.u_grade_T.set_value(u_grade)
+                # TODO: To be sure what is the mathematical meaning of this -> It seems that nothing
+                # TODO Deprecated
+                # self.tg.c_resc.set_value(1)
+
+            # Just grid. I add a small number to avoid problems with the origin point
+            self.tg.grid_val_T.set_value(np.cast[self.dtype](_grid_rescaled.grid + 10e-6))
+            # Universal grid
+            self.tg.universal_grid_matrix_T.set_value(np.cast[self.dtype](_universal_matrix + 1e-10))
+
+            # Initialization of the block model
+            self.tg.final_block.set_value(np.zeros((_grid_rescaled.grid.shape[0]), dtype='int'))
+
+            # Initialization of the boolean array that represent the areas of the block model to be computed in the
+            # following series
+            self.tg.yet_simulated.set_value(np.ones((_grid_rescaled.grid.shape[0]), dtype='int'))
+
+            # Unique number assigned to each lithology
+            #self.tg.n_formation.set_value(np.insert(_data_rescaled.interfaces['formation number'].unique(),
+            #                                        0, 0)[::-1])
+
+            self.tg.n_formation.set_value(_data_rescaled.interfaces['formation number'].unique())
+
+            # Number of formations per series. The function is not pretty but the result is quite clear
+            self.tg.n_formations_per_serie.set_value(
+                np.insert(_data_rescaled.interfaces.groupby('order_series').formation.nunique().values.cumsum(), 0, 0))

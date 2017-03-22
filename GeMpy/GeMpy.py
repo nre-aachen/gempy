@@ -15,34 +15,72 @@ this is only to test git 3
 # import theano.tensor as T
 import numpy as _np
 # import sys, os
-# import pandas as pn
-
+import pandas as pn
+import copy
 from Visualization import PlotData
 from DataManagement import DataManagement
+from IPython.core.debugger import Tracer
 
 
-def compute_block_model(geo_data, series_number="all",
-                        series_distribution=None, order_series=None,
-                        extent=None, resolution=None, grid_type="regular_3D",
-                        verbose=0, **kwargs):
+def rescale_data(geo_data, rescaling_factor=None):
+    """
+    Rescale the data of a DataManagement object between 0 and 1 due to stability problem of the float32.
+    Args:
+        geo_data: DataManagement object with the real scale data
+        rescaling_factor(float): factor of the rescaling. Default to maximum distance in one the axis
 
-    if extent or resolution:
-        set_grid(geo_data, extent=extent, resolution=resolution, grid_type=grid_type, **kwargs)
+    Returns:
 
-    if series_distribution:
-        set_data_series(geo_data, series_distribution=series_distribution, order_series=order_series, verbose=0)
+    """
+    max_coord = pn.concat(
+        [geo_data.foliations, geo_data.interfaces]).max()[['X', 'Y', 'Z']]
+    min_coord = pn.concat(
+        [geo_data.foliations, geo_data.interfaces]).min()[['X', 'Y', 'Z']]
 
-    if not getattr(geo_data, 'interpolator', None):
-        import warnings
+    if not rescaling_factor:
+        rescaling_factor = 2*_np.max(max_coord - min_coord)
 
-        warnings.warn('Using default interpolation values')
-        set_interpolator(geo_data)
+    centers = (max_coord+min_coord)/2
 
-    geo_data.interpolator.block.set_value(_np.zeros_like(geo_data.grid.grid[:, 0]))
+    new_coord_interfaces = (geo_data.interfaces[['X', 'Y', 'Z']] -
+                           centers) / rescaling_factor + 0.5001
 
-    geo_data.interpolator.compute_block_model(series_number=series_number, verbose=verbose)
+    new_coord_foliations = (geo_data.foliations[['X', 'Y', 'Z']] -
+                           centers) / rescaling_factor + 0.5001
 
-    return geo_data.interpolator.block
+    new_coord_extent = (geo_data.extent - _np.repeat(centers,2)) / rescaling_factor + 0.5001
+
+    geo_data_rescaled = copy.deepcopy(geo_data)
+    geo_data_rescaled.interfaces[['X', 'Y', 'Z']] = new_coord_interfaces
+    geo_data_rescaled.foliations[['X', 'Y', 'Z']] = new_coord_foliations
+    geo_data_rescaled.extent = new_coord_extent.as_matrix()
+
+    geo_data_rescaled.grid.grid = (geo_data.grid.grid - centers.as_matrix()) /rescaling_factor + 0.5001
+    return geo_data_rescaled
+
+# TODO needs to be updated
+# def compute_block_model(geo_data, series_number="all",
+#                         series_distribution=None, order_series=None,
+#                         extent=None, resolution=None, grid_type="regular_3D",
+#                         verbose=0, **kwargs):
+#
+#     if extent or resolution:
+#         set_grid(geo_data, extent=extent, resolution=resolution, grid_type=grid_type, **kwargs)
+#
+#     if series_distribution:
+#         set_data_series(geo_data, series_distribution=series_distribution, order_series=order_series, verbose=0)
+#
+#     if not getattr(geo_data, 'interpolator', None):
+#         import warnings
+#
+#         warnings.warn('Using default interpolation values')
+#         set_interpolator(geo_data)
+#
+#     geo_data.interpolator.tg.final_block.set_value(_np.zeros_like(geo_data.grid.grid[:, 0]))
+#
+#     geo_data.interpolator.compute_block_model(series_number=series_number, verbose=verbose)
+#
+#     return geo_data.interpolator.tg.final_block
 
 
 def get_grid(geo_data):
@@ -50,7 +88,7 @@ def get_grid(geo_data):
 
 
 def get_raw_data(geo_data, dtype='all'):
-    return geo_data.get_raw_data(dtype=dtype)
+    return geo_data.get_raw_data(itype=dtype)
 
 
 def import_data(extent, resolution=[50, 50, 50], **kwargs):
@@ -80,10 +118,30 @@ def import_data(extent, resolution=[50, 50, 50], **kwargs):
     return DataManagement(extent, resolution, **kwargs)
 
 
-def i_set_data(geo_data, dtype="foliations"):
+def i_set_data(geo_data, dtype="foliations", action="Open"):
 
-    geo_data.i_set_data(dtype=dtype)
+    if action == 'Close':
+        geo_data.i_close_set_data()
 
+    if action == 'Open':
+        geo_data.i_open_set_data(itype=dtype)
+
+
+def select_series(geo_data, series):
+    """
+    Return the formations of a given serie in string
+    :param series: list of int or list of str
+    :return: formations of a given serie in string separeted by |
+    """
+    new_geo_data = copy.deepcopy(geo_data)
+
+    if type(series) == int or type(series[0]) == int:
+        new_geo_data.interfaces = geo_data.interfaces[geo_data.interfaces['order_series'].isin(series)]
+        new_geo_data.foliations = geo_data.foliations[geo_data.foliations['order_series'].isin(series)]
+    elif type(series[0]) == str:
+        new_geo_data.interfaces = geo_data.interfaces[geo_data.interfaces['series'].isin(series)]
+        new_geo_data.foliations = geo_data.foliations[geo_data.foliations['series'].isin(series)]
+    return new_geo_data
 
 def set_data_series(geo_data, series_distribution=None, order_series=None,
                         update_p_field=True, verbose=0):
@@ -91,7 +149,7 @@ def set_data_series(geo_data, series_distribution=None, order_series=None,
     geo_data.set_series(series_distribution=series_distribution, order=order_series)
     try:
         if update_p_field:
-            geo_data.interpolator.update_potential_fields()
+            geo_data.interpolator.compute_potential_fields()
     except AttributeError:
         pass
 
@@ -99,7 +157,7 @@ def set_data_series(geo_data, series_distribution=None, order_series=None,
         return get_raw_data(geo_data)
 
 
-def set_interfaces(geo_data, interf_Dataframe, append=False, update_p_field = True):
+def set_interfaces(geo_data, interf_Dataframe, append=False, update_p_field=True):
     geo_data.set_interfaces(interf_Dataframe, append=append)
     # To update the interpolator parameters without calling a new object
     try:
@@ -107,7 +165,7 @@ def set_interfaces(geo_data, interf_Dataframe, append=False, update_p_field = Tr
         geo_data.interpolator._grid = geo_data.grid
        # geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid)
         if update_p_field:
-            geo_data.interpolator.update_potential_fields()
+            geo_data.interpolator.compute_potential_fields()
     except AttributeError:
         pass
 
@@ -120,31 +178,36 @@ def set_foliations(geo_data, foliat_Dataframe, append=False, update_p_field=True
         geo_data.interpolator._grid = geo_data.grid
       #  geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid)
         if update_p_field:
-            geo_data.interpolator.update_potential_fields()
+            geo_data.interpolator.compute_potential_fields()
     except AttributeError:
         pass
 
 
-def set_grid(geo_data, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
+def set_grid(geo_data, new_grid=None, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
     """
-    Method to initialize the class grid. So far is really simple and only has the regular grid type
+    Method to initialize the class new_grid. So far is really simple and only has the regular new_grid type
 
     Args:
         grid_type (str): regular_3D or regular_2D (I am not even sure if regular 2D still working)
         **kwargs: Arbitrary keyword arguments.
 
     Returns:
-        self.grid(GeMpy_core.grid): Object that contain different grids
+        self.new_grid(GeMpy_core.new_grid): Object that contain different grids
     """
-    if not extent:
-        extent = geo_data.extent
-    if not resolution:
-        resolution = geo_data.resolution
+    if new_grid is not None:
+        assert new_grid.shape[1] is 3 and len(new_grid.shape) is 2, 'The shape of new grid must be (n,3) where n is' \
+                                                                    'the number of points of the grid'
+        geo_data.grid.grid = new_grid
+    else:
+        if not extent:
+            extent = geo_data.extent
+        if not resolution:
+            resolution = geo_data.resolution
 
-    geo_data.grid = geo_data.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
+        geo_data.grid = geo_data.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
 
 
-def set_interpolator(geo_data, compile_theano=False, *args, **kwargs):
+def set_interpolator(geo_data,  *args, **kwargs):
     """
     Method to initialize the class interpolator. All the constant parameters for the interpolation can be passed
     as args, otherwise they will take the default value (TODO: documentation of the dafault values)
@@ -165,16 +228,25 @@ def set_interpolator(geo_data, compile_theano=False, *args, **kwargs):
         self.Plot(GeMpy_core.PlotData): Object to visualize data and results. It gets updated.
     """
 
+    rescaling_factor = kwargs.get('rescaling_factor', None)
+
+    if 'u_grade' in kwargs:
+        compile_theano = True
+
     if not getattr(geo_data, 'grid', None):
         set_grid(geo_data)
 
-    if not getattr(geo_data, 'interpolator', None) or compile_theano:
-        geo_data.interpolator = geo_data.InterpolatorClass(geo_data, geo_data.grid, compile_theano=True,
-                                                           *args, **kwargs)
+    geo_data_int = rescale_data(geo_data, rescaling_factor=rescaling_factor)
+
+    if not getattr(geo_data_int, 'interpolator', None) or compile_theano:
+        geo_data_int.interpolator = geo_data_int.InterpolatorClass(geo_data_int, geo_data_int.grid,
+                                                                   *args, **kwargs)
     else:
-        geo_data.interpolator._data = geo_data
-        geo_data.interpolator._grid = geo_data.grid
-        geo_data.interpolator._set_constant_parameteres(geo_data, geo_data.interpolator._grid, **kwargs)
+        geo_data_int.interpolator._data = geo_data_int
+        geo_data_int.interpolator._grid = geo_data_int.grid
+        geo_data_int.interpolator.set_theano_shared_parameteres(geo_data_int, geo_data_int.interpolator._grid, **kwargs)
+
+    return geo_data_int
 
 
 def plot_data(geo_data, direction="y", series="all", **kwargs):
@@ -191,14 +263,14 @@ def plot_section(geo_data, cell_number, block=None, direction="y", **kwargs):
     return plot
 
 
-def plot_potential_field(geo_data, cell_number, potential_field=None, n_pf=0,
+def plot_potential_field(geo_data, potential_field, cell_number, n_pf=0,
                          direction="y", plot_data=True, series="all", *args, **kwargs):
 
     plot = PlotData(geo_data)
-    plot.plot_potential_field(cell_number, potential_field=potential_field, n_pf=n_pf,
+    plot.plot_potential_field(potential_field, cell_number, n_pf=n_pf,
                               direction=direction,  plot_data=plot_data, series=series,
                               *args, **kwargs)
 
 
-def update_potential_fields(geo_data, verbose=0):
-    geo_data.interpolator.update_potential_fields(verbose=verbose)
+def compute_potential_fields(geo_data, verbose=0):
+    geo_data.interpolator.compute_potential_fields(verbose=verbose)
