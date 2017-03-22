@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dictionaries/miguel.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/markdown-exported-files.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/markdown-navigator.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/markdown-navigator/profiles_settings.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/GeMpy.iml" afterPath="$PROJECT_DIR$/.idea/GeMpy.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/OptimizationNotebook.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/OptimizationNotebook.ipynb" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -53,8 +43,8 @@
       <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2160">
-              <caret line="123" column="0" lean-forward="true" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
+            <state relative-caret-position="234">
+              <caret line="16" column="32" lean-forward="true" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
               <folding>
                 <element signature="e#19169#22006#0" expanded="false" />
               </folding>
@@ -687,13 +677,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00029" summary="More changes in docs 2">
-      <created>1482402467474</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1482402467474</updated>
-    </task>
     <task id="LOCAL-00030" summary="More changes in docs 3">
       <created>1482402699434</created>
       <option name="number" value="00030" />
@@ -1030,7 +1013,14 @@
       <option name="project" value="LOCAL" />
       <updated>1490153046078</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="improving the gitignore&#10;">
+      <created>1490153140284</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1490153140284</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1467,8 +1457,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2160">
-          <caret line="123" column="0" lean-forward="true" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
+        <state relative-caret-position="234">
+          <caret line="16" column="32" lean-forward="true" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
           <folding>
             <element signature="e#19169#22006#0" expanded="false" />
           </folding>
