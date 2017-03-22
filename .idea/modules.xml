@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/GeMpy.iml" filepath="$PROJECT_DIR$/.idea/GeMpy.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../pymc3-master/.idea/pymc3-master.iml" filepath="$PROJECT_DIR$/../pymc3-master/.idea/pymc3-master.iml" />
     </modules>
   </component>
 </project>
