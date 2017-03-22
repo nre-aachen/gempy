@@ -3,3 +3,4 @@ matplotlib
 theano
 pandas
 seaborn
+ipyvolume

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Kriging structure of the Potential field method &mdash; GeMpy 2 documentation</title>
+    <title>Kriging structure of the Potential field method &#8212; GeMpy 2 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,18 +17,21 @@
         VERSION:     '2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="GeMpy 2 documentation" href="GeMpy Introduction.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tutorial" href="tutorial.html" />
     <link rel="prev" title="Welcome to GeMpy’s documentation!" href="GeMpy Introduction.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -58,9 +61,9 @@ modeling step.</p>
 where the variables to interpolate that bears algebraic relation between
 them, which is one parameter is the first derivative of the other.</p>
 <div class="math">
-\[\begin{equation}
+\begin{equation}
 \frac{\partial Z_\it{i}}{\partial u}(x) = \lim_{\it{p}\to 0} \frac{ Z(x+pu)-Z(x)}{p}
-\end{equation}\]</div><p>Kriging or Gaussian process regression (cite Matheron) is a spatial
+\end{equation}</div><p>Kriging or Gaussian process regression (cite Matheron) is a spatial
 interpolation method that makes use of a given covariance function to
 compute the best linear unbiased prediction between the data. This
 method can be easily extended to multivariate methods&#8212;i.e.
@@ -88,11 +91,11 @@ the involved locations at any given point <span class="math">\({\bf{x}}_0\)</spa
 mathematical dependencies between the two variables allows to express
 the universal drift as</p>
 <div class="math">
-\[\begin{equation}
+\begin{equation}
 \lambda F_1 + \lambda F_2 = f_10
-\end{equation}\]</div><p>resulting a cokriging system of the form:</p>
+\end{equation}</div><p>resulting a cokriging system of the form:</p>
 <div class="math">
-\[\begin{equation}
+\begin{equation}
 \left[ \begin{array}{ccc}
 {\bf{C_{\partial {\bf{Z}}/ \partial u, \, \partial {\bf{Z}}/ \partial v}}} &amp;
 {\bf{C_{\partial {\bf{Z}}/ \partial u, \, Z}}} &amp;
@@ -114,7 +117,7 @@ the universal drift as</p>
 {\bf{c_{Z, \,\partial {\bf{Z}}/ \partial u}}} &amp;  {\bf{c_{\bf{Z}, \,\bf{Z}}}} \\
 {\bf{f_{10}}} &amp; {\bf{f_{20}}} \end{array} \right]
 \label{krig_sys}
-\end{equation}\]</div><p>As we can see in Eq , it is possible to solve the kriging system for the
+\end{equation}</div><p>As we can see in Eq , it is possible to solve the kriging system for the
 potential field, <strong>Z</strong> as well as its derivative
 <span class="math">\(\partial {\bf{Z}}/ \partial u\)</span>. Whether the main goal is the
 segmentation of the layers which is done using the value of <strong>Z</strong>, the
@@ -147,15 +150,15 @@ application such as meshing or geophysical forward calculations.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/Kriging.txt"
+      <li><a href="_sources/Kriging.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -169,11 +172,11 @@ application such as meshing or geophysical forward calculations.</p>
       &copy;2016, Miguel de la Varga. NRE-RWTH team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
-      <a href="_sources/Kriging.txt"
+      <a href="_sources/Kriging.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
