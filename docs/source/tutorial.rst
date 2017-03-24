@@ -2,7 +2,7 @@ Tutorial
 ========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    ./Notebooks/Example_1_Sandstone
    ./Notebooks/Example_2_Simple_PyMC3
