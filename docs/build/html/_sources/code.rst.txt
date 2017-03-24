@@ -3,7 +3,11 @@ Code
 
 .. toctree::
 
-.. automodule:: GeMpy_core
+.. automodule:: GeMpy
+    :members:
+.. automodule:: DataManagement
+    :members:
+.. automodule:: theanograf
     :members:
 .. automodule:: Visualization
     :members:
