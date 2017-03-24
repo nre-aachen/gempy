@@ -1,6 +1,6 @@
 
-Example Faults
-==============
+Example 3: Faults
+=================
 
 Generating data
 ~~~~~~~~~~~~~~~

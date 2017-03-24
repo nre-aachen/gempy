@@ -185,7 +185,7 @@ Generating data
 
 
 
-.. image:: Example_2-Simple-PyMC3_files/Example_2-Simple-PyMC3_8_0.png
+.. image:: Example_2_Simple_PyMC3_files/Example_2_Simple_PyMC3_8_0.png
 
 
 .. code:: ipython3
@@ -297,7 +297,7 @@ Generating data
 
 
 
-.. image:: Example_2-Simple-PyMC3_files/Example_2-Simple-PyMC3_13_0.png
+.. image:: Example_2_Simple_PyMC3_files/Example_2_Simple_PyMC3_13_0.png
 
 
 PyMC3
@@ -375,27 +375,27 @@ PyMC3
 
 
 
-.. image:: Example_2-Simple-PyMC3_files/Example_2-Simple-PyMC3_19_0.png
+.. image:: Example_2_Simple_PyMC3_files/Example_2_Simple_PyMC3_19_0.png
 
 
 
-.. image:: Example_2-Simple-PyMC3_files/Example_2-Simple-PyMC3_19_1.png
+.. image:: Example_2_Simple_PyMC3_files/Example_2_Simple_PyMC3_19_1.png
 
 
 
-.. image:: Example_2-Simple-PyMC3_files/Example_2-Simple-PyMC3_19_2.png
+.. image:: Example_2_Simple_PyMC3_files/Example_2_Simple_PyMC3_19_2.png
 
 
 
-.. image:: Example_2-Simple-PyMC3_files/Example_2-Simple-PyMC3_19_3.png
+.. image:: Example_2_Simple_PyMC3_files/Example_2_Simple_PyMC3_19_3.png
 
 
 
-.. image:: Example_2-Simple-PyMC3_files/Example_2-Simple-PyMC3_19_4.png
+.. image:: Example_2_Simple_PyMC3_files/Example_2_Simple_PyMC3_19_4.png
 
 
 
-.. image:: Example_2-Simple-PyMC3_files/Example_2-Simple-PyMC3_19_5.png
+.. image:: Example_2_Simple_PyMC3_files/Example_2_Simple_PyMC3_19_5.png
 
 
 .. code:: ipython3

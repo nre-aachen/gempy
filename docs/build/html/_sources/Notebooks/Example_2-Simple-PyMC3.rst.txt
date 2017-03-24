@@ -1,6 +1,6 @@
 
-Implementing GeMpy into PyMC3
-=============================
+Example 2: Implementing GeMpy into PyMC3
+========================================
 
 Generating data
 ~~~~~~~~~~~~~~~

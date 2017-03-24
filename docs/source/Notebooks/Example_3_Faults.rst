@@ -180,7 +180,7 @@ Generating data
 
 
 
-.. image:: Example_3-Faults_files/Example_3-Faults_9_1.png
+.. image:: Example_3_Faults_files/Example_3_Faults_9_1.png
 
 
 .. code:: ipython3

@@ -27,7 +27,7 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Example 3: Simple model PyMC" href="Notebooks/Example_3_Simple_PyMC.html" />
+    <link rel="prev" title="Example 3: Faults" href="Notebooks/Example_3-Faults.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -47,6 +47,836 @@
 <h1>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
+<span class="target" id="module-GeMpy"></span><p>Module with classes and methods to perform implicit regional modelling based on
+the potential field method.
+Tested on Ubuntu 14</p>
+<p>Created on 10/10 /2016</p>
+<p>&#64;author: Miguel de la Varga</p>
+<dl class="function">
+<dt id="GeMpy.import_data">
+<code class="descclassname">GeMpy.</code><code class="descname">import_data</code><span class="sig-paren">(</span><em>extent, resolution=[50, 50, 50], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy.html#import_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy.import_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to initialize the class data. Calling this function some of the data has to be provided (TODO give to
+everything a default).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>extent</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; [x_min, x_max, y_min, y_max, z_min, z_max]. Extent for the visualization of data
+and default of for the grid class.</li>
+<li><strong>resolution</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; [nx, ny, nz]. Resolution for the visualization of data
+and default of for the grid class.</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first simple">
+<li><strong>Resolution</strong> (<em></em><em>(</em><em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a><em>]</em><em></em><em>)</em><em></em>) &#8211; [nx, ny, nz]. Defaults to 50</li>
+<li><strong>path_i</strong> &#8211; Path to the data bases of interfaces. Default os.getcwd(),</li>
+<li><strong>path_f</strong> &#8211; Path to the data bases of foliations. Default os.getcwd()</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p>Object that encapsulate all raw data of the project</p>
+<p>dep: self.Plot(GeMpy_core.PlotData): Object to visualize data and results</p>
+</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeMpy.DataManagement</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="GeMpy.rescale_data">
+<code class="descclassname">GeMpy.</code><code class="descname">rescale_data</code><span class="sig-paren">(</span><em>geo_data</em>, <em>rescaling_factor=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy.html#rescale_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy.rescale_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rescale the data of a DataManagement object between 0 and 1 due to stability problem of the float32.
+:param geo_data: DataManagement object with the real scale data
+:param rescaling_factor: factor of the rescaling. Default to maximum distance in one the axis
+:type rescaling_factor: float</p>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GeMpy.select_series">
+<code class="descclassname">GeMpy.</code><code class="descname">select_series</code><span class="sig-paren">(</span><em>geo_data</em>, <em>series</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy.html#select_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy.select_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the formations of a given serie in string
+:param series: list of int or list of str
+:return: formations of a given serie in string separeted by |</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GeMpy.set_grid">
+<code class="descclassname">GeMpy.</code><code class="descname">set_grid</code><span class="sig-paren">(</span><em>geo_data</em>, <em>new_grid=None</em>, <em>extent=None</em>, <em>resolution=None</em>, <em>grid_type='regular_3D'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy.html#set_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy.set_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to initialize the class new_grid. So far is really simple and only has the regular new_grid type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid_type</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; regular_3D or regular_2D (I am not even sure if regular 2D still working)</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Object that contain different grids</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self.new_grid(GeMpy_core.new_grid)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="GeMpy.set_interpolator">
+<code class="descclassname">GeMpy.</code><code class="descname">set_interpolator</code><span class="sig-paren">(</span><em>geo_data</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GeMpy.html#set_interpolator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeMpy.set_interpolator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to initialize the class interpolator. All the constant parameters for the interpolation can be passed
+as args, otherwise they will take the default value (TODO: documentation of the dafault values)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>*args</strong> &#8211; Variable length argument list</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first simple">
+<li><strong>range_var</strong> &#8211; Range of the variogram. Default None</li>
+<li><strong>c_o</strong> &#8211; Covariance at 0. Default None</li>
+<li><strong>nugget_effect</strong> &#8211; Nugget effect of the gradients. Default 0.01</li>
+<li><strong>u_grade</strong> &#8211; Grade of the polynomial used in the universal part of the Kriging. Default 2</li>
+<li><strong>rescaling_factor</strong> &#8211; Magic factor that multiplies the covariances). Default 2</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Object to perform the potential field method
+self.Plot(GeMpy_core.PlotData): Object to visualize data and results. It gets updated.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self.Interpolator (GeMpy_core.Interpolator)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="module-DataManagement"></span><dl class="class">
+<dt id="DataManagement.DataManagement">
+<em class="property">class </em><code class="descclassname">DataManagement.</code><code class="descname">DataManagement</code><span class="sig-paren">(</span><em>extent, resolution=[50, 50, 50], path_i=None, path_f=None, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement" title="Permalink to this definition">¶</a></dt>
+<dd><p>-DOCS NOT UPDATED- Class to import the raw data of the model and set data classifications into formations and series</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>extent</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; [x_min, x_max, y_min, y_max, z_min, z_max]</li>
+<li><strong>Resolution</strong> (<em></em><em>(</em><em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a><em>]</em><em></em><em>)</em><em></em>) &#8211; [nx, ny, nz]. Defaults to 50</li>
+<li><strong>path_i</strong> &#8211; Path to the data bases of interfaces. Default os.getcwd(),</li>
+<li><strong>path_f</strong> &#8211; Path to the data bases of foliations. Default os.getcwd()</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="DataManagement.DataManagement.extent">
+<code class="descname">extent</code><a class="headerlink" href="#DataManagement.DataManagement.extent" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> &#8211; [x_min, x_max, y_min, y_max, z_min, z_max]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="DataManagement.DataManagement.resolution">
+<code class="descname">resolution</code><a class="headerlink" href="#DataManagement.DataManagement.resolution" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>(Optional[list])</em> &#8211; [nx, ny, nz]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="DataManagement.DataManagement.Foliations">
+<code class="descname">Foliations</code><a class="headerlink" href="#DataManagement.DataManagement.Foliations" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>pandas.core.frame.DataFrame</em> &#8211; Pandas data frame with the foliations data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="DataManagement.DataManagement.Interfaces">
+<code class="descname">Interfaces</code><a class="headerlink" href="#DataManagement.DataManagement.Interfaces" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>pandas.core.frame.DataFrame</em> &#8211; Pandas data frame with the interfaces data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="DataManagement.DataManagement.formations">
+<code class="descname">formations</code><a class="headerlink" href="#DataManagement.DataManagement.formations" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>numpy.ndarray</em> &#8211; Dictionary that contains the name of the formations</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="DataManagement.DataManagement.series">
+<code class="descname">series</code><a class="headerlink" href="#DataManagement.DataManagement.series" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>pandas.core.frame.DataFrame</em> &#8211; Pandas data frame which contains every formation within each series</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="DataManagement.DataManagement.GridClass">
+<em class="property">class </em><code class="descname">GridClass</code><span class="sig-paren">(</span><em>extent</em>, <em>resolution</em>, <em>grid_type='regular_3D'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.GridClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.GridClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>-DOCS NOT UPDATED- Class with set of functions to generate grids</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>extent</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; [x_min, x_max, y_min, y_max, z_min, z_max]</li>
+<li><strong>resolution</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; [nx, ny, nz].</li>
+<li><strong>grid_type</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Type of grid. So far only regular 3D is implemented</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="DataManagement.DataManagement.GridClass.create_regular_grid_3d">
+<code class="descname">create_regular_grid_3d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.GridClass.create_regular_grid_3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.GridClass.create_regular_grid_3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to create a 3D regular grid where is interpolated</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Unraveled 3D numpy array where every row correspond to the xyz coordinates of a regular grid</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="DataManagement.DataManagement.InterpolatorClass">
+<em class="property">class </em><code class="descclassname">DataManagement.</code><code class="descname">InterpolatorClass</code><span class="sig-paren">(</span><em>_data_scaled</em>, <em>_grid_scaled=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.InterpolatorClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.InterpolatorClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>-DOCS NOT UPDATED- Class which contain all needed methods to perform potential field implicit modelling in theano</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>_data</strong> (<em>GeMpy_core.DataManagement</em>) &#8211; All values of a DataManagement object</li>
+<li><strong>_grid</strong> (<em>GeMpy_core.grid</em>) &#8211; A grid object</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Level of verbosity during the execution of the functions (up to 5). Default 0</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="DataManagement.DataManagement.InterpolatorClass.data_prep">
+<code class="descname">data_prep</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.InterpolatorClass.data_prep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.InterpolatorClass.data_prep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ideally this method will extract the data from the pandas dataframes to individual numpy arrays to be input
+of the theano function. However since some of the shared parameters are function of these arrays shape I also
+set them here
+:returns:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>List of arrays which are the input for the theano function:</dt>
+<dd><ul class="first last simple">
+<li>numpy.array: dips_position</li>
+<li>numpy.array: dip_angles</li>
+<li>numpy.array: azimuth</li>
+<li>numpy.array: polarity</li>
+<li>numpy.array: ref_layer_points</li>
+<li>numpy.array: rest_layer_points</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">idl (<a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)">list</a>)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.InterpolatorClass.order_table">
+<code class="descname">order_table</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.InterpolatorClass.order_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.InterpolatorClass.order_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>First we sort the dataframes by the series age. Then we set a unique number for every formation and resort
+the formations. All inplace</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.InterpolatorClass.set_formation_number">
+<code class="descname">set_formation_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.InterpolatorClass.set_formation_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.InterpolatorClass.set_formation_number" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Set a unique number to each formation. NOTE: this method is getting deprecated since the user does not need
+to know it and also now the numbers must be set in the order of the series as well. Therefore this method
+has been moved to the interpolator class as preprocessing</div></blockquote>
+<p>Returns: Column in the interfaces and foliations dataframes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.InterpolatorClass.set_theano_shared_parameteres">
+<code class="descname">set_theano_shared_parameteres</code><span class="sig-paren">(</span><em>_data_rescaled</em>, <em>_grid_rescaled</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.InterpolatorClass.set_theano_shared_parameteres"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.InterpolatorClass.set_theano_shared_parameteres" title="Permalink to this definition">¶</a></dt>
+<dd><p>Here we create most of the kriging parameters. The user can pass them as kwargs otherwise we pick the
+default values from the DataManagement info. The share variables are set in place. All the parameters here
+are independent of the input data so this function only has to be called if you change the extent or grid or
+if you want to change one the kriging parameters.
+:param _data_rescaled: DataManagement object
+:param _grid_rescaled: Grid object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>u_grade</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Drift grade. Default to 2.</li>
+<li><strong>range_var</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Range of the variogram. Default 3D diagonal of the extent</li>
+<li><strong>c_o</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Covariance at lag 0. Default range_var ** 2 / 14 / 3. See my paper when I write it</li>
+<li><strong>nugget_effect</strong> (<em>flaot</em>) &#8211; Nugget effect of foliations. Default to 0.01</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.calculate_gradient">
+<code class="descclassname">DataManagement.</code><code class="descname">calculate_gradient</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.calculate_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.calculate_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the gradient vector of module 1 given dip and azimuth to be able to plot the foliations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">extra columns with components xyz of the unity vector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">self.foliations</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.create_grid">
+<code class="descclassname">DataManagement.</code><code class="descname">create_grid</code><span class="sig-paren">(</span><em>extent=None</em>, <em>resolution=None</em>, <em>grid_type='regular_3D'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.create_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.create_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to initialize the class grid. So far is really simple and only has the regular grid type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid_type</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; regular_3D or regular_2D (I am not even sure if regular 2D still working)</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Object that contain different grids</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self.grid(GeMpy_core.grid)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.get_raw_data">
+<code class="descclassname">DataManagement.</code><code class="descname">get_raw_data</code><span class="sig-paren">(</span><em>itype='all'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.get_raw_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.get_raw_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns the interfaces and foliations pandas Dataframes. Can return both at the same time or only
+one of the two
+:param itype: input data type, either &#8216;foliations&#8217;, &#8216;interfaces&#8217; or &#8216;all&#8217; for both.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Data frame with the raw data</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">pandas.core.frame.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.i_close_set_data">
+<code class="descclassname">DataManagement.</code><code class="descname">i_close_set_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.i_close_set_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.i_close_set_data" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Method to have interactive pandas tables in jupyter notebooks. The idea is to use this method to interact with</dt>
+<dd>the table and i_close_set_data to recompute the parameters that depend on the changes made. I did not find a
+easier solution than calling two different methods.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>itype</strong> &#8211; input data type, either &#8216;foliations&#8217; or &#8216;interfaces&#8217;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Data frame with the changed data on real time</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pandas.core.frame.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.i_open_set_data">
+<code class="descclassname">DataManagement.</code><code class="descname">i_open_set_data</code><span class="sig-paren">(</span><em>itype='foliations'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.i_open_set_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.i_open_set_data" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Method to have interactive pandas tables in jupyter notebooks. The idea is to use this method to interact with</dt>
+<dd>the table and i_close_set_data to recompute the parameters that depend on the changes made. I did not find a
+easier solution than calling two different methods.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>itype</strong> &#8211; input data type, either &#8216;foliations&#8217; or &#8216;interfaces&#8217;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Data frame with the changed data on real time</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pandas.core.frame.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="DataManagement.DataManagement.load_data_csv">
+<em class="property">static </em><code class="descclassname">DataManagement.</code><code class="descname">load_data_csv</code><span class="sig-paren">(</span><em>data_type</em>, <em>path='/home/miguel/PycharmProjects/GeMpy'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.load_data_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.load_data_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to load either interface or foliations data csv files. Normally this is in which GeoModeller exports it</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_type</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; &#8216;interfaces&#8217; or &#8216;foliations&#8217;</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; path to the files. Default os.getcwd()</li>
+<li><strong>**kwargs</strong> &#8211; Arbitrary keyword arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Data frame with the raw data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">pandas.core.frame.DataFrame</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.set_foliations">
+<code class="descclassname">DataManagement.</code><code class="descname">set_foliations</code><span class="sig-paren">(</span><em>foliat_Dataframe</em>, <em>append=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.set_foliations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.set_foliations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to change or append a Dataframe to foliations in place.
+:param interf_Dataframe: pandas.core.frame.DataFrame with the data
+:param append: Bool: if you want to append the new data frame or substitute it</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.set_formation_number">
+<code class="descclassname">DataManagement.</code><code class="descname">set_formation_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.set_formation_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.set_formation_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a unique number to each formation. NOTE: this method is getting deprecated since the user does not need
+to know it and also now the numbers must be set in the order of the series as well. Therefore this method
+has been moved to the interpolator class as preprocessing</p>
+<p>Returns: Column in the interfaces and foliations dataframes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.set_interfaces">
+<code class="descclassname">DataManagement.</code><code class="descname">set_interfaces</code><span class="sig-paren">(</span><em>interf_Dataframe</em>, <em>append=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.set_interfaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.set_interfaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to change or append a Dataframe to interfaces in place.
+:param interf_Dataframe: pandas.core.frame.DataFrame with the data
+:param append: Bool: if you want to append the new data frame or substitute it</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DataManagement.DataManagement.set_series">
+<code class="descclassname">DataManagement.</code><code class="descname">set_series</code><span class="sig-paren">(</span><em>series_distribution=None</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/DataManagement.html#DataManagement.set_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#DataManagement.DataManagement.set_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to define the different series of the project</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>series_distribution</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; with the name of the serie as key and the name of the formations as values.</li>
+<li><strong>order</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a><em>]</em><em></em>) &#8211; order of the series by default takes the dictionary keys which until python 3.6 are
+random. This is important to set the erosion relations between the different series</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A pandas DataFrame with the series and formations relations
+self.interfaces: one extra column with the given series
+self.foliations: one extra column with the given series</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">self.series</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-theanograf"></span><dl class="docutils">
+<dt>Function that generates the symbolic code to perform the interpolation. Calling this function creates</dt>
+<dd>both the theano functions for the potential field and the block.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">theano function for the potential field
+theano function for the block</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="theanograf.TheanoGraph_pro">
+<em class="property">class </em><code class="descclassname">theanograf.</code><code class="descname">TheanoGraph_pro</code><span class="sig-paren">(</span><em>u_grade=0, verbose=[0], dtype='float32'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is used to help to divide the construction of the graph into sensical parts. All its methods build a part
+of the graph. Every method can be seen as a branch and collection of branches until the last method that will be the
+whole tree. Every part of the graph could be compiled separately but as we increase the complexity the input of each
+of these methods is more and more difficult to provide (if you are in a branch close to the trunk you need all the
+results of the branches above)</p>
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.b_vector">
+<code class="descname">b_vector</code><span class="sig-paren">(</span><em>verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.b_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.b_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creation of the independent vector b to solve the kriging system
+:param verbose: -deprecated-</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">independent vector</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">theano.tensor.vector</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.block_series">
+<code class="descname">block_series</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.block_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.block_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the part of the block model of a given series (dictated by the bool array yet to be computed)
+:returns: Value of lithology at every interpolated point
+:rtype: theano.tensor.vector</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.compute_a_fault">
+<code class="descname">compute_a_fault</code><span class="sig-paren">(</span><em>len_i_0</em>, <em>len_i_1</em>, <em>len_f_0</em>, <em>len_f_1</em>, <em>n_form_per_serie_0</em>, <em>n_form_per_serie_1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.compute_a_fault"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.compute_a_fault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that loops each fault, generating a potential field for each on them with the respective block model
+:param len_i_0: Lenght of rest of previous series
+:param len_i_1: Lenght of rest for the computed series
+:param len_f_0: Lenght of dips of previous series
+:param len_f_1: Length of dips of the computed series
+:param n_form_per_serie_0: Number of formations of previous series
+:param n_form_per_serie_1: Number of formations of the computed series</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">block model derived from the faults that afterwards is used as a drift for the &#8220;real&#8221;
+data</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">theano.tensor.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.compute_a_series">
+<code class="descname">compute_a_series</code><span class="sig-paren">(</span><em>len_i_0</em>, <em>len_i_1</em>, <em>len_f_0</em>, <em>len_f_1</em>, <em>n_form_per_serie_0</em>, <em>n_form_per_serie_1</em>, <em>final_block</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.compute_a_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.compute_a_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that loops each series, generating a potential field for each on them with the respective block model
+:param len_i_0: Lenght of rest of previous series
+:param len_i_1: Lenght of rest for the computed series
+:param len_f_0: Lenght of dips of previous series
+:param len_f_1: Length of dips of the computed series
+:param n_form_per_serie_0: Number of formations of previous series
+:param n_form_per_serie_1: Number of formations of the computed series</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">final block model</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">theano.tensor.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.cov_gradients">
+<code class="descname">cov_gradients</code><span class="sig-paren">(</span><em>verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.cov_gradients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.cov_gradients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create covariance function for the gradiens
+:returns: covariance of the gradients. Shape number of points in dip_pos x number of</p>
+<blockquote>
+<div>points in dip_pos</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">theano.tensor.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.cov_interface_gradients">
+<code class="descname">cov_interface_gradients</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.cov_interface_gradients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.cov_interface_gradients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create covariance function for the gradiens
+:returns:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>covariance of the gradients. Shape number of points in rest x number of</dt>
+<dd>points in dip_pos</dd>
+</dl>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">theano.tensor.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.cov_interfaces">
+<code class="descname">cov_interfaces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.cov_interfaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.cov_interfaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create covariance function for the interfaces
+:returns: covariance of the interfaces. Shape number of points in rest x number of</p>
+<blockquote>
+<div>points in rest</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">theano.tensor.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.covariance_matrix">
+<code class="descname">covariance_matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.covariance_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.covariance_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set all the previous covariances together in the universal cokriging matrix
+:returns: Multivariate covariance
+:rtype: theano.tensor.matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.extend_dual_kriging">
+<code class="descname">extend_dual_kriging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.extend_dual_kriging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.extend_dual_kriging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tile the dual kriging vector to cover all the points to interpolate.So far I just make a matrix with the
+dimensions len(DK)x(grid) but in the future maybe I have to try to loop all this part so consume less memory
+:returns: Matrix with the Dk parameters repeated for all the points to interpolate
+:rtype: theano.tensor.matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.faults_contribution">
+<code class="descname">faults_contribution</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.faults_contribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.faults_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computation of the contribution of the faults drift at every point to interpolate. To get these we need to
+compute a whole block model with the faults data
+:returns: Contribution of the faults drift (input) at every point to interpolate
+:rtype: theano.tensor.vector</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.faults_matrix">
+<code class="descname">faults_matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.faults_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.faults_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates the part of the graph that generates the faults function creating a &#8220;block model&#8221; at the
+references and the rest of the points. Then this vector has to be appended to the covariance function
+:returns: Drift matrix for the interfaces. Shape number of points in rest x n faults. This drif</p>
+<blockquote>
+<div><p>is a simple addition of an arbitrary number</p>
+<p>theano.tensor.matrix: Drift matrix for the gradients. Shape number of points in dips x n faults. For
+discrete values this matrix will be null since the derivative of a constant is 0</p>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">theano.tensor.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.gradient_contribution">
+<code class="descname">gradient_contribution</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.gradient_contribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.gradient_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computation of the contribution of the foliations at every point to interpolate
+:returns: Contribution of all foliations (input) at every point to interpolate
+:rtype: theano.tensor.vector</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.input_parameters_list">
+<code class="descname">input_parameters_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.input_parameters_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.input_parameters_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a list with the symbolic variables to use when we compile the theano function
+:returns:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>[self.dips_position_all, self.dip_angles_all, self.azimuth_all, self.polarity_all,</dt>
+<dd>self.ref_layer_points_all, self.rest_layer_points_all]</dd>
+</dl>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)">list</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.interface_contribution">
+<code class="descname">interface_contribution</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.interface_contribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.interface_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computation of the contribution of the interfaces at every point to interpolate
+:returns: Contribution of all interfaces (input) at every point to interpolate
+:rtype: theano.tensor.vector</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.matrices_shapes">
+<code class="descname">matrices_shapes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.matrices_shapes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.matrices_shapes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all the lengths of the matrices that form the covariance matrix
+Returns: length_of_CG, length_of_CGI, length_of_U_I, length_of_faults, length_of_C</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.potential_field_at_all">
+<code class="descname">potential_field_at_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.potential_field_at_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.potential_field_at_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the potential field at all the interpolation points, i.e. grid plus rest plus ref
+:returns: Potential fields at all points
+:rtype: theano.tensor.vector</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.potential_field_at_interfaces">
+<code class="descname">potential_field_at_interfaces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.potential_field_at_interfaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.potential_field_at_interfaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Potential field at interfaces. To avoid errors I take all the points of rest that belong to one interface
+and make the average
+:returns: Potential field values at the interfaces of a given series
+:rtype: theano.tensor.vector</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.solve_kriging">
+<code class="descname">solve_kriging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.solve_kriging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.solve_kriging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the kriging system. This has to get substituted by a more efficient and stable method QR
+decomposition in all likelihood
+:returns: Dual kriging parameters
+:rtype: theano.tensor.vector</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="theanograf.TheanoGraph_pro.squared_euclidean_distances">
+<em class="property">static </em><code class="descname">squared_euclidean_distances</code><span class="sig-paren">(</span><em>x_1</em>, <em>x_2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.squared_euclidean_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.squared_euclidean_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the euclidian distances in 3D between all the points in x_1 and x_2
+:param x_1: shape n_points x number dimension
+:type x_1: theano.tensor.matrix
+:param x_2: shape n_points x number dimension
+:type x_2: theano.tensor.matrix</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Distancse matrix. shape n_points x n_points</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">theano.tensor.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.universal_drift_contribution">
+<code class="descname">universal_drift_contribution</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.universal_drift_contribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.universal_drift_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computation of the contribution of the universal drift at every point to interpolate
+:returns: Contribution of the universal drift (input) at every point to interpolate
+:rtype: theano.tensor.vector</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.universal_matrix">
+<code class="descname">universal_matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.universal_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.universal_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the drift matrices for the potential field and its gradient
+:returns: Drift matrix for the interfaces. Shape number of points in rest x 3**degree drift</p>
+<blockquote>
+<div><p>(except degree 0 that is 0)</p>
+<p>theano.tensor.matrix: Drift matrix for the gradients. Shape number of points in dips x 3**degree drift
+(except degree 0 that is 0)</p>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">theano.tensor.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.whole_block_model">
+<code class="descname">whole_block_model</code><span class="sig-paren">(</span><em>n_faults=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.whole_block_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.whole_block_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Final function that loops first all the faults, then uses that result in the final block and loops again the
+series
+:param n_faults: Number of faults to extract the correct values from the big input matrices
+:type n_faults: int</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Final block model with the segmented lithologies</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">theano.tensor.vector</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="theanograf.TheanoGraph_pro.x_to_interpolate">
+<code class="descname">x_to_interpolate</code><span class="sig-paren">(</span><em>verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/theanograf.html#TheanoGraph_pro.x_to_interpolate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#theanograf.TheanoGraph_pro.x_to_interpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>here I add to the grid points also the references points(to check the value of the potential field at the
+interfaces). Also here I will check what parts of the grid have been already computed in a previous series
+to avoid to recompute.
+:returns: The 3D points of the given grid plus the reference and rest points
+:rtype: theano.tensor.matrix</p>
+</dd></dl>
+
+</dd></dl>
+
 <span class="target" id="module-Visualization"></span><p>Module with classes and methods to visualized structural geology data and potential fields of the regional modelling based on
 the potential field method.
 Tested on Ubuntu 14</p>
@@ -213,7 +1043,7 @@ specific directions</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="GeMpy Introduction.html">Documentation overview</a><ul>
-      <li>Previous: <a href="Notebooks/Example_3_Simple_PyMC.html" title="previous chapter">Example 3: Simple model PyMC</a></li>
+      <li>Previous: <a href="Notebooks/Example_3-Faults.html" title="previous chapter">Example 3: Faults</a></li>
   </ul></li>
 </ul>
 </div>

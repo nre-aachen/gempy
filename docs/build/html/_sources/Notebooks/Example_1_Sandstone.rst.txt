@@ -344,7 +344,7 @@ Example 1: Sandstone Model
 
 
 Below here so far is deprecated
-===============================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 First we make a GeMpy instance with most of the parameters default
 (except range that is given by the project). Then we also fix the
