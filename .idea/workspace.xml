@@ -1,29 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_2_Simple_PyMC3.ipynb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_3_Faults.ipynb" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/Notebooks/Example_1_Sandstone.doctree" afterPath="$PROJECT_DIR$/docs/build/doctrees/Notebooks/Example_1_Sandstone.doctree" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" afterPath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/doctrees/tutorial.doctree" afterPath="$PROJECT_DIR$/docs/build/doctrees/tutorial.doctree" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/objects.inv" afterPath="$PROJECT_DIR$/docs/build/html/objects.inv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/GeMpy.py" afterPath="$PROJECT_DIR$/GeMpy/GeMpy.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/Visualization.py" afterPath="$PROJECT_DIR$/GeMpy/Visualization.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/coKriging.py" afterPath="$PROJECT_DIR$/GeMpy/coKriging.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/theanograf.py" afterPath="$PROJECT_DIR$/GeMpy/theanograf.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/Notebooks/Example_1_Sandstone.html" afterPath="$PROJECT_DIR$/docs/build/html/Notebooks/Example_1_Sandstone.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/_modules/Visualization.html" afterPath="$PROJECT_DIR$/docs/build/html/_modules/Visualization.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/_sources/Notebooks/Example_1_Sandstone.rst.txt" afterPath="$PROJECT_DIR$/docs/build/html/_sources/Notebooks/Example_1_Sandstone.rst.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/_sources/tutorial.rst.txt" afterPath="$PROJECT_DIR$/docs/build/html/_sources/tutorial.rst.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/code.html" afterPath="$PROJECT_DIR$/docs/build/html/code.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/searchindex.js" afterPath="$PROJECT_DIR$/docs/build/html/searchindex.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/build/html/tutorial.html" afterPath="$PROJECT_DIR$/docs/build/html/tutorial.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/Notebooks/Example_1_Sandstone.rst" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_1_Sandstone.rst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/Notebooks/Example_3_Faults.rst" afterPath="$PROJECT_DIR$/docs/source/Notebooks/Example_3_Faults.rst" />
+    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="Documentation update: Tutorial3">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/source/index.rst" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_3_Faults.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_3_Faults.ipynb" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -89,8 +70,8 @@
       <file leaf-file-name="Visualization.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="640">
-              <caret line="263" column="0" lean-forward="false" selection-start-line="260" selection-start-column="5" selection-end-line="263" selection-end-column="0" />
+            <state relative-caret-position="496">
+              <caret line="255" column="26" lean-forward="false" selection-start-line="255" selection-start-column="26" selection-end-line="255" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -288,6 +269,38 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -687,13 +700,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00034" summary="Docs 0.91">
-      <created>1482405426965</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1482405426965</updated>
-    </task>
     <task id="LOCAL-00035" summary="Docs 0.912">
       <created>1482405632053</created>
       <option name="number" value="00035" />
@@ -1030,7 +1036,14 @@
       <option name="project" value="LOCAL" />
       <updated>1490335344189</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="Documentation update: Tutorial3">
+      <created>1490861411565</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1490861411566</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1420,8 +1433,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="640">
-          <caret line="263" column="0" lean-forward="false" selection-start-line="260" selection-start-column="5" selection-end-line="263" selection-end-column="0" />
+        <state relative-caret-position="496">
+          <caret line="255" column="26" lean-forward="false" selection-start-line="255" selection-start-column="26" selection-end-line="255" selection-end-column="26" />
           <folding />
         </state>
       </provider>
