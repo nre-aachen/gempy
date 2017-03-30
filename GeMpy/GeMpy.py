@@ -8,12 +8,12 @@ Created on 10/10 /2016
 @author: Miguel de la Varga
 
 """
-
+from __future__ import division
 # import theano
 # import theano.tensor as T
 import numpy as _np
 # import sys, os
-import pandas as pn
+import pandas as _pn
 import copy
 from Visualization import PlotData
 from DataManagement import DataManagement
@@ -30,9 +30,9 @@ def rescale_data(geo_data, rescaling_factor=None):
     Returns:
 
     """
-    max_coord = pn.concat(
+    max_coord = _pn.concat(
         [geo_data.foliations, geo_data.interfaces]).max()[['X', 'Y', 'Z']]
-    min_coord = pn.concat(
+    min_coord = _pn.concat(
         [geo_data.foliations, geo_data.interfaces]).min()[['X', 'Y', 'Z']]
 
     if not rescaling_factor:

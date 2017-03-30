@@ -17,8 +17,8 @@ Generating data
     import GeMpy
     
     # Reloading (only for development purposes)
-    import importlib
-    importlib.reload(GeMpy)
+    #import importlib
+    #importlib.reload(GeMpy)
     
     # Usuful packages
     import numpy as np
@@ -158,30 +158,10 @@ Generating data
     # Solution of theano
     sol = debugging(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3],input_data_P[4], input_data_P[5])
 
-
-.. parsed-literal::
-
-    Faults contribution __str__ = [ 0.  0.  0. ...,  0.  0.  0.]
-    Faults contribution __str__ = [ 0.023055  0.023055  0.023055 ...,  0.        0.        0.      ]
-
-
 .. code:: ipython3
 
     #GeMpy.plot_potential_field(fault1, sol.reshape(50,50,50),13, plot_data = True)
     GeMpy.plot_section(geo_data, 30, block = sol, plot_data = True)
-
-
-
-
-.. parsed-literal::
-
-    <Visualization.PlotData at 0x7fb37664c160>
-
-
-
-
-.. image:: Example_3_Faults_files/Example_3_Faults_9_1.png
-
 
 .. code:: ipython3
 

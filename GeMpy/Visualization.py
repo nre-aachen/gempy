@@ -246,8 +246,43 @@ class PlotData(object):
         for label, x, y in zip(frame[label_col], frame[x], frame[y]):
             plt.annotate(label, xy=(x + 0.2, y + 0.15), **kwargs)
 
+    def plot3D_steno(self, block,  project, plot=True, **kwargs):
+        import steno3d
+        import numpy as np
+        steno3d.login()
+
+        description = kwargs.get('description', 'Nothing')
+        proj = steno3d.Project(
+            title=project,
+            description=description,
+            public=True,
+        )
+
+        # mesh = steno3d.Mesh3DGrid(h1=np.diff(np.linspace(self._data.extent[0], self._data.extent[1], self._data.resolution[0])),
+        #                           h2=np.diff(np.linspace(self._data.extent[2], self._data.extent[3], self._data.resolution[1])),
+        #                           h3=np.diff(np.linspace(self._data.extent[4], self._data.extent[5], self._data.resolution[2])))
+
+        mesh = steno3d.Mesh3DGrid(h1=np.ones(self._data.resolution[0]) * (self._data.extent[0] - self._data.extent[1]) /
+                                                                         (self._data.resolution[0] - 1),
+                                  h2=np.ones(self._data.resolution[1]) * (self._data.extent[2] - self._data.extent[3]) /
+                                                                         (self._data.resolution[1] - 1),
+                                  h3=np.ones(self._data.resolution[2]) * (self._data.extent[4] - self._data.extent[5]) /
+                                                                         (self._data.resolution[2] - 1))
+
+        data = steno3d.DataArray(
+            title='Lithologies',
+            array=block)
+
+        vol = steno3d.Volume(project=proj, mesh=mesh, data=[dict(location='CC', data=data)])
+        vol.upload()
+
+        if plot:
+            return vol.plot()
+
     def export_vtk(self):
         """
         export vtk
         :return:
         """
+
+
