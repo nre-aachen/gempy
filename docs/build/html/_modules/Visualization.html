@@ -291,11 +291,46 @@
         <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="n">label_col</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="n">y</span><span class="p">]):</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
+    <span class="k">def</span> <span class="nf">plot3D_steno</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">,</span>  <span class="n">project</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">steno3d</span>
+        <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        <span class="n">steno3d</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+        <span class="n">description</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;Nothing&#39;</span><span class="p">)</span>
+        <span class="n">proj</span> <span class="o">=</span> <span class="n">steno3d</span><span class="o">.</span><span class="n">Project</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+            <span class="n">public</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># mesh = steno3d.Mesh3DGrid(h1=np.diff(np.linspace(self._data.extent[0], self._data.extent[1], self._data.resolution[0])),</span>
+        <span class="c1">#                           h2=np.diff(np.linspace(self._data.extent[2], self._data.extent[3], self._data.resolution[1])),</span>
+        <span class="c1">#                           h3=np.diff(np.linspace(self._data.extent[4], self._data.extent[5], self._data.resolution[2])))</span>
+
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">steno3d</span><span class="o">.</span><span class="n">Mesh3DGrid</span><span class="p">(</span><span class="n">h1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span>
+                                                                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+                                  <span class="n">h2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span>
+                                                                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+                                  <span class="n">h3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span> <span class="o">/</span>
+                                                                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">steno3d</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Lithologies&#39;</span><span class="p">,</span>
+            <span class="n">array</span><span class="o">=</span><span class="n">block</span><span class="p">)</span>
+
+        <span class="n">vol</span> <span class="o">=</span> <span class="n">steno3d</span><span class="o">.</span><span class="n">Volume</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span> <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="s1">&#39;CC&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)])</span>
+        <span class="n">vol</span><span class="o">.</span><span class="n">upload</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vol</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+
 <div class="viewcode-block" id="PlotData.export_vtk"><a class="viewcode-back" href="../code.html#Visualization.PlotData.export_vtk">[docs]</a>    <span class="k">def</span> <span class="nf">export_vtk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        export vtk</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span></div></div>
+
+
 </pre></div>
 
           </div>

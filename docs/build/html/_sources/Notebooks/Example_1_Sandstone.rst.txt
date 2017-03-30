@@ -49,9 +49,11 @@ Example 1: Sandstone Model
 
 .. code:: ipython3
 
-    # Preprocessing data to interpolate: This rescales the coordinates between 0 and 1 for stability issues. Here we can choose also the drift degree
-    # (in new updates I will change it to be possible to change the grade after compilation). From here we can set also the data type of the operations in case
-    # you want to use the GPU. Verbose is huge. There is a large list of strings that select what you want to print while the computation.
+    # Preprocessing data to interpolate: This rescales the coordinates between 0 and 1 for stability issues.
+    # Here we can choose also the drift degree (in new updates I will change it to be possible to change the
+    # grade after compilation). From here we can set also the data type of the operations in case you want to
+    # use the GPU. Verbose is huge. There is a large list of strings that select what you want to print while
+    # the computation.
     data_interp = GeMpy.set_interpolator(geo_data, u_grade = 2, dtype="float32", verbose=[])
 
 .. code:: ipython3
@@ -61,8 +63,8 @@ Example 1: Sandstone Model
     # Set all the theano shared parameters and return the symbolic variables (the input of the theano function)
     input_data_T = data_interp.interpolator.tg.input_parameters_list()
     
-    # Prepare the input data (interfaces, foliations data) to call the theano function. Also set a few theano shared variables with the len
-    # of formations series and so on
+    # Prepare the input data (interfaces, foliations data) to call the theano function.
+    #Also set a few theano shared variables with the len of formations series and so on
     input_data_P = data_interp.interpolator.data_prep() 
     
     # Compile the theano function.
@@ -85,7 +87,7 @@ Example 1: Sandstone Model
 
 .. parsed-literal::
 
-    <Visualization.PlotData at 0x7f0a685fe198>
+    <Visualization.PlotData at 0x7f72c6f7f828>
 
 
 
@@ -93,9 +95,100 @@ Example 1: Sandstone Model
 .. image:: Example_1_Sandstone_files/Example_1_Sandstone_6_1.png
 
 
+
 .. code:: ipython3
 
-    p3.figure
+    GeMpy.PlotData(geo_data).plot3D_steno(sol, 'Sandstone', description='The sandstone model')
+
+
+.. parsed-literal::
+
+    
+    You are already logged in as @leguark. To log in as a different user
+    please `steno3d.logout()`, then login specifying a different
+    username or API developer key.
+    
+    
+    Verifying your quota for public projects...
+    This PUBLIC project will be viewable by everyone.
+    Total progress: 100% - Uploading: project Sandstone
+    Complete!
+    https://steno3d.com/resource/volume/CHDpVR6bYLVyTAiWYAHW
+
+
+
+
+.. raw:: html
+
+    
+            <iframe
+                width="100%"
+                height="500"
+                src="https://steno3d.com/resource/volume/CHDpVR6bYLVyTAiWYAHW"
+                frameborder="0"
+                allowfullscreen
+            ></iframe>
+            
+
+
+
+.. code:: ipython3
+
+    np.linspace(geo_data.extent[0], geo_data.extent[1], geo_data.resolution[0], retstep=True)
+
+
+
+
+.. parsed-literal::
+
+    (array([ 696000.      ,  697307.692308,  698615.384615,  699923.076923,  701230.769231,  702538.461538,  703846.153846,
+             705153.846154,  706461.538462,  707769.230769,  709076.923077,  710384.615385,  711692.307692,  713000.      ,
+             714307.692308,  715615.384615,  716923.076923,  718230.769231,  719538.461538,  720846.153846,  722153.846154,
+             723461.538462,  724769.230769,  726076.923077,  727384.615385,  728692.307692,  730000.      ,  731307.692308,
+             732615.384615,  733923.076923,  735230.769231,  736538.461538,  737846.153846,  739153.846154,  740461.538462,
+             741769.230769,  743076.923077,  744384.615385,  745692.307692,  747000.      ]),
+     1307.6923076923076)
+
+
+
+.. code:: ipython3
+
+    np.diff(np.linspace(geo_data.extent[0], geo_data.extent[1], geo_data.resolution[0], retstep=False)).shape
+
+
+
+
+.. parsed-literal::
+
+    (39,)
+
+
+
+.. code:: ipython3
+
+    (geo_data.extent[1]- geo_data.extent[0])/ geo_data.resolution[0]-4
+
+
+
+
+.. parsed-literal::
+
+    1271.0
+
+
+
+.. code:: ipython3
+
+    (geo_data.extent[1]- geo_data.extent[0])/39
+
+
+
+
+.. parsed-literal::
+
+    1307.6923076923076
+
+
 
 .. code:: ipython3
 
@@ -815,7 +908,7 @@ BIF Series
 
 
 
-.. image:: Example_1_Sandstone_files/Example_1_Sandstone_34_0.png
+.. image:: Example_1_Sandstone_files/Example_1_Sandstone_39_0.png
 
 
 SImple mafic
@@ -827,7 +920,7 @@ SImple mafic
 
 
 
-.. image:: Example_1_Sandstone_files/Example_1_Sandstone_36_0.png
+.. image:: Example_1_Sandstone_files/Example_1_Sandstone_41_0.png
 
 
 Optimizing the export of lithologies
@@ -878,7 +971,7 @@ method ``plot_block_section`` to see a 2D section of the model
 
 
 
-.. image:: Example_1_Sandstone_files/Example_1_Sandstone_41_1.png
+.. image:: Example_1_Sandstone_files/Example_1_Sandstone_46_1.png
 
 
 Export to vtk. (*Under development*)

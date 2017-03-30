@@ -140,13 +140,13 @@ class DataManagement(object):
             pandas.core.frame.DataFrame: Data frame with the raw data
 
         """
-        import pandas as _pn
+        import pandas as pn
         if itype == 'foliations':
             raw_data = self.foliations
         elif itype == 'interfaces':
             raw_data = self.interfaces
         elif itype == 'all':
-            raw_data = _pn.concat([self.interfaces, self.foliations], keys=['interfaces', 'foliations'])
+            raw_data = pn.concat([self.interfaces, self.foliations], keys=['interfaces', 'foliations'])
         return raw_data
 
     def i_open_set_data(self, itype="foliations"):
