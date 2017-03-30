@@ -12,7 +12,11 @@ GeMpy is an opensource project for the generation of 3D structural geological mo
 
 The results look like this:
 
-.. image:: ./images/sandstone_example.png
+.. raw:: html
+
+    <div style="margin-top:10px;">
+      <iframe src="https://steno3d.com/embed/A747sS50WZZu75yEm8Yi" width="600" height="400"></iframe>
+    </div>
 
 Its implicit nature allows the user to generate complete 3D geological models through the interpolation of:
 
