@@ -368,10 +368,10 @@ def clustering_grid(grid_to_inter, n_clusters=50, plot=False):
     return clust
 
 
-def select_points(df, grid_to_inter, cluster, n_rep=10):
+def select_points(df, grid_to_inter, cluster, SED_f = theano_sed(), n_rep=10):
 
     points_cluster = np.bincount(cluster.labels_)
-    SED_f = theano_sed()
+  #  SED_f = theano_sed()
 
     for i in range(n_rep):
         for i_clust in range(cluster.n_clusters):
@@ -395,5 +395,115 @@ def select_points(df, grid_to_inter, cluster, n_rep=10):
             yield (h_x0, select, selected_cluster_grid)
 
 
+def SGS_compute(selected_coord_data, selected_grid_to_inter, selected_values_data,
+                trace, nuggets=None, n_var=1, n_exp=2, n_gaus=2):
+    #SED_f = theano_sed()
 
+
+    #SED = SED_f(selected_coord_data, selected_coord_data)
+
+    npti = selected_grid_to_inter.shape[1]
+
+    cov_h = cross_covariance(trace, selected_coord_data,
+                             nuggets=nuggets, n_var=n_var, n_exp=n_exp, n_gaus=n_gaus, ordinary=True)
+    cov_b = cross_covariance(trace, selected_grid_to_inter, nuggets=nuggets, n_var=n_var, n_exp=n_exp, n_gaus=n_gaus,
+                             ordinary=True)
+
+    k_weights = np.linalg.solve(cov_h, cov_b)
+    svd_tmp = np.tile(np.repeat(selected_values_data, npti, axis=1), (n_var, 1))
+
+    # Sol ordinary kriging mean
+    k_mean = (svd_tmp * k_weights[:-n_var]).sum(axis=0)
+
+    # Sol ordinary kriging std
+    k_std = svd_tmp.std(axis=0) - (k_weights * cov_b)[:-n_var].sum(axis=0) + (k_weights * cov_b)[-n_var:].sum(axis=0)
+
+    assert all(k_std) > -10, "A standard deviation of kringing is really off. Check nothing is wrong"
+
+    # Set negatives to 0
+    k_std[k_std < 0] = 0.1
+
+    values_interp = np.random.normal(k_mean, k_std)
+  #  for point in range(npti-1):
+   #     values_data = np.vstack((values_data, values_interp[point::npti]))
+
+    #coord_data = np.vstack((coord_data, grid_interpolating))
+    return values_interp#, k_std# - svd_tmp.std(axis=0)
+
+
+def SGS(df, grid_to_inter, cluster,
+        trace, nuggets=None, n_var=1, n_exp=2, n_gaus=2,
+        n_rep=10, verbose = 0):
+
+    points_cluster = np.bincount(cluster.labels_)
+    coord_data = df[['X', 'Y', 'Z']].as_matrix()
+    values_data = df[df.columns.difference(['X', 'Y', 'Z'])].as_matrix()
+
+    SED_f = theano_sed()
+
+    for i in range(n_rep):
+        for i_clust in range(cluster.n_clusters):
+            cluster_bool = cluster.labels_ == i_clust
+            cluster_grid = grid_to_inter[cluster_bool]
+            # Mix the values of each cluster
+           # if i is 0:
+           #     np.random.shuffle(cluster_grid)
+
+            size_range = int(points_cluster[i_clust]/n_rep)
+
+            # Select points where interpolate
+            selected_cluster_grid = cluster_grid[i * size_range:(i + 1) * size_range]
+            npti = selected_cluster_grid.shape[0]
+
+            # Euclidiand distances
+            h_x0 = SED_f(coord_data, selected_cluster_grid)
+            # Drop any point already simulated
+            #print((h_x0==0).sum())
+          #  h_x0 = h_x0[~np.any(h_x0 == 0, axis=1)]
+            h_xi = SED_f(coord_data, coord_data)
+
+            # Checking the radio of the simulation
+            for r in range(50, 1000, 1):
+                select = (h_x0 < r).any(axis=1)
+                if select.sum() > 50:
+                    break
+            if verbose > 2:
+                print("sel", select.shape)
+                print("val", values_data.shape)
+            if verbose > 0:
+                print("Number of points used and number of points to interpolate", select.sum(), npti)
+            h_xi_sel = h_xi[select][:, select]
+            h_x0_sel = h_x0[select]
+            values_data_sel = values_data[select]
+
+            values_interpolated = SGS_compute(h_xi_sel, h_x0_sel, values_data_sel,
+                                              trace, nuggets, n_var, n_exp, n_gaus)
+
+            # Append the coordinates of the interpolated values to the values coord data since they will be interpolated
+            coord_data = np.vstack((coord_data, selected_cluster_grid))
+
+            # Setting negative values to 0
+            values_data[values_data < 0] = 0
+
+            # Append interpolated values to the initial values
+            for point in range(npti-1):
+                values_data = np.vstack((values_data, values_interpolated[point::npti]))
+
+    return coord_data, values_data
+
+# def SGS(coord_data, values_data, h_x0, select,
+#         trace, nuggets=None, n_var=1, n_exp=2, n_gaus=2):
+#     SED_f = theano_sed()
+#
+#     #for h_x0, select, grid_interpolating in selector:
+#
+#     SED = SED_f(coord_data, coord_data)
+#
+#     values_interp, npti = SGS_compute(SED[select], h_x0[select], values_data[select],
+#                                       trace, nuggets, n_var, n_exp, n_gaus)
+#
+#     for point in range(npti-1):
+#         values_data = np.vstack((values_data, values_interp[point::npti]))
+#
+#     coord_data = np.vstack((coord_data, grid_interpolating))
 

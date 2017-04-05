@@ -46,7 +46,7 @@ def rescale_data(geo_data, rescaling_factor=None):
     new_coord_foliations = (geo_data.foliations[['X', 'Y', 'Z']] -
                            centers) / rescaling_factor + 0.5001
 
-    new_coord_extent = (geo_data.extent - _np.repeat(centers,2)) / rescaling_factor + 0.5001
+    new_coord_extent = (geo_data.extent - _np.repeat(centers.as_matrix(), 2)) / rescaling_factor + 0.5001
 
     geo_data_rescaled = copy.deepcopy(geo_data)
     geo_data_rescaled.interfaces[['X', 'Y', 'Z']] = new_coord_interfaces
