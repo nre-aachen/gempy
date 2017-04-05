@@ -111,7 +111,7 @@ class PlotData(object):
             y = "Z"
             Gx = "G_y"
             Gy = "G_z"
-            extent_val = self._data.extent[3], self._data.extent[2], self._data.extent[5], self._data.extent[4]
+            extent_val = self._data.extent[2], self._data.extent[3], self._data.extent[4], self._data.extent[5]
         elif direction == "y":
             _b = cell_number
             x = "X"
@@ -125,7 +125,7 @@ class PlotData(object):
             y = "Y"
             Gx = "G_x"
             Gy = "G_y"
-            extent_val = self._data.extent[1], self._data.extent[0], self._data.extent[3], self._data.extent[2]
+            extent_val = self._data.extent[0], self._data.extent[1], self._data.extent[2], self._data.extent[3]
         else:
             raise AttributeError(str(direction) + "must be a cartesian direction, i.e. xyz")
         return _a, _b, _c, extent_val, x, y, Gx, Gy
@@ -196,7 +196,7 @@ class PlotData(object):
         """
 
         if plot_data:
-            self.plot_data(direction, self._data.interfaces['series'].unique()[n_pf])
+            self.plot_data(direction, 'all')
 
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
         plt.contour(potential_field[_a, _b, _c].T, cell_number,

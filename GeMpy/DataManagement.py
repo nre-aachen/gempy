@@ -425,7 +425,7 @@ class DataManagement(object):
 
             # Importing the theano graph. The methods of this object generate different parts of graph.
             # See theanograf doc
-            self.tg = theanograf.TheanoGraph_pro(u_grade, dtype=dtype, verbose=verbose,)
+            self.tg = theanograf.TheanoGraph_pro(dtype=dtype, verbose=verbose,)
 
             # Sorting data in case the user provides it unordered
             self.order_table()
@@ -434,7 +434,15 @@ class DataManagement(object):
             self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, **kwargs)
 
             # Extracting data from the pandas dataframe to numpy array in the required form for the theano function
-            self.data_prep()
+            self.data_prep(**kwargs)
+
+            # Avoid crashing my pc
+            import theano
+            if theano.config.optimizer != 'fast_run':
+                assert self.tg.grid_val_T.get_value().shape[0] * \
+                       np.math.factorial(len(self.tg.len_series_i.get_value())) < 2e6, \
+                       'The grid is too big for the number of potential fields. Reduce the grid or change the' \
+                       'optimization flag to fast run'
 
         def set_formation_number(self):
             """
@@ -483,7 +491,7 @@ class DataManagement(object):
             # the index. For some of the methods (pn.drop) we have to apply afterwards we need to reset these indeces
             self._data_scaled.interfaces.reset_index(drop=True, inplace=True)
 
-        def data_prep(self):
+        def data_prep(self, **kwargs):
             """
             Ideally this method will extract the data from the pandas dataframes to individual numpy arrays to be input
             of the theano function. However since some of the shared parameters are function of these arrays shape I also
@@ -497,6 +505,12 @@ class DataManagement(object):
                     - numpy.array: ref_layer_points
                     - numpy.array: rest_layer_points
             """
+
+            u_grade = kwargs.get('u_grade', None)
+
+            # ==================
+            # Extracting lengths
+            # ==================
             # Array containing the size of every formation. Interfaces
             len_interfaces = np.asarray(
                 [np.sum(self._data_scaled.interfaces['formation number'] == i)
@@ -537,6 +551,20 @@ class DataManagement(object):
             # Cumulative length of the series. We add the 0 at the beginning and set the shared value. SHARED
             self.tg.len_series_f.set_value(np.insert(len_series_f, 0, 0).cumsum())
 
+            # =========================
+            # Choosing Universal drifts
+            # =========================
+
+            if u_grade is None:
+                u_grade = np.zeros_like(len_series_i)
+                u_grade[len_series_i > 12] = 9
+                u_grade[(len_series_i > 6) & (len_series_i < 12)] = 3
+
+            self.tg.u_grade_T.set_value(u_grade)
+
+            # ================
+            # Prepare Matrices
+            # ================
             # Rest layers matrix # PYTHON VAR
             rest_layer_points = pandas_rest_layer_points[['X', 'Y', 'Z']].as_matrix()
 
@@ -631,11 +659,11 @@ class DataManagement(object):
             self.tg.nugget_effect_grad_T.set_value(np.cast[self.dtype](nugget_effect))
 
             # TODO change the drift to the same style I have the faults so I do not need to do this
-            # Drift grade
-            if u_grade == 0:
-                self.tg.u_grade_T.set_value(u_grade)
-            else:
-                self.tg.u_grade_T.set_value(u_grade)
+            # # Drift grade
+            # if u_grade == 0:
+            #     self.tg.u_grade_T.set_value(u_grade)
+            # else:
+            #     self.tg.u_grade_T.set_value(u_grade)
                 # TODO: To be sure what is the mathematical meaning of this -> It seems that nothing
                 # TODO Deprecated
                 # self.tg.c_resc.set_value(1)
@@ -646,7 +674,7 @@ class DataManagement(object):
             self.tg.universal_grid_matrix_T.set_value(np.cast[self.dtype](_universal_matrix + 1e-10))
 
             # Initialization of the block model
-            self.tg.final_block.set_value(np.zeros((_grid_rescaled.grid.shape[0]), dtype='int'))
+            self.tg.final_block.set_value(np.zeros((_grid_rescaled.grid.shape[0]), dtype='float32'))
 
             # Initialization of the boolean array that represent the areas of the block model to be computed in the
             # following series

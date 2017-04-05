@@ -21,14 +21,17 @@ import bokeh.layouts as bl
 import bokeh.plotting as bp
 
 
-def choose_lithology_elements(df, litho, elem=None):
+def choose_lithology_elements(df, litho, elem=None, coord = True):
     """
     litho(str): Name of the lithology-domain
     elem(list): List of strings with elements you want to analyze
     """
     # Choosing just the opx litology
     if elem is not None:
-        domain = df[df['Lithology'] == litho][np.append(['X', 'Y', 'Z'], elem)]
+        if coord:
+            domain = df[df['Lithology'] == litho][np.append(['X', 'Y', 'Z'], elem)]
+        else:
+            domain = df[df['Lithology'] == litho][elem]
         # Drop negative values
         domain = domain[(domain[elem] > 0).all(1)]
     else:
@@ -36,6 +39,16 @@ def choose_lithology_elements(df, litho, elem=None):
 
     return domain
 
+
+def select_segmented_grid(df, litho, grid, block):
+
+    block = np.squeeze(block)
+    assert grid.shape[0] == block.shape[0], 'The grid you want to use for kriging and the grid used for the layers ' \
+                                            'segmentation are not the same'
+
+    litho_num = df['Lithology Number'][df["Lithology"] == litho].iloc[0]
+    segm_grid = grid[block == litho_num]
+    return segm_grid
 
 def transform_data(df, n_comp=1, log10=False):
     # Take log to try to aproximate better the normal distributions
@@ -60,8 +73,8 @@ def theano_sed():
     theano.config.compute_test_value = "ignore"
 
     # Set symbolic variable as matrix (with the XYZ coords)
-    coord_T = T.dmatrix()
-
+    coord_T_x1 = T.dmatrix()
+    coord_T_x2 = T.dmatrix()
     # Euclidian distances function
     def squared_euclidean_distances(x_1, x_2):
         sqd = T.sqrt(T.maximum(
@@ -72,7 +85,9 @@ def theano_sed():
         return sqd
 
     # Compiling function
-    f = theano.function([coord_T], squared_euclidean_distances(coord_T, coord_T), allow_input_downcast=False)
+    f = theano.function([coord_T_x1, coord_T_x2],
+                        squared_euclidean_distances(coord_T_x1, coord_T_x2),
+                        allow_input_downcast=False)
     return f
 
 
@@ -244,7 +259,7 @@ def plot_cross_variograms(trace, lags, df, n_exp=2, n_gaus=2, iter_plot=200, exp
     show(grid)
 
 
-def plot_cross_covariance(trace, lags, df, n_exp=2, n_gaus=2, nuggets=None, iter_plot=200, experimental=False):
+def plot_cross_covariance(trace, lags, df, n_exp=2, n_gaus=2, nuggets=None, iter_plot=200):
     n_equations = trace['weights'].shape[1]
     n_iter = trace['weights'].shape[0]
     lags_tiled = np.tile(lags, (iter_plot, 1))
@@ -272,8 +287,7 @@ def plot_cross_covariance(trace, lags, df, n_exp=2, n_gaus=2, nuggets=None, iter
     for e, el in enumerate(df.columns):
         p = bp.figure(x_axis_type="log")
         p.multi_line(list(lags_tiled), list(b_var[e]), color='olive', alpha=0.08)
-        if experimental:
-            p.scatter(experimental['lags'], y=experimental[el], color='navy', size=2)
+
         p.title.text = el
         p.xaxis.axis_label = "lags"
         p.yaxis.axis_label = "Semivariance"
@@ -285,27 +299,101 @@ def plot_cross_covariance(trace, lags, df, n_exp=2, n_gaus=2, nuggets=None, iter
     show(grid)
 
 
-def cross_covariance(trace, h, nuggets=None, n_var=1, n_exp=2, n_gaus=2):
+def cross_covariance(trace, sed, nuggets=None, n_var=1, n_exp=2, n_gaus=2, ordinary=True):
 
+    h = np.ravel(sed)
+    n_points = len(h)
+    n_points_r = sed.shape[0]
+    n_points_c = sed.shape[1]
     sample = np.random.randint(400, trace['weights'].shape[0])
     n_eq = trace['weights'].shape[1]
     # Exp contribution
     exp_cont = (np.tile(
         exp_vario(h, trace['sill'][sample][:n_exp], trace['range'][sample][:n_exp]),
-        n_var
-    ) * trace['weights'][sample][np.linspace(0, n_eq-1, n_eq) % (n_exp + n_gaus) < n_exp]).reshape(len(h), n_exp, n_var, order="F")
+        n_var**2
+    ) * trace['weights'][sample][np.linspace(0, n_eq-1, n_eq) % (n_exp + n_gaus) < n_exp]).reshape(n_points, n_exp, n_var**2, order="F")
 
     # Gauss contribution
     gaus_cont = (np.tile(
         gaus_vario(h, trace['sill'][sample][n_exp:], trace['range'][sample][n_exp:]),
-        n_var
-    ) * trace['weights'][sample][np.linspace(0, n_eq-1, n_eq) % (n_exp + n_gaus) >= n_exp]).reshape(len(h), n_gaus, n_var, order="F")
+        n_var**2
+    ) * trace['weights'][sample][np.linspace(0, n_eq-1, n_eq) % (n_exp + n_gaus) >= n_exp]).reshape(n_points, n_gaus, n_var**2, order="F")
 
     # Stacking and summing
     conts = np.hstack((exp_cont, gaus_cont)).sum(axis=1)
 
-    if any(nuggets):
+    if nuggets is not None:
         conts += nuggets
 
     cov = 1 - conts
-    return cov
+
+    cov_str = np.zeros((0, n_points_c*n_var))
+
+    cov_aux = cov.reshape(n_points_r, n_points_c, n_var**2, order='F')
+
+    # This is a incredibly convoluted way to reshape the cross covariance but I did not find anything better
+    for i in range(n_var):
+        cov_str = np.vstack((cov_str,
+                             cov_aux[:, :, i*n_var:(i+1)*n_var].reshape(n_points_r, n_points_c*n_var, order='F')))
+
+
+    if ordinary:
+        ord = np.zeros((n_var, n_var*n_points_c+n_var))
+        for i in range(n_var):
+            ord[i, n_points_c * i:n_points_c * (i + 1)] = np.ones(n_points_c)
+        cov_str = np.vstack((cov_str, ord[:, :-n_var]))
+
+        # Stack the ordinary values to the C(h)
+        if n_points_r == n_points_c:
+             cov_str = np.hstack((cov_str, ord.T))
+
+    return cov_str
+
+
+def clustering_grid(grid_to_inter, n_clusters=50, plot=False):
+    from sklearn.cluster import KMeans
+    clust = KMeans(n_clusters=n_clusters).fit(grid_to_inter)
+    if plot:
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+
+        ax.scatter(clust.cluster_centers_[:, 0], clust.cluster_centers_[:, 1], clust.cluster_centers_[:, 2])
+
+        ax.set_xlabel('X Label')
+        ax.set_ylabel('Y Label')
+        ax.set_zlabel('Z Label')
+
+        plt.show()
+
+    return clust
+
+
+def select_points(df, grid_to_inter, cluster, n_rep=10):
+
+    points_cluster = np.bincount(cluster.labels_)
+    SED_f = theano_sed()
+
+    for i in range(n_rep):
+        for i_clust in range(cluster.n_clusters):
+            cluster_bool = cluster.labels_ == i_clust
+            cluster_grid = grid_to_inter[cluster_bool]
+            # Mix the values of each cluster
+            if i is 0:
+                np.random.shuffle(cluster_grid)
+
+            size_range = int(points_cluster[i_clust]/n_rep)
+            selected_cluster_grid = cluster_grid[i * size_range:(i + 1) * size_range]
+            dist = SED_f(df, selected_cluster_grid)
+
+            # Checking the radio of the simulation
+            for r in range(100, 1000, 100):
+                select = (dist < r).any(axis=1)
+                if select.sum() > 50:
+                    break
+
+            h_x0 = dist
+            yield (h_x0, select, selected_cluster_grid)
+
+
+
+

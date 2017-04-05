@@ -2,8 +2,8 @@ from distutils.core import setup
 
 setup(
     name='GeMpy',
-    version='0.01',
-    packages=['GeMpy', 'pygeomod'],
+    version='0.9',
+    packages=['GeMpy'],
     url='',
     license='MIT',
     author='Miguel de la Varga',

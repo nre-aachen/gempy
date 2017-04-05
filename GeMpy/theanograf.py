@@ -26,7 +26,7 @@ class TheanoGraph_pro(object):
     of these methods is more and more difficult to provide (if you are in a branch close to the trunk you need all the
     results of the branches above)
     """
-    def __init__(self, u_grade=0, verbose=[0], dtype='float32'):
+    def __init__(self, verbose=[0], dtype='float32'):
         """
         In the init we need to create all the symbolic parameters that are used in the process. Most of the variables
         are shared parameters initialized with random values. At this stage we only care about the type and shape of the
@@ -59,7 +59,7 @@ class TheanoGraph_pro(object):
         # ======================
         # INITIALIZE SHARED
         # ====================
-        self.u_grade_T = theano.shared(u_grade, "Grade of the universal drift")
+        self.u_grade_T = theano.shared(np.arange(2, dtype='int'), "Grade of the universal drift")
         self.a_T = theano.shared(np.cast[dtype](1.), "Range")
         self.c_o_T = theano.shared(np.cast[dtype](1.), 'Covariance at 0')
         self.nugget_effect_grad_T = theano.shared(np.cast[dtype](0.01))
@@ -73,7 +73,7 @@ class TheanoGraph_pro(object):
         # -DEP- Now I pass it as attribute when I create that part of the graph
         #self.n_faults = theano.shared(0, 'Number of faults to compute')#
 
-        self.final_block = theano.shared(np.zeros(3, dtype='int'), "Final block computed")
+        self.final_block = theano.shared(np.zeros(3, ), "Final block computed")
         self.yet_simulated = theano.shared(np.ones(3, dtype='int'), "Points to be computed yet")
 
         # This parameters give me the shape of the different groups of data. I pass all data together and I threshold it
@@ -163,11 +163,11 @@ class TheanoGraph_pro(object):
         # Calculating the dimensions of the
         length_of_CG = self.dips_position_tiled.shape[0]
         length_of_CGI = self.rest_layer_points.shape[0]
-        if self.u_grade_T.get_value() == 0:
-            length_of_U_I = 0*self.u_grade_T
-        else:
-            length_of_U_I = 3**self.u_grade_T
-
+        # if self.u_grade_T.get_value() == 0:
+        #     length_of_U_I = 0*self.u_grade_T
+        # else:
+        #     length_of_U_I = 3**self.u_grade_T
+        length_of_U_I = self.u_grade_T_op
         length_of_faults = self.fault_matrix.shape[0]
         length_of_C = length_of_CG + length_of_CGI + length_of_U_I + length_of_faults
 
@@ -375,87 +375,87 @@ class TheanoGraph_pro(object):
             (except degree 0 that is 0)
         """
 
-        # Init
-        U_I = None
-        U_G = None
+        # # Init
+        # U_I = None
+        # U_G = None
+        #
+        # if self.u_grade_T.get_value() == 1:
+        #     # ==========================
+        #     # Condition of universality 1 degree
+        #
+        #     # Gradients
+        #     n = self.dips_position.shape[0]
+        #     U_G = T.zeros((n * self.n_dimensions, self.n_dimensions))
+        #     # x
+        #     U_G = T.set_subtensor(
+        #         U_G[:n, 0], 1)
+        #     # y
+        #     U_G = T.set_subtensor(
+        #         U_G[n:n * 2, 1], 1
+        #     )
+        #     # z
+        #     U_G = T.set_subtensor(
+        #         U_G[n * 2: n * 3, 2], 1
+        #     )
+        #
+        #     # Interface
+        #     # Cartesian distances between reference points and rest
+        #     hx = T.stack(
+        #         (self.rest_layer_points[:, 0] - self.ref_layer_points[:, 0]),
+        #         (self.rest_layer_points[:, 1] - self.ref_layer_points[:, 1]),
+        #         (self.rest_layer_points[:, 2] - self.ref_layer_points[:, 2])
+        #     ).T
+        #
+        #     U_I = - hx * self.gi_reescale
 
-        if self.u_grade_T.get_value() == 1:
-            # ==========================
-            # Condition of universality 1 degree
 
-            # Gradients
-            n = self.dips_position.shape[0]
-            U_G = T.zeros((n * self.n_dimensions, self.n_dimensions))
-            # x
-            U_G = T.set_subtensor(
-                U_G[:n, 0], 1)
-            # y
-            U_G = T.set_subtensor(
-                U_G[n:n * 2, 1], 1
-            )
-            # z
-            U_G = T.set_subtensor(
-                U_G[n * 2: n * 3, 2], 1
-            )
+      #  elif self.u_grade_T.get_value() == 2:
+        # ==========================
+        # Condition of universality 2 degree
+        # Gradients
 
-            # Interface
-            # Cartesian distances between reference points and rest
-            hx = T.stack(
-                (self.rest_layer_points[:, 0] - self.ref_layer_points[:, 0]),
-                (self.rest_layer_points[:, 1] - self.ref_layer_points[:, 1]),
-                (self.rest_layer_points[:, 2] - self.ref_layer_points[:, 2])
-            ).T
+        n = self.dips_position.shape[0]
+        U_G = T.zeros((n * self.n_dimensions, 3 * self.n_dimensions))
+        # x
+        U_G = T.set_subtensor(U_G[:n, 0], 1)
+        # y
+        U_G = T.set_subtensor(U_G[n * 1:n * 2, 1], 1)
+        # z
+        U_G = T.set_subtensor(U_G[n * 2: n * 3, 2], 1)
+        # x**2
+        U_G = T.set_subtensor(U_G[:n, 3], 2 * self.gi_reescale * self.dips_position[:, 0])
+        # y**2
+        U_G = T.set_subtensor(U_G[n * 1:n * 2, 4], 2 * self.gi_reescale * self.dips_position[:, 1])
+        # z**2
+        U_G = T.set_subtensor(U_G[n * 2: n * 3, 5], 2 * self.gi_reescale * self.dips_position[:, 2])
+        # xy
+        U_G = T.set_subtensor(U_G[:n, 6], self.gi_reescale * self.dips_position[:, 1])  # This is y
+        U_G = T.set_subtensor(U_G[n * 1:n * 2, 6], self.gi_reescale * self.dips_position[:, 0])  # This is x
+        # xz
+        U_G = T.set_subtensor(U_G[:n, 7], self.gi_reescale * self.dips_position[:, 2])  # This is z
+        U_G = T.set_subtensor(U_G[n * 2: n * 3, 7], self.gi_reescale * self.dips_position[:, 0])  # This is x
+        # yz
+        U_G = T.set_subtensor(U_G[n * 1:n * 2, 8], self.gi_reescale * self.dips_position[:, 2])  # This is z
+        U_G = T.set_subtensor(U_G[n * 2:n * 3, 8], self.gi_reescale * self.dips_position[:, 1])  # This is y
 
-            U_I = - hx * self.gi_reescale
-
-
-        elif self.u_grade_T.get_value() == 2:
-            # ==========================
-            # Condition of universality 2 degree
-            # Gradients
-
-            n = self.dips_position.shape[0]
-            U_G = T.zeros((n * self.n_dimensions, 3 * self.n_dimensions))
-            # x
-            U_G = T.set_subtensor(U_G[:n, 0], 1)
-            # y
-            U_G = T.set_subtensor(U_G[n * 1:n * 2, 1], 1)
-            # z
-            U_G = T.set_subtensor(U_G[n * 2: n * 3, 2], 1)
-            # x**2
-            U_G = T.set_subtensor(U_G[:n, 3], 2 * self.gi_reescale * self.dips_position[:, 0])
-            # y**2
-            U_G = T.set_subtensor(U_G[n * 1:n * 2, 4], 2 * self.gi_reescale * self.dips_position[:, 1])
-            # z**2
-            U_G = T.set_subtensor(U_G[n * 2: n * 3, 5], 2 * self.gi_reescale * self.dips_position[:, 2])
-            # xy
-            U_G = T.set_subtensor(U_G[:n, 6], self.gi_reescale * self.dips_position[:, 1])  # This is y
-            U_G = T.set_subtensor(U_G[n * 1:n * 2, 6], self.gi_reescale * self.dips_position[:, 0])  # This is x
-            # xz
-            U_G = T.set_subtensor(U_G[:n, 7], self.gi_reescale * self.dips_position[:, 2])  # This is z
-            U_G = T.set_subtensor(U_G[n * 2: n * 3, 7], self.gi_reescale * self.dips_position[:, 0])  # This is x
-            # yz
-            U_G = T.set_subtensor(U_G[n * 1:n * 2, 8], self.gi_reescale * self.dips_position[:, 2])  # This is z
-            U_G = T.set_subtensor(U_G[n * 2:n * 3, 8], self.gi_reescale * self.dips_position[:, 1])  # This is y
-
-            # Interface
-            U_I = - T.stack(
-                (self.gi_reescale * (self.rest_layer_points[:, 0] - self.ref_layer_points[:, 0]),
-                 self.gi_reescale * (self.rest_layer_points[:, 1] - self.ref_layer_points[:, 1]),
-                 self.gi_reescale * (self.rest_layer_points[:, 2] - self.ref_layer_points[:, 2]),
-                 self.gi_reescale ** 2 * (self.rest_layer_points[:, 0] ** 2 - self.ref_layer_points[:, 0] ** 2),
-                 self.gi_reescale ** 2 * (self.rest_layer_points[:, 1] ** 2 - self.ref_layer_points[:, 1] ** 2),
-                 self.gi_reescale ** 2 * (self.rest_layer_points[:, 2] ** 2 - self.ref_layer_points[:, 2] ** 2),
-                 self.gi_reescale ** 2 * (
-                     self.rest_layer_points[:, 0] * self.rest_layer_points[:, 1] - self.ref_layer_points[:, 0] *
-                     self.ref_layer_points[:, 1]),
-                 self.gi_reescale ** 2 * (
-                     self.rest_layer_points[:, 0] * self.rest_layer_points[:, 2] - self.ref_layer_points[:, 0] *
-                     self.ref_layer_points[:, 2]),
-                 self.gi_reescale ** 2 * (
-                     self.rest_layer_points[:, 1] * self.rest_layer_points[:, 2] - self.ref_layer_points[:, 1] *
-                     self.ref_layer_points[:, 2]),
-                 )).T
+        # Interface
+        U_I = - T.stack(
+            (self.gi_reescale * (self.rest_layer_points[:, 0] - self.ref_layer_points[:, 0]),
+             self.gi_reescale * (self.rest_layer_points[:, 1] - self.ref_layer_points[:, 1]),
+             self.gi_reescale * (self.rest_layer_points[:, 2] - self.ref_layer_points[:, 2]),
+             self.gi_reescale ** 2 * (self.rest_layer_points[:, 0] ** 2 - self.ref_layer_points[:, 0] ** 2),
+             self.gi_reescale ** 2 * (self.rest_layer_points[:, 1] ** 2 - self.ref_layer_points[:, 1] ** 2),
+             self.gi_reescale ** 2 * (self.rest_layer_points[:, 2] ** 2 - self.ref_layer_points[:, 2] ** 2),
+             self.gi_reescale ** 2 * (
+                 self.rest_layer_points[:, 0] * self.rest_layer_points[:, 1] - self.ref_layer_points[:, 0] *
+                 self.ref_layer_points[:, 1]),
+             self.gi_reescale ** 2 * (
+                 self.rest_layer_points[:, 0] * self.rest_layer_points[:, 2] - self.ref_layer_points[:, 0] *
+                 self.ref_layer_points[:, 2]),
+             self.gi_reescale ** 2 * (
+                 self.rest_layer_points[:, 1] * self.rest_layer_points[:, 2] - self.ref_layer_points[:, 1] *
+                 self.ref_layer_points[:, 2]),
+             )).T
 
         if 'U_I' in self.verbose:
             U_I = theano.printing.Print('U_I')(U_I)
@@ -475,7 +475,7 @@ class TheanoGraph_pro(object):
             U_I.name = 'Drift interfaces'
             U_G.name = 'Drift foliations'
 
-        return U_I, U_G
+        return U_I[:, :self.u_grade_T_op], U_G[:, :self.u_grade_T_op]
 
     def faults_matrix(self):
         """
@@ -493,7 +493,7 @@ class TheanoGraph_pro(object):
 
         # self.fault_matrix contains the faults volume of the grid and the rest and ref points. For the drift we need
         # to make it relative to the reference point
-        F_I = self.fault_matrix[:, -2*lenght_of_CGI:-lenght_of_CGI] - self.fault_matrix[:, -lenght_of_CGI:]
+        F_I = (self.fault_matrix[:, -2*lenght_of_CGI:-lenght_of_CGI] - self.fault_matrix[:, -lenght_of_CGI:])*100
 
         # As long as the drift is a constant F_G is null
         F_G = T.zeros((self.fault_matrix.shape[0], lenght_of_CG))
@@ -535,9 +535,9 @@ class TheanoGraph_pro(object):
         # TODO see if this condition is necesary. I think that simply by choosing len = 0 of the universal should work
         # (as I do in the fautls)
         # Set UG
-        if not self.u_grade_T.get_value() == 0:
-            C_matrix = T.set_subtensor(C_matrix[0:length_of_CG,
-                                       length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I], U_G)
+        #if not self.u_grade_T.get_value() == 0:
+        C_matrix = T.set_subtensor(C_matrix[0:length_of_CG,
+                                   length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I], U_G)
 
         # Set FG. I cannot use -index because when is -0 is equivalent to 0
         C_matrix = T.set_subtensor(C_matrix[0:length_of_CG, length_of_CG+length_of_CGI+length_of_U_I:], F_G.T)
@@ -551,20 +551,20 @@ class TheanoGraph_pro(object):
                                    length_of_CG:length_of_CG + length_of_CGI], C_I)
 
         # Set U_I
-        if not self.u_grade_T.get_value() == 0:
-            C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI,
-                                       length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I], U_I)
+        #if not self.u_grade_T.get_value() == 0:
+        C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI,
+                                   length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I], U_I)
 
         # Set F_I
         C_matrix = T.set_subtensor(C_matrix[length_of_CG:length_of_CG + length_of_CGI, length_of_CG+length_of_CGI+length_of_U_I:], F_I.T)
 
             # Third row of matrices
             # Set U_G
-        if not self.u_grade_T.get_value() == 0:
-            C_matrix = T.set_subtensor(C_matrix[length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I, 0:length_of_CG], U_G.T)
+       # if not self.u_grade_T.get_value() == 0:
+        C_matrix = T.set_subtensor(C_matrix[length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I, 0:length_of_CG], U_G.T)
 
-            # Set U_I
-            C_matrix = T.set_subtensor(C_matrix[length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I, length_of_CG:length_of_CG + length_of_CGI], U_I.T)
+        # Set U_I
+        C_matrix = T.set_subtensor(C_matrix[length_of_CG+length_of_CGI:length_of_CG+length_of_CGI+length_of_U_I, length_of_CG:length_of_CG + length_of_CGI], U_I.T)
 
         # Fourth row of matrices
         # Set F_G
@@ -629,7 +629,7 @@ class TheanoGraph_pro(object):
         # Solving the kriging system
         # TODO: look for an eficient way to substitute nlianlg by a theano operation
         import theano.tensor.slinalg
-        b2 = T.tile(b, (1,1)).T
+        b2 = T.tile(b, (1, 1)).T
         DK_parameters = theano.tensor.slinalg.solve(C_matrix, b2)
         DK_parameters = DK_parameters.reshape((DK_parameters.shape[0],))
       #  DK_parameters = T.dot(T.nlinalg.matrix_inverse(C_matrix), b)
@@ -760,7 +760,7 @@ class TheanoGraph_pro(object):
             theano.tensor.vector: Contribution of the universal drift (input) at every point to interpolate
         """
         weights = self.extend_dual_kriging()
-        length_of_U_I = self.matrices_shapes()[2]
+        length_of_CG, length_of_CGI, length_of_U_I, length_of_faults, length_of_C = self.matrices_shapes()
         grid_val = self.x_to_interpolate()
 
         # Universal drift contribution
@@ -773,34 +773,34 @@ class TheanoGraph_pro(object):
         #              self.rest_layer_points[:, 0] * self.rest_layer_points[:, 2],
         #              self.rest_layer_points[:, 1] * self.rest_layer_points[:, 2]), axis=1)).T
 
-        if self.u_grade_T.get_value() == 0:
-            f_0 = 0
-        else:
-            # Here I create the universal terms for rest and ref. The universal terms for the grid are done in python
-            # and append here. The idea is that the grid is kind of constant so I do not have to recompute it every
-            # time
-            _universal_terms_interfaces = T.horizontal_stack(
-                self.rest_layer_points_all,
-                (self.rest_layer_points_all ** 2),
-                T.stack((self.rest_layer_points_all[:, 0] * self.rest_layer_points_all[:, 1],
-                         self.rest_layer_points_all[:, 0] * self.rest_layer_points_all[:, 2],
-                         self.rest_layer_points_all[:, 1] * self.rest_layer_points_all[:, 2]), axis=1)).T
+        # if self.u_grade_T.get_value() == 0:
+        #     f_0 = 0
+        # else:
+        # Here I create the universal terms for rest and ref. The universal terms for the grid are done in python
+        # and append here. The idea is that the grid is kind of constant so I do not have to recompute it every
+        # time
+        _universal_terms_interfaces = T.horizontal_stack(
+            self.rest_layer_points_all,
+            (self.rest_layer_points_all ** 2),
+            T.stack((self.rest_layer_points_all[:, 0] * self.rest_layer_points_all[:, 1],
+                     self.rest_layer_points_all[:, 0] * self.rest_layer_points_all[:, 2],
+                     self.rest_layer_points_all[:, 1] * self.rest_layer_points_all[:, 2]), axis=1)).T
 
-            # I append rest and ref to grid
-            universal_grid_interfaces_matrix = T.horizontal_stack(
-                (self.universal_grid_matrix_T * self.yet_simulated).nonzero_values().reshape((9, -1)),
-                T.tile(_universal_terms_interfaces, (1, 2)))
+        # I append rest and ref to grid
+        universal_grid_interfaces_matrix = T.horizontal_stack(
+            (self.universal_grid_matrix_T * self.yet_simulated).nonzero_values().reshape((9, -1)),
+            T.tile(_universal_terms_interfaces, (1, 2)))
 
-            # These are the magic terms to get the same as geomodeller
-            gi_rescale_aux = T.repeat(self.gi_reescale, 9)
-            gi_rescale_aux = T.set_subtensor(gi_rescale_aux[:3], 1)
-            _aux_magic_term = T.tile(gi_rescale_aux[:3**self.u_grade_T], (grid_val.shape[0], 1)).T
+        # These are the magic terms to get the same as geomodeller
+        gi_rescale_aux = T.repeat(self.gi_reescale, 9)
+        gi_rescale_aux = T.set_subtensor(gi_rescale_aux[:3], 1)
+        _aux_magic_term = T.tile(gi_rescale_aux[:self.u_grade_T_op], (grid_val.shape[0], 1)).T
 
-            # Drif contribution
-            f_0 = (T.sum(
-                weights[-length_of_U_I:, :] * self.gi_reescale * _aux_magic_term *
-                universal_grid_interfaces_matrix[:3**self.u_grade_T]
-                , axis=0))
+        # Drif contribution
+        f_0 = (T.sum(
+            weights[length_of_CG + length_of_CGI:length_of_CG + length_of_CGI + length_of_U_I, :] * self.gi_reescale * _aux_magic_term *
+            universal_grid_interfaces_matrix[:self.u_grade_T_op]
+            , axis=0))
 
         if not type(f_0) == int:
             f_0.name = 'Contribution of the universal drift to the potential field at every point of the grid'
@@ -967,10 +967,11 @@ class TheanoGraph_pro(object):
         return partial_block
 
     def compute_a_fault(self,
-                         len_i_0, len_i_1,
-                         len_f_0, len_f_1,
-                         n_form_per_serie_0, n_form_per_serie_1
-                         ):
+                        len_i_0, len_i_1,
+                        len_f_0, len_f_1,
+                        n_form_per_serie_0, n_form_per_serie_1,
+                        u_grade_iter
+                        ):
         """
         Function that loops each fault, generating a potential field for each on them with the respective block model
         Args:
@@ -1004,6 +1005,7 @@ class TheanoGraph_pro(object):
         # Theano shared
         self.number_of_points_per_formation_T_op = self.number_of_points_per_formation_T[n_form_per_serie_0: n_form_per_serie_1]
         self.n_formation_op = self.n_formation[n_form_per_serie_0: n_form_per_serie_1]
+        self.u_grade_T_op = u_grade_iter
         self.dips_position = self.dips_position_all[len_f_0: len_f_1, :]
         self.dips_position_tiled = T.tile(self.dips_position, (self.n_dimensions, 1))
 
@@ -1032,6 +1034,7 @@ class TheanoGraph_pro(object):
                          len_i_0, len_i_1,
                          len_f_0, len_f_1,
                          n_form_per_serie_0, n_form_per_serie_1,
+                         u_grade_iter,
                          final_block):
 
         """
@@ -1059,6 +1062,7 @@ class TheanoGraph_pro(object):
         # Theano shared
         self.number_of_points_per_formation_T_op = self.number_of_points_per_formation_T[n_form_per_serie_0: n_form_per_serie_1]
         self.n_formation_op = self.n_formation[n_form_per_serie_0: n_form_per_serie_1]
+        self.u_grade_T_op = u_grade_iter
 
         self.dips_position = self.dips_position_all[len_f_0: len_f_1, :]
         self.dips_position_tiled = T.tile(self.dips_position, (self.n_dimensions, 1))
@@ -1087,7 +1091,68 @@ class TheanoGraph_pro(object):
 
         return final_block
 
-    def whole_block_model(self, n_faults=0):
+    def compute_a_series_pf(self,
+                         len_i_0, len_i_1,
+                         len_f_0, len_f_1,
+                         n_form_per_serie_0, n_form_per_serie_1,
+                         u_grade_iter,
+                        ):
+
+        """
+        Function that loops each series, generating a potential field for each on them with the respective block model
+        Args:
+             len_i_0: Lenght of rest of previous series
+             len_i_1: Lenght of rest for the computed series
+             len_f_0: Lenght of dips of previous series
+             len_f_1: Length of dips of the computed series
+             n_form_per_serie_0: Number of formations of previous series
+             n_form_per_serie_1: Number of formations of the computed series
+
+        Returns:
+             theano.tensor.matrix: final block model
+        """
+
+        # THIS IS THE FINAL BLOCK. (DO I NEED TO LOOP THE FAULTS FIRST? Yes you do)
+        # ==================
+        # Preparing the data
+        # ==================
+        # Vector that controls the points that have been simulated in previous iterations
+        #self.yet_simulated = T.eq(final_block, 0)
+        #self.yet_simulated.name = 'Yet simulated node'
+
+        # Theano shared
+        self.number_of_points_per_formation_T_op = self.number_of_points_per_formation_T[n_form_per_serie_0: n_form_per_serie_1]
+        self.n_formation_op = self.n_formation[n_form_per_serie_0: n_form_per_serie_1]
+        self.u_grade_T_op = u_grade_iter
+
+        self.dips_position = self.dips_position_all[len_f_0: len_f_1, :]
+        self.dips_position_tiled = T.tile(self.dips_position, (self.n_dimensions, 1))
+
+        # Theano Var
+        self.dip_angles = self.dip_angles_all[len_f_0: len_f_1]
+        self.azimuth = self.azimuth_all[len_f_0: len_f_1]
+        self.polarity = self.polarity_all[len_f_0: len_f_1]
+
+        self.ref_layer_points = self.ref_layer_points_all[len_i_0: len_i_1, :]
+        self.rest_layer_points = self.rest_layer_points_all[len_i_0: len_i_1, :]
+
+        # Printing
+      #  if 'yet_simulated' in self.verbose:
+      #      self.yet_simulated = theano.printing.Print(self.yet_simulated.name)(self.yet_simulated)
+        if 'n_formation' in self.verbose:
+            self.n_formation_op = theano.printing.Print('n_formation')(self.n_formation_op)
+
+        # ====================
+        # Computing the series
+        # ====================
+        potential_field_contribution = self.potential_field_at_all()[:-2*self.rest_layer_points_all.shape[0]]
+        #final_block = T.set_subtensor(
+        #    final_block[T.nonzero(T.cast(self.yet_simulated, "int8"))[0]],
+        #    potential_field_contribution)
+
+        return potential_field_contribution
+
+    def whole_block_model(self, n_faults=0, compute_pf=False):
 
         """
         Final function that loops first all the faults, then uses that result in the final block and loops again the
@@ -1110,7 +1175,8 @@ class TheanoGraph_pro(object):
              #   outputs_info=[final_block_init],   This line may be used for the faults network
                 sequences=[dict(input=self.len_series_i[:n_faults+1], taps=[0, 1]),
                            dict(input=self.len_series_f[:n_faults+1], taps=[0, 1]),
-                           dict(input=self.n_formations_per_serie[:n_faults+1], taps=[0, 1])]
+                           dict(input=self.n_formations_per_serie[:n_faults+1], taps=[0, 1]),
+                           dict(input=self.u_grade_T[:n_faults + 1], taps=[0])]
                  )
 
             self.fault_matrix = fault_matrix
@@ -1118,13 +1184,26 @@ class TheanoGraph_pro(object):
             if 'faults block' in self.verbose:
                 self.fault_matrix = theano.printing.Print('I am outside the faults')(fault_matrix)
 
-        # Loop the series to create the Final block
-        all_series_blocks, updates2 = theano.scan(
+        #Loop the series to create the Final block
+        all_series, updates2 = theano.scan(
              fn=self.compute_a_series,
              outputs_info=[final_block_init],
              sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
                         dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
-                        dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1])]
+                        dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
+                        dict(input=self.u_grade_T[n_faults:], taps=[0])]
         )
 
-        return all_series_blocks[-1]
+        # if compute_pf:
+        #     all_series_pf, updates3 = theano.scan(
+        #          fn=self.compute_a_series_pf,
+        #          sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
+        #                     dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
+        #                     dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
+        #                     dict(input=self.u_grade_T[n_faults:], taps=[0])]
+        #     )
+
+            #all_series = T.vertical_stack(all_series, all_series_pf)
+
+        return all_series
+
