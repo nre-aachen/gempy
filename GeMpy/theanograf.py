@@ -1205,5 +1205,5 @@ class TheanoGraph_pro(object):
 
             #all_series = T.vertical_stack(all_series, all_series_pf)
 
-        return all_series
+        return all_series[-1]
 

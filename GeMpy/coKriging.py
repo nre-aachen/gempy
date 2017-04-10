@@ -50,14 +50,28 @@ def select_segmented_grid(df, litho, grid, block):
     segm_grid = grid[block == litho_num]
     return segm_grid
 
-def transform_data(df, n_comp=1, log10=False):
-    # Take log to try to aproximate better the normal distributions
-    # chem_opx = np.log10(chem_opx)
 
-    # Finding two modes in the data
+def transform_data(df_o, n_comp=1, log10=False):
+    """
+    Method to improve the normality of the input data before perform krigin
+    Args:
+        df_o: Dataframe with the data to interpolate
+        n_comp: Number of component in case of multimodal data
+        log10 (bool): If true return the log in base 10 of the properties:
+
+    Returns:
+        pandas.core.frame.DataFrame: Data frame with the transformed data
+    """
+
+    import copy
+    df = copy.deepcopy(df_o)
+
+    # Take log to try to aproximate better the normal distributions
     if log10:
+        print('computing log')
         df[df.columns.difference(['X', 'Y', 'Z'])] = np.log10(df[df.columns.difference(['X', 'Y', 'Z'])])
 
+    # Finding n modes in the data
     if n_comp > 1:
         from sklearn import mixture
         gmm = mixture.GaussianMixture(n_components=n_comp,
@@ -70,11 +84,19 @@ def transform_data(df, n_comp=1, log10=False):
 
 
 def theano_sed():
+    """
+    Function to create a theano function to compute the euclidian distances efficiently
+    Returns:
+        theano.compile.function_module.Function: Compiled function
+
+    """
+
     theano.config.compute_test_value = "ignore"
 
     # Set symbolic variable as matrix (with the XYZ coords)
     coord_T_x1 = T.dmatrix()
     coord_T_x2 = T.dmatrix()
+
     # Euclidian distances function
     def squared_euclidean_distances(x_1, x_2):
         sqd = T.sqrt(T.maximum(
@@ -91,39 +113,39 @@ def theano_sed():
     return f
 
 
-def coord_rescale(df):
-    """
-    Rescale coordinates to avoid float32 errors in larga coordinates to be able to use the gpu
-    """
-
-    max_coord = df.max()[['X', 'Y', 'Z']]
-    min_coord = df.min()[['X', 'Y', 'Z']]
-
-    rescaling_factor = 2 * np.max(max_coord - min_coord)
-
-    centers = (max_coord + min_coord) / 2
-
-    df_res = (df[['X', 'Y', 'Z']] -
-              centers) / rescaling_factor + 0.5001
-
-    return df_res
-
-
 # This is extremily ineficient. Try to vectorize it in theano, it is possible to gain X100
+def compute_variogram(df, properties, euclidian_distances, tol=10, lags=np.logspace(0, 2.5, 100), plot=[]):
+    """
+    Compute the experimental variogram and cross variogram for a par of properties
+    Args:
+        df (pandas.core.frame.DataFrame): Dataframe with the properties and coordinates used in the experimental
+         variogram computation
+        properties (list): List of the two properties to compute the semivariogram.
+        euclidian_distances (numpy.array): Precomputed distances of the euclidian distances
+        tol (float): Tolerance
+        lags (list): List of lags to compute the experimental variogram
+        plot (bool): If true plot the experimental variogram after computed
 
-def compute_variogram(df, element_couple, euclidian_distances, tol=10, lags=np.logspace(0, 2.5, 100), plot=[]):
+    Returns:
+        list: semvariance aor cross-semivariance
     """
-    Compute the experimental variogram for a par of elements
-    """
-    # Tiling the element concentation to a square matrix
-    element = (df[element_couple[0]].as_matrix().reshape(-1, 1) -
-               np.tile(df[element_couple[1]], (df[element_couple[1]].shape[0], 1))) ** 2
+
+    # Tiling the properties to a square matrix
+    element = (df[properties[0]].as_matrix().reshape(-1, 1) -
+               np.tile(df[properties[1]], (df[properties[1]].shape[0], 1))) ** 2
 
     # Semivariance computation
     semivariance_lag = []
+
+    # Looping every lag to compute the semivariance
     for i in lags:
+        # Selecting the points at the given lag and tolerance
         points_at_lag = ((euclidian_distances > i - tol) * (euclidian_distances < i + tol))
+
+        # Extracting the values of the properties of the selected lags
         var_points = element[points_at_lag]
+
+        # Appending the semivariance
         semivariance_lag = np.append(semivariance_lag, np.mean(var_points) / 2)
 
     if "experimental" in plot:
@@ -134,6 +156,18 @@ def compute_variogram(df, element_couple, euclidian_distances, tol=10, lags=np.l
 
 
 def exp_lags(max_range, exp=2, n_lags=100):
+    """
+    Function to create a more specific exponential distance between the lags in case that log10 gives too much weight
+    to the smaller lags
+    Args:
+        max_range(float): Maximum distance
+        exp (float): Exponential degree
+        n_lags (int): Number of lags
+
+    Returns:
+        list: lags
+
+    """
     lags = np.empty(0)
     for i in range(n_lags):
         lags = np.append(lags, i ** exp)
@@ -141,31 +175,81 @@ def exp_lags(max_range, exp=2, n_lags=100):
     return lags
 
 
-def compute_crossvariogram(df, element_names, euclidian_distances=None, **kwargs):
-    lag_exp = kwargs.get('lag_exp', 2)
+def compute_crossvariogram(df, properties_names, euclidian_distances=None, **kwargs):
+    """
+    Compute the experimental crossvariogram of all properties given
+    Args:
+        df (pandas.core.frame.DataFrame): Dataframe with the properties and coordinates used in the experimental
+         variogram computation
+        properties_names (list str): List of strings with the properties to compute
+        euclidian_distances (numpy.array): Precomputed euclidian distances. If None they are computed inplace
+        Keyword Args:
+            - lag_exp: Degree of the exponential. If None log10
+            - lag_range: Maximum distance to compute a lag
+            - n_lags: Number of lags
+
+    Returns:
+        pandas.core.frame.DataFrame: Every experimental cross-variogram
+    """
+
+    lag_exp = kwargs.get('lag_exp', None)
     lag_range = kwargs.get('lag_range', 500)
     n_lags = kwargs.get('n_lags', 100)
 
-    lags = exp_lags(lag_range, lag_exp, n_lags)
-    lags = np.logspace(0, 2.5, 100)
-    if not euclidian_distances:
-        # coords = coord_rescale(df)
-        euclidian_distances = theano_sed()(df[['X', 'Y', 'Z']])
+    # Choosing the lag array
+    if lag_exp is not None:
+        lags = exp_lags(lag_range, lag_exp, n_lags)
+    else:
+        lags = np.logspace(0, np.log10(lag_range), n_lags)
 
-    # Init dataframe
+    # Compute euclidian distance
+    if not euclidian_distances:
+        euclidian_distances = theano_sed()(df[['X', 'Y', 'Z']], df[['X', 'Y', 'Z']])
+
+    # Init dataframe to store the results
     experimental_variograms_frame = pn.DataFrame()
 
+    # This is extremily ineficient. Try to vectorize it in theano, it is possible to gain X100
     # Nested loop. DEPRECATED enumerate
-    for e_i, i in enumerate(element_names):
-        for e_j, j in enumerate(element_names):
+    for i in properties_names:
+        for j in properties_names:
             col_name = i + '-' + j
             values = compute_variogram(df, [i, j], euclidian_distances, lags=lags)
             experimental_variograms_frame[col_name] = values
 
-    # Add lags column
-
+    # Add lags column for plotting mainly
     experimental_variograms_frame['lags'] = lags
+
     return experimental_variograms_frame
+
+
+class SGS(object):
+
+    def __init__(self, exp_var, properties):
+
+        self.exp_var_raw = exp_var
+        self.properties = properties
+        self.n_properties = len(properties)
+        self.lags = self.exp_var_raw['lags']
+        self.exp_var, self.nuggets = self.preprocess()
+
+    def preprocess(self):
+        import sklearn.preprocessing as skp
+
+        scaled_data = skp.minmax_scale(self.exp_var_raw[self.properties])
+        nuggets = self.exp_var_raw.iloc[0]
+        processed_data = scaled_data - nuggets
+        return processed_data, nuggets
+
+    def plot_experimental(self, transformed=False):
+
+        if transformed:
+            plot = self.exp_var.plot(x=self.lags, y=self.exp_var.columns[self.properties], subplots=True, kind ='line',
+                                     style='.', layout=(self.n_properties, self.n_properties), figsize=(16, 8));
+        else:
+            plot = self.exp_var.plot(x=self.lags, y=self.exp_var_raw.columns[self.properties], subplots=True, kind='line',
+                                     style='.', layout=(self.n_properties, self.n_properties), figsize=(16, 8));
+        return plot
 
 
 def fit_cross_cov(df, lags, n_exp=2, n_gaus=2, range_mu=None):
@@ -221,7 +305,7 @@ def gaus_vario(lags, sill, range_):
     return sill * (1 - np.exp(np.dot(-lags.reshape(-1, 1) ** 2, (range_.reshape(1, -1) * 4 / 7) ** -2)))
 
 
-def plot_cross_variograms(trace, lags, df, n_exp=2, n_gaus=2, iter_plot=200, experimental=False):
+def plot_cross_variograms(trace, lags, df, n_exp=2, n_gaus=2, iter_plot=200, experimental=None):
     n_equations = trace['weights'].shape[1]
     n_iter = trace['weights'].shape[0]
     lags_tiled = np.tile(lags, (iter_plot, 1))
@@ -246,7 +330,7 @@ def plot_cross_variograms(trace, lags, df, n_exp=2, n_gaus=2, iter_plot=200, exp
     for e, el in enumerate(df.columns):
         p = bp.figure(x_axis_type="log")
         p.multi_line(list(lags_tiled), list(b_var[e]), color='olive', alpha=0.08)
-        if experimental:
+        if experimental is not None:
             p.scatter(experimental['lags'], y=experimental[el], color='navy', size=2)
         p.title.text = el
         p.xaxis.axis_label = "lags"
@@ -276,7 +360,7 @@ def plot_cross_covariance(trace, lags, df, n_exp=2, n_gaus=2, nuggets=None, iter
             b = np.dstack((b, trace['weights'][:, i_gaus + i * (n_exp + n_gaus)] *
                            gaus_vario(lags, trace['sill'][:, i_gaus], trace['range'][:, i_gaus])))
         # Sum the contributins of each function
-        if any(nuggets):
+        if nuggets is not None:
             b_all = 1 - (b.sum(axis=2) + nuggets[i])
         else:
             b_all = 1 - (b.sum(axis=2))
@@ -431,9 +515,9 @@ def SGS_compute(selected_coord_data, selected_grid_to_inter, selected_values_dat
     return values_interp#, k_std# - svd_tmp.std(axis=0)
 
 
-def SGS(df, grid_to_inter, cluster,
-        trace, nuggets=None, n_var=1, n_exp=2, n_gaus=2,
-        n_rep=10, verbose = 0):
+def SGS_run(df, grid_to_inter, cluster,
+            trace, nuggets=None, n_var=1, n_exp=2, n_gaus=2,
+            n_rep=10, verbose = 0):
 
     points_cluster = np.bincount(cluster.labels_)
     coord_data = df[['X', 'Y', 'Z']].as_matrix()

@@ -312,6 +312,8 @@ class DataManagement(object):
         if not order:
             order = _series.keys()
 
+        # TODO assert len order is equal to len of the dictionary
+
         # We create a dataframe with the links
         _series = pn.DataFrame(data=_series, columns=order)
 
@@ -411,7 +413,7 @@ class DataManagement(object):
             self.dtype = dtype
 
             # Drift grade
-            u_grade = kwargs.get('u_grade', 2)
+            u_grade = kwargs.get('u_grade', [2])
 
             # We hide the scaled copy of DataManagement object from the user. The scaling happens in GeMpy what is a
             # bit weird. Maybe at some point I should bring the function to this module
@@ -434,7 +436,7 @@ class DataManagement(object):
             self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, **kwargs)
 
             # Extracting data from the pandas dataframe to numpy array in the required form for the theano function
-            self.data_prep(**kwargs)
+            self.data_prep(u_grade=u_grade)
 
             # Avoid crashing my pc
             import theano
@@ -507,7 +509,7 @@ class DataManagement(object):
             """
 
             u_grade = kwargs.get('u_grade', None)
-
+            print(u_grade)
             # ==================
             # Extracting lengths
             # ==================
@@ -641,7 +643,7 @@ class DataManagement(object):
                 c_o = range_var ** 2 / 14 / 3
 
             # Asserting that the drift grade is in this range
-            assert (0 <= u_grade <= 2)
+           # assert (0 <= all(u_grade) <= 2)
 
             # Creating the drift matrix. TODO find the official name of this matrix?
             _universal_matrix = np.vstack((_grid_rescaled.grid.T,
