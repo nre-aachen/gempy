@@ -41,7 +41,7 @@ class TheanoGraph_pro(object):
 
         # Pass the verbose list as property
         self.verbose = verbose
-
+        self.compute_pf = False
         # Creation of symbolic parameters
         # =============
         # Constants
@@ -73,16 +73,16 @@ class TheanoGraph_pro(object):
         # -DEP- Now I pass it as attribute when I create that part of the graph
         #self.n_faults = theano.shared(0, 'Number of faults to compute')#
 
-        self.final_block = theano.shared(np.zeros(3, ), "Final block computed")
-        self.yet_simulated = theano.shared(np.ones(3, dtype='int'), "Points to be computed yet")
+        self.final_block = theano.shared(np.zeros((1, 3)), "Final block computed")
+        self.yet_simulated = theano.shared(np.ones(3, dtype='int64'), "Points to be computed yet")
 
         # This parameters give me the shape of the different groups of data. I pass all data together and I threshold it
         # using these values to the different potential fields and formations
-        self.len_series_i = theano.shared(np.arange(2, dtype='int'), 'Length of interfaces in every series')
-        self.len_series_f = theano.shared(np.arange(2, dtype='int'), 'Length of foliations in every series')
+        self.len_series_i = theano.shared(np.arange(2, dtype='int64'), 'Length of interfaces in every series')
+        self.len_series_f = theano.shared(np.arange(2, dtype='int64'), 'Length of foliations in every series')
         self.n_formations_per_serie = theano.shared(np.arange(3, dtype='int'), 'List with the number of formations')
-        self.n_formation = theano.shared(np.arange(2, dtype='int'), "Value of the formation")
-        self.number_of_points_per_formation_T = theano.shared(np.zeros(3, dtype='int'))
+        self.n_formation = theano.shared(np.arange(2, dtype='int64'), "Value of the formation")
+        self.number_of_points_per_formation_T = theano.shared(np.zeros(3, dtype='int64'))
 
         # ======================
         # VAR
@@ -1056,7 +1056,7 @@ class TheanoGraph_pro(object):
         # Preparing the data
         # ==================
         # Vector that controls the points that have been simulated in previous iterations
-        self.yet_simulated = T.eq(final_block, 0)
+        self.yet_simulated = T.eq(final_block[0, :], 0)
         self.yet_simulated.name = 'Yet simulated node'
 
         # Theano shared
@@ -1086,8 +1086,16 @@ class TheanoGraph_pro(object):
         # ====================
         potential_field_contribution = self.block_series()[:-2*self.rest_layer_points_all.shape[0]]
         final_block = T.set_subtensor(
-            final_block[T.nonzero(T.cast(self.yet_simulated, "int8"))[0]],
+            final_block[0, T.nonzero(T.cast(self.yet_simulated, "int8"))[0]],
             potential_field_contribution)
+
+        if self.compute_pf:
+            potential_field_values = self.potential_field_at_all()[:-2*self.rest_layer_points_all.shape[0]]
+            final_block = T.set_subtensor(
+            final_block[-1, T.nonzero(T.cast(self.yet_simulated, "int8"))[0]],
+                potential_field_values)
+
+            #final_block_out = T.vertical_stack(final_block, pf)
 
         return final_block
 
@@ -1163,6 +1171,8 @@ class TheanoGraph_pro(object):
         Returns:
             theano.tensor.vector: Final block model with the segmented lithologies
         """
+        self.compute_pf = True
+
 
         # we initialize the final block
         final_block_init = self.final_block
@@ -1184,26 +1194,36 @@ class TheanoGraph_pro(object):
             if 'faults block' in self.verbose:
                 self.fault_matrix = theano.printing.Print('I am outside the faults')(fault_matrix)
 
-        #Loop the series to create the Final block
-        all_series, updates2 = theano.scan(
-             fn=self.compute_a_series,
-             outputs_info=[final_block_init],
-             sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
-                        dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
-                        dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
-                        dict(input=self.u_grade_T[n_faults:], taps=[0])]
-        )
+        if self.compute_pf:
+            final_block_init = T.vertical_stack(self.final_block, self.final_block)
+            # Loop the series to create the Final block
+            all_series, updates2 = theano.scan(
+                fn=self.compute_a_series,
+                outputs_info=final_block_init,
+                sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
+                           dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
+                           dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
+                           dict(input=self.u_grade_T[n_faults:], taps=[0])]
+            # all_series_pf, updates3 = theano.scan(
+            #      fn=self.compute_a_series,
+            #      outputs_info=final_block_init,
+            #      sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
+            #                 dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
+            #                 dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
+            #                 dict(input=self.u_grade_T[n_faults:], taps=[0])]
+            )
 
-        # if compute_pf:
-        #     all_series_pf, updates3 = theano.scan(
-        #          fn=self.compute_a_series_pf,
-        #          sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
-        #                     dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
-        #                     dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
-        #                     dict(input=self.u_grade_T[n_faults:], taps=[0])]
-        #     )
-
+        else:
+            # Loop the series to create the Final block
+            all_series, updates2 = theano.scan(
+                fn=self.compute_a_series,
+                outputs_info=final_block_init,
+                sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
+                           dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
+                           dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
+                           dict(input=self.u_grade_T[n_faults:], taps=[0])]
+            )
             #all_series = T.vertical_stack(all_series, all_series_pf)
 
-        return all_series[-1]
+        return all_series
 

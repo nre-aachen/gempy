@@ -279,6 +279,26 @@ class PlotData(object):
         if plot:
             return vol.plot()
 
+    # def plot3D_ipyvolume(block, geo_data, cm=plt.cm.viridis.colors):
+    #     import ipyvolume.pylab as p3
+    #     n_lith = np.unique(block).shape[0]
+    #     p3.figure()
+    #     for e, i in enumerate(np.unique(sol)):  # np.unique(block)):
+    #
+    #         bool_pos = block == i
+    #         p3.scatter(
+    #             geo_data.grid.grid[:, 0][bool_pos],
+    #             geo_data.grid.grid[:, 1][bool_pos],
+    #             geo_data.grid.grid[:, 2][bool_pos],
+    #             marker='box',
+    #             color=cm[np.linspace(0, 255, n_lith, dtype=int)[e]])
+    #
+    #     p3.xlim(np.min(geo_data.grid.grid[:, 0]), np.max(geo_data.grid.grid[:, 0]))
+    #     p3.ylim(np.min(geo_data.grid.grid[:, 1]), np.max(geo_data.grid.grid[:, 1]))
+    #     p3.zlim(np.min(geo_data.grid.grid[:, 2]), np.max(geo_data.grid.grid[:, 2]))
+    #
+    #     p3.show()
+
     def export_vtk(self):
         """
         export vtk

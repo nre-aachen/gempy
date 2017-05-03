@@ -1,47 +1,53 @@
 import pandas as pn
-import glob
-import os
 import numpy as np
-path = '/home/bl3/Documents/CSIRO/MBS_split_by_holeID/MBS_split_by_holeID'
-import theano.tensor as T
-import theano
-import sys, os
-sys.path.append("/home/bl3/PycharmProjects/GeMpy/GeMpy")
-
-# Importing GeMpy modules
-import GeMpy
 import matplotlib.pyplot as plt
-from matplotlib.collections import LineCollection
-from matplotlib import colors as mcolors
 
-# Setting the extent
-geo_data = GeMpy.import_data([3.377617e+05, 5.075333e+05,
-                              6.743846e+06,1.011812e+07,
-                              2.056000e+01, 4.884000e+02], [50,50,50])
-
-# Reading the interfaces data, created in the previous section
-inter = pn.read_pickle('/home/bl3/Documents/CSIRO/interfaces')
-
-# Choosing the formations
-inter = inter[inter['formation'].isin(['harz', 'dun', 'gabb', 'opx', 'base'])]
-
-# Creating one arbitrary foliation (the algorithm needs at least one)
-foli = inter[['X', 'Y', 'Z']].iloc[0]
-foli = foli.to_frame().T
-foli['azimuth'] = 0
-foli['dip'] = 0
-foli['polarity'] = 1
-foli['formation'] = 'harz'
-
-# Setting interfaces and foliations in GeMpy
-GeMpy.set_interfaces(geo_data, inter)
-GeMpy.set_foliations(geo_data, foli)
+import theano
+import theano.tensor as T
+import pymc3 as pm
+import sys
+import GeMpy
+import coKriging as ck
+import importlib
+importlib.reload(ck)
 
 
-# Preparing data to interpolate
+# Read data
+data = pn.read_pickle('../../CSIRO/Domained_data.pkl')
+geomodel = np.load("../../CSIRO/3Dmodel.npy")
+exp_variogram = pn.read_pickle("../../CSIRO/experimental_variogram.p")
 
-data_interp = GeMpy.set_interpolator(geo_data, u_grade = 0, compute_potential_field= False, compute_block_model = False,
-                      verbose = 0)
+# In the future the best would be to save a file with all the 3D model info
+grid = GeMpy.DataManagement([422050,423090,8429400,8432100,-500, 332],[50, 50, 50]).grid.grid
 
-input_data_T = data_interp.interpolator.tg.input_parameters_list()
-input_data_P = data_interp.interpolator.data_prep()
+sgs = ck.SGS(exp_var=exp_variogram, properties=['Al_ppm-Al_ppm', 'Al_ppm-Ca_ppm', 'Ca_ppm-Al_ppm', 'Ca_ppm-Ca_ppm' ], n_exp = 5)
+sgs.set_data(data)
+sgs.set_lithology('opx')
+sgs.set_geomodel(geomodel)
+
+sgs.choose_lithology_elements(elem = ['Al_ppm', 'Ca_ppm'])
+sgs.select_segmented_grid(grid)
+model = sgs.fit_cross_cov(n_exp=5)
+with model:
+    start = pm.find_MAP() # Find starting value by optimization
+    step = pm.Metropolis()
+    #db = pm.backends.SQLite('SQtry.sqlite')
+    trace = pm.sample(2000, step, init=start, progressbar=True, njobs=1);
+sgs.set_trace(trace)
+
+SED_f = ck.theano_sed()
+
+df = sgs.data_to_inter[['X', 'Y', 'Z']]
+selected_cluster_grid = sgs.grid_to_inter[5000:5002]
+dist = SED_f(df, selected_cluster_grid)
+
+# Checking the radio of the simulation
+for r in range(100, 1000, 100):
+    select = (dist < r).any(axis=1)
+    if select.sum() > 50:
+        break
+
+j = np.zeros(sgs.grid_to_inter.shape[0], dtype=bool)
+j[5000:5002] = True
+
+sgs.solve_kriging(select, j)

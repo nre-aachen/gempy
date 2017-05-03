@@ -413,7 +413,7 @@ class DataManagement(object):
             self.dtype = dtype
 
             # Drift grade
-            u_grade = kwargs.get('u_grade', [2])
+            u_grade = kwargs.get('u_grade', [2, 2])
 
             # We hide the scaled copy of DataManagement object from the user. The scaling happens in GeMpy what is a
             # bit weird. Maybe at some point I should bring the function to this module
@@ -509,7 +509,6 @@ class DataManagement(object):
             """
 
             u_grade = kwargs.get('u_grade', None)
-            print(u_grade)
             # ==================
             # Extracting lengths
             # ==================
@@ -676,7 +675,7 @@ class DataManagement(object):
             self.tg.universal_grid_matrix_T.set_value(np.cast[self.dtype](_universal_matrix + 1e-10))
 
             # Initialization of the block model
-            self.tg.final_block.set_value(np.zeros((_grid_rescaled.grid.shape[0]), dtype='float32'))
+            self.tg.final_block.set_value(np.zeros((1, _grid_rescaled.grid.shape[0]), dtype='float32'))
 
             # Initialization of the boolean array that represent the areas of the block model to be computed in the
             # following series
