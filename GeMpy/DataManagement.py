@@ -412,8 +412,12 @@ class DataManagement(object):
             dtype = kwargs.get('dtype', 'float32')
             self.dtype = dtype
 
+            range_var = kwargs.get('range_var', None)
+
             # Drift grade
             u_grade = kwargs.get('u_grade', [2, 2])
+
+
 
             # We hide the scaled copy of DataManagement object from the user. The scaling happens in GeMpy what is a
             # bit weird. Maybe at some point I should bring the function to this module
@@ -433,7 +437,7 @@ class DataManagement(object):
             self.order_table()
 
             # Setting theano parameters
-            self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, **kwargs)
+            self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, range_var=range_var)
 
             # Extracting data from the pandas dataframe to numpy array in the required form for the theano function
             self.data_prep(u_grade=u_grade)
