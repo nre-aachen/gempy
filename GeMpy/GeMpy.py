@@ -54,6 +54,9 @@ def rescale_data(geo_data, rescaling_factor=None):
     geo_data_rescaled.extent = new_coord_extent.as_matrix()
 
     geo_data_rescaled.grid.grid = (geo_data.grid.grid - centers.as_matrix()) /rescaling_factor + 0.5001
+
+    geo_data_rescaled.rescaling_factor = rescaling_factor
+
     return geo_data_rescaled
 
 # TODO needs to be updated

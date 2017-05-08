@@ -11,7 +11,7 @@ import theano.tensor as T
 import numpy as np
 import sys
 
-theano.config.optimizer = 'fast_run'
+theano.config.optimizer = 'fast_compile'
 theano.config.exception_verbosity = 'high'
 theano.config.compute_test_value = 'ignore'
 theano.config.floatX = 'float32'
@@ -50,8 +50,8 @@ class TheanoGraph_pro(object):
         # Arbitrary values to get the same results that GeoModeller. These parameters are a mystery for me yet. I have
         # to ask Gabi and Simon. In my humble opinion they weight the contribution of the interfaces against the
         # foliations.
-        self.i_reescale = theano.shared(np.cast[dtype](4))
-        self.gi_reescale = theano.shared(np.cast[dtype](2))
+        self.i_reescale = theano.shared(np.cast[dtype](4.))
+        self.gi_reescale = theano.shared(np.cast[dtype](2.))
 
         # Number of dimensions. Now it is not too variable anymore
         self.n_dimensions = 3
@@ -109,6 +109,8 @@ class TheanoGraph_pro(object):
         # Block model out of the faults. It is initialized with shape(0, grid+ ref+rest) so if I do not change it during
         # the computation it does not have any effect
         self.fault_matrix = T.zeros((0, self.grid_val_T.shape[0] + 2*self.ref_layer_points.shape[0]))
+
+        self.u_grade_T_op = theano.shared(0)
 
     # -DEP-
     #def testing(self):
@@ -216,7 +218,7 @@ class TheanoGraph_pro(object):
              (1 - 7 * (sed_ref_ref / self.a_T) ** 2 +
               35 / 4 * (sed_ref_ref / self.a_T) ** 3 -
               7 / 2 * (sed_ref_ref / self.a_T) ** 5 +
-              3 / 4 * (sed_ref_ref / self.a_T) ** 7)))) + 10e-6
+              3 / 4 * (sed_ref_ref / self.a_T) ** 7)))) + 1e-6
 
         # Add name to the theano node
         C_I.name = 'Covariance Interfaces'
@@ -295,6 +297,9 @@ class TheanoGraph_pro(object):
         if verbose > 1:
             theano.printing.pydotprint(C_G, outfile="graphs/" + sys._getframe().f_code.co_name + ".png",
                                        var_with_name_simple=True)
+
+        if str(sys._getframe().f_code.co_name) in self.verbose:
+            C_G = theano.printing.Print('Cov Gradients')(C_G)
 
         return C_G
 
@@ -611,6 +616,9 @@ class TheanoGraph_pro(object):
         if verbose > 1:
             theano.printing.pydotprint(b, outfile="graphs/" + sys._getframe().f_code.co_name + "_i.png",
                                        var_with_name_simple=True)
+
+        if str(sys._getframe().f_code.co_name) in self.verbose:
+            b = theano.printing.Print('b vector')(b)
 
         # Add name to the theano node
         b.name = 'b vector'

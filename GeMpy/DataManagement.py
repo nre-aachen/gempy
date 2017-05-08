@@ -641,6 +641,7 @@ class DataManagement(object):
                                     (_data_rescaled.extent[2] - _data_rescaled.extent[3]) ** 2 +
                                     (_data_rescaled.extent[4] - _data_rescaled.extent[5]) ** 2)
 
+
             # Default covariance at 0
             if not c_o:
                 c_o = range_var ** 2 / 14 / 3

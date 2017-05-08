@@ -199,7 +199,9 @@ class PlotData(object):
             self.plot_data(direction, 'all')
 
         _a, _b, _c, extent_val, x, y = self._slice(direction, cell_number)[:-2]
-        plt.contour(potential_field[_a, _b, _c].T, cell_number,
+        plt.contour(potential_field.reshape(
+            self._data.resolution[0], self._data.resolution[1], self._data.resolution[2])[_a, _b, _c].T,
+                    cell_number,
                     extent=extent_val, *args,
                     **kwargs)
 
