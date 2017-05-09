@@ -74,7 +74,7 @@ class TheanoGraph_pro(object):
         #self.n_faults = theano.shared(0, 'Number of faults to compute')#
 
         self.final_block = theano.shared(np.zeros((1, 3)), "Final block computed")
-        self.yet_simulated = theano.shared(np.ones(3, dtype='int64'), "Points to be computed yet")
+        #self.yet_simulated = theano.shared(np.ones(3, dtype='int64'), "Points to be computed yet")
 
         # This parameters give me the shape of the different groups of data. I pass all data together and I threshold it
         # using these values to the different potential fields and formations
@@ -1201,6 +1201,9 @@ class TheanoGraph_pro(object):
 
             if 'faults block' in self.verbose:
                 self.fault_matrix = theano.printing.Print('I am outside the faults')(fault_matrix)
+
+       # self.u_grade_T = theano.printing.Print('drift degree')(self.u_grade_T)
+       # self.a_T = theano.printing.Print('range')(self.a_T)
 
         if self.compute_pf:
             final_block_init = T.vertical_stack(self.final_block, self.final_block)

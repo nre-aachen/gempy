@@ -437,7 +437,7 @@ class DataManagement(object):
             self.order_table()
 
             # Setting theano parameters
-            self.set_theano_shared_parameteres(self._data_scaled, self._grid_scaled, range_var=range_var)
+            self.set_theano_shared_parameteres(range_var=range_var)
 
             # Extracting data from the pandas dataframe to numpy array in the required form for the theano function
             self.data_prep(u_grade=u_grade)
@@ -564,7 +564,7 @@ class DataManagement(object):
                 u_grade = np.zeros_like(len_series_i)
                 u_grade[len_series_i > 12] = 9
                 u_grade[(len_series_i > 6) & (len_series_i < 12)] = 3
-
+            print(u_grade)
             self.tg.u_grade_T.set_value(u_grade)
 
             # ================
@@ -610,7 +610,7 @@ class DataManagement(object):
 
             return idl
 
-        def set_theano_shared_parameteres(self, _data_rescaled, _grid_rescaled, **kwargs):
+        def set_theano_shared_parameteres(self, **kwargs):
             """
             Here we create most of the kriging parameters. The user can pass them as kwargs otherwise we pick the
             default values from the DataManagement info. The share variables are set in place. All the parameters here
@@ -637,9 +637,10 @@ class DataManagement(object):
 
             # Default range
             if not range_var:
-                range_var = np.sqrt((_data_rescaled.extent[0] - _data_rescaled.extent[1]) ** 2 +
-                                    (_data_rescaled.extent[2] - _data_rescaled.extent[3]) ** 2 +
-                                    (_data_rescaled.extent[4] - _data_rescaled.extent[5]) ** 2)
+                print('I am here')
+                range_var = np.sqrt((self._data_scaled.extent[0] - self._data_scaled.extent[1]) ** 2 +
+                                    (self._data_scaled.extent[2] - self._data_scaled.extent[3]) ** 2 +
+                                    (self._data_scaled.extent[4] - self._data_scaled.extent[5]) ** 2)
 
 
             # Default covariance at 0
@@ -650,11 +651,11 @@ class DataManagement(object):
            # assert (0 <= all(u_grade) <= 2)
 
             # Creating the drift matrix. TODO find the official name of this matrix?
-            _universal_matrix = np.vstack((_grid_rescaled.grid.T,
-                                           (_grid_rescaled.grid ** 2).T,
-                                           _grid_rescaled.grid[:, 0] * _grid_rescaled.grid[:, 1],
-                                           _grid_rescaled.grid[:, 0] * _grid_rescaled.grid[:, 2],
-                                           _grid_rescaled.grid[:, 1] * _grid_rescaled.grid[:, 2]))
+            _universal_matrix = np.vstack((self._grid_scaled.grid.T,
+                                           (self._grid_scaled.grid ** 2).T,
+                                           self._grid_scaled.grid[:, 0] * self._grid_scaled.grid[:, 1],
+                                           self._grid_scaled.grid[:, 0] * self._grid_scaled.grid[:, 2],
+                                           self._grid_scaled.grid[:, 1] * self._grid_scaled.grid[:, 2]))
 
             # Setting shared variables
             # Range
@@ -675,23 +676,23 @@ class DataManagement(object):
                 # self.tg.c_resc.set_value(1)
 
             # Just grid. I add a small number to avoid problems with the origin point
-            self.tg.grid_val_T.set_value(np.cast[self.dtype](_grid_rescaled.grid + 10e-6))
+            self.tg.grid_val_T.set_value(np.cast[self.dtype](self._grid_scaled.grid + 10e-6))
             # Universal grid
             self.tg.universal_grid_matrix_T.set_value(np.cast[self.dtype](_universal_matrix + 1e-10))
 
             # Initialization of the block model
-            self.tg.final_block.set_value(np.zeros((1, _grid_rescaled.grid.shape[0]), dtype='float32'))
+            self.tg.final_block.set_value(np.zeros((1, self._grid_scaled.grid.shape[0]), dtype='float32'))
 
             # Initialization of the boolean array that represent the areas of the block model to be computed in the
             # following series
-            self.tg.yet_simulated.set_value(np.ones((_grid_rescaled.grid.shape[0]), dtype='int'))
+            #self.tg.yet_simulated.set_value(np.ones((_grid_rescaled.grid.shape[0]), dtype='int'))
 
             # Unique number assigned to each lithology
             #self.tg.n_formation.set_value(np.insert(_data_rescaled.interfaces['formation number'].unique(),
             #                                        0, 0)[::-1])
 
-            self.tg.n_formation.set_value(_data_rescaled.interfaces['formation number'].unique())
+            self.tg.n_formation.set_value(self._data_scaled.interfaces['formation number'].unique())
 
             # Number of formations per series. The function is not pretty but the result is quite clear
             self.tg.n_formations_per_serie.set_value(
-                np.insert(_data_rescaled.interfaces.groupby('order_series').formation.nunique().values.cumsum(), 0, 0))
+                np.insert(self._data_scaled.interfaces.groupby('order_series').formation.nunique().values.cumsum(), 0, 0))
