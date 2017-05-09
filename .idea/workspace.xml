@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/GeMpy.iml" afterPath="$PROJECT_DIR$/.idea/GeMpy.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/theanograf.py" afterPath="$PROJECT_DIR$/GeMpy/theanograf.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_3_Faults.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_3_Faults.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/Untitled.ipynb" afterPath="$PROJECT_DIR$/test/Untitled.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test.py" afterPath="$PROJECT_DIR$/test/test.py" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -21,6 +24,7 @@
     <SUITE FILE_PATH="coverage/GeMpy$debugging_simple.coverage" NAME="debugging_simple Coverage Results" MODIFIED="1491891393851" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GeMpy" />
     <SUITE FILE_PATH="coverage/GeMpy$starting_theano.coverage" NAME="starting theano Coverage Results" MODIFIED="1486010762778" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/GeMpy$debugger.coverage" NAME="debugger Coverage Results" MODIFIED="1486019451514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GeMpy" />
+    <SUITE FILE_PATH="coverage/GeMpy$py_test_in_test_py.coverage" NAME="py.test in test.py Coverage Results" MODIFIED="1494324893116" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -32,6 +36,31 @@
     <option name="SHOW_TABLE_DETAILS" value="true" />
     <option name="SHOW_EMPTY_GROUPS" value="false" />
     <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+  </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="32">
+                    <caret line="1058" column="41" lean-forward="false" selection-start-line="1058" selection-start-column="29" selection-end-line="1058" selection-end-column="41" />
+                    <folding>
+                      <element signature="e#6872#7505#0" expanded="false" />
+                      <element signature="e#25402#28809#0" expanded="false" />
+                      <element signature="e#28854#30136#0" expanded="false" />
+                      <element signature="e#52802#55288#0" expanded="false" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="ExportToHTMLSettings">
@@ -83,26 +112,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="531">
-              <caret line="450" column="54" lean-forward="true" selection-start-line="450" selection-start-column="54" selection-end-line="450" selection-end-column="54" />
+            <state relative-caret-position="491">
+              <caret line="595" column="47" lean-forward="false" selection-start-line="595" selection-start-column="43" selection-end-line="595" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="1132" column="28" lean-forward="false" selection-start-line="1132" selection-start-column="28" selection-end-line="1132" selection-end-column="28" />
+            <state relative-caret-position="330">
+              <caret line="511" column="14" lean-forward="false" selection-start-line="511" selection-start-column="14" selection-end-line="511" selection-end-column="14" />
               <folding>
-                <element signature="e#6821#7454#0" expanded="false" />
-                <element signature="e#24357#27764#0" expanded="false" />
-                <element signature="e#27809#29091#0" expanded="false" />
-                <element signature="e#45462#47899#0" expanded="false" />
+                <element signature="e#6872#7505#0" expanded="false" />
+                <element signature="e#14897#17520#0" expanded="false" />
+                <element signature="e#17526#17533#0" expanded="false" />
+                <element signature="e#17982#23043#0" expanded="false" />
+                <element signature="e#25402#28809#0" expanded="false" />
+                <element signature="e#28854#30136#0" expanded="false" />
+                <element signature="e#30175#31155#0" expanded="false" />
+                <element signature="e#32441#33133#0" expanded="false" />
+                <element signature="e#33180#34779#0" expanded="false" />
+                <element signature="e#34827#36467#0" expanded="false" />
+                <element signature="e#36521#39333#0" expanded="false" />
+                <element signature="e#39378#40265#0" expanded="false" />
+                <element signature="e#40313#41104#0" expanded="false" />
+                <element signature="e#52802#55288#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -111,8 +150,8 @@
       <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="880">
-              <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+            <state relative-caret-position="360">
+              <caret line="122" column="1" lean-forward="false" selection-start-line="122" selection-start-column="1" selection-end-line="122" selection-end-column="1" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -132,6 +171,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/GeMpy/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="242">
+              <caret line="11" column="8" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -145,18 +194,9 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>yet_simulated_func</find>
-      <find>cartesian_dist_reference_to_rest</find>
-      <find>self.C_matrix</find>
-      <find>_universal_terms_interfaces</find>
-      <find>universal_grid_matrix_T</find>
-      <find>self.ref_layer_points</find>
       <find>kwar</find>
       <find>self.u_grade_T</find>
       <find>-len</find>
-      <find>fault</find>
-      <find>self.</find>
-      <find>self.fault_matrix</find>
       <find>n_var</find>
       <find>series</find>
       <find>select</find>
@@ -175,10 +215,21 @@
       <find>yet_simulated</find>
       <find>data_prep</find>
       <find>order</find>
+      <find>order_tabl</find>
+      <find>self.</find>
+      <find>I am her</find>
+      <find>self.fault_matrix</find>
+      <find>self.faults_matrix</find>
+      <find>fault</find>
+      <find>faults int</find>
+      <find>rest</find>
+      <find>n_formation_op</find>
     </findStrings>
     <replaceStrings>
       <replace>compute_potential_field</replace>
       <replace>compute_potential_fields</replace>
+      <replace />
+      <replace />
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -231,15 +282,15 @@
         <option value="$PROJECT_DIR$/docs/source/tutorial.rst" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/setup.py" />
-        <option value="$PROJECT_DIR$/GeMpy/__init__.py" />
         <option value="$PROJECT_DIR$/GeMpy/debugging.py" />
         <option value="$PROJECT_DIR$/GeMpy/coKriging.py" />
         <option value="$PROJECT_DIR$/GeMpy/geomodeller_xml_obj.py" />
         <option value="$PROJECT_DIR$/GeMpy/Visualization.py" />
-        <option value="$PROJECT_DIR$/test/test.py" />
         <option value="$PROJECT_DIR$/GeMpy/GeMpy.py" />
-        <option value="$PROJECT_DIR$/GeMpy/theanograf.py" />
+        <option value="$PROJECT_DIR$/GeMpy/__init__.py" />
+        <option value="$PROJECT_DIR$/test/test.py" />
         <option value="$PROJECT_DIR$/GeMpy/DataManagement.py" />
+        <option value="$PROJECT_DIR$/GeMpy/theanograf.py" />
       </list>
     </option>
   </component>
@@ -327,6 +378,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="Prototype Notebook" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GeMpy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="GeMpy" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -368,7 +433,7 @@
       <recent name="$PROJECT_DIR$/debugging" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.debugging_simple">
+  <component name="RunManager" selected="Python tests.py.test in test.py">
     <configuration default="false" name="starting theano" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -421,6 +486,31 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GeMpy/debugging.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="py.test in test.py" type="tests" factoryName="py.test" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="GeMpy" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="testToRun" value="$PROJECT_DIR$/test/test.py" />
+      <option name="keywords" value="" />
+      <option name="params" value="" />
+      <option name="USE_PARAM" value="false" />
+      <option name="USE_KEYWORD" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
@@ -673,16 +763,18 @@
       <option name="USE_KEYWORD" value="false" />
       <method />
     </configuration>
-    <list size="3">
+    <list size="4">
       <item index="0" class="java.lang.String" itemvalue="Python.starting theano" />
       <item index="1" class="java.lang.String" itemvalue="Python.debugger" />
       <item index="2" class="java.lang.String" itemvalue="Python.debugging_simple" />
+      <item index="3" class="java.lang.String" itemvalue="Python tests.py.test in test.py" />
     </list>
     <recent_temporary>
-      <list size="3">
-        <item index="0" class="java.lang.String" itemvalue="Python.debugging_simple" />
-        <item index="1" class="java.lang.String" itemvalue="Python.debugger" />
-        <item index="2" class="java.lang.String" itemvalue="Python.starting theano" />
+      <list size="4">
+        <item index="0" class="java.lang.String" itemvalue="Python tests.py.test in test.py" />
+        <item index="1" class="java.lang.String" itemvalue="Python.debugging_simple" />
+        <item index="2" class="java.lang.String" itemvalue="Python.debugger" />
+        <item index="3" class="java.lang.String" itemvalue="Python.starting theano" />
       </list>
     </recent_temporary>
   </component>
@@ -699,13 +791,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
-    </task>
-    <task id="LOCAL-00044" summary="Docs 0.97&#10;&#10;seriously?">
-      <created>1482411390777</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1482411390777</updated>
     </task>
     <task id="LOCAL-00045" summary="Docs 0.98&#10;&#10;This may be the last one?">
       <created>1482411707937</created>
@@ -1043,8 +1128,23 @@
       <option name="project" value="LOCAL" />
       <updated>1494257418777</updated>
     </task>
-    <option name="localTasksCounter" value="94" />
+    <task id="LOCAL-00094" summary="learnt how to update all variables and constants without compiling">
+      <created>1494320823358</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1494320823358</updated>
+    </task>
+    <option name="localTasksCounter" value="95" />
     <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="py_test_in_test_py - 2017.05.09 at 11h 44m 22s.xml">
+      <configuration name="py.test in test.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_py - 2017.05.09 at 12h 14m 54s.xml">
+      <configuration name="py.test in test.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1065,20 +1165,20 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906324" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26666668" sideWeight="0.41569927" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.340625" sideWeight="0.4792703" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20215054" sideWeight="0.48258707" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12669323" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2139785" sideWeight="0.4948207" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29354838" sideWeight="0.4948207" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35281837" sideWeight="0.48207173" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21604939" sideWeight="0.48258707" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498618" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2776618" sideWeight="0.53545815" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Concurrent Activities Diagram" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35281837" sideWeight="0.48207173" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17438272" sideWeight="0.49243027" order="6" side_tool="false" content_ui="tabs" />
@@ -1136,7 +1236,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed u_grade = 0 bug with the shape of C_matrix and added more sensical rescaling of the grid" />
     <MESSAGE value="pymc3 Running after almost two years and couple of thousands lines of code. Piece of cake" />
     <MESSAGE value="pymc3 Running notebook" />
     <MESSAGE value="Commit almost faults there. Solving the problem of where to interpolate the potential field" />
@@ -1161,7 +1260,8 @@
     <MESSAGE value="addint the option of getting the potential fields" />
     <MESSAGE value="comparing sandstone GeMpy vs Sandstone" />
     <MESSAGE value="tests a,b,c" />
-    <option name="LAST_COMMIT_MESSAGE" value="tests a,b,c" />
+    <MESSAGE value="learnt how to update all variables and constants without compiling" />
+    <option name="LAST_COMMIT_MESSAGE" value="learnt how to update all variables and constants without compiling" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1190,7 +1290,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="89" />
+      <option name="time" value="90" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1373,24 +1473,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GeMpy/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="880">
-          <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/debugging.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
@@ -1417,24 +1499,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
+    <entry file="file://$PROJECT_DIR$/GeMpy/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="1132" column="28" lean-forward="false" selection-start-line="1132" selection-start-column="28" selection-end-line="1132" selection-end-column="28" />
+        <state relative-caret-position="242">
+          <caret line="11" column="8" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="122" column="1" lean-forward="false" selection-start-line="122" selection-start-column="1" selection-end-line="122" selection-end-column="1" />
           <folding>
-            <element signature="e#6821#7454#0" expanded="false" />
-            <element signature="e#24357#27764#0" expanded="false" />
-            <element signature="e#27809#29091#0" expanded="false" />
-            <element signature="e#45462#47899#0" expanded="false" />
+            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="531">
-          <caret line="450" column="54" lean-forward="true" selection-start-line="450" selection-start-column="54" selection-end-line="450" selection-end-column="54" />
+        <state relative-caret-position="491">
+          <caret line="595" column="47" lean-forward="false" selection-start-line="595" selection-start-column="43" selection-end-line="595" selection-end-column="47" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="511" column="14" lean-forward="false" selection-start-line="511" selection-start-column="14" selection-end-line="511" selection-end-column="14" />
+          <folding>
+            <element signature="e#6872#7505#0" expanded="false" />
+            <element signature="e#14897#17520#0" expanded="false" />
+            <element signature="e#17526#17533#0" expanded="false" />
+            <element signature="e#17982#23043#0" expanded="false" />
+            <element signature="e#25402#28809#0" expanded="false" />
+            <element signature="e#28854#30136#0" expanded="false" />
+            <element signature="e#30175#31155#0" expanded="false" />
+            <element signature="e#32441#33133#0" expanded="false" />
+            <element signature="e#33180#34779#0" expanded="false" />
+            <element signature="e#34827#36467#0" expanded="false" />
+            <element signature="e#36521#39333#0" expanded="false" />
+            <element signature="e#39378#40265#0" expanded="false" />
+            <element signature="e#40313#41104#0" expanded="false" />
+            <element signature="e#52802#55288#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

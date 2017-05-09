@@ -637,7 +637,6 @@ class DataManagement(object):
 
             # Default range
             if not range_var:
-                print('I am here')
                 range_var = np.sqrt((self._data_scaled.extent[0] - self._data_scaled.extent[1]) ** 2 +
                                     (self._data_scaled.extent[2] - self._data_scaled.extent[3]) ** 2 +
                                     (self._data_scaled.extent[4] - self._data_scaled.extent[5]) ** 2)

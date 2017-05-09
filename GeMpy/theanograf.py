@@ -109,6 +109,9 @@ class TheanoGraph_pro(object):
         # Block model out of the faults. It is initialized with shape(0, grid+ ref+rest) so if I do not change it during
         # the computation it does not have any effect
         self.fault_matrix = T.zeros((0, self.grid_val_T.shape[0] + 2*self.ref_layer_points.shape[0]))
+        self.len_i_0 = 0
+        self.len_i_1 = 1
+
 
         self.u_grade_T_op = theano.shared(0)
 
@@ -498,7 +501,21 @@ class TheanoGraph_pro(object):
 
         # self.fault_matrix contains the faults volume of the grid and the rest and ref points. For the drift we need
         # to make it relative to the reference point
-        F_I = (self.fault_matrix[:, -2*lenght_of_CGI:-lenght_of_CGI] - self.fault_matrix[:, -lenght_of_CGI:])*100
+        len_points = self.rest_layer_points_all.shape[0]
+        interface_loc = self.fault_matrix.shape[1] - 2*len_points
+
+        len_points = theano.printing.Print('len points')(
+            len_points)
+        fault_matrix_at_interfaces_rest = self.fault_matrix[:, interface_loc+self.len_i_0: interface_loc+self.len_i_1]
+        fault_matrix_at_interfaces_ref =  self.fault_matrix[:, interface_loc+len_points+self.len_i_0: interface_loc+len_points+self.len_i_1]
+        fault_matrix_at_interfaces_rest = theano.printing.Print('Faults interfaces matrix rest')(fault_matrix_at_interfaces_rest)
+        fault_matrix_at_interfaces_ref = theano.printing.Print('Faults interfaces matrix ref')(fault_matrix_at_interfaces_ref)
+       # len_points_i = 2*self.rest_layer_points_all.shape[0] + self.n_formation_op[0]-1
+       # len_points_e = 2*self.rest_layer_points_all.shape[0] + self.n_formation_op[-1]-1
+
+     #   F_I = (self.fault_matrix[:, -2*len_points:-len_points] - self.fault_matrix[:, -len_points:])[self.n_formation_op-1]
+
+        F_I = fault_matrix_at_interfaces_rest - fault_matrix_at_interfaces_ref
 
         # As long as the drift is a constant F_G is null
         F_G = T.zeros((self.fault_matrix.shape[0], lenght_of_CG))
@@ -670,6 +687,9 @@ class TheanoGraph_pro(object):
         if verbose > 1:
             theano.printing.pydotprint(grid_val, outfile="graphs/" + sys._getframe().f_code.co_name + ".png",
                                        var_with_name_simple=True)
+
+        if 'grid_val' in self.verbose:
+            grid_val = theano.printing.Print('Points to interpolate')(grid_val)
 
         return grid_val
 
@@ -1014,6 +1034,7 @@ class TheanoGraph_pro(object):
         self.number_of_points_per_formation_T_op = self.number_of_points_per_formation_T[n_form_per_serie_0: n_form_per_serie_1]
         self.n_formation_op = self.n_formation[n_form_per_serie_0: n_form_per_serie_1]
         self.u_grade_T_op = u_grade_iter
+
         self.dips_position = self.dips_position_all[len_f_0: len_f_1, :]
         self.dips_position_tiled = T.tile(self.dips_position, (self.n_dimensions, 1))
 
@@ -1025,6 +1046,12 @@ class TheanoGraph_pro(object):
         self.ref_layer_points = self.ref_layer_points_all[len_i_0: len_i_1, :]
         self.rest_layer_points = self.rest_layer_points_all[len_i_0: len_i_1, :]
 
+       # self.fault_matrix_at_rest = self.fault_matrix[]
+       # self.fault_matrix_at_ref =
+
+
+        if 'n_formation' in self.verbose:
+            self.n_formation_op = theano.printing.Print('n_formation_fault')(self.n_formation_op)
 
         # ====================
         # Computing the series
@@ -1083,11 +1110,15 @@ class TheanoGraph_pro(object):
         self.ref_layer_points = self.ref_layer_points_all[len_i_0: len_i_1, :]
         self.rest_layer_points = self.rest_layer_points_all[len_i_0: len_i_1, :]
 
+        # For the contribution of the faults I did not find a better way
+        self.len_i_0 = len_i_0
+        self.len_i_1 = len_i_1
+
         # Printing
         if 'yet_simulated' in self.verbose:
             self.yet_simulated = theano.printing.Print(self.yet_simulated.name)(self.yet_simulated)
         if 'n_formation' in self.verbose:
-            self.n_formation_op = theano.printing.Print('n_formation')(self.n_formation_op)
+            self.n_formation_op = theano.printing.Print('n_formation_series')(self.n_formation_op)
 
         # ====================
         # Computing the series
@@ -1168,7 +1199,7 @@ class TheanoGraph_pro(object):
 
         return potential_field_contribution
 
-    def whole_block_model(self, n_faults=0, compute_pf=False):
+    def whole_block_model(self, n_faults=0, compute_pf=True):
 
         """
         Final function that loops first all the faults, then uses that result in the final block and loops again the
@@ -1179,12 +1210,12 @@ class TheanoGraph_pro(object):
         Returns:
             theano.tensor.vector: Final block model with the segmented lithologies
         """
-        self.compute_pf = True
-
+        self.compute_pf = compute_pf
 
         # we initialize the final block
         final_block_init = self.final_block
         final_block_init.name = 'final block init'
+        self.yet_simulated = T.eq(final_block_init[0, :], 0)
 
         # Check if there are faults and loop them to create the Faults block
         if n_faults != 0:
@@ -1236,5 +1267,5 @@ class TheanoGraph_pro(object):
             )
             #all_series = T.vertical_stack(all_series, all_series_pf)
 
-        return all_series
+        return  all_series#self.fault_matrix
 
