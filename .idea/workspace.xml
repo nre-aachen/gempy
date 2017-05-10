@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/GeMpy.iml" afterPath="$PROJECT_DIR$/.idea/GeMpy.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/theanograf.py" afterPath="$PROJECT_DIR$/GeMpy/theanograf.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_3_Faults.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_3_Faults.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/Untitled.ipynb" afterPath="$PROJECT_DIR$/test/Untitled.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test.py" afterPath="$PROJECT_DIR$/test/test.py" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,31 +32,6 @@
     <option name="SHOW_TABLE_DETAILS" value="true" />
     <option name="SHOW_EMPTY_GROUPS" value="false" />
     <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
-  </component>
-  <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf>
-            <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="32">
-                    <caret line="1058" column="41" lean-forward="false" selection-start-line="1058" selection-start-column="29" selection-end-line="1058" selection-end-column="41" />
-                    <folding>
-                      <element signature="e#6872#7505#0" expanded="false" />
-                      <element signature="e#25402#28809#0" expanded="false" />
-                      <element signature="e#28854#30136#0" expanded="false" />
-                      <element signature="e#52802#55288#0" expanded="false" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="ExportToHTMLSettings">
@@ -105,7 +76,7 @@
       <file leaf-file-name="Visualization.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="526">
+            <state relative-caret-position="4642">
               <caret line="213" column="0" lean-forward="false" selection-start-line="213" selection-start-column="0" selection-end-line="213" selection-end-column="0" />
               <folding />
             </state>
@@ -115,7 +86,7 @@
       <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="491">
+            <state relative-caret-position="12936">
               <caret line="595" column="47" lean-forward="false" selection-start-line="595" selection-start-column="43" selection-end-line="595" selection-end-column="47" />
               <folding />
             </state>
@@ -125,8 +96,8 @@
       <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="511" column="14" lean-forward="false" selection-start-line="511" selection-start-column="14" selection-end-line="511" selection-end-column="14" />
+            <state relative-caret-position="528">
+              <caret line="832" column="62" lean-forward="true" selection-start-line="832" selection-start-column="62" selection-end-line="832" selection-end-column="62" />
               <folding>
                 <element signature="e#6872#7505#0" expanded="false" />
                 <element signature="e#14897#17520#0" expanded="false" />
@@ -138,10 +109,9 @@
                 <element signature="e#32441#33133#0" expanded="false" />
                 <element signature="e#33180#34779#0" expanded="false" />
                 <element signature="e#34827#36467#0" expanded="false" />
-                <element signature="e#36521#39333#0" expanded="false" />
-                <element signature="e#39378#40265#0" expanded="false" />
-                <element signature="e#40313#41104#0" expanded="false" />
-                <element signature="e#52802#55288#0" expanded="false" />
+                <element signature="e#40353#41240#0" expanded="false" />
+                <element signature="e#41288#42079#0" expanded="false" />
+                <element signature="e#53777#56263#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -150,7 +120,7 @@
       <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
+            <state relative-caret-position="2596">
               <caret line="122" column="1" lean-forward="false" selection-start-line="122" selection-start-column="1" selection-end-line="122" selection-end-column="1" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
@@ -162,7 +132,7 @@
       <file leaf-file-name="GeMpy.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
+            <state relative-caret-position="1078">
               <caret line="49" column="0" lean-forward="false" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
               <folding>
                 <element signature="e#190#221#0" expanded="true" />
@@ -175,7 +145,7 @@
         <entry file="file://$PROJECT_DIR$/GeMpy/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="242">
-              <caret line="11" column="8" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+              <caret line="11" column="8" lean-forward="false" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -341,6 +311,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -398,7 +369,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -792,13 +762,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00045" summary="Docs 0.98&#10;&#10;This may be the last one?">
-      <created>1482411707937</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1482411707937</updated>
-    </task>
     <task id="LOCAL-00046" summary="Docs 0.981&#10;&#10;Nop it wasnt">
       <created>1482412073944</created>
       <option name="number" value="00046" />
@@ -1135,7 +1098,14 @@
       <option name="project" value="LOCAL" />
       <updated>1494320823358</updated>
     </task>
-    <option name="localTasksCounter" value="95" />
+    <task id="LOCAL-00095" summary="solved faults bug">
+      <created>1494353005203</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1494353005203</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1159,26 +1129,26 @@
     <frame x="65" y="52" width="1855" height="1028" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19402985" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19624102" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1743215" sideWeight="0.49243027" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2672234" sideWeight="0.5843007" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906324" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26666668" sideWeight="0.41569927" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.340625" sideWeight="0.4792703" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20215054" sideWeight="0.48258707" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12669323" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29354838" sideWeight="0.4948207" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35281837" sideWeight="0.48207173" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20215054" sideWeight="0.48258707" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498618" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2776618" sideWeight="0.53545815" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Concurrent Activities Diagram" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35281837" sideWeight="0.48207173" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17438272" sideWeight="0.49243027" order="6" side_tool="false" content_ui="tabs" />
@@ -1236,7 +1206,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="pymc3 Running after almost two years and couple of thousands lines of code. Piece of cake" />
     <MESSAGE value="pymc3 Running notebook" />
     <MESSAGE value="Commit almost faults there. Solving the problem of where to interpolate the potential field" />
     <MESSAGE value="Infinite Faults Baby!!!!" />
@@ -1261,7 +1230,8 @@
     <MESSAGE value="comparing sandstone GeMpy vs Sandstone" />
     <MESSAGE value="tests a,b,c" />
     <MESSAGE value="learnt how to update all variables and constants without compiling" />
-    <option name="LAST_COMMIT_MESSAGE" value="learnt how to update all variables and constants without compiling" />
+    <MESSAGE value="solved faults bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="solved faults bug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1483,7 +1453,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="526">
+        <state relative-caret-position="4642">
           <caret line="213" column="0" lean-forward="false" selection-start-line="213" selection-start-column="0" selection-end-line="213" selection-end-column="0" />
           <folding />
         </state>
@@ -1491,7 +1461,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
+        <state relative-caret-position="1078">
           <caret line="49" column="0" lean-forward="false" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
           <folding>
             <element signature="e#190#221#0" expanded="true" />
@@ -1502,14 +1472,14 @@
     <entry file="file://$PROJECT_DIR$/GeMpy/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="242">
-          <caret line="11" column="8" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+          <caret line="11" column="8" lean-forward="false" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
+        <state relative-caret-position="2596">
           <caret line="122" column="1" lean-forward="false" selection-start-line="122" selection-start-column="1" selection-end-line="122" selection-end-column="1" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
@@ -1519,7 +1489,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
+        <state relative-caret-position="12936">
           <caret line="595" column="47" lean-forward="false" selection-start-line="595" selection-start-column="43" selection-end-line="595" selection-end-column="47" />
           <folding />
         </state>
@@ -1527,8 +1497,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="511" column="14" lean-forward="false" selection-start-line="511" selection-start-column="14" selection-end-line="511" selection-end-column="14" />
+        <state relative-caret-position="528">
+          <caret line="832" column="62" lean-forward="true" selection-start-line="832" selection-start-column="62" selection-end-line="832" selection-end-column="62" />
           <folding>
             <element signature="e#6872#7505#0" expanded="false" />
             <element signature="e#14897#17520#0" expanded="false" />
@@ -1540,10 +1510,9 @@
             <element signature="e#32441#33133#0" expanded="false" />
             <element signature="e#33180#34779#0" expanded="false" />
             <element signature="e#34827#36467#0" expanded="false" />
-            <element signature="e#36521#39333#0" expanded="false" />
-            <element signature="e#39378#40265#0" expanded="false" />
-            <element signature="e#40313#41104#0" expanded="false" />
-            <element signature="e#52802#55288#0" expanded="false" />
+            <element signature="e#40353#41240#0" expanded="false" />
+            <element signature="e#41288#42079#0" expanded="false" />
+            <element signature="e#53777#56263#0" expanded="false" />
           </folding>
         </state>
       </provider>

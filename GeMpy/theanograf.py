@@ -807,17 +807,33 @@ class TheanoGraph_pro(object):
         # Here I create the universal terms for rest and ref. The universal terms for the grid are done in python
         # and append here. The idea is that the grid is kind of constant so I do not have to recompute it every
         # time
-        _universal_terms_interfaces = T.horizontal_stack(
+        _universal_terms_interfaces_rest = T.horizontal_stack(
             self.rest_layer_points_all,
             (self.rest_layer_points_all ** 2),
             T.stack((self.rest_layer_points_all[:, 0] * self.rest_layer_points_all[:, 1],
                      self.rest_layer_points_all[:, 0] * self.rest_layer_points_all[:, 2],
-                     self.rest_layer_points_all[:, 1] * self.rest_layer_points_all[:, 2]), axis=1)).T
+                     self.rest_layer_points_all[:, 1] * self.rest_layer_points_all[:, 2]), axis=1))
+
+        _universal_terms_interfaces_ref = T.horizontal_stack(
+            self.ref_layer_points_all,
+            (self.ref_layer_points_all ** 2),
+            T.stack((self.ref_layer_points_all[:, 0] * self.ref_layer_points_all[:, 1],
+                     self.ref_layer_points_all[:, 0] * self.ref_layer_points_all[:, 2],
+                     self.ref_layer_points_all[:, 1] * self.ref_layer_points_all[:, 2]), axis=1),
+        )
+
+        # _universal_terms_interfaces = T.horizontal_stack(
+        #     self.rest_layer_points_all,
+        #     (self.rest_layer_points_all ** 2),
+        #     T.stack((self.rest_layer_points_all[:, 0] * self.rest_layer_points_all[:, 1],
+        #              self.rest_layer_points_all[:, 0] * self.rest_layer_points_all[:, 2],
+        #              self.rest_layer_points_all[:, 1] * self.rest_layer_points_all[:, 2]), axis=1)).T
 
         # I append rest and ref to grid
         universal_grid_interfaces_matrix = T.horizontal_stack(
             (self.universal_grid_matrix_T * self.yet_simulated).nonzero_values().reshape((9, -1)),
-            T.tile(_universal_terms_interfaces, (1, 2)))
+            T.vertical_stack(_universal_terms_interfaces_rest, _universal_terms_interfaces_ref).T)
+          #  T.tile(_universal_terms_interfaces, (1, 2)))
 
         # These are the magic terms to get the same as geomodeller
         gi_rescale_aux = T.repeat(self.gi_reescale, 9)
