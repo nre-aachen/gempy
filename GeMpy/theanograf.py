@@ -515,7 +515,7 @@ class TheanoGraph_pro(object):
 
      #   F_I = (self.fault_matrix[:, -2*len_points:-len_points] - self.fault_matrix[:, -len_points:])[self.n_formation_op-1]
 
-        F_I = fault_matrix_at_interfaces_rest - fault_matrix_at_interfaces_ref
+        F_I = fault_matrix_at_interfaces_ref - fault_matrix_at_interfaces_rest
 
         # As long as the drift is a constant F_G is null
         F_G = T.zeros((self.fault_matrix.shape[0], lenght_of_CG))

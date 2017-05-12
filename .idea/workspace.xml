@@ -4,6 +4,9 @@
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/theanograf.py" afterPath="$PROJECT_DIR$/GeMpy/theanograf.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_2_Simple_PyMC3.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_2_Simple_PyMC3.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/FabianThesis.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/FabianThesis.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/Untitled.ipynb" afterPath="$PROJECT_DIR$/test/Untitled.ipynb" />
     </list>
     <ignored path="GeMpy.iws" />
@@ -76,8 +79,8 @@
       <file leaf-file-name="Visualization.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4642">
-              <caret line="213" column="0" lean-forward="false" selection-start-line="213" selection-start-column="0" selection-end-line="213" selection-end-column="0" />
+            <state relative-caret-position="674">
+              <caret line="159" column="30" lean-forward="false" selection-start-line="159" selection-start-column="30" selection-end-line="159" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -86,18 +89,18 @@
       <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="12936">
-              <caret line="595" column="47" lean-forward="false" selection-start-line="595" selection-start-column="43" selection-end-line="595" selection-end-column="47" />
+            <state relative-caret-position="1384">
+              <caret line="499" column="21" lean-forward="false" selection-start-line="499" selection-start-column="12" selection-end-line="499" selection-end-column="21" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="528">
-              <caret line="832" column="62" lean-forward="true" selection-start-line="832" selection-start-column="62" selection-end-line="832" selection-end-column="62" />
+            <state relative-caret-position="220">
+              <caret line="13" column="39" lean-forward="false" selection-start-line="13" selection-start-column="39" selection-end-line="13" selection-end-column="39" />
               <folding>
                 <element signature="e#6872#7505#0" expanded="false" />
                 <element signature="e#14897#17520#0" expanded="false" />
@@ -109,7 +112,6 @@
                 <element signature="e#32441#33133#0" expanded="false" />
                 <element signature="e#33180#34779#0" expanded="false" />
                 <element signature="e#34827#36467#0" expanded="false" />
-                <element signature="e#40353#41240#0" expanded="false" />
                 <element signature="e#41288#42079#0" expanded="false" />
                 <element signature="e#53777#56263#0" expanded="false" />
               </folding>
@@ -117,10 +119,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="geogrid.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../pygeomod/pygeomod/geogrid.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="11946">
+              <caret line="547" column="13" lean-forward="false" selection-start-line="547" selection-start-column="13" selection-end-line="547" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2596">
+            <state relative-caret-position="548">
               <caret line="122" column="1" lean-forward="false" selection-start-line="122" selection-start-column="1" selection-end-line="122" selection-end-column="1" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
@@ -164,7 +176,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>kwar</find>
       <find>self.u_grade_T</find>
       <find>-len</find>
       <find>n_var</find>
@@ -194,11 +205,11 @@
       <find>faults int</find>
       <find>rest</find>
       <find>n_formation_op</find>
+      <find>vtk</find>
     </findStrings>
     <replaceStrings>
       <replace>compute_potential_field</replace>
       <replace>compute_potential_fields</replace>
-      <replace />
       <replace />
     </replaceStrings>
   </component>
@@ -311,8 +322,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -369,12 +378,14 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pymc3-master" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pygeomod/pygeomod/geogrid.py" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="Sqlite (Xerial)" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="34" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
@@ -762,13 +773,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00046" summary="Docs 0.981&#10;&#10;Nop it wasnt">
-      <created>1482412073944</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1482412073944</updated>
-    </task>
     <task id="LOCAL-00047" summary="Docs 0.984&#10;&#10;This is going to be IT">
       <created>1482412189385</created>
       <option name="number" value="00047" />
@@ -1105,7 +1109,14 @@
       <option name="project" value="LOCAL" />
       <updated>1494353005203</updated>
     </task>
-    <option name="localTasksCounter" value="96" />
+    <task id="LOCAL-00096" summary="faults problem solved">
+      <created>1494421145203</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1494421145204</updated>
+    </task>
+    <option name="localTasksCounter" value="97" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1129,7 +1140,7 @@
     <frame x="65" y="52" width="1855" height="1028" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19624102" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19845219" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1743215" sideWeight="0.49243027" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2672234" sideWeight="0.5843007" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906324" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1206,7 +1217,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="pymc3 Running notebook" />
     <MESSAGE value="Commit almost faults there. Solving the problem of where to interpolate the potential field" />
     <MESSAGE value="Infinite Faults Baby!!!!" />
     <MESSAGE value="Faults notebook" />
@@ -1231,7 +1241,8 @@
     <MESSAGE value="tests a,b,c" />
     <MESSAGE value="learnt how to update all variables and constants without compiling" />
     <MESSAGE value="solved faults bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="solved faults bug" />
+    <MESSAGE value="faults problem solved" />
+    <option name="LAST_COMMIT_MESSAGE" value="faults problem solved" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1269,7 +1280,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/GeMpy/External_communication.py" />
     <entry file="file://$PROJECT_DIR$/docs/build/lib/GeMpy/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -1447,15 +1457,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4642">
-          <caret line="213" column="0" lean-forward="false" selection-start-line="213" selection-start-column="0" selection-end-line="213" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1477,28 +1478,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/test.py">
+    <entry file="file://$PROJECT_DIR$/../pygeomod/pygeomod/geogrid.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2596">
-          <caret line="122" column="1" lean-forward="false" selection-start-line="122" selection-start-column="1" selection-end-line="122" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="11946">
+          <caret line="547" column="13" lean-forward="false" selection-start-line="547" selection-start-column="13" selection-end-line="547" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12936">
-          <caret line="595" column="47" lean-forward="false" selection-start-line="595" selection-start-column="43" selection-end-line="595" selection-end-column="47" />
+        <state relative-caret-position="1384">
+          <caret line="499" column="21" lean-forward="false" selection-start-line="499" selection-start-column="12" selection-end-line="499" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GeMpy/Visualization.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="674">
+          <caret line="159" column="30" lean-forward="false" selection-start-line="159" selection-start-column="30" selection-end-line="159" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/theanograf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="832" column="62" lean-forward="true" selection-start-line="832" selection-start-column="62" selection-end-line="832" selection-end-column="62" />
+        <state relative-caret-position="220">
+          <caret line="13" column="39" lean-forward="false" selection-start-line="13" selection-start-column="39" selection-end-line="13" selection-end-column="39" />
           <folding>
             <element signature="e#6872#7505#0" expanded="false" />
             <element signature="e#14897#17520#0" expanded="false" />
@@ -1510,9 +1517,18 @@
             <element signature="e#32441#33133#0" expanded="false" />
             <element signature="e#33180#34779#0" expanded="false" />
             <element signature="e#34827#36467#0" expanded="false" />
-            <element signature="e#40353#41240#0" expanded="false" />
             <element signature="e#41288#42079#0" expanded="false" />
             <element signature="e#53777#56263#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="548">
+          <caret line="122" column="1" lean-forward="false" selection-start-line="122" selection-start-column="1" selection-end-line="122" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
