@@ -373,18 +373,61 @@ class DataManagement(object):
         for key in kwargs:
             self.interfaces.ix[index, str(key)] = kwargs[key]
 
-    def foliation_modify(self, index, **kwargs):
+    def interface_add(self, data):
         """
-        Allows modification of foliation data at specified dataframe index.
+        Adds interface to dataframe.
         Args:
-            index (int): dataframe index of the foliation point 
-            **kwargs: G_x, G_y, G_z, X, Y, Z, azimuth, dip
+            data (list): [X, Y, Z, formation, labels, order_series, series]
 
         Returns: Nothing
 
         """
+        self.interfaces.loc[0] = data
+
+    def interface_drop(self, index):
+        """
+        Drops interface from dataframe identified by index
+        Args:
+            index: dataframe index
+
+        Returns: Nothing
+
+        """
+        self.interfaces.drop(index, inplace=True)
+
+    def foliation_modify(self, index, **kwargs):
+        """
+        Allows modification of foliation data at specified dataframe index.
+        Args:
+            index: dataframe index of the foliation point 
+            **kwargs: G_x, G_y, G_z, X, Y, Z, azimuth, dip, formation, labels, order_series, polarity
+
+        Returns: Nothing
+        """
         for key in kwargs:
             self.foliations.ix[index, str(key)] = kwargs[key]
+
+    def foliation_add(self, data):
+        """
+        Adds foliation to dataframe.
+        Args:
+            data (list): [G_x, G_y, G_z, X, Y, Z, azimuth, dip, formation, labels, order_series, polarity, series]
+
+        Returns: Nothing
+
+        """
+        self.foliations.loc[0] = data
+
+    def foliations_drop(self, index):
+        """
+        Drops foliation from dataframe identified by index
+        Args:
+            index: dataframe index
+
+        Returns: Nothing
+
+        """
+        self.foliations.drop(index, inplace=True)
 
 
     class GridClass(object):
