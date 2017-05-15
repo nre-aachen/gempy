@@ -351,6 +351,42 @@ class DataManagement(object):
         except ValueError:
             pass
 
+    def reset_indices(self):
+        """
+        Resets dataframe indices for foliations and interfaces.
+        Returns: Nothing
+
+        """
+        self.interfaces.reset_index(inplace=True, drop=True)
+        self.foliations.reset_index(inplace=True, drop=True)
+
+    def interface_modify(self, index, **kwargs):
+        """
+        Allows modification of the x,y and/or z-coordinates of an interface at specified dataframe index.
+        Args:
+            index: dataframe index of the foliation point 
+            **kwargs: X, Y, Z (int or float)
+
+        Returns: Nothing
+
+        """
+        for key in kwargs:
+            self.interfaces.ix[index, str(key)] = kwargs[key]
+
+    def foliation_modify(self, index, **kwargs):
+        """
+        Allows modification of foliation data at specified dataframe index.
+        Args:
+            index (int): dataframe index of the foliation point 
+            **kwargs: G_x, G_y, G_z, X, Y, Z, azimuth, dip
+
+        Returns: Nothing
+
+        """
+        for key in kwargs:
+            self.foliations.ix[index, str(key)] = kwargs[key]
+
+
     class GridClass(object):
         """
         -DOCS NOT UPDATED- Class with set of functions to generate grids
