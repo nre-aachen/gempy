@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/GeMpy.iml" afterPath="$PROJECT_DIR$/.idea/GeMpy.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/Visualization.py" afterPath="$PROJECT_DIR$/GeMpy/Visualization.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/theanograf.py" afterPath="$PROJECT_DIR$/GeMpy/theanograf.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/FabianThesis.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/FabianThesis.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Visualization.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Visualization.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/Untitled.ipynb" afterPath="$PROJECT_DIR$/test/Untitled.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test.py" afterPath="$PROJECT_DIR$/test/test.py" />
     </list>
     <ignored path="GeMpy.iws" />
@@ -61,8 +57,8 @@
       <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="333">
-              <caret line="361" column="46" lean-forward="false" selection-start-line="361" selection-start-column="46" selection-end-line="361" selection-end-column="46" />
+            <state relative-caret-position="267">
+              <caret line="473" column="41" lean-forward="true" selection-start-line="473" selection-start-column="41" selection-end-line="473" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -84,17 +80,17 @@
             <state relative-caret-position="856">
               <caret line="1201" column="23" lean-forward="false" selection-start-line="1201" selection-start-column="12" selection-end-line="1201" selection-end-column="23" />
               <folding>
-                <element signature="e#6869#7502#0" expanded="false" />
-                <element signature="e#14894#17517#0" expanded="false" />
-                <element signature="e#17523#17530#0" expanded="false" />
-                <element signature="e#17979#23040#0" expanded="false" />
-                <element signature="e#25061#28468#0" expanded="false" />
-                <element signature="e#28513#29795#0" expanded="false" />
-                <element signature="e#29834#30814#0" expanded="false" />
-                <element signature="e#32100#32792#0" expanded="false" />
-                <element signature="e#32839#34438#0" expanded="false" />
-                <element signature="e#34486#36126#0" expanded="false" />
-                <element signature="e#40947#41738#0" expanded="false" />
+                <element signature="e#6873#7506#0" expanded="false" />
+                <element signature="e#14898#17521#0" expanded="false" />
+                <element signature="e#17527#17534#0" expanded="false" />
+                <element signature="e#17983#23044#0" expanded="false" />
+                <element signature="e#25065#28472#0" expanded="false" />
+                <element signature="e#28517#29799#0" expanded="false" />
+                <element signature="e#29838#30818#0" expanded="false" />
+                <element signature="e#32104#32796#0" expanded="false" />
+                <element signature="e#32843#34442#0" expanded="false" />
+                <element signature="e#34490#36130#0" expanded="false" />
+                <element signature="e#40951#41742#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -115,8 +111,8 @@
       <file leaf-file-name="test.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="702">
-              <caret line="281" column="20" lean-forward="false" selection-start-line="281" selection-start-column="20" selection-end-line="281" selection-end-column="20" />
+            <state relative-caret-position="990">
+              <caret line="75" column="0" lean-forward="true" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -295,60 +291,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="&lt; Python 3.6.0 (~/anaconda3/bin/python) &gt;" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="&lt; Python 3.6.0 (~/anaconda3/bin/python) &gt;" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="site-packages" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="&lt; Python 3.6.0 (~/anaconda3/bin/python) &gt;" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="site-packages" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GeMpy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="GeMpy" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -375,7 +317,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="settings.github" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../pygeomod/pygeomod/geogrid.py" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="Sqlite (Xerial)" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="34" />
@@ -764,13 +706,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00048" summary="New structure following my brothers advices">
-      <created>1483467316109</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1483467316109</updated>
-    </task>
     <task id="LOCAL-00050" summary="last changes to GeMpy.py to leave it decent for Orleans">
       <created>1484039762111</created>
       <option name="number" value="00050" />
@@ -1107,7 +1042,14 @@
       <option name="project" value="LOCAL" />
       <updated>1494590546591</updated>
     </task>
-    <option name="localTasksCounter" value="98" />
+    <task id="LOCAL-00098" summary="new test, addition of read vox and get formation numbers">
+      <created>1495551126256</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1495551126256</updated>
+    </task>
+    <option name="localTasksCounter" value="99" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1211,7 +1153,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Infinite Faults Baby!!!!" />
     <MESSAGE value="Faults notebook" />
     <MESSAGE value="debugging faults" />
     <MESSAGE value="Update of notebook examples" />
@@ -1236,7 +1177,8 @@
     <MESSAGE value="solved faults bug" />
     <MESSAGE value="faults problem solved" />
     <MESSAGE value="fix bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix bug" />
+    <MESSAGE value="new test, addition of read vox and get formation numbers" />
+    <option name="LAST_COMMIT_MESSAGE" value="new test, addition of read vox and get formation numbers" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1522,33 +1464,33 @@
         <state relative-caret-position="856">
           <caret line="1201" column="23" lean-forward="false" selection-start-line="1201" selection-start-column="12" selection-end-line="1201" selection-end-column="23" />
           <folding>
-            <element signature="e#6869#7502#0" expanded="false" />
-            <element signature="e#14894#17517#0" expanded="false" />
-            <element signature="e#17523#17530#0" expanded="false" />
-            <element signature="e#17979#23040#0" expanded="false" />
-            <element signature="e#25061#28468#0" expanded="false" />
-            <element signature="e#28513#29795#0" expanded="false" />
-            <element signature="e#29834#30814#0" expanded="false" />
-            <element signature="e#32100#32792#0" expanded="false" />
-            <element signature="e#32839#34438#0" expanded="false" />
-            <element signature="e#34486#36126#0" expanded="false" />
-            <element signature="e#40947#41738#0" expanded="false" />
+            <element signature="e#6873#7506#0" expanded="false" />
+            <element signature="e#14898#17521#0" expanded="false" />
+            <element signature="e#17527#17534#0" expanded="false" />
+            <element signature="e#17983#23044#0" expanded="false" />
+            <element signature="e#25065#28472#0" expanded="false" />
+            <element signature="e#28517#29799#0" expanded="false" />
+            <element signature="e#29838#30818#0" expanded="false" />
+            <element signature="e#32104#32796#0" expanded="false" />
+            <element signature="e#32843#34442#0" expanded="false" />
+            <element signature="e#34490#36130#0" expanded="false" />
+            <element signature="e#40951#41742#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="333">
-          <caret line="361" column="46" lean-forward="false" selection-start-line="361" selection-start-column="46" selection-end-line="361" selection-end-column="46" />
+        <state relative-caret-position="267">
+          <caret line="473" column="41" lean-forward="true" selection-start-line="473" selection-start-column="41" selection-end-line="473" selection-end-column="41" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="702">
-          <caret line="281" column="20" lean-forward="false" selection-start-line="281" selection-start-column="20" selection-end-line="281" selection-end-column="20" />
+        <state relative-caret-position="990">
+          <caret line="75" column="0" lean-forward="true" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
