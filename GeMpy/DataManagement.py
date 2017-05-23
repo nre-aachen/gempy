@@ -351,6 +351,84 @@ class DataManagement(object):
         except ValueError:
             pass
 
+    def reset_indices(self):
+        """
+        Resets dataframe indices for foliations and interfaces.
+        Returns: Nothing
+
+        """
+        self.interfaces.reset_index(inplace=True, drop=True)
+        self.foliations.reset_index(inplace=True, drop=True)
+
+    def interface_modify(self, index, **kwargs):
+        """
+        Allows modification of the x,y and/or z-coordinates of an interface at specified dataframe index.
+        Args:
+            index: dataframe index of the foliation point
+            **kwargs: X, Y, Z (int or float)
+
+        Returns: Nothing
+
+        """
+        for key in kwargs:
+            self.interfaces.ix[index, str(key)] = kwargs[key]
+
+    def interface_add(self, data):
+        """
+        Adds interface to dataframe.
+        Args:
+            data (list): [X, Y, Z, formation, labels, order_series, series]
+
+        Returns: Nothing
+
+        """
+        self.interfaces.loc[0] = data
+
+    def interface_drop(self, index):
+        """
+        Drops interface from dataframe identified by index
+        Args:
+            index: dataframe index
+
+        Returns: Nothing
+
+        """
+        self.interfaces.drop(index, inplace=True)
+
+    def foliation_modify(self, index, **kwargs):
+        """
+        Allows modification of foliation data at specified dataframe index.
+        Args:
+            index: dataframe index of the foliation point
+            **kwargs: G_x, G_y, G_z, X, Y, Z, azimuth, dip, formation, labels, order_series, polarity
+
+        Returns: Nothing
+        """
+        for key in kwargs:
+            self.foliations.ix[index, str(key)] = kwargs[key]
+
+    def foliation_add(self, data):
+        """
+        Adds foliation to dataframe.
+        Args:
+            data (list): [G_x, G_y, G_z, X, Y, Z, azimuth, dip, formation, labels, order_series, polarity, series]
+
+        Returns: Nothing
+
+        """
+        self.foliations.loc[0] = data
+
+    def foliations_drop(self, index):
+        """
+        Drops foliation from dataframe identified by index
+        Args:
+            index: dataframe index
+
+        Returns: Nothing
+
+        """
+        self.foliations.drop(index, inplace=True)
+
     def get_formation_number(self):
         pn_series = self.interfaces.groupby('formation number').formation.unique()
         ip_addresses = {}

@@ -59,7 +59,7 @@ class TheanoGraph_pro(object):
         # ======================
         # INITIALIZE SHARED
         # ====================
-        self.u_grade_T = theano.shared(np.arange(2, dtype='int'), "Grade of the universal drift")
+        self.u_grade_T = theano.shared(np.arange(2, dtype='int64'), "Grade of the universal drift")
         self.a_T = theano.shared(np.cast[dtype](1.), "Range")
         self.c_o_T = theano.shared(np.cast[dtype](1.), 'Covariance at 0')
         self.nugget_effect_grad_T = theano.shared(np.cast[dtype](0.01))
@@ -80,7 +80,7 @@ class TheanoGraph_pro(object):
         # using these values to the different potential fields and formations
         self.len_series_i = theano.shared(np.arange(2, dtype='int64'), 'Length of interfaces in every series')
         self.len_series_f = theano.shared(np.arange(2, dtype='int64'), 'Length of foliations in every series')
-        self.n_formations_per_serie = theano.shared(np.arange(3, dtype='int'), 'List with the number of formations')
+        self.n_formations_per_serie = theano.shared(np.arange(3, dtype='int64'), 'List with the number of formations')
         self.n_formation = theano.shared(np.arange(2, dtype='int64'), "Value of the formation")
         self.number_of_points_per_formation_T = theano.shared(np.zeros(3, dtype='int64'))
 
