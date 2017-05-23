@@ -429,7 +429,6 @@ class DataManagement(object):
         """
         self.foliations.drop(index, inplace=True)
 
-
     class GridClass(object):
         """
         -DOCS NOT UPDATED- Class with set of functions to generate grids
