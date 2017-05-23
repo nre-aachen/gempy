@@ -8,6 +8,9 @@ import GeMpy
 
 
 class TestNoFaults:
+    """
+    I am testing all block and potential field values so sol is (n_block+n_pot)
+    """
     # Init interpolator
     @pytest.fixture(scope='class')
     def interpolator(self):
@@ -59,6 +62,7 @@ class TestNoFaults:
         rescaled_data = GeMpy.rescale_data(geo_data)
 
         data_interp.interpolator._data_scaled = rescaled_data
+        data_interp.interpolator._grid_scaled = rescaled_data.grid
         data_interp.interpolator.order_table()
         data_interp.interpolator.set_theano_shared_parameteres()
 
@@ -91,6 +95,7 @@ class TestNoFaults:
         rescaled_data = GeMpy.rescale_data(geo_data)
 
         data_interp.interpolator._data_scaled = rescaled_data
+        data_interp.interpolator._grid_scaled = rescaled_data.grid
         data_interp.interpolator.order_table()
         data_interp.interpolator.set_theano_shared_parameteres()
 
@@ -106,7 +111,7 @@ class TestNoFaults:
 
     def test_c(self, theano_f):
         """
-        Two layers a bit curvy, drift degree 2
+        Two layers a bit curvy, drift degree 0
         """
         data_interp = theano_f[0]
         compiled_f = theano_f[1]
@@ -119,6 +124,7 @@ class TestNoFaults:
         rescaled_data = GeMpy.rescale_data(geo_data)
 
         data_interp.interpolator._data_scaled = rescaled_data
+        data_interp.interpolator._grid_scaled = rescaled_data.grid
         data_interp.interpolator.order_table()
         data_interp.interpolator.set_theano_shared_parameteres()
 
@@ -131,3 +137,152 @@ class TestNoFaults:
 
         real_sol = np.load('test_c_sol.npy')
         np.testing.assert_array_almost_equal(sol, real_sol, decimal=3)
+
+
+class TestFaults:
+    @pytest.fixture(scope='class')
+    def theano_f_1f(self):
+        # Importing the data from csv files and settign extent and resolution
+        geo_data = GeMpy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
+                                     path_f="./GeoModeller/test_d/test_d_Foliations.csv",
+                                     path_i="./GeoModeller/test_d/test_d_Points.csv")
+
+        GeMpy.set_data_series(geo_data, {'series': ('A', 'B'),
+                                        'fault1': 'f1'}, order_series=['fault1', 'series'])
+
+        data_interp = GeMpy.set_interpolator(geo_data,
+                                             dtype="float64",
+                                             verbose=['solve_kriging',
+                                                      'faults block'
+                                                      ])
+
+        # Set all the theano shared parameters and return the symbolic variables (the input of the theano function)
+        input_data_T = data_interp.interpolator.tg.input_parameters_list()
+
+        # Prepare the input data (interfaces, foliations data) to call the theano function.
+        # Also set a few theano shared variables with the len of formations series and so on
+        input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
+
+        # Compile the theano function.
+        compiled_f = theano.function(input_data_T, data_interp.interpolator.tg.whole_block_model(1),
+                                     allow_input_downcast=True, profile=True)
+        data_interp.interpolator.get_kriging_parameters()
+
+        return data_interp, compiled_f
+
+    def test_d(self, theano_f_1f):
+        """
+        Two layers 1 fault
+        """
+        data_interp = theano_f_1f[0]
+        compiled_f = theano_f_1f[1]
+
+        # Importing the data from csv files and settign extent and resolution
+        geo_data = GeMpy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
+                                     path_f="./GeoModeller/test_d/test_d_Foliations.csv",
+                                     path_i="./GeoModeller/test_d/test_d_Points.csv")
+
+        GeMpy.set_data_series(geo_data, {'series': ('A', 'B'),
+                                          'fault1': 'f1'}, order_series=['fault1', 'series'])
+
+        rescaled_data = GeMpy.rescale_data(geo_data)
+
+
+        data_interp.interpolator._data_scaled = rescaled_data
+        data_interp.interpolator._grid_scaled = rescaled_data.grid
+        data_interp.interpolator.order_table()
+        data_interp.interpolator.set_theano_shared_parameteres()
+
+        # Prepare the input data (interfaces, foliations data) to call the theano function.
+        # Also set a few theano shared variables with the len of formations series and so on
+        input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
+
+        data_interp.interpolator.get_kriging_parameters()
+
+        sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
+                         input_data_P[5])
+       # print(data_interp.rescale_factor, 'rescale')
+        real_sol = np.load('test_d_sol.npy')
+        np.testing.assert_array_almost_equal(sol, real_sol, decimal=3)
+
+    def test_e(self, theano_f_1f):
+        """
+        Two layers a bit curvy, 1 fault
+        """
+        data_interp = theano_f_1f[0]
+        compiled_f = theano_f_1f[1]
+
+        # Importing the data from csv files and settign extent and resolution
+        geo_data = GeMpy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
+                                     path_f="./GeoModeller/test_e/test_e_Foliations.csv",
+                                     path_i="./GeoModeller/test_e/test_e_Points.csv")
+
+        GeMpy.set_data_series(geo_data, {'series': ('A', 'B'),
+                                        'fault1': 'f1'}, order_series=['fault1', 'series'])
+
+        rescaled_data = GeMpy.rescale_data(geo_data)
+
+        data_interp.interpolator._data_scaled = rescaled_data
+        data_interp.interpolator._grid_scaled = rescaled_data.grid
+        data_interp.interpolator.order_table()
+        data_interp.interpolator.set_theano_shared_parameteres()
+
+        # Prepare the input data (interfaces, foliations data) to call the theano function.
+        # Also set a few theano shared variables with the len of formations series and so on
+        input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
+
+        data_interp.interpolator.get_kriging_parameters()
+
+        sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
+                         input_data_P[5])
+       # print(data_interp.rescale_factor, 'rescale')
+        real_sol = np.load('test_e_sol.npy')
+        np.testing.assert_array_almost_equal(sol, real_sol, decimal=3)
+
+    def test_f(self, theano_f_1f):
+        """
+        Two layers a bit curvy, 1 fault
+        """
+        data_interp = theano_f_1f[0]
+        compiled_f = theano_f_1f[1]
+
+        # Importing the data from csv files and settign extent and resolution
+        geo_data = GeMpy.import_data([0, 2000, 0, 2000, -2000, 0], [50, 50, 50],
+                                     path_f="./GeoModeller/test_f/test_f_Foliations.csv",
+                                     path_i="./GeoModeller/test_f/test_f_Points.csv")
+
+        geo_data.set_formation_number(geo_data.formations[[3, 2, 1, 0, 4]])
+
+        GeMpy.set_data_series(geo_data, {'series': ('Reservoir'
+                                                    , 'Seal',
+                                                    'SecondaryReservoir',
+                                                    'NonReservoirDeep'
+                                                    ),
+                                         'fault1': 'MainFault'},
+                              order_series=['fault1', 'series'])
+
+        rescaled_data = GeMpy.rescale_data(geo_data)
+
+        data_interp.interpolator._data_scaled = rescaled_data
+        data_interp.interpolator._grid_scaled = rescaled_data.grid
+        data_interp.interpolator.order_table()
+        data_interp.interpolator.set_theano_shared_parameteres()
+
+        # Prepare the input data (interfaces, foliations data) to call the theano function.
+        # Also set a few theano shared variables with the len of formations series and so on
+        input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
+
+        data_interp.interpolator.get_kriging_parameters()
+
+        sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
+                         input_data_P[5])
+       # print(data_interp.rescale_factor, 'rescale')
+        real_sol = np.load('test_f_sol.npy')
+        np.testing.assert_array_almost_equal(sol, real_sol, decimal=2)
+        mismatch = ~np.isclose(sol, real_sol, rtol=0.01).sum()/np.product(sol.shape)
+        assert mismatch * 100 < 1
+        GeoMod_sol = geo_data.read_vox('./GeoModeller/test_f/test_f.vox')
+        similarity = ((GeoMod_sol - sol[0, 0, :]) != 0).sum() / sol[0, 0].shape[0]
+
+        print('The mismatch geomodeller-gempy is ', similarity*100, '%')
+        assert similarity < 0.05, 'The mismatch with geomodeller is too high'

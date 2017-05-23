@@ -13,7 +13,7 @@ import sys
 
 theano.config.optimizer = 'fast_compile'
 theano.config.exception_verbosity = 'high'
-theano.config.compute_test_value = 'ignore'
+theano.config.compute_test_value = 'off'
 theano.config.floatX = 'float32'
 theano.config.profile_memory = True
 
@@ -504,12 +504,9 @@ class TheanoGraph_pro(object):
         len_points = self.rest_layer_points_all.shape[0]
         interface_loc = self.fault_matrix.shape[1] - 2*len_points
 
-        len_points = theano.printing.Print('len points')(
-            len_points)
         fault_matrix_at_interfaces_rest = self.fault_matrix[:, interface_loc+self.len_i_0: interface_loc+self.len_i_1]
         fault_matrix_at_interfaces_ref =  self.fault_matrix[:, interface_loc+len_points+self.len_i_0: interface_loc+len_points+self.len_i_1]
-        fault_matrix_at_interfaces_rest = theano.printing.Print('Faults interfaces matrix rest')(fault_matrix_at_interfaces_rest)
-        fault_matrix_at_interfaces_ref = theano.printing.Print('Faults interfaces matrix ref')(fault_matrix_at_interfaces_ref)
+
        # len_points_i = 2*self.rest_layer_points_all.shape[0] + self.n_formation_op[0]-1
        # len_points_e = 2*self.rest_layer_points_all.shape[0] + self.n_formation_op[-1]-1
 
@@ -1283,5 +1280,5 @@ class TheanoGraph_pro(object):
             )
             #all_series = T.vertical_stack(all_series, all_series_pf)
 
-        return  all_series#self.fault_matrix
+        return all_series#self.fault_matrix
 

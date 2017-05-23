@@ -301,10 +301,97 @@ class PlotData(object):
     #
     #     p3.show()
 
-    def export_vtk(self):
+    def export_vtk_structured(self):
         """
         export vtk
         :return:
         """
 
+        # from evtk.hl import gridToVTK
+        #
+        # import numpy as np
+        #
+        # import random as rnd
+        #
+        # # Dimensions
+        #
+        # nx, ny, nz = 50, 50, 50
+        #
+        # lx, ly, lz = 10., 10., -10.0
+        #
+        # dx, dy, dz = lx / nx, ly / ny, lz / nz
+        #
+        # ncells = nx * ny * nz
+        #
+        # npoints = (nx + 1) * (ny + 1) * (nz + 1)
+        #
+        # # Coordinates
+        #
+        # X = np.arange(0, lx + 0.1 * dx, dx, dtype='float64')
+        #
+        # Y = np.arange(0, ly + 0.1 * dy, dy, dtype='float64')
+        #
+        # Z = np.arange(0, lz + 0.1 * dz, dz, dtype='float64')
+        #
+        # x = np.zeros((nx + 1, ny + 1, nz + 1))
+        #
+        # y = np.zeros((nx + 1, ny + 1, nz + 1))
+        #
+        # z = np.zeros((nx + 1, ny + 1, nz + 1))
+        #
+        # # We add some random fluctuation to make the grid more interesting
+        #
+        # for k in range(nz + 1):
+        #
+        #     for j in range(ny + 1):
+        #         for i in range(nx + 1):
+        #             x[i, j, k] = X[i] + (0.5 - rnd.random()) * 0.2 * dx
+        #
+        #             y[i, j, k] = Y[j] + (0.5 - rnd.random()) * 0.2 * dy
+        #
+        #             z[i, j, k] = Z[k] + (0.5 - rnd.random()) * 0.2 * dz
+        #
+        #             # Variables
+        #
+        # pressure = sol[0, 0, :].reshape((nx, ny, nz))
+        #
+        # gridToVTK("./structured", x, y, z, cellData={"pressure": pressure})
 
+    def export_vtk_rectilinear(self):
+        """
+        ajapg
+        Returns:
+
+        """
+        # from evtk.hl import gridToVTK
+        #
+        # import numpy as np
+        #
+        # # Dimensions
+        #
+        #
+        # nx, ny, nz = 50, 50, 50
+        #
+        # lx, ly, lz = 10., 10., -10.0
+        #
+        # dx, dy, dz = lx / nx, ly / ny, lz / nz
+        #
+        # ncells = nx * ny * nz
+        #
+        # npoints = (nx + 1) * (ny + 1) * (nz + 1)
+        #
+        # # Coordinates
+        #
+        # x = np.arange(0, lx + 0.1 * dx, dx, dtype='float64')
+        #
+        # y = np.arange(0, ly + 0.1 * dy, dy, dtype='float64')
+        #
+        # z = np.arange(0, lz + 0.1 * dz, dz, dtype='float64')
+        #
+        # # Variables
+        #
+        # pressure = sol[0, 0, :].reshape((nx, ny, nz))
+        #
+        # temp = np.random.rand(npoints).reshape((nx + 1, ny + 1, nz + 1))
+        #
+        # gridToVTK("./rectilinear", x, y, z, cellData={"lithology": pressure}, )

@@ -335,7 +335,7 @@ class DataManagement(object):
 
         return _series
 
-    def set_formation_number(self):
+    def set_formation_number(self, formation_order):
         """
         Set a unique number to each formation. NOTE: this method is getting deprecated since the user does not need
         to know it and also now the numbers must be set in the order of the series as well. Therefore this method
@@ -344,12 +344,40 @@ class DataManagement(object):
         Returns: Column in the interfaces and foliations dataframes
         """
         try:
-            ip_addresses = self.interfaces["formation"].unique()
+            ip_addresses = formation_order
             ip_dict = dict(zip(ip_addresses, range(1, len(ip_addresses)+1)))
             self.interfaces['formation number'] = self.interfaces['formation'].replace(ip_dict)
             self.foliations['formation number'] = self.foliations['formation'].replace(ip_dict)
         except ValueError:
             pass
+
+    def get_formation_number(self):
+        pn_series = self.interfaces.groupby('formation number').formation.unique()
+        ip_addresses = {}
+        for e, i in enumerate(pn_series):
+            ip_addresses[i[0]] = e + 1
+        ip_addresses['DefaultBasement'] = 0
+        return ip_addresses
+
+    # TODO think where this function should go
+    def read_vox(self, path):
+        """
+        read vox from geomodeller and transform it to gempy format
+        Returns:
+            numpy.array: block model
+        """
+
+        geo_res = pn.read_csv(path)
+
+        geo_res = geo_res.iloc[9:]
+
+        #ip_addresses = geo_res['nx 50'].unique()  # geo_data.interfaces["formation"].unique()
+        ip_dict = self.get_formation_number()
+
+        geo_res_num = geo_res.iloc[:, 0].replace(ip_dict)
+        block_geomodeller = np.ravel(geo_res_num.as_matrix().reshape(
+                                        self.resolution[0], self.resolution[1], self.resolution[2], order='C').T)
+        return block_geomodeller
 
     class GridClass(object):
         """
@@ -482,7 +510,9 @@ class DataManagement(object):
                                                      inplace=True)
 
             # Give formation number
-            self.set_formation_number()
+            if not 'formation number' in self._data_scaled.interfaces.columns:
+                print('I am here')
+                self.set_formation_number()
 
             # We order the pandas table by formation (also by series in case something weird happened)
             self._data_scaled.interfaces.sort_values(by=['order_series', 'formation number'],
@@ -530,7 +560,7 @@ class DataManagement(object):
 
             # Drop the reference points using pandas indeces to get just the rest_layers array
             pandas_rest_layer_points = self._data_scaled.interfaces.drop(ref_position)
-
+            self.pandas_rest_layer_points = pandas_rest_layer_points
             # TODO: do I need this? PYTHON
             # DEP- because per series the foliations do not belong to a formation but to the whole series
             # len_foliations = np.asarray(
@@ -695,3 +725,28 @@ class DataManagement(object):
             # Number of formations per series. The function is not pretty but the result is quite clear
             self.tg.n_formations_per_serie.set_value(
                 np.insert(self._data_scaled.interfaces.groupby('order_series').formation.nunique().values.cumsum(), 0, 0))
+
+        def get_kriging_parameters(self, verbose=0):
+            # range
+            print('range', self.tg.a_T.get_value(), self.tg.a_T.get_value() * self._data_scaled.rescaling_factor)
+            # Number of drift equations
+            print('Number of drift equations', self.tg.u_grade_T.get_value())
+            # Covariance at 0
+            print('Covariance at 0', self.tg.c_o_T.get_value())
+            # Foliations nugget effect
+            print('Foliations nugget effect', self.tg.nugget_effect_grad_T.get_value())
+
+            if verbose > 0:
+                # Input data shapes
+
+                # Lenght of the interfaces series
+                print('Length of the interfaces series', self.tg.len_series_i.get_value())
+                # Length of the foliations series
+                print('Length of the foliations series', self.tg.len_series_f.get_value())
+                # Number of formation
+                print('Number of formations', self.tg.n_formation.get_value())
+                # Number of formations per series
+                print('Number of formations per series', self.tg.n_formations_per_serie.get_value())
+                # Number of points per formation
+                print('Number of points per formation (rest)', self.tg.number_of_points_per_formation_T.get_value())
+
