@@ -75,7 +75,7 @@ class TestNoFaults:
                          input_data_P[5])
 
         real_sol = np.load('test_a_sol.npy')
-        np.testing.assert_array_almost_equal(sol, real_sol, decimal=3)
+        np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=3)
 
         GeMpy.plot_section(geo_data, 25, block=sol[0, 0, :], direction='y', plot_data=True)
         GeMpy.plot_potential_field(geo_data, sol[0, 1, :], 25)
@@ -107,7 +107,7 @@ class TestNoFaults:
                          input_data_P[5])
 
         real_sol = np.load('test_b_sol.npy')
-        np.testing.assert_array_almost_equal(sol, real_sol, decimal=3)
+        np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=3)
 
     def test_c(self, theano_f):
         """
@@ -136,7 +136,7 @@ class TestNoFaults:
                          input_data_P[5])
 
         real_sol = np.load('test_c_sol.npy')
-        np.testing.assert_array_almost_equal(sol, real_sol, decimal=3)
+        np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=3)
 
 
 class TestFaults:
@@ -203,7 +203,7 @@ class TestFaults:
                          input_data_P[5])
        # print(data_interp.rescale_factor, 'rescale')
         real_sol = np.load('test_d_sol.npy')
-        np.testing.assert_array_almost_equal(sol, real_sol, decimal=3)
+        np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=3)
 
     def test_e(self, theano_f_1f):
         """
@@ -237,7 +237,7 @@ class TestFaults:
                          input_data_P[5])
        # print(data_interp.rescale_factor, 'rescale')
         real_sol = np.load('test_e_sol.npy')
-        np.testing.assert_array_almost_equal(sol, real_sol, decimal=3)
+        np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=3)
 
     def test_f(self, theano_f_1f):
         """
@@ -278,8 +278,8 @@ class TestFaults:
                          input_data_P[5])
        # print(data_interp.rescale_factor, 'rescale')
         real_sol = np.load('test_f_sol.npy')
-        np.testing.assert_array_almost_equal(sol, real_sol, decimal=2)
-        mismatch = ~np.isclose(sol, real_sol, rtol=0.01).sum()/np.product(sol.shape)
+        np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=2)
+        mismatch = ~np.isclose(sol[:, :2, :], real_sol, rtol=0.01).sum()/np.product(sol.shape)
         assert mismatch * 100 < 1
         GeoMod_sol = geo_data.read_vox('./GeoModeller/test_f/test_f.vox')
         similarity = ((GeoMod_sol - sol[0, 0, :]) != 0).sum() / sol[0, 0].shape[0]

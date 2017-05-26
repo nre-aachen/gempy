@@ -552,7 +552,7 @@ class DataManagement(object):
             import theano
             if theano.config.optimizer != 'fast_run':
                 assert self.tg.grid_val_T.get_value().shape[0] * \
-                       np.math.factorial(len(self.tg.len_series_i.get_value())) < 2e6, \
+                       np.math.factorial(len(self.tg.len_series_i.get_value())) < 2e7, \
                        'The grid is too big for the number of potential fields. Reduce the grid or change the' \
                        'optimization flag to fast run'
 
@@ -673,7 +673,8 @@ class DataManagement(object):
                 u_grade[len_series_i > 12] = 9
                 u_grade[(len_series_i > 6) & (len_series_i < 12)] = 3
             print(u_grade)
-            self.tg.u_grade_T.set_value(u_grade)
+            # it seems I have to pass list instead array_like that is weird
+            self.tg.u_grade_T.set_value(list(u_grade))
 
             # ================
             # Prepare Matrices
