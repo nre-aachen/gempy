@@ -407,16 +407,18 @@ class DataManagement(object):
         for key in kwargs:
             self.foliations.ix[index, str(key)] = kwargs[key]
 
-    def foliation_add(self, data):
+    def foliation_add(self, **kwargs):
         """
         Adds foliation to dataframe.
         Args:
-            data (list): [G_x, G_y, G_z, X, Y, Z, azimuth, dip, formation, labels, order_series, polarity, series]
+            **kwargs: G_x, G_y, G_z, X, Y, Z, azimuth, dip, formation, labels, order_series, polarity, series
 
         Returns: Nothing
 
         """
-        self.foliations.loc[0] = data
+        l = len(self.foliations)
+        for key in kwargs:
+            self.foliations.ix[l, str(key)] = kwargs[key]
 
     def foliations_drop(self, index):
         """

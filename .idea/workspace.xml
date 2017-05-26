@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="DataManagement methods for adding, modifying and dropping interfaces and foliations from dataframes">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Prototype Notebook/Visualization3_vtkEditor.ipynb" />
+    <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GeMpy/visualization_vtk.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GeMpy/DataManagement.py" afterPath="$PROJECT_DIR$/GeMpy/DataManagement.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Visualization.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Visualization.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Visualization3_vtkEditor.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Visualization3_vtkEditor.ipynb" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -84,13 +84,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="297" column="35" lean-forward="true" selection-start-line="297" selection-start-column="35" selection-end-line="297" selection-end-column="35" />
+            <state relative-caret-position="12486">
+              <caret line="379" column="74" lean-forward="false" selection-start-line="379" selection-start-column="68" selection-end-line="379" selection-end-column="74" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="visualization_vtk.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/GeMpy/visualization_vtk.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="566">
+              <caret line="192" column="41" lean-forward="true" selection-start-line="192" selection-start-column="41" selection-end-line="192" selection-end-column="41" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -134,8 +146,8 @@
       <file leaf-file-name="GeMpy.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5742">
-              <caret line="183" column="12" lean-forward="false" selection-start-line="183" selection-start-column="12" selection-end-line="183" selection-end-column="12" />
+            <state relative-caret-position="7986">
+              <caret line="242" column="57" lean-forward="false" selection-start-line="242" selection-start-column="57" selection-end-line="242" selection-end-column="57" />
               <folding>
                 <element signature="e#190#221#0" expanded="true" />
               </folding>
@@ -166,9 +178,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>n_var</find>
-      <find>series</find>
-      <find>select</find>
       <find>u_g</find>
       <find>print</find>
       <find>Normal</find>
@@ -185,7 +194,6 @@
       <find>data_prep</find>
       <find>order</find>
       <find>order_tabl</find>
-      <find>self.</find>
       <find>I am her</find>
       <find>self.fault_matrix</find>
       <find>self.faults_matrix</find>
@@ -196,11 +204,18 @@
       <find>vtk</find>
       <find>List with the number of formations</find>
       <find>Grade of the universal drift</find>
+      <find>geo_data</find>
+      <find>self.arrows</find>
+      <find>self.</find>
+      <find>vtkEditor</find>
     </findStrings>
     <replaceStrings>
       <replace>compute_potential_field</replace>
       <replace>compute_potential_fields</replace>
       <replace />
+      <replace>spheres</replace>
+      <replace>arrows</replace>
+      <replace>geo_data</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -263,8 +278,11 @@
         <option value="$PROJECT_DIR$/GeMpy/__init__.py" />
         <option value="$PROJECT_DIR$/test/test.py" />
         <option value="$PROJECT_DIR$/GeMpy/theanograf.py" />
-        <option value="$PROJECT_DIR$/GeMpy/DataManagement.py" />
         <option value="$PROJECT_DIR$/Prototype Notebook/Visualization3c.py" />
+        <option value="$PROJECT_DIR$/Prototype Notebook/Visualization3_vtkEditor.py" />
+        <option value="$PROJECT_DIR$/GeMpy/DataManagement.py" />
+        <option value="$PROJECT_DIR$/GeMpy/VTK.py" />
+        <option value="$PROJECT_DIR$/GeMpy/visualization_vtk.py" />
       </list>
     </option>
   </component>
@@ -315,7 +333,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -372,6 +389,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -783,13 +801,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00050" summary="last changes to GeMpy.py to leave it decent for Orleans">
-      <created>1484039762111</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1484039762111</updated>
-    </task>
     <task id="LOCAL-00051" summary="last changes to GeMpy.py to leave it decent for Orleans v2">
       <created>1484055644450</created>
       <option name="number" value="00051" />
@@ -1126,7 +1137,14 @@
       <option name="project" value="LOCAL" />
       <updated>1494851346164</updated>
     </task>
-    <option name="localTasksCounter" value="99" />
+    <task id="LOCAL-00099" summary="vtkEditor notebook for basic 3d model visualization and interface points modification">
+      <created>1495543288476</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1495543288477</updated>
+    </task>
+    <option name="localTasksCounter" value="100" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1151,8 +1169,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-13" y="-13" width="3226" height="1766" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41709512" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24903598" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1743215" sideWeight="0.49243027" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2664016" sideWeight="0.5843007" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906324" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1230,7 +1249,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="debugging faults" />
     <MESSAGE value="Update of notebook examples" />
     <MESSAGE value="DataManagement Documentation update" />
     <MESSAGE value="theanograf documentation at 80%" />
@@ -1255,7 +1273,8 @@
     <MESSAGE value="added DataManagement methods for resetting dataframe indices of interfaces and foliations, added 2 methods to modify foliation and interface data directly in dataframes" />
     <MESSAGE value="fix bug" />
     <MESSAGE value="DataManagement methods for adding, modifying and dropping interfaces and foliations from dataframes" />
-    <option name="LAST_COMMIT_MESSAGE" value="DataManagement methods for adding, modifying and dropping interfaces and foliations from dataframes" />
+    <MESSAGE value="vtkEditor notebook for basic 3d model visualization and interface points modification" />
+    <option name="LAST_COMMIT_MESSAGE" value="vtkEditor notebook for basic 3d model visualization and interface points modification" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1293,9 +1312,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/docs/source/GeMpy Introduction.rst" />
-    <entry file="file://$PROJECT_DIR$/GeMpy/GeMCpy.py" />
-    <entry file="file://$USER_HOME$/anaconda3/lib/python3.5/tokenize.py" />
     <entry file="file://$USER_HOME$/anaconda3/lib/python3.5/site-packages/theano/gof/link.py" />
     <entry file="file://$PROJECT_DIR$/docs/build/lib/GeMpy/GeMpy_core.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1448,16 +1464,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5742">
-          <caret line="183" column="12" lean-forward="false" selection-start-line="183" selection-start-column="12" selection-end-line="183" selection-end-column="12" />
-          <folding>
-            <element signature="e#190#221#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
@@ -1509,12 +1515,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/GeMpy/GeMpy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7986">
+          <caret line="242" column="57" lean-forward="false" selection-start-line="242" selection-start-column="57" selection-end-line="242" selection-end-column="57" />
+          <folding>
+            <element signature="e#190#221#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Prototype Notebook/Visualization3_vtkEditor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GeMpy/VTK.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/GeMpy/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="297" column="35" lean-forward="true" selection-start-line="297" selection-start-column="35" selection-end-line="297" selection-end-column="35" />
+        <state relative-caret-position="12486">
+          <caret line="379" column="74" lean-forward="false" selection-start-line="379" selection-start-column="68" selection-end-line="379" selection-end-column="74" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GeMpy/visualization_vtk.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="566">
+          <caret line="192" column="41" lean-forward="true" selection-start-line="192" selection-start-column="41" selection-end-line="192" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
