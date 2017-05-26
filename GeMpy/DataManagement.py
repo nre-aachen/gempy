@@ -373,16 +373,18 @@ class DataManagement(object):
         for key in kwargs:
             self.interfaces.ix[index, str(key)] = kwargs[key]
 
-    def interface_add(self, data):
+    def interface_add(self, **kwargs):
         """
         Adds interface to dataframe.
         Args:
-            data (list): [X, Y, Z, formation, labels, order_series, series]
+            **kwargs: X, Y, Z, formation, labels, order_series, series
 
         Returns: Nothing
 
         """
-        self.interfaces.loc[0] = data
+        l = len(self.interfaces)
+        for key in kwargs:
+            self.interfaces.ix[l, str(key)] = kwargs[key]
 
     def interface_drop(self, index):
         """
