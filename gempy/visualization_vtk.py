@@ -130,7 +130,7 @@ def visualize(geo_data):
     ymaxs = [1, 0.33, 0.66, 1]
 
     ren_list = []
-    for i in range(1):
+    for i in range(4):
         ren_list.append(vtk.vtkRenderer())
         renwin.AddRenderer(ren_list[-1])
         ren_list[-1].SetViewport(xmins[i], ymins[i], xmaxs[i], ymaxs[i])
@@ -143,8 +143,8 @@ def visualize(geo_data):
 
     # 3d model camera
     model_cam = vtk.vtkCamera()
-    model_cam.SetPosition(50, 50, 50)
-    model_cam.SetFocalPoint(0, 0, 0)
+    model_cam.SetPosition(_e[1]*5, _e[3]*5, _e[5]*5)
+    model_cam.SetFocalPoint(_e[1]/2, _e[3]/2, _e[5]/2)
 
     # XY camera
     xy_cam = vtk.vtkCamera()
@@ -180,9 +180,9 @@ def visualize(geo_data):
     camera_list = [model_cam, xy_cam, yz_cam, xz_cam]
 
     ren_list[0].SetActiveCamera(model_cam)
-    # ren_list[1].SetActiveCamera(xy_cam)
-    # ren_list[2].SetActiveCamera(yz_cam)
-    # ren_list[3].SetActiveCamera(xz_cam)
+    ren_list[1].SetActiveCamera(xy_cam)
+    ren_list[2].SetActiveCamera(yz_cam)
+    ren_list[3].SetActiveCamera(xz_cam)
 
     # ///////////////////////////////////////////////////////////////
     # create AxesActor and customize

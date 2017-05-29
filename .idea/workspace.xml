@@ -4,10 +4,6 @@
     <list default="true" id="050fb100-0240-4a70-a41a-778e251719ea" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/FabianThesis.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/FabianThesis.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gempy/DataManagement.py" afterPath="$PROJECT_DIR$/gempy/DataManagement.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gempy/GemPy_f.py" afterPath="$PROJECT_DIR$/gempy/GemPy_f.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gempy/Visualization.py" afterPath="$PROJECT_DIR$/gempy/Visualization.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gempy/debugging.py" afterPath="$PROJECT_DIR$/gempy/debugging.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gempy/visualization_vtk.py" afterPath="$PROJECT_DIR$/gempy/visualization_vtk.py" />
     </list>
     <ignored path="GeMpy.iws" />
@@ -104,8 +100,8 @@
       <file leaf-file-name="visualization_vtk.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gempy/visualization_vtk.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="664">
-              <caret line="341" column="71" lean-forward="true" selection-start-line="341" selection-start-column="71" selection-end-line="341" selection-end-column="71" />
+            <state relative-caret-position="92">
+              <caret line="189" column="0" lean-forward="true" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -757,13 +753,6 @@
       <option name="presentableId" value="Default" />
       <updated>1468934057428</updated>
     </task>
-    <task id="LOCAL-00053" summary="solved interactive">
-      <created>1484058544838</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1484058544838</updated>
-    </task>
     <task id="LOCAL-00054" summary="going on at home">
       <created>1484063589587</created>
       <option name="number" value="00054" />
@@ -1100,7 +1089,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496046532848</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="first tutorialand front&#10;">
+      <created>1496060868660</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1496060868661</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1205,7 +1201,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="theanograf documentation at 80%" />
     <MESSAGE value="theanograf documentation at 100% beta" />
     <MESSAGE value="all notebooks working again" />
     <MESSAGE value="updating website to merge" />
@@ -1230,7 +1225,8 @@
     <MESSAGE value="vtkEditor notebook for basic 3d model visualization and interface points modification" />
     <MESSAGE value="Merge branch 'Development_Alex' of https://github.com/nre-aachen/GeMpy into Development_Miguel&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;" />
     <MESSAGE value="restructure&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="restructure&#10;" />
+    <MESSAGE value="first tutorialand front&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="first tutorialand front&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1482,8 +1478,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gempy/visualization_vtk.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="664">
-          <caret line="341" column="71" lean-forward="true" selection-start-line="341" selection-start-column="71" selection-end-line="341" selection-end-column="71" />
+        <state relative-caret-position="92">
+          <caret line="189" column="0" lean-forward="true" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
