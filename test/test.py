@@ -3,8 +3,8 @@ import pytest
 import theano
 import numpy as np
 import sys
-sys.path.append("../GeMpy")
-import GeMpy
+sys.path.append("../gempy")
+import gempy
 
 
 class TestNoFaults:
@@ -15,21 +15,21 @@ class TestNoFaults:
     @pytest.fixture(scope='class')
     def interpolator(self):
         # Importing the data from csv files and settign extent and resolution
-        geo_data = GeMpy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
+        geo_data = gempy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
                                      path_f="./GeoModeller/test_a/test_a_Foliations.csv",
                                      path_i="./GeoModeller/test_a/test_a_Points.csv")
 
-        data_interp = GeMpy.set_interpolator(geo_data,
+        data_interp = gempy.set_interpolator(geo_data,
                                              dtype="float64",
                                              verbose=['solve_kriging'])
     @pytest.fixture(scope='class')
     def theano_f(self):
         # Importing the data from csv files and settign extent and resolution
-        geo_data = GeMpy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
+        geo_data = gempy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
                                      path_f="./GeoModeller/test_a/test_a_Foliations.csv",
                                      path_i="./GeoModeller/test_a/test_a_Points.csv")
 
-        data_interp = GeMpy.set_interpolator(geo_data,
+        data_interp = gempy.set_interpolator(geo_data,
                                              dtype="float64",
                                              verbose=['solve_kriging'])
 
@@ -55,11 +55,11 @@ class TestNoFaults:
         compiled_f = theano_f[1]
 
         # Importing the data from csv files and settign extent and resolution
-        geo_data = GeMpy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
+        geo_data = gempy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
                                      path_f="./GeoModeller/test_a/test_a_Foliations.csv",
                                      path_i="./GeoModeller/test_a/test_a_Points.csv")
 
-        rescaled_data = GeMpy.rescale_data(geo_data)
+        rescaled_data = gempy.rescale_data(geo_data)
 
         data_interp.interpolator._data_scaled = rescaled_data
         data_interp.interpolator._grid_scaled = rescaled_data.grid
@@ -77,8 +77,8 @@ class TestNoFaults:
         real_sol = np.load('test_a_sol.npy')
         np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=3)
 
-        GeMpy.plot_section(geo_data, 25, block=sol[0, 0, :], direction='y', plot_data=True)
-        GeMpy.plot_potential_field(geo_data, sol[0, 1, :], 25)
+        gempy.plot_section(geo_data, 25, block=sol[0, 0, :], direction='y', plot_data=True)
+        gempy.plot_potential_field(geo_data, sol[0, 1, :], 25)
 
     def test_b(self, theano_f):
         """
@@ -88,11 +88,11 @@ class TestNoFaults:
         compiled_f = theano_f[1]
 
         # Importing the data from csv files and settign extent and resolution
-        geo_data = GeMpy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
+        geo_data = gempy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
                                      path_f="./GeoModeller/test_b/test_b_Foliations.csv",
                                      path_i="./GeoModeller/test_b/test_b_Points.csv")
 
-        rescaled_data = GeMpy.rescale_data(geo_data)
+        rescaled_data = gempy.rescale_data(geo_data)
 
         data_interp.interpolator._data_scaled = rescaled_data
         data_interp.interpolator._grid_scaled = rescaled_data.grid
@@ -117,11 +117,11 @@ class TestNoFaults:
         compiled_f = theano_f[1]
 
         # Importing the data from csv files and settign extent and resolution
-        geo_data = GeMpy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
+        geo_data = gempy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
                                      path_f="./GeoModeller/test_c/test_c_Foliations.csv",
                                      path_i="./GeoModeller/test_c/test_c_Points.csv")
 
-        rescaled_data = GeMpy.rescale_data(geo_data)
+        rescaled_data = gempy.rescale_data(geo_data)
 
         data_interp.interpolator._data_scaled = rescaled_data
         data_interp.interpolator._grid_scaled = rescaled_data.grid
@@ -143,14 +143,14 @@ class TestFaults:
     @pytest.fixture(scope='class')
     def theano_f_1f(self):
         # Importing the data from csv files and settign extent and resolution
-        geo_data = GeMpy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
+        geo_data = gempy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
                                      path_f="./GeoModeller/test_d/test_d_Foliations.csv",
                                      path_i="./GeoModeller/test_d/test_d_Points.csv")
 
-        GeMpy.set_data_series(geo_data, {'series': ('A', 'B'),
+        gempy.set_data_series(geo_data, {'series': ('A', 'B'),
                                         'fault1': 'f1'}, order_series=['fault1', 'series'])
 
-        data_interp = GeMpy.set_interpolator(geo_data,
+        data_interp = gempy.set_interpolator(geo_data,
                                              dtype="float64",
                                              verbose=['solve_kriging',
                                                       'faults block'
@@ -178,14 +178,14 @@ class TestFaults:
         compiled_f = theano_f_1f[1]
 
         # Importing the data from csv files and settign extent and resolution
-        geo_data = GeMpy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
+        geo_data = gempy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
                                      path_f="./GeoModeller/test_d/test_d_Foliations.csv",
                                      path_i="./GeoModeller/test_d/test_d_Points.csv")
 
-        GeMpy.set_data_series(geo_data, {'series': ('A', 'B'),
+        gempy.set_data_series(geo_data, {'series': ('A', 'B'),
                                           'fault1': 'f1'}, order_series=['fault1', 'series'])
 
-        rescaled_data = GeMpy.rescale_data(geo_data)
+        rescaled_data = gempy.rescale_data(geo_data)
 
 
         data_interp.interpolator._data_scaled = rescaled_data
@@ -213,14 +213,14 @@ class TestFaults:
         compiled_f = theano_f_1f[1]
 
         # Importing the data from csv files and settign extent and resolution
-        geo_data = GeMpy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
+        geo_data = gempy.import_data([0, 10, 0, 10, -10, 0], [50, 50, 50],
                                      path_f="./GeoModeller/test_e/test_e_Foliations.csv",
                                      path_i="./GeoModeller/test_e/test_e_Points.csv")
 
-        GeMpy.set_data_series(geo_data, {'series': ('A', 'B'),
+        gempy.set_data_series(geo_data, {'series': ('A', 'B'),
                                         'fault1': 'f1'}, order_series=['fault1', 'series'])
 
-        rescaled_data = GeMpy.rescale_data(geo_data)
+        rescaled_data = gempy.rescale_data(geo_data)
 
         data_interp.interpolator._data_scaled = rescaled_data
         data_interp.interpolator._grid_scaled = rescaled_data.grid
@@ -247,13 +247,13 @@ class TestFaults:
         compiled_f = theano_f_1f[1]
 
         # Importing the data from csv files and settign extent and resolution
-        geo_data = GeMpy.import_data([0, 2000, 0, 2000, -2000, 0], [50, 50, 50],
+        geo_data = gempy.import_data([0, 2000, 0, 2000, -2000, 0], [50, 50, 50],
                                      path_f="./GeoModeller/test_f/test_f_Foliations.csv",
                                      path_i="./GeoModeller/test_f/test_f_Points.csv")
 
         geo_data.set_formation_number(geo_data.formations[[3, 2, 1, 0, 4]])
 
-        GeMpy.set_data_series(geo_data, {'series': ('Reservoir'
+        gempy.set_data_series(geo_data, {'series': ('Reservoir'
                                                     , 'Seal',
                                                     'SecondaryReservoir',
                                                     'NonReservoirDeep'
@@ -261,7 +261,7 @@ class TestFaults:
                                          'fault1': 'MainFault'},
                               order_series=['fault1', 'series'])
 
-        rescaled_data = GeMpy.rescale_data(geo_data)
+        rescaled_data = gempy.rescale_data(geo_data)
 
         data_interp.interpolator._data_scaled = rescaled_data
         data_interp.interpolator._grid_scaled = rescaled_data.grid

@@ -302,10 +302,10 @@ class SGS(object):
         assert grid.shape[0] == block.shape[0], 'The grid you want to use for kriging and the grid used for the layers ' \
                                                 'segmentation are not the same'
 
-        # Translate lithology name to lithology number, i.e. the value of the lithology in the GeMpy block
+        # Translate lithology name to lithology number, i.e. the value of the lithology in the gempy block
         litho_num = df['Lithology Number'][df["Lithology"] == litho].iloc[0]
 
-        # Extract from the grid the XYZ coordinates where the GeMpy block model is the given lithology
+        # Extract from the grid the XYZ coordinates where the gempy block model is the given lithology
         segm_grid = grid[block == litho_num]
 
         # Set the segmented grid
@@ -358,7 +358,7 @@ class SGS(object):
         """
         Grid setter
         Args:
-            grid (numpy.array): Grid object from GeMpy with the points of interest of the model
+            grid (numpy.array): Grid object from gempy with the points of interest of the model
         """
         self.grid_to_inter = grid
 
@@ -372,9 +372,9 @@ class SGS(object):
 
     def set_geomodel(self, geomodel):
         """
-        GeMpy model setter
+        gempy model setter
         Args:
-            geomodel (numpy.array): GeMpy block model
+            geomodel (numpy.array): gempy block model
         """
         self.geomodel = geomodel
 

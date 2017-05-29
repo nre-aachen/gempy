@@ -6,7 +6,7 @@ Created on 21/10/2016
 #from . import qgrid
 #import DataManagement
 #import theanograf
-import GeMpy
+from .GemPy_f import *
 
 if __name__ == '__main__':
     pass

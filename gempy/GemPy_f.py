@@ -15,8 +15,8 @@ import numpy as _np
 # import sys, os
 import pandas as _pn
 import copy
-from Visualization import PlotData
-from DataManagement import DataManagement
+from .Visualization import PlotData
+from .DataManagement import DataManagement
 from IPython.core.debugger import Tracer
 
 

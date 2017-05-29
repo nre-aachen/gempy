@@ -1,9 +1,9 @@
 from distutils.core import setup
 
 setup(
-    name='GeMpy',
+    name='gempy',
     version='0.9',
-    packages=['GeMpy'],
+    packages=['gempy'],
     url='',
     license='MIT',
     author='Miguel de la Varga',

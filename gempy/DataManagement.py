@@ -5,7 +5,7 @@ import sys
 
 import numpy as np
 import pandas as pn
-import theanograf
+from . import theanograf
 
 
 class DataManagement(object):
@@ -529,7 +529,7 @@ class DataManagement(object):
 
 
 
-            # We hide the scaled copy of DataManagement object from the user. The scaling happens in GeMpy what is a
+            # We hide the scaled copy of DataManagement object from the user. The scaling happens in gempy what is a
             # bit weird. Maybe at some point I should bring the function to this module
             self._data_scaled = _data_scaled
 

@@ -337,5 +337,6 @@ def create_axes(geo_data, camera_list):
     cubeAxesActor.SetZAxisLabelVisibility(0)
 
     # only plot grid lines furthest from viewpoint
-    cubeAxesActor.SetGridLineLocation(cubeAxesActor.VTK_GRID_LINES_FURTHEST)
+    cubeAxesActor.SetGridLineLocation(vtk.VTK_GRID_LINES_FURTHEST)
+
     return cubeAxesActor

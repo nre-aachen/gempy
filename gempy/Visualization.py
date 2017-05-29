@@ -18,7 +18,7 @@ import seaborn as sns
 
 class PlotData(object):
     """
-    Class to make the different plot related with GeMpy
+    Class to make the different plot related with gempy
 
     Args:
         _data(GeMpy_core.DataManagement): All values of a DataManagement object
