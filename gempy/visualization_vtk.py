@@ -1,6 +1,6 @@
 import vtk
 import random
-
+import sys
 
 class InterfaceSphere(vtk.vtkSphereSource):
     def __init__(self, index):
@@ -112,7 +112,6 @@ class CustomInteractor(vtk.vtkInteractorStyleTrackballActor):
 def visualize(geo_data):
     """
     Returns:
-
     """
     spheres = create_interface_spheres(geo_data)
     arrows = create_foliation_arrows(geo_data)
@@ -131,7 +130,7 @@ def visualize(geo_data):
     ymaxs = [1, 0.33, 0.66, 1]
 
     ren_list = []
-    for i in range(4):
+    for i in range(1):
         ren_list.append(vtk.vtkRenderer())
         renwin.AddRenderer(ren_list[-1])
         ren_list[-1].SetViewport(xmins[i], ymins[i], xmaxs[i], ymaxs[i])
@@ -181,17 +180,17 @@ def visualize(geo_data):
     camera_list = [model_cam, xy_cam, yz_cam, xz_cam]
 
     ren_list[0].SetActiveCamera(model_cam)
-    ren_list[1].SetActiveCamera(xy_cam)
-    ren_list[2].SetActiveCamera(yz_cam)
-    ren_list[3].SetActiveCamera(xz_cam)
+    # ren_list[1].SetActiveCamera(xy_cam)
+    # ren_list[2].SetActiveCamera(yz_cam)
+    # ren_list[3].SetActiveCamera(xz_cam)
 
     # ///////////////////////////////////////////////////////////////
     # create AxesActor and customize
-    cubeAxesActor = create_axes(geo_data, camera_list)
+    cube_axes_actor = create_axes(geo_data, camera_list)
 
     for r in ren_list:
         # add axes actor to all renderers
-        r.AddActor(cubeAxesActor)
+        r.AddActor(cube_axes_actor)
         for a in actors:
             # add "normal" actors to renderers (spheres)
             r.AddActor(a)
@@ -306,37 +305,41 @@ def create_arrow_transformers(arrows, geo_data):
 
 def create_axes(geo_data, camera_list):
     "Create and return cubeAxesActor, settings."
-    cubeAxesActor = vtk.vtkCubeAxesActor()
-    cubeAxesActor.SetBounds(geo_data.extent)
-    cubeAxesActor.SetCamera(camera_list[0])
+    cube_axes_actor = vtk.vtkCubeAxesActor()
+    cube_axes_actor.SetBounds(geo_data.extent)
+    cube_axes_actor.SetCamera(camera_list[0])
 
     # set axes and label colors
-    cubeAxesActor.GetTitleTextProperty(0).SetColor(1.0, 0.0, 0.0)
-    cubeAxesActor.GetLabelTextProperty(0).SetColor(1.0, 0.0, 0.0)
+    cube_axes_actor.GetTitleTextProperty(0).SetColor(1.0, 0.0, 0.0)
+    cube_axes_actor.GetLabelTextProperty(0).SetColor(1.0, 0.0, 0.0)
     # font size doesn't work seem to work - maybe some override in place?
     # cubeAxesActor.GetLabelTextProperty(0).SetFontSize(10)
-    cubeAxesActor.GetTitleTextProperty(1).SetColor(0.0, 1.0, 0.0)
-    cubeAxesActor.GetLabelTextProperty(1).SetColor(0.0, 1.0, 0.0)
-    cubeAxesActor.GetTitleTextProperty(2).SetColor(0.0, 0.0, 1.0)
-    cubeAxesActor.GetLabelTextProperty(2).SetColor(0.0, 0.0, 1.0)
+    cube_axes_actor.GetTitleTextProperty(1).SetColor(0.0, 1.0, 0.0)
+    cube_axes_actor.GetLabelTextProperty(1).SetColor(0.0, 1.0, 0.0)
+    cube_axes_actor.GetTitleTextProperty(2).SetColor(0.0, 0.0, 1.0)
+    cube_axes_actor.GetLabelTextProperty(2).SetColor(0.0, 0.0, 1.0)
 
-    cubeAxesActor.DrawXGridlinesOn()
-    cubeAxesActor.DrawYGridlinesOn()
-    cubeAxesActor.DrawZGridlinesOn()
+    cube_axes_actor.DrawXGridlinesOn()
+    cube_axes_actor.DrawYGridlinesOn()
+    cube_axes_actor.DrawZGridlinesOn()
 
-    cubeAxesActor.XAxisMinorTickVisibilityOff()
-    cubeAxesActor.YAxisMinorTickVisibilityOff()
-    cubeAxesActor.ZAxisMinorTickVisibilityOff()
+    cube_axes_actor.XAxisMinorTickVisibilityOff()
+    cube_axes_actor.YAxisMinorTickVisibilityOff()
+    cube_axes_actor.ZAxisMinorTickVisibilityOff()
 
-    cubeAxesActor.SetXTitle("X")
-    cubeAxesActor.SetYTitle("Y")
-    cubeAxesActor.SetZTitle("Z")
+    cube_axes_actor.SetXTitle("X")
+    cube_axes_actor.SetYTitle("Y")
+    cube_axes_actor.SetZTitle("Z")
 
-    cubeAxesActor.SetXAxisLabelVisibility(0)
-    cubeAxesActor.SetYAxisLabelVisibility(0)
-    cubeAxesActor.SetZAxisLabelVisibility(0)
+    cube_axes_actor.SetXAxisLabelVisibility(0)
+    cube_axes_actor.SetYAxisLabelVisibility(0)
+    cube_axes_actor.SetZAxisLabelVisibility(0)
 
     # only plot grid lines furthest from viewpoint
-    cubeAxesActor.SetGridLineLocation(vtk.VTK_GRID_LINES_FURTHEST)
+    # ensure platform compatibility for the grid line options
+    if sys.platform == "win32":
+        cube_axes_actor.SetGridLineLocation(cube_axes_actor.VTK_GRID_LINES_FURTHEST)
+    else: # rather use elif == "linux" ? but what about other platforms
+        cube_axes_actor.SetGridLineLocation(vtk.VTK_GRID_LINES_FURTHEST)
 
-    return cubeAxesActor
+    return cube_axes_actor

@@ -8,7 +8,7 @@ import pandas as pn
 from . import theanograf
 
 
-class DataManagement(object):
+class InputData(object):
     """
     -DOCS NOT UPDATED- Class to import the raw data of the model and set data classifications into formations and series
 
@@ -128,6 +128,15 @@ class DataManagement(object):
             resolution = self.resolution
 
         return self.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
+
+    def data_to_pickle(self, path=False):
+        if not path:
+            path = './geo_data'
+        import pickle
+        with open(path+'.pickle', 'wb') as f:
+            # Pickle the 'data' dictionary using the highest protocol available.
+            pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
+
 
     def get_raw_data(self, itype='all'):
         """

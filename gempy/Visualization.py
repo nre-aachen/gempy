@@ -11,7 +11,7 @@ Created on 23/09/2016
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
-
+from IPython.core.debugger import Pdb
 
 # TODO: inherit pygeomod classes
 # import sys, os
@@ -76,6 +76,7 @@ class PlotData(object):
                 isin(self._data.series.columns.values)]
 
         else:
+
             series_to_plot_i = self._data.interfaces[self._data.interfaces["series"] == series]
             series_to_plot_f = self._data.foliations[self._data.foliations["series"] == series]
 

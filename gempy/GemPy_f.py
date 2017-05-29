@@ -16,7 +16,8 @@ import numpy as _np
 import pandas as _pn
 import copy
 from .Visualization import PlotData
-from .DataManagement import DataManagement
+from .visualization_vtk import visualize
+from .DataManagement import InputData
 from IPython.core.debugger import Tracer
 
 
@@ -84,9 +85,30 @@ def rescale_data(geo_data, rescaling_factor=None):
 #     return geo_data.interpolator.tg.final_block
 
 
+def data_to_pickle(geo_data, path=False):
+
+    geo_data.data_to_pickle(path)
+
+
+def read_pickle(path):
+    import pickle
+    with open(path, 'rb') as f:
+        # The protocol version used is detected automatically, so we do not
+        # have to specify it.
+        data = pickle.load(f)
+        return data
+
+
 def get_grid(geo_data):
     return geo_data.grid.grid
 
+
+def get_resolution(geo_data):
+    return geo_data.resolution
+
+
+def get_extent(geo_data):
+    return geo_data.extent
 
 def get_raw_data(geo_data, dtype='all'):
     return geo_data.get_raw_data(itype=dtype)
@@ -116,7 +138,7 @@ def import_data(extent, resolution=[50, 50, 50], **kwargs):
         dep: self.Plot(GeMpy_core.PlotData): Object to visualize data and results
     """
 
-    return DataManagement(extent, resolution, **kwargs)
+    return InputData(extent, resolution, **kwargs)
 
 
 def i_set_data(geo_data, dtype="foliations", action="Open"):
@@ -272,6 +294,8 @@ def plot_potential_field(geo_data, potential_field, cell_number, n_pf=0,
                               direction=direction,  plot_data=plot_data, series=series,
                               *args, **kwargs)
 
+def plot_data_3D(geo_data):
+    visualize(geo_data)
 
 def compute_potential_fields(geo_data, verbose=0):
     geo_data.interpolator.compute_potential_fields(verbose=verbose)

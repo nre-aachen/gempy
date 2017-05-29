@@ -18,7 +18,7 @@ geomodel = np.load("../../CSIRO/3Dmodel.npy")
 exp_variogram = pn.read_pickle("../../CSIRO/experimental_variogram.p")
 
 # In the future the best would be to save a file with all the 3D model info
-grid = gempy.DataManagement([422050, 423090, 8429400, 8432100, -500, 332], [50, 50, 50]).grid.grid
+grid = gempy.InputData([422050, 423090, 8429400, 8432100, -500, 332], [50, 50, 50]).grid.grid
 
 sgs = ck.SGS(exp_var=exp_variogram, properties=['Al_ppm-Al_ppm', 'Al_ppm-Ca_ppm', 'Ca_ppm-Al_ppm', 'Ca_ppm-Ca_ppm' ], n_exp = 5)
 sgs.set_data(data)
