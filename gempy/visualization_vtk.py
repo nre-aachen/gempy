@@ -113,6 +113,8 @@ def visualize(geo_data):
     """
     Returns:
     """
+    n_ren = 4
+
     spheres = create_interface_spheres(geo_data)
     arrows = create_foliation_arrows(geo_data)
     arrows_transformers = create_arrow_transformers(arrows, geo_data)
@@ -130,7 +132,7 @@ def visualize(geo_data):
     ymaxs = [1, 0.33, 0.66, 1]
 
     ren_list = []
-    for i in range(4):
+    for i in range(n_ren):
         ren_list.append(vtk.vtkRenderer())
         renwin.AddRenderer(ren_list[-1])
         ren_list[-1].SetViewport(xmins[i], ymins[i], xmaxs[i], ymaxs[i])
@@ -179,10 +181,8 @@ def visualize(geo_data):
 
     camera_list = [model_cam, xy_cam, yz_cam, xz_cam]
 
-    ren_list[0].SetActiveCamera(model_cam)
-    ren_list[1].SetActiveCamera(xy_cam)
-    ren_list[2].SetActiveCamera(yz_cam)
-    ren_list[3].SetActiveCamera(xz_cam)
+    for i in range(n_ren):
+        ren_list[i].SetActiveCamera(camera_list[i])
 
     # ///////////////////////////////////////////////////////////////
     # create AxesActor and customize
