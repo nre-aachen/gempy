@@ -73,7 +73,7 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
         # matrix = self.PickedActor.GetMatrix(vtk.vtkMatrix4x4())
         try:
             matrix = self.PickedActor.GetOrientation()
-            print(str(matrix))
+            # print(str(matrix))
         except AttributeError:
             pass
         self.OnLeftButtonUp()
@@ -117,9 +117,9 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
             except AttributeError:
                 pass
         if type(self.PickedProducer) is FoliationArrow:
-            print("Yeha, Arrow!")
+            #print("Yeha, Arrow!")
             _c = self.PickedActor.GetCenter()
-            print(str(_c))
+            #(str(_c))
             self.geo_data.foliation_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
 
         self.OnMiddleButtonUp()
@@ -131,7 +131,7 @@ class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
         self.parent = parent
         self.AddObserver("LeftButtonPressEvent", self.left_button_press_event)
         self.AddObserver("LeftButtonReleaseEvent", self.left_button_release_event)
-        # self.AddObserver("MouseMoveEvent", self.mouse_move_event)
+        self.AddObserver("MouseMoveEvent", self.mouse_move_event)
 
         self.AddObserver("KeyPressEvent", self.key_down_event)
 
