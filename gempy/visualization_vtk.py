@@ -2,6 +2,7 @@ import vtk
 import random
 import sys
 import numpy as np
+# from colors import *  # TODO: Make color import work
 
 class InterfaceSphere(vtk.vtkSphereSource):
     def __init__(self, index):
@@ -56,6 +57,8 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
         for pa in picked_actors:
             if pa is not None:
                 self.PickedActor = pa
+
+        # TODO: Arrow Rotation -> modify foliation dataframe
         # vtk.vtkOpenGLActor.GetOrientation?
         # matrix = self.PickedActor.GetMatrix(m)
         # if self.PickedActor is
@@ -117,9 +120,7 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
             except AttributeError:
                 pass
         if type(self.PickedProducer) is FoliationArrow:
-            #print("Yeha, Arrow!")
             _c = self.PickedActor.GetCenter()
-            #(str(_c))
             self.geo_data.foliation_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
 
         self.OnMiddleButtonUp()
@@ -175,10 +176,33 @@ class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
         self.prev_mouse_pos = mouse_pos
 
 
-def visualize(geo_data, verbose=0):
+def extract_surface(pot_field, val, res, spacing):
+    from skimage import measure
+
+    vertices, simplices, normals, values = measure.marching_cubes(pot_field.reshape(res[0], res[1], res[2]),
+                                                                  val, #0.2424792,  # -0.559606
+                                                                  spacing=spacing, # (10.0, 10.0, 10.0)
+                                                                  )
+    return vertices, simplices, normals, values
+
+
+def visualize(geo_data, pot_field=None, surface_vals=None, interf_bool=True, fol_bool=True, surf_bool=True, verbose=0):
     """
+
+    Args:
+        geo_data: geo_data object
+        pot_field: np.array
+        surface_vals: list of potential field values
+        interf_bool: bool
+        fol_bool: bool
+        surf_bool: bool
+        verbose: int
+
     Returns:
+
     """
+    # TODO: Make consistent bool option for interfaces, foliations, surfaces, etc.
+
     n_ren = 4
 
     # get model extent and calculate parameters for camera and sphere size
@@ -189,6 +213,13 @@ def visualize(geo_data, verbose=0):
     _e_d_avrg = (_e_dx + _e_dy + _e_dz) / 3
     _e_max = np.argmax(geo_data.extent)
 
+    res = geo_data.resolution
+
+    # create render window, settings
+    renwin = vtk.vtkRenderWindow()
+    renwin.SetSize(1000, 800)
+    renwin.SetWindowName('GeMpy 3D-Editor')
+
     # create interface SphereSource
     spheres = create_interface_spheres(geo_data, r=_e_d_avrg/30)
     # create foliation ArrowSource
@@ -196,14 +227,36 @@ def visualize(geo_data, verbose=0):
     # create arrow transformer
     arrows_transformers = create_arrow_transformers(arrows, geo_data)
 
+    if pot_field is not None:
+        # create PolyData object for each surface
+        surfaces = []
+        for val in surface_vals:
+            vertices, simplices, normals, values = extract_surface(pot_field,
+                                                                   val,
+                                                                   res,
+                                                                   (10,10,10)) # TODO: Make dynamic
+            _pf_p = vtk.vtkPoints()
+            _pf_tris = vtk.vtkCellArray()
+            _pf_tri = vtk.vtkTriangle()
+
+            for p in vertices*0.4:  # TODO: What's the the 0.4 scaling for?
+                _pf_p.InsertNextPoint(p)
+            for i in simplices:
+                _pf_tri.GetPointIds().SetId(0, i[0])
+                _pf_tri.GetPointIds().SetId(1, i[1])
+                _pf_tri.GetPointIds().SetId(2, i[2])
+
+                _pf_tris.InsertNextCell(_pf_tri)
+
+            surfaces.append(vtk.vtkPolyData())
+            surfaces[-1].SetPoints(_pf_p)
+            surfaces[-1].SetPolys(_pf_tris)
+
     # create mappers and actors for interface spheres and foliation arrows
     mappers, actors = create_mappers_actors(spheres)
     arrow_mappers, arrow_actors = create_mappers_actors(arrows_transformers)
-
-    # create render window, settings
-    renwin = vtk.vtkRenderWindow()
-    renwin.SetSize(1000, 800)
-    renwin.SetWindowName('GeMpy 3D-Editor')
+    if pot_field is not None:
+        surface_mappers, surface_actors = create_mappers_actors(surfaces)
 
     # viewport dimensions setup
     xmins = [0, 0.6, 0.6, 0.6]
@@ -226,6 +279,7 @@ def visualize(geo_data, verbose=0):
 
     # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     # 3d model camera
+    # TODO: Outsource camera into function
     model_cam = vtk.vtkCamera()
     model_cam.SetPosition(_e[_e_max]*5, _e[_e_max]*5, _e[_e_max]*5)
     model_cam.SetFocalPoint(np.min(_e[0:2]) + _e_dx / 2,
@@ -297,6 +351,9 @@ def visualize(geo_data, verbose=0):
             r.AddActor(a)
         for a in arrow_actors:
             r.AddActor(a)
+        if pot_field is not None:
+            for a in surface_actors:
+                r.AddActor(a)
 
     # initialize and start the app
     interactor.Initialize()
@@ -331,42 +388,45 @@ def create_mappers_actors(sources):
     actors = []
     for s in sources:
         mappers.append(vtk.vtkPolyDataMapper())
-        mappers[-1].SetInputConnection(s.GetOutputPort())
+        if type(s) == vtk.vtkPolyData:
+            mappers[-1].SetInputData(s)
+        else:
+            mappers[-1].SetInputConnection(s.GetOutputPort())
         actors.append(vtk.vtkActor())
         actors[-1].SetMapper(mappers[-1])
-    return (mappers, actors)
+    return mappers, actors
 
 
 def get_transform(startPoint, endPoint):
     # Compute a basis
-    normalizedX = [0 for i in range(3)]
-    normalizedY = [0 for i in range(3)]
-    normalizedZ = [0 for i in range(3)]
+    normalized_x = [0 for i in range(3)]
+    normalized_y = [0 for i in range(3)]
+    normalized_z = [0 for i in range(3)]
 
     # The X axis is a vector from start to end
     math = vtk.vtkMath()
-    math.Subtract(endPoint, startPoint, normalizedX)
-    length = math.Norm(normalizedX)
-    math.Normalize(normalizedX)
+    math.Subtract(endPoint, startPoint, normalized_x)
+    length = math.Norm(normalized_x)
+    math.Normalize(normalized_x)
 
     # The Z axis is an arbitrary vector cross X
     arbitrary = [0 for i in range(3)]
     arbitrary[0] = random.uniform(-10, 10)
     arbitrary[1] = random.uniform(-10, 10)
     arbitrary[2] = random.uniform(-10, 10)
-    math.Cross(normalizedX, arbitrary, normalizedZ)
-    math.Normalize(normalizedZ)
+    math.Cross(normalized_x, arbitrary, normalized_z)
+    math.Normalize(normalized_z)
 
     # The Y axis is Z cross X
-    math.Cross(normalizedZ, normalizedX, normalizedY)
+    math.Cross(normalized_z, normalized_x, normalized_y)
     matrix = vtk.vtkMatrix4x4()
 
     # Create the direction cosine matrix
     matrix.Identity()
     for i in range(3):
-        matrix.SetElement(i, 0, normalizedX[i])
-        matrix.SetElement(i, 1, normalizedY[i])
-        matrix.SetElement(i, 2, normalizedZ[i])
+        matrix.SetElement(i, 0, normalized_x[i])
+        matrix.SetElement(i, 1, normalized_y[i])
+        matrix.SetElement(i, 2, normalized_z[i])
 
     # Apply the transforms
     transform = vtk.vtkTransform()
