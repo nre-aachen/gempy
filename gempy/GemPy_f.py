@@ -9,7 +9,7 @@ Created on 10/10 /2016
 
 """
 from __future__ import division
-# import theano
+import theano
 # import theano.tensor as T
 import numpy as _np
 # import sys, os
@@ -17,9 +17,49 @@ import pandas as _pn
 import copy
 from .Visualization import PlotData
 from .visualization_vtk import visualize
-from .DataManagement import InputData
+from .DataManagement import InputData, InterpolatorInput
 from IPython.core.debugger import Tracer
 
+
+def set_interpolation_data(geo_data, **kwargs):
+    in_data = InterpolatorInput(geo_data, **kwargs)
+    return in_data
+
+def compile_th_fn(geo_data, dtype=None, u_grade=None, **kwargs):
+    """
+
+    Args:
+        geo_data:
+        **kwargs:
+
+    Returns:
+
+    """
+
+    # Choosing float precision for the computation
+
+    if not dtype:
+        if theano.config.device == 'gpu':
+            dtype = 'float32'
+        else:
+            print('making float 64')
+            dtype = 'float64'
+
+    # We make a rescaled version of geo_data for stability reasons
+    data_interp = set_interpolator(geo_data, dtype=dtype)
+
+    # This are the shared parameters and the compilation of the function. This will be hidden as well at some point
+    input_data_T = data_interp.interpolator.tg.input_parameters_list()
+
+    # This prepares the user data to the theano function
+    #input_data_P = data_interp.interpolator.data_prep(u_grade=u_grade)
+
+    # then we compile we have to pass the number of formations that are faults!!
+    th_fn = theano.function(input_data_T, data_interp.interpolator.tg.whole_block_model(data_interp.n_faults),
+                            on_unused_input='ignore',
+                            allow_input_downcast=True,
+                            profile=False)
+    return th_fn
 
 def rescale_data(geo_data, rescaling_factor=None):
     """
@@ -205,7 +245,7 @@ def set_foliations(geo_data, foliat_Dataframe, append=False, update_p_field=True
     except AttributeError:
         pass
 
-
+#DEP?
 def set_grid(geo_data, new_grid=None, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
     """
     Method to initialize the class new_grid. So far is really simple and only has the regular new_grid type
@@ -229,7 +269,7 @@ def set_grid(geo_data, new_grid=None, extent=None, resolution=None, grid_type="r
 
         geo_data.grid = geo_data.GridClass(extent, resolution, grid_type=grid_type, **kwargs)
 
-
+#DEP?
 def set_interpolator(geo_data,  *args, **kwargs):
     """
     Method to initialize the class interpolator. All the constant parameters for the interpolation can be passed
@@ -262,6 +302,7 @@ def set_interpolator(geo_data,  *args, **kwargs):
     geo_data_int = rescale_data(geo_data, rescaling_factor=rescaling_factor)
 
     if not getattr(geo_data_int, 'interpolator', None) or compile_theano:
+        print('I am in the setting')
         geo_data_int.interpolator = geo_data_int.InterpolatorClass(geo_data_int, geo_data_int.grid,
                                                                    *args, **kwargs)
     else:

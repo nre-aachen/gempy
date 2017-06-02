@@ -3,7 +3,7 @@ import pytest
 import theano
 import numpy as np
 import sys
-sys.path.append("../gempy")
+sys.path.append("../")
 import gempy
 
 
@@ -11,6 +11,7 @@ class TestNoFaults:
     """
     I am testing all block and potential field values so sol is (n_block+n_pot)
     """
+    # DEP?
     # Init interpolator
     @pytest.fixture(scope='class')
     def interpolator(self):
@@ -29,20 +30,24 @@ class TestNoFaults:
                                      path_f="./GeoModeller/test_a/test_a_Foliations.csv",
                                      path_i="./GeoModeller/test_a/test_a_Points.csv")
 
-        data_interp = gempy.set_interpolator(geo_data,
-                                             dtype="float64",
-                                             verbose=['solve_kriging'])
+       # data_interp = gempy.set_interpolator(geo_data,
+       #                                      dtype="float64",
+       #                                      verbose=['solve_kriging'])
+
 
         # Set all the theano shared parameters and return the symbolic variables (the input of the theano function)
-        input_data_T =   data_interp.interpolator.tg.input_parameters_list()
+        #input_data_T =   data_interp.interpolator.tg.input_parameters_list()
 
         # Prepare the input data (interfaces, foliations data) to call the theano function.
         # Also set a few theano shared variables with the len of formations series and so on
-        input_data_P =   data_interp.interpolator.data_prep(u_grade=[3])
+       # input_data_P =   data_interp.interpolator.data_prep(u_grade=[3])
 
         # Compile the theano function.
-        compiled_f = theano.function(input_data_T,   data_interp.interpolator.tg.whole_block_model(),
-                                     allow_input_downcast=True, profile=True)
+       # compiled_f = theano.function(input_data_T,   data_interp.interpolator.tg.whole_block_model(),
+       #                              allow_input_downcast=True, profile=True)
+
+        data_interp = gempy.InterpolatorInput(geo_data, dtype='float64')
+        compiled_f = data_interp.compile_th_fn()
 
         return data_interp, compiled_f
 
@@ -59,20 +64,22 @@ class TestNoFaults:
                                      path_f="./GeoModeller/test_a/test_a_Foliations.csv",
                                      path_i="./GeoModeller/test_a/test_a_Points.csv")
 
-        rescaled_data = gempy.rescale_data(geo_data)
+        # rescaled_data = gempy.rescale_data(geo_data)
+        #
+        # data_interp.interpolator._data_scaled = rescaled_data
+        # data_interp.interpolator._grid_scaled = rescaled_data.grid
+        # data_interp.interpolator.order_table()
+        # data_interp.interpolator.set_theano_shared_parameteres()
+        #
+        # # Prepare the input data (interfaces, foliations data) to call the theano function.
+        # # Also set a few theano shared variables with the len of formations series and so on
+        # input_data_P = data_interp.interpolator.data_prep(u_grade=[3])
+        # # Compile the theano function.
 
-        data_interp.interpolator._data_scaled = rescaled_data
-        data_interp.interpolator._grid_scaled = rescaled_data.grid
-        data_interp.interpolator.order_table()
-        data_interp.interpolator.set_theano_shared_parameteres()
+        data_interp.set_interpolator(geo_data)
 
-        # Prepare the input data (interfaces, foliations data) to call the theano function.
-        # Also set a few theano shared variables with the len of formations series and so on
-        input_data_P = data_interp.interpolator.data_prep(u_grade=[3])
-        # Compile the theano function.
-
-        sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
-                         input_data_P[5])
+        i = data_interp.get_input_data(u_grade=[3])
+        sol = compiled_f(*i)
 
         real_sol = np.load('test_a_sol.npy')
         np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=3)
@@ -92,19 +99,25 @@ class TestNoFaults:
                                      path_f="./GeoModeller/test_b/test_b_Foliations.csv",
                                      path_i="./GeoModeller/test_b/test_b_Points.csv")
 
-        rescaled_data = gempy.rescale_data(geo_data)
+        # DEP
+        # rescaled_data = gempy.rescale_data(geo_data)
+        #
+        # data_interp.interpolator._data_scaled = rescaled_data
+        # data_interp.interpolator._grid_scaled = rescaled_data.grid
+        # data_interp.interpolator.order_table()
+        # data_interp.interpolator.set_theano_shared_parameteres()
+        #
+        # # Prepare the input data (interfaces, foliations data) to call the theano function.
+        # # Also set a few theano shared variables with the len of formations series and so on
+        # input_data_P = data_interp.interpolator.data_prep(u_grade=[3])
+        #
+        # sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
+        #                  input_data_P[5])
 
-        data_interp.interpolator._data_scaled = rescaled_data
-        data_interp.interpolator._grid_scaled = rescaled_data.grid
-        data_interp.interpolator.order_table()
-        data_interp.interpolator.set_theano_shared_parameteres()
+        data_interp.set_interpolator(geo_data)
 
-        # Prepare the input data (interfaces, foliations data) to call the theano function.
-        # Also set a few theano shared variables with the len of formations series and so on
-        input_data_P = data_interp.interpolator.data_prep(u_grade=[3])
-
-        sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
-                         input_data_P[5])
+        i = data_interp.get_input_data(u_grade=[3])
+        sol = compiled_f(*i)
 
         real_sol = np.load('test_b_sol.npy')
         np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=3)
@@ -121,19 +134,26 @@ class TestNoFaults:
                                      path_f="./GeoModeller/test_c/test_c_Foliations.csv",
                                      path_i="./GeoModeller/test_c/test_c_Points.csv")
 
-        rescaled_data = gempy.rescale_data(geo_data)
+        # DEP
+        # rescaled_data = gempy.rescale_data(geo_data)
+        #
+        # data_interp.interpolator._data_scaled = rescaled_data
+        # data_interp.interpolator._grid_scaled = rescaled_data.grid
+        # data_interp.interpolator.order_table()
+        # data_interp.interpolator.set_theano_shared_parameteres()
+        #
+        # # Prepare the input data (interfaces, foliations data) to call the theano function.
+        # # Also set a few theano shared variables with the len of formations series and so on
+        # input_data_P = data_interp.interpolator.data_prep(u_grade=[0])
 
-        data_interp.interpolator._data_scaled = rescaled_data
-        data_interp.interpolator._grid_scaled = rescaled_data.grid
-        data_interp.interpolator.order_table()
-        data_interp.interpolator.set_theano_shared_parameteres()
 
-        # Prepare the input data (interfaces, foliations data) to call the theano function.
-        # Also set a few theano shared variables with the len of formations series and so on
-        input_data_P = data_interp.interpolator.data_prep(u_grade=[0])
+        # sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
+        #                 input_data_P[5])
 
-        sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
-                         input_data_P[5])
+        data_interp.set_interpolator(geo_data)
+
+        i = data_interp.get_input_data(u_grade=[0])
+        sol = compiled_f(*i)
 
         real_sol = np.load('test_c_sol.npy')
         np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=3)
@@ -150,23 +170,27 @@ class TestFaults:
         gempy.set_data_series(geo_data, {'series': ('A', 'B'),
                                         'fault1': 'f1'}, order_series=['fault1', 'series'])
 
-        data_interp = gempy.set_interpolator(geo_data,
-                                             dtype="float64",
-                                             verbose=['solve_kriging',
-                                                      'faults block'
-                                                      ])
+        # data_interp = gempy.set_interpolator(geo_data,
+        #                                      dtype="float64",
+        #                                      verbose=['solve_kriging',
+        #                                               'faults block'
+        #                                               ])
 
-        # Set all the theano shared parameters and return the symbolic variables (the input of the theano function)
-        input_data_T = data_interp.interpolator.tg.input_parameters_list()
+        # # Set all the theano shared parameters and return the symbolic variables (the input of the theano function)
+        # input_data_T = data_interp.interpolator.tg.input_parameters_list()
+        #
+        # # Prepare the input data (interfaces, foliations data) to call the theano function.
+        # # Also set a few theano shared variables with the len of formations series and so on
+        # input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
+        #
+        # # Compile the theano function.
+        # compiled_f = theano.function(input_data_T, data_interp.interpolator.tg.whole_block_model(1),
+        #                              allow_input_downcast=True, profile=True)
+        # data_interp.interpolator.get_kriging_parameters()
 
-        # Prepare the input data (interfaces, foliations data) to call the theano function.
-        # Also set a few theano shared variables with the len of formations series and so on
-        input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
-
-        # Compile the theano function.
-        compiled_f = theano.function(input_data_T, data_interp.interpolator.tg.whole_block_model(1),
-                                     allow_input_downcast=True, profile=True)
-        data_interp.interpolator.get_kriging_parameters()
+        geo_data.n_faults = 1
+        data_interp = gempy.InterpolatorInput(geo_data, dtype='float64')
+        compiled_f = data_interp.compile_th_fn()
 
         return data_interp, compiled_f
 
@@ -185,22 +209,30 @@ class TestFaults:
         gempy.set_data_series(geo_data, {'series': ('A', 'B'),
                                           'fault1': 'f1'}, order_series=['fault1', 'series'])
 
-        rescaled_data = gempy.rescale_data(geo_data)
+       #  rescaled_data = gempy.rescale_data(geo_data)
+       #
+       # # data_interp = gempy.set_interpolator(geo_data, dtype="float64",)
+       #  data_interp.interpolator._data_scaled = rescaled_data
+       #  data_interp.interpolator._grid_scaled = rescaled_data.grid
+       #  data_interp.interpolator.order_table()
+       #  data_interp.interpolator.set_theano_shared_parameteres()
+       #
+       #  # Prepare the input data (interfaces, foliations data) to call the theano function.
+       #  # Also set a few theano shared variables with the len of formations series and so on
+       #  input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
+       #
+       #  data_interp.interpolator.get_kriging_parameters()
+       #
+       #  sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
+       #                   input_data_P[5])
 
+        geo_data.n_faults = 1
 
-        data_interp.interpolator._data_scaled = rescaled_data
-        data_interp.interpolator._grid_scaled = rescaled_data.grid
-        data_interp.interpolator.order_table()
-        data_interp.interpolator.set_theano_shared_parameteres()
+        data_interp.set_interpolator(geo_data)
 
-        # Prepare the input data (interfaces, foliations data) to call the theano function.
-        # Also set a few theano shared variables with the len of formations series and so on
-        input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
+        i = data_interp.get_input_data(u_grade=[3, 3])
+        sol = compiled_f(*i)
 
-        data_interp.interpolator.get_kriging_parameters()
-
-        sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
-                         input_data_P[5])
        # print(data_interp.rescale_factor, 'rescale')
         real_sol = np.load('test_d_sol.npy')
         np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=3)
@@ -220,22 +252,32 @@ class TestFaults:
         gempy.set_data_series(geo_data, {'series': ('A', 'B'),
                                         'fault1': 'f1'}, order_series=['fault1', 'series'])
 
-        rescaled_data = gempy.rescale_data(geo_data)
+       #  rescaled_data = gempy.rescale_data(geo_data)
+       # # data_interp = gempy.set_interpolator(geo_data, dtype="float64", )
+       #  data_interp.interpolator._data_scaled = rescaled_data
+       #  data_interp.interpolator._grid_scaled = rescaled_data.grid
+       #  data_interp.interpolator.order_table()
+       #  data_interp.interpolator.set_theano_shared_parameteres()
+       #
+       #  # Prepare the input data (interfaces, foliations data) to call the theano function.
+       #  # Also set a few theano shared variables with the len of formations series and so on
+       #  input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
+       #
+       #  data_interp.interpolator.get_kriging_parameters()
+       #
+       #
+       #
+       #  sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
+       #                   input_data_P[5])
 
-        data_interp.interpolator._data_scaled = rescaled_data
-        data_interp.interpolator._grid_scaled = rescaled_data.grid
-        data_interp.interpolator.order_table()
-        data_interp.interpolator.set_theano_shared_parameteres()
+        geo_data.n_faults = 1
 
-        # Prepare the input data (interfaces, foliations data) to call the theano function.
-        # Also set a few theano shared variables with the len of formations series and so on
-        input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
+        data_interp.set_interpolator(geo_data)
 
-        data_interp.interpolator.get_kriging_parameters()
+        i = data_interp.get_input_data(u_grade=[3, 3])
+        sol = compiled_f(*i)
 
-        sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
-                         input_data_P[5])
-       # print(data_interp.rescale_factor, 'rescale')
+        # print(data_interp.rescale_factor, 'rescale')
         real_sol = np.load('test_e_sol.npy')
         np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=3)
 
@@ -261,22 +303,30 @@ class TestFaults:
                                          'fault1': 'MainFault'},
                               order_series=['fault1', 'series'])
 
-        rescaled_data = gempy.rescale_data(geo_data)
+       #  rescaled_data = gempy.rescale_data(geo_data)
+       # # data_interp = gempy.set_interpolator(geo_data, dtype="float64", )
+       #  data_interp.interpolator._data_scaled = rescaled_data
+       #  data_interp.interpolator._grid_scaled = rescaled_data.grid
+       #  data_interp.interpolator.order_table()
+       #  data_interp.interpolator.set_theano_shared_parameteres()
+       #
+       #  # Prepare the input data (interfaces, foliations data) to call the theano function.
+       #  # Also set a few theano shared variables with the len of formations series and so on
+       #  input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
+       #
+       #  data_interp.interpolator.get_kriging_parameters()
+       #
+       #  sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
+       #                   input_data_P[5])
+       # # print(data_interp.rescale_factor, 'rescale')
 
-        data_interp.interpolator._data_scaled = rescaled_data
-        data_interp.interpolator._grid_scaled = rescaled_data.grid
-        data_interp.interpolator.order_table()
-        data_interp.interpolator.set_theano_shared_parameteres()
+        geo_data.n_faults = 1
 
-        # Prepare the input data (interfaces, foliations data) to call the theano function.
-        # Also set a few theano shared variables with the len of formations series and so on
-        input_data_P = data_interp.interpolator.data_prep(u_grade=[3, 3])
+        data_interp.set_interpolator(geo_data)
 
-        data_interp.interpolator.get_kriging_parameters()
+        i = data_interp.get_input_data(u_grade=[3, 3])
+        sol = compiled_f(*i)
 
-        sol = compiled_f(input_data_P[0], input_data_P[1], input_data_P[2], input_data_P[3], input_data_P[4],
-                         input_data_P[5])
-       # print(data_interp.rescale_factor, 'rescale')
         real_sol = np.load('test_f_sol.npy')
         np.testing.assert_array_almost_equal(sol[:, :2, :], real_sol, decimal=2)
         mismatch = ~np.isclose(sol[:, :2, :], real_sol, rtol=0.01).sum()/np.product(sol.shape)

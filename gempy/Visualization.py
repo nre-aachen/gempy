@@ -396,3 +396,49 @@ class PlotData(object):
         # temp = np.random.rand(npoints).reshape((nx + 1, ny + 1, nz + 1))
         #
         # gridToVTK("./rectilinear", x, y, z, cellData={"lithology": pressure}, )
+
+    def plot_layers(self):
+        """
+        plot layers
+        Returns:
+
+        """
+
+        # import vtk
+        # from vtk import *
+        #
+        # # setup points and vertices
+        # Points = vtk.vtkPoints()
+        # Triangles = vtk.vtkCellArray()
+        # Triangle = vtk.vtkTriangle()
+        #
+        # for p in vertices * 0.4:
+        #     Points.InsertNextPoint(p)
+        #
+        # # Unfortunately in this simple example the following lines are ambiguous.
+        # # The first 0 is the index of the triangle vertex which is ALWAYS 0-2.
+        # # The second 0 is the index into the point (geometry) array, so this can range from 0-(NumPoints-1)
+        # # i.e. a more general statement is triangle->GetPointIds()->SetId(0, PointId);
+        #
+        # for i in simplices:
+        #     Triangle.GetPointIds().SetId(0, i[0])
+        #     Triangle.GetPointIds().SetId(1, i[1])
+        #     Triangle.GetPointIds().SetId(2, i[2])
+        #
+        #     Triangles.InsertNextCell(Triangle)
+        #
+        # polydata = vtk.vtkPolyData()
+        # polydata.SetPoints(Points)
+        # polydata.SetPolys(Triangles)
+        #
+        # polydata.Modified()
+        # if vtk.VTK_MAJOR_VERSION <= 5:
+        #     polydata.Update()
+        #
+        # writer = vtk.vtkXMLPolyDataWriter();
+        # writer.SetFileName("Fabian_f.vtp");
+        # if vtk.VTK_MAJOR_VERSION <= 5:
+        #     writer.SetInput(polydata)
+        # else:
+        #     writer.SetInputData(polydata)
+        # writer.Write()
