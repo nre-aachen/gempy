@@ -535,6 +535,7 @@ class InputData(object):
           #  self.grid = np.vstack(map(np.ravel, g)).T.astype("float32")
             return np.vstack(map(np.ravel, g)).T.astype("float32")
 
+    # DEP!
     class InterpolatorClass(object):
         """
         -DOCS NOT UPDATED- Class which contain all needed methods to perform potential field implicit modelling in theano
@@ -871,17 +872,26 @@ class InputData(object):
 
 
 class InterpolatorInput:
-    def __init__(self, geo_data, u_grade = None, rescaling_factor=None, **kwargs):
-
+    def __init__(self, geo_data, compile_theano=True, compute_all=True, u_grade=None, rescaling_factor=None, **kwargs):
+        # TODO add all options before compilation in here. Basically this is n_faults, n_layers, verbose, dtype, and \
+        # only block or all
         assert isinstance(geo_data, InputData), 'You need to pass a InputData object'
 
         #self.in_data = self.rescale_data(geo_data, rescaling_factor=rescaling_factor)
-
+        # Set some parameters. TODO posibly this should go in kwargs
         self.u_grade = u_grade
+
+        # Rescaling
         self.data = self.rescale_data(geo_data, rescaling_factor=rescaling_factor)
+
+        # Creating interpolator class with all the precompilation options
         self.interpolator = self.set_interpolator(**kwargs)
 
-    def compile_th_fn(self, dtype=None, u_grade=None, **kwargs):
+        if compile_theano:
+            self.th_fn = self.compile_th_fn(compute_all=compute_all)
+
+    # DEP all options since it goes in set_interpolator
+    def compile_th_fn(self, compute_all=True, dtype=None, u_grade=None, **kwargs):
         """
 
         Args:
@@ -910,7 +920,8 @@ class InterpolatorInput:
         # input_data_P = data_interp.interpolator.data_prep(u_grade=u_grade)
 
         # then we compile we have to pass the number of formations that are faults!!
-        th_fn = theano.function(input_data_T, self.interpolator.tg.whole_block_model(self.data.n_faults),
+        th_fn = theano.function(input_data_T, self.interpolator.tg.whole_block_model(self.data.n_faults,
+                                                                                     compute_all=compute_all),
                                 on_unused_input='ignore',
                                 allow_input_downcast=True,
                                 profile=False)
@@ -997,8 +1008,7 @@ class InterpolatorInput:
         # First creation
         if not getattr(self, 'interpolator', None):
             print('I am in the setting')
-            interpolator = self.InterpolatorClass(geo_data_in, geo_data_in.grid,
-                                                    *args, **kwargs)
+            interpolator = self.InterpolatorClass(geo_data_in, geo_data_in.grid, *args, **kwargs)
 
         # Update
         else:
@@ -1010,6 +1020,37 @@ class InterpolatorInput:
             interpolator = None
 
         return interpolator
+
+    def update_interpolator(self, geo_data=None, *args, **kwargs):
+        """
+        Update variables without compiling the theano function
+        Args:
+            geo_data:
+            *args:
+            **kwargs:
+
+        Returns:
+
+        """
+        if 'u_grade' in kwargs:
+            compile_theano = True
+
+        range_var = kwargs.get('range_var', None)
+
+        rescaling_factor = kwargs.get('rescaling_factor', None)
+
+
+        if geo_data:
+            geo_data_in = self.rescale_data(geo_data, rescaling_factor=rescaling_factor)
+            self.data = geo_data_in
+        else:
+            geo_data_in = self.data
+
+        print('I am in update')
+        self.interpolator._data_scaled = geo_data_in
+        self.interpolator._grid_scaled = geo_data_in.grid
+        self.interpolator.order_table()
+        self.interpolator.set_theano_shared_parameteres(range_var=range_var)
 
     def get_input_data(self, u_grade=None):
         if not u_grade:
@@ -1261,6 +1302,8 @@ class InterpolatorInput:
             range_var = kwargs.get('range_var', None)
             c_o = kwargs.get('c_o', None)
             nugget_effect = kwargs.get('nugget_effect', 0.01)
+            # DEP
+           # compute_all = kwargs.get('compute_all', True)
 
             # -DEP- Now I rescale the data so we do not need this
             # rescaling_factor = kwargs.get('rescaling_factor', None)
