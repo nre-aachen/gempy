@@ -876,10 +876,18 @@ class InterpolatorInput:
         # TODO add all options before compilation in here. Basically this is n_faults, n_layers, verbose, dtype, and \
         # only block or all
         assert isinstance(geo_data, InputData), 'You need to pass a InputData object'
+        # Here we can change the dtype for stability and GPU vs CPU
+        self.dtype = kwargs.get('dtype', 'float32')
+
 
         #self.in_data = self.rescale_data(geo_data, rescaling_factor=rescaling_factor)
         # Set some parameters. TODO posibly this should go in kwargs
         self.u_grade = u_grade
+
+        # This two properties get set calling rescale data
+        self.rescaling_factor = None
+        self.centers = None
+        self.extent_rescaled = None
 
         # Rescaling
         self.data = self.rescale_data(geo_data, rescaling_factor=rescaling_factor)
@@ -937,6 +945,7 @@ class InterpolatorInput:
         Returns:
 
         """
+        # TODO split this function in compute rescaling factor and rescale z
         max_coord = pn.concat(
             [geo_data.foliations, geo_data.interfaces]).max()[['X', 'Y', 'Z']]
         min_coord = pn.concat(
@@ -962,9 +971,30 @@ class InterpolatorInput:
 
         geo_data_rescaled.grid.grid = (geo_data.grid.grid - centers.as_matrix()) / rescaling_factor + 0.5001
 
-        geo_data_rescaled.rescaling_factor = rescaling_factor
+        self.rescaling_factor = rescaling_factor
+        self.centers = centers
+        self.extent_rescaled = new_coord_extent
 
         return geo_data_rescaled
+
+    # DEP?
+    def set_airbore_plane(self, z, res_grav):
+
+        # Rescale z
+        z_res = (z-self.centers[2])/self.rescaling_factor + 0.5001
+
+        # Create xy meshgrid
+        xy = np.meshgrid(np.linspace(self.extent_rescaled.iloc[0],
+                                     self.extent_rescaled.iloc[1], res_grav[0]),
+                         np.linspace(self.extent_rescaled.iloc[2],
+                                     self.extent_rescaled.iloc[3], res_grav[1]))
+        z = np.ones(res_grav[0]*res_grav[1])*z_res
+
+        # Transformation
+        xy_ravel = np.vstack(map(np.ravel, xy))
+        airborne_plane = np.vstack((xy_ravel, z)).T.astype(self.dtype)
+
+        return airborne_plane
 
     def set_interpolator(self, geo_data = None, *args, **kwargs):
         """

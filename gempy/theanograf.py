@@ -1329,3 +1329,56 @@ class TheanoGraph_pro(object):
 
         return all_series
 
+    # ==================================
+    # Geophysics
+    # ==================================
+    #
+    def choose_cells(self, grid, measure_points):
+        """
+        Preprocessing to see which nearby cells we use for the gravity
+        Args:
+            grid:
+            measure_points:
+
+        Returns:
+
+        """
+        return bool
+
+
+    # def slice_cells(self, selected_cells, block_lith):
+    #
+    #     # First change the bedrock to arbitrary value
+    #     new_block = block-lith + 1
+    #
+    #     (new_block * selected_cells[:. T.newaxis?]).nonzero_values()
+    #
+    #
+    # def set_densities(self, block_lith):
+    #
+    #     def switch_densities(lith, block):
+    #         """
+    #
+    #         Args:
+    #             lith:
+    #             block:
+    #
+    #         Returns:
+    #
+    #         """
+    #         densities = T.switch(
+    #             T.eq(sed_dips_dips, 0),  # This is the condition
+    #             0,  # If true it is equal to 0. This is how a direction affect another
+    #             (  # else, following Chiles book
+    #
+    #         return
+    #
+    #     partial_block, updates2 = theano.scan(
+    #         fn=compare,
+    #         outputs_info=None,
+    #         sequences=[dict(input=self.n_formation)],
+    #         non_sequences=block_lith)
+
+#class ForwardGravity(TheanoGraph_pro):
+
+
