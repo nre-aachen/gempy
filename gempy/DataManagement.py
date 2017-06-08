@@ -44,21 +44,15 @@ class InputData(object):
 
         # TODO choose the default source of data. So far only csv
         # Create the pandas dataframes
-        if path_f:
-            self.foliations = self.load_data_csv(data_type="foliations", path=path_f, **kwargs)
-            assert set(['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation']).issubset(self.foliations.columns), \
-                "One or more columns do not match with the expected values " + str(self.foliations.columns)
-        else:
-            # if we dont read a csv we create an empty dataframe with the columns that have to be filled
-            self.foliations = pn.DataFrame(columns=['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity',
-                                                    'formation', 'series'])
-        if path_i:
-            self.interfaces = self.load_data_csv(data_type="interfaces", path=path_i, **kwargs)
-            assert set(['X', 'Y', 'Z', 'formation']).issubset(self.interfaces.columns), \
-                "One or more columns do not match with the expected values " + str(self.interfaces.columns)
-        else:
-            self.interfaces = pn.DataFrame(columns=['X', 'Y', 'Z', 'formation', 'series'])
 
+        # if we dont read a csv we create an empty dataframe with the columns that have to be filled
+        self.foliations = pn.DataFrame(columns=['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity',
+                                                'formation', 'series'])
+
+        self.interfaces = pn.DataFrame(columns=['X', 'Y', 'Z', 'formation', 'series'])
+
+        if path_f or path_i:
+            self.import_data(path_i=path_i, path_f=path_f)
 
         # DEP-
         self._set_formations()
@@ -72,6 +66,28 @@ class InputData(object):
 
         # Create default grid object. TODO: (Is this necessary now?)
         self.grid = self.set_grid(extent=None, resolution=None, grid_type="regular_3D", **kwargs)
+
+    def import_data(self, path_i, path_f, **kwargs):
+        """
+
+        Args:
+            path_i:
+            path_f:
+            **kwargs:
+
+        Returns:
+
+        """
+
+        if path_f:
+            self.foliations = self.load_data_csv(data_type="foliations", path=path_f, **kwargs)
+            assert set(['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity', 'formation']).issubset(self.foliations.columns), \
+                "One or more columns do not match with the expected values " + str(self.foliations.columns)
+
+        if path_i:
+            self.interfaces = self.load_data_csv(data_type="interfaces", path=path_i, **kwargs)
+            assert set(['X', 'Y', 'Z', 'formation']).issubset(self.interfaces.columns), \
+                "One or more columns do not match with the expected values " + str(self.interfaces.columns)
 
     def _set_formations(self):
         """

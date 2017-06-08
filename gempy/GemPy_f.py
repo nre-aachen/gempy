@@ -103,6 +103,18 @@ def read_pickle(path):
         return data
 
 
+def get_series(geo_gata):
+    """
+
+    Args:
+        geo_gata:
+
+    Returns:
+
+    """
+    return geo_gata.series
+
+
 def get_grid(geo_data):
     return geo_data.grid.grid
 
@@ -118,7 +130,7 @@ def get_raw_data(geo_data, dtype='all'):
     return geo_data.get_raw_data(itype=dtype)
 
 
-def import_data(extent, resolution=[50, 50, 50], **kwargs):
+def create_data(extent, resolution=[50, 50, 50], **kwargs):
     """
     Method to initialize the class data. Calling this function some of the data has to be provided (TODO give to
     everything a default).
@@ -181,7 +193,7 @@ def set_data_series(geo_data, series_distribution=None, order_series=None,
         pass
 
     if verbose > 0:
-        return get_raw_data(geo_data)
+        return get_series(geo_data)
 
 
 def set_interfaces(geo_data, interf_Dataframe, append=False, update_p_field=True):
