@@ -16,7 +16,7 @@ import numpy as _np
 import pandas as _pn
 import copy
 from .Visualization import PlotData
-from .visualization_vtk import visualize
+from .visualization_vtk import visualize, export_vtk_rectilinear
 from .DataManagement import InputData, InterpolatorInput
 from IPython.core.debugger import Tracer
 
@@ -313,6 +313,7 @@ def plot_potential_field(geo_data, potential_field, cell_number, n_pf=0,
 
 def plot_data_3D(geo_data):
     visualize(geo_data)
+
 
 # DEP
 # def compute_potential_fields(geo_data, verbose=0):

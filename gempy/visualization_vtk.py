@@ -507,3 +507,45 @@ def create_axes(geo_data, camera_list, verbose=0):
         cube_axes_actor.SetGridLineLocation(vtk.VTK_GRID_LINES_FURTHEST)
 
     return cube_axes_actor
+
+def export_vtk_rectilinear(geo_data, block_lith, path=None):
+        """
+        export vtk
+        :return:
+        """
+
+        from evtk.hl import gridToVTK
+
+        import numpy as np
+
+        import random as rnd
+
+        # Dimensions
+
+        nx, ny, nz = geo_data.resolution
+
+        lx = geo_data.extent[0] - geo_data.extent[1]
+        ly = geo_data.extent[2] - geo_data.extent[3]
+        lz = geo_data.extent[4] - geo_data.extent[5]
+
+        dx, dy, dz = lx / nx, ly / ny, lz / nz
+
+        ncells = nx * ny * nz
+
+        npoints = (nx + 1) * (ny + 1) * (nz + 1)
+
+        # Coordinates
+        x = np.arange(0, lx + 0.1 * dx, dx, dtype='float64')
+
+        y = np.arange(0, ly + 0.1 * dy, dy, dtype='float64')
+
+        z = np.arange(0, lz + 0.1 * dz, dz, dtype='float64')
+
+
+                    # Variables
+
+        lith = block_lith.reshape((nx, ny, nz))
+        if not path:
+            path = "./Lithology_block"
+
+        gridToVTK(path, x, y, z, cellData={"Lithology": lith})

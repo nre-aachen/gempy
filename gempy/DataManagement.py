@@ -382,10 +382,32 @@ class InputData(object):
         self.interfaces.sort_values(by='order_series', inplace=True)
         self.foliations.sort_values(by='order_series', inplace=True)
 
+        # Set default faults
+        faults_series = []
+        for i in self.series.columns:
+            if 'fault' in i or 'Fault' in i:
+                faults_series.append(i)
+
+        self.set_faults(faults_series)
+
         # Save the dataframe in a property
         self.series = _series
 
         return _series
+
+    def set_faults(self, series_name):
+        """
+
+        Args:
+            series_name(list or array_like):
+
+        Returns:
+
+        """
+        if not len(series_name) == 0:
+            self.interfaces['isFault'] = self.interfaces['series'].isin(series_name)
+            self.foliations['isFault'] = self.foliations['series'].isin(series_name)
+            self.n_faults = len(series_name)
 
     def set_formation_number(self, formation_order):
         """
@@ -988,6 +1010,7 @@ class InterpolatorInput:
         geo_data_rescaled.grid.grid = (geo_data.grid.grid - centers.as_matrix()) / rescaling_factor + 0.5001
 
         self.rescaling_factor = rescaling_factor
+        geo_data_rescaled.rescaling_factor = rescaling_factor
         self.centers = centers
         self.extent_rescaled = new_coord_extent
 

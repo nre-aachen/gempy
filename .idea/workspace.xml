@@ -2,16 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdbb1290-9983-43c2-98e4-77eb7ca73249" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Tutorial/ch2.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Tutorial/ch3.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Tutorial/ch4.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/Example_1_Sandstone.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/FabianThesis.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/FabianThesis.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Prototype Notebook/physics2.ipynb" afterPath="$PROJECT_DIR$/Prototype Notebook/physics2.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tutorial/ch1.ipynb" afterPath="$PROJECT_DIR$/Tutorial/ch1.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tutorial/ch2.ipynb" afterPath="$PROJECT_DIR$/Tutorial/ch2.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gempy/DataManagement.py" afterPath="$PROJECT_DIR$/gempy/DataManagement.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gempy/GemPy_f.py" afterPath="$PROJECT_DIR$/gempy/GemPy_f.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gempy/GeoPhysics.py" afterPath="$PROJECT_DIR$/gempy/GeoPhysics.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gempy/debugging.py" afterPath="$PROJECT_DIR$/gempy/debugging.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gempy/visualization_vtk.py" afterPath="$PROJECT_DIR$/gempy/visualization_vtk.py" />
     </list>
     <ignored path="GeMpy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,7 +38,7 @@
       <file leaf-file-name="theanograf.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gempy/theanograf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3884">
+            <state relative-caret-position="28622">
               <caret line="1360" column="5" lean-forward="false" selection-start-line="1360" selection-start-column="5" selection-end-line="1360" selection-end-column="5" />
               <folding>
                 <element signature="e#264#277#0" expanded="true" />
@@ -51,8 +51,8 @@
       <file leaf-file-name="GeoPhysics.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gempy/GeoPhysics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="62" column="82" lean-forward="false" selection-start-line="62" selection-start-column="82" selection-end-line="62" selection-end-column="82" />
+            <state relative-caret-position="299">
+              <caret line="103" column="26" lean-forward="false" selection-start-line="103" selection-start-column="26" selection-end-line="103" selection-end-column="26" />
               <folding>
                 <element signature="e#16#34#0" expanded="true" />
               </folding>
@@ -60,23 +60,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DataManagement.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gempy/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="946">
-              <caret line="78" column="0" lean-forward="true" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+            <state relative-caret-position="519">
+              <caret line="1012" column="61" lean-forward="false" selection-start-line="1012" selection-start-column="61" selection-end-line="1012" selection-end-column="61" />
               <folding>
-                <element signature="e#22376#39409#0" expanded="false" />
+                <element signature="e#0#31#0" expanded="true" />
+                <element signature="e#22992#40025#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GemPy_f.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GemPy_f.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gempy/GemPy_f.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="193" column="0" lean-forward="true" selection-start-line="193" selection-start-column="0" selection-end-line="193" selection-end-column="0" />
+            <state relative-caret-position="299">
+              <caret line="332" column="10" lean-forward="false" selection-start-line="332" selection-start-column="4" selection-end-line="332" selection-end-column="10" />
               <folding>
                 <element signature="e#190#221#0" expanded="true" />
               </folding>
@@ -87,11 +88,22 @@
       <file leaf-file-name="visualization_vtk.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gempy/visualization_vtk.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="884">
-              <caret line="361" column="26" lean-forward="false" selection-start-line="361" selection-start-column="16" selection-end-line="361" selection-end-column="26" />
+            <state relative-caret-position="11154">
+              <caret line="510" column="26" lean-forward="false" selection-start-line="510" selection-start-column="4" selection-end-line="510" selection-end-column="26" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
+                <marker date="1497009847180" expanded="true" signature="18851:18907" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Visualization.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/gempy/Visualization.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="8404">
+              <caret line="385" column="42" lean-forward="false" selection-start-line="385" selection-start-column="42" selection-end-line="385" selection-end-column="42" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -119,7 +131,6 @@
     <findStrings>
       <find>swi</find>
       <find>nonzer</find>
-      <find>rescaling_fac</find>
       <find>grid</find>
       <find>close</find>
       <find>closest_cells_index</find>
@@ -127,10 +138,25 @@
       <find>import_</find>
       <find>self.airborne_plane</find>
       <find>set</find>
+      <find>lith</find>
+      <find>extent</find>
+      <find>visual</find>
+      <find>input_data_T</find>
+      <find>input_data_P</find>
+      <find>rescaling_fac</find>
+      <find>selfg</find>
+      <find>get</find>
+      <find>get_kr</find>
+      <find>get_kri</find>
+      <find>rescaling_factor</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/gempy/GemPy_f.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/gempy/DataManagement.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -140,8 +166,9 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/gempy/debugging.py" />
         <option value="$PROJECT_DIR$/gempy/GeoPhysics.py" />
-        <option value="$PROJECT_DIR$/gempy/DataManagement.py" />
+        <option value="$PROJECT_DIR$/gempy/visualization_vtk.py" />
         <option value="$PROJECT_DIR$/gempy/GemPy_f.py" />
+        <option value="$PROJECT_DIR$/gempy/DataManagement.py" />
       </list>
     </option>
   </component>
@@ -172,6 +199,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -229,7 +257,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -512,32 +539,59 @@
       <option name="project" value="LOCAL" />
       <updated>1496824936585</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="gravity optimized ch2 of tutorial">
+      <created>1496936797580</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1496936797580</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21393035" sideWeight="0.49391305" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17412935" sideWeight="0.49391305" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985386" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20950802" sideWeight="0.50608695" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12839249" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985386" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17849687" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12839249" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985386" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21614152" sideWeight="0.49391305" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17849687" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20950802" sideWeight="0.50608695" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12839249" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
@@ -557,7 +611,8 @@
     <MESSAGE value="Merge remote-tracking branch 'remotes/origin/Development_Alex' into Development_Miguel&#10;&#10;Conflicts:&#10;&#9;.idea/GeMpy.iml&#10;&#9;.idea/misc.xml&#10;&#9;.idea/workspace.xml&#10;&#9;Prototype Notebook/FabianThesis.ipynb&#10;" />
     <MESSAGE value="physics and fabianLess input data" />
     <MESSAGE value="fabianLess input data" />
-    <option name="LAST_COMMIT_MESSAGE" value="fabianLess input data" />
+    <MESSAGE value="gravity optimized ch2 of tutorial" />
+    <option name="LAST_COMMIT_MESSAGE" value="gravity optimized ch2 of tutorial" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -573,39 +628,31 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/gempy/theanograf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="29920">
-          <caret line="1360" column="5" lean-forward="false" selection-start-line="1360" selection-start-column="5" selection-end-line="1360" selection-end-column="5" />
-          <folding>
-            <element signature="e#264#277#0" expanded="true" />
-            <element signature="e#54042#54073#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gempy/GeoPhysics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="1298">
+          <caret line="62" column="82" lean-forward="false" selection-start-line="62" selection-start-column="82" selection-end-line="62" selection-end-column="82" />
           <folding>
             <element signature="e#16#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gempy/debugging.py">
+    <entry file="file://$PROJECT_DIR$/gempy/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="14" selection-end-column="41" />
-          <folding />
+        <state relative-caret-position="1518">
+          <caret line="78" column="0" lean-forward="true" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#22992#40025#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gempy/GemPy_f.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="19" column="22" lean-forward="false" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#190#221#0" expanded="true" />
           </folding>
@@ -618,6 +665,7 @@
           <caret line="361" column="26" lean-forward="false" selection-start-line="361" selection-start-column="16" selection-end-line="361" selection-end-column="26" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+            <marker date="1497009847180" expanded="true" signature="18851:18907" ph="..." />
           </folding>
         </state>
       </provider>
@@ -655,7 +703,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
           <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="14" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -675,6 +722,64 @@
           <caret line="361" column="26" lean-forward="false" selection-start-line="361" selection-start-column="16" selection-end-line="361" selection-end-column="26" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+            <marker date="1497009847180" expanded="true" signature="18851:18907" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1672">
+          <caret line="80" column="7" lean-forward="false" selection-start-line="80" selection-start-column="7" selection-end-line="81" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gempy/theanograf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="29920">
+          <caret line="1360" column="5" lean-forward="false" selection-start-line="1360" selection-start-column="5" selection-end-line="1360" selection-end-column="5" />
+          <folding>
+            <element signature="e#264#277#0" expanded="true" />
+            <element signature="e#54042#54073#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gempy/GeoPhysics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#16#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gempy/debugging.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="14" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gempy/GemPy_f.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="19" column="22" lean-forward="false" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+          <folding>
+            <element signature="e#190#221#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gempy/visualization_vtk.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7876">
+          <caret line="361" column="26" lean-forward="false" selection-start-line="361" selection-start-column="16" selection-end-line="361" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1497009847180" expanded="true" signature="18851:18907" ph="..." />
           </folding>
         </state>
       </provider>
@@ -692,8 +797,8 @@
         <state relative-caret-position="19624">
           <caret line="1224" column="65" lean-forward="false" selection-start-line="1224" selection-start-column="65" selection-end-line="1224" selection-end-column="65" />
           <folding>
-            <element signature="e#0#31#0" expanded="false" />
-            <element signature="e#22376#39409#0" expanded="false" />
+            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#22992#40025#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -725,6 +830,7 @@
           <caret line="361" column="26" lean-forward="false" selection-start-line="361" selection-start-column="16" selection-end-line="361" selection-end-column="26" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+            <marker date="1497009847180" expanded="true" signature="18851:18907" ph="..." />
           </folding>
         </state>
       </provider>
@@ -742,8 +848,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#31#0" expanded="false" />
-            <element signature="e#22376#39409#0" expanded="false" />
+            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#22992#40025#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -775,6 +881,7 @@
           <caret line="361" column="26" lean-forward="false" selection-start-line="361" selection-start-column="16" selection-end-line="361" selection-end-column="26" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+            <marker date="1497009847180" expanded="true" signature="18851:18907" ph="..." />
           </folding>
         </state>
       </provider>
@@ -792,8 +899,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#31#0" expanded="false" />
-            <element signature="e#22376#39409#0" expanded="false" />
+            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#22992#40025#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -825,6 +932,7 @@
           <caret line="361" column="26" lean-forward="false" selection-start-line="361" selection-start-column="16" selection-end-line="361" selection-end-column="26" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+            <marker date="1497009847180" expanded="true" signature="18851:18907" ph="..." />
           </folding>
         </state>
       </provider>
@@ -842,8 +950,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#31#0" expanded="false" />
-            <element signature="e#22376#39409#0" expanded="false" />
+            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#22992#40025#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -881,7 +989,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="15" column="31" lean-forward="false" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -908,7 +1015,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gempy/theanograf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3884">
+        <state relative-caret-position="28622">
           <caret line="1360" column="5" lean-forward="false" selection-start-line="1360" selection-start-column="5" selection-end-line="1360" selection-end-column="5" />
           <folding>
             <element signature="e#264#277#0" expanded="true" />
@@ -917,21 +1024,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gempy/visualization_vtk.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="361" column="26" lean-forward="false" selection-start-line="361" selection-start-column="16" selection-end-line="361" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/pandas/indexes/base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="181">
           <caret line="2188" column="0" lean-forward="false" selection-start-line="2188" selection-start-column="0" selection-end-line="2188" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -939,7 +1035,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="181">
           <caret line="338" column="0" lean-forward="false" selection-start-line="338" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -947,26 +1042,33 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
           <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="16" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gempy/DataManagement.py">
+    <entry file="file://$PROJECT_DIR$/Tutorial/Untitled.ipynb" />
+    <entry file="file://$PROJECT_DIR$/gempy/Visualization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="946">
-          <caret line="78" column="0" lean-forward="true" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+        <state relative-caret-position="8404">
+          <caret line="385" column="42" lean-forward="false" selection-start-line="385" selection-start-column="42" selection-end-line="385" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gempy/visualization_vtk.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11154">
+          <caret line="510" column="26" lean-forward="false" selection-start-line="510" selection-start-column="4" selection-end-line="510" selection-end-column="26" />
           <folding>
-            <element signature="e#22376#39409#0" expanded="false" />
+            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1497009847180" expanded="true" signature="18851:18907" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gempy/GeoPhysics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="62" column="82" lean-forward="false" selection-start-line="62" selection-start-column="82" selection-end-line="62" selection-end-column="82" />
+        <state relative-caret-position="299">
+          <caret line="103" column="26" lean-forward="false" selection-start-line="103" selection-start-column="26" selection-end-line="103" selection-end-column="26" />
           <folding>
             <element signature="e#16#34#0" expanded="true" />
           </folding>
@@ -975,10 +1077,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gempy/GemPy_f.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="193" column="0" lean-forward="true" selection-start-line="193" selection-start-column="0" selection-end-line="193" selection-end-column="0" />
+        <state relative-caret-position="299">
+          <caret line="332" column="10" lean-forward="false" selection-start-line="332" selection-start-column="4" selection-end-line="332" selection-end-column="10" />
           <folding>
             <element signature="e#190#221#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gempy/DataManagement.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="519">
+          <caret line="1012" column="61" lean-forward="false" selection-start-line="1012" selection-start-column="61" selection-end-line="1012" selection-end-column="61" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#22992#40025#0" expanded="false" />
           </folding>
         </state>
       </provider>
