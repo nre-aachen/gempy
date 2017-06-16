@@ -139,8 +139,9 @@ class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
         self.AddObserver("LeftButtonPressEvent", self.left_button_press_event)
         self.AddObserver("LeftButtonReleaseEvent", self.left_button_release_event)
         self.AddObserver("MouseMoveEvent", self.mouse_move_event)
-
         self.AddObserver("KeyPressEvent", self.key_down_event)
+
+        self.renwin = self.parent.GetRenderWindow()
 
         self.ren_list = ren_list
         self.geo_data = geo_data
@@ -157,13 +158,20 @@ class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
             self.parent.SetInteractorStyle(CustomInteractorActor(self.ren_list, self.geo_data, self.parent))
 
     def left_button_press_event(self, obj, ev):
+        if self.renwin is not None:
+            self.renwin_size = self.renwin.GetSize()
+        else:
+            self.renwin_size = (1000, 800)
+
         self.left_button_hold = True
         click_pos = self.GetInteractor().GetEventPosition()
         # self.parent.SetCurrentRenderer(self.ren_list[0])
-
-        if click_pos[0] < 600:
-            self.OnLeftButtonDown()
-        else:
+        try:
+            if click_pos[0] < self.renwin_size[0]*0.66:  #self.renwin.GetSize()[0]*0.66:
+                self.OnLeftButtonDown()
+            else:
+                pass
+        except AttributeError:
             pass
 
     def left_button_release_event(self, obj, ev):
@@ -173,9 +181,14 @@ class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
     def mouse_move_event(self, obj, ev):
         mouse_pos = self.GetInteractor().GetEventPosition()
 
+        if self.renwin is not None:
+            self.renwin_size = self.renwin.GetSize()
+        else:
+            self.renwin_size = (1000, 800)
+
         if self.prev_mouse_pos is not None:
             dx = mouse_pos[0] - self.prev_mouse_pos[0]
-            if mouse_pos[0] + dx >= 600:
+            if mouse_pos[0] + dx >= self.renwin_size[0]*0.66:  #self.renwin.GetSize()[0]*0.66:
                 self.left_button_release_event(obj, ev)
             else:
                 self.OnMouseMove()
