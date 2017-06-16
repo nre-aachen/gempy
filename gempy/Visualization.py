@@ -12,9 +12,11 @@ import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
 from IPython.core.debugger import Pdb
+from .colors import color_dict_rgb
 
 # TODO: inherit pygeomod classes
 # import sys, os
+
 
 class PlotData(object):
     """
@@ -30,7 +32,7 @@ class PlotData(object):
         verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0
     """
 
-    def __init__(self, _data, **kwargs):
+    def __init__(self, _data, cd_rgb=color_dict_rgb, **kwargs):
 
         self._data = _data
 
@@ -41,6 +43,20 @@ class PlotData(object):
             # and block. 2D 3D? Improving the iteration
             # with pandas framework
         self._set_style()
+
+        self.cd_rgb = cd_rgb
+
+        c_names = ["indigo", "red", "yellow", "brown", "orange",
+                   "green", "blue", "amber", "pink", "light-blue",
+                   "lime", "blue-grey", "deep-orange", "grey", "cyan",
+                   "deep-purple", "purple", "teal", "light-green"]
+
+        # c_subnames = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900']
+        #               'a100','a200', 'a400', 'a700']
+
+        self.cmap = matplotlib.colors.ListedColormap([self.cd_rgb[key]["400"] for key in c_names])
+        bounds = [i for i in range(len(c_names))]
+        self.norm = matplotlib.colors.BoundaryNorm(bounds, self.cmap.N)
 
     def _set_style(self):
         """
@@ -172,7 +188,7 @@ class PlotData(object):
         if plot_data:
             self.plot_data(direction, 'all')
 
-        plt.imshow(plot_block[_a, _b, _c].T, origin="bottom", cmap="viridis",
+        plt.imshow(plot_block[_a, _b, _c].T, origin="bottom", cmap=self.cmap, norm=self.norm,
                    extent=extent_val,
                    interpolation=interpolation, **kwargs)
 

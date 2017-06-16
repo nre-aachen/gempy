@@ -5,6 +5,8 @@ import numpy as np
 from .colors import *
 
 
+
+
 class InterfaceSphere(vtk.vtkSphereSource):
     def __init__(self, index):
         self.index = index  # df index
@@ -186,10 +188,9 @@ def visualize(geo_data,
               interf_bool=True, fol_bool=True,
               verbose=0,
               win_size=(1000, 800),
-              sphere_r=None,
+              sphere_r=None
               ):
     """
-
     Args:
         geo_data: geo_data object
         pot_field: np.array
@@ -204,6 +205,7 @@ def visualize(geo_data,
     """
     # TODO: Scale foliation arrow size with model extent, add option to set manually
     # TODO: Fix move lock if window gets resized
+    # create color LOT for formations
 
     n_ren = 4
 
@@ -244,12 +246,12 @@ def visualize(geo_data,
             vertices, simplices, normals, values = _extract_surface(pot_field,
                                                                     val,
                                                                     res,
-                                                                    (10,10,10)) # TODO: Make dynamic
+                                                                    (res[0], res[1], res[2]))  # TODO: Make dynamic
             _pf_p = vtk.vtkPoints()
             _pf_tris = vtk.vtkCellArray()
             _pf_tri = vtk.vtkTriangle()
 
-            for p in vertices*0.4:  # TODO: What's the the 0.4 scaling for?
+            for p in vertices:  #*0.4:  # TODO: What's the the 0.4 scaling for?
                 _pf_p.InsertNextPoint(p)
             for i in simplices:
                 _pf_tri.GetPointIds().SetId(0, i[0])
@@ -304,10 +306,16 @@ def visualize(geo_data,
     # create AxesActor and customize
     cube_axes_actor = _create_axes(geo_data, camera_list)
 
+    #axes_actor = vtk.vtkAxesActor()
+    #transform = vtk.vtkTransform()
+    #transform.Translate(_e[0], _e[2], _e[4])
+    #axes_actor.SetUserTransform(transform)
+
     # add actors to all renderers
     for r in ren_list:
         # add axes actor to all renderers
         r.AddActor(cube_axes_actor)
+        #r.AddActor(axes_actor)
         if interf_bool:
             for a in interf_actors:
                 r.AddActor(a)
