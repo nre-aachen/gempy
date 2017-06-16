@@ -4,6 +4,7 @@ import sys
 import numpy as np
 from .colors import *
 
+
 class InterfaceSphere(vtk.vtkSphereSource):
     def __init__(self, index):
         self.index = index  # df index
@@ -179,16 +180,6 @@ class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
         self.prev_mouse_pos = mouse_pos
 
 
-def extract_surface(pot_field, val, res, spacing):
-    from skimage import measure
-
-    vertices, simplices, normals, values = measure.marching_cubes(pot_field.reshape(res[0], res[1], res[2]),
-                                                                  val, #0.2424792,  # -0.559606
-                                                                  spacing=spacing, # (10.0, 10.0, 10.0)
-                                                                  )
-    return vertices, simplices, normals, values
-
-
 def visualize(geo_data,
               pot_field=None,
               surface_vals=None,
@@ -212,6 +203,7 @@ def visualize(geo_data,
 
     """
     # TODO: Scale foliation arrow size with model extent, add option to set manually
+    # TODO: Fix move lock if window gets resized
 
     n_ren = 4
 
@@ -234,25 +226,25 @@ def visualize(geo_data,
         # create interface SphereSource
         if sphere_r is None:
             sphere_r = _e_d_avrg/30
-        spheres = create_interface_spheres(geo_data, r=sphere_r)
+        spheres = _create_interface_spheres(geo_data, r=sphere_r)
         # create sphere mappers and actors
-        interf_mappers, interf_actors = create_mappers_actors(spheres)
+        interf_mappers, interf_actors = _create_mappers_actors(spheres)
     if fol_bool:
         # create foliation ArrowSource
-        arrows = create_foliation_arrows(geo_data)
+        arrows = _create_foliation_arrows(geo_data)
         # create arrow transformer
-        arrows_transformers = create_arrow_transformers(arrows, geo_data)
+        arrows_transformers = _create_arrow_transformers(arrows, geo_data)
         # create arrow mappers and actors
-        arrow_mappers, arrow_actors = create_mappers_actors(arrows_transformers)
+        arrow_mappers, arrow_actors = _create_mappers_actors(arrows_transformers)
 
     if pot_field is not None:
         # create PolyData object for each surface
         surfaces = []
         for val in surface_vals:
-            vertices, simplices, normals, values = extract_surface(pot_field,
-                                                                   val,
-                                                                   res,
-                                                                   (10,10,10)) # TODO: Make dynamic
+            vertices, simplices, normals, values = _extract_surface(pot_field,
+                                                                    val,
+                                                                    res,
+                                                                    (10,10,10)) # TODO: Make dynamic
             _pf_p = vtk.vtkPoints()
             _pf_tris = vtk.vtkCellArray()
             _pf_tri = vtk.vtkTriangle()
@@ -271,7 +263,7 @@ def visualize(geo_data,
             surfaces[-1].SetPolys(_pf_tris)
 
         # create surface mappers and actors
-        surface_mappers, surface_actors = create_mappers_actors(surfaces)
+        surface_mappers, surface_actors = _create_mappers_actors(surfaces)
 
     # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     # viewport dimensions setup
@@ -310,7 +302,7 @@ def visualize(geo_data,
 
     # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     # create AxesActor and customize
-    cube_axes_actor = create_axes(geo_data, camera_list)
+    cube_axes_actor = _create_axes(geo_data, camera_list)
 
     # add actors to all renderers
     for r in ren_list:
@@ -334,6 +326,16 @@ def visualize(geo_data,
     interactor.Start()
 
     del renwin, interactor
+
+
+def _extract_surface(pot_field, val, res, spacing):
+    from skimage import measure
+
+    vertices, simplices, normals, values = measure.marching_cubes(pot_field.reshape(res[0], res[1], res[2]),
+                                                                  val, #0.2424792,  # -0.559606
+                                                                  spacing=spacing, # (10.0, 10.0, 10.0)
+                                                                  )
+    return vertices, simplices, normals, values
 
 
 def _create_cameras(_e, verbose=0):
@@ -393,7 +395,7 @@ def _create_cameras(_e, verbose=0):
     return [model_cam, xy_cam, yz_cam, xz_cam]
 
 
-def create_interface_spheres(geo_data, r=0.33):
+def _create_interface_spheres(geo_data, r=0.33):
     "Creates InterfaceSphere (vtkSphereSource) for all interface positions in dataframe."
     spheres = []
     for index, row in geo_data.interfaces.iterrows():
@@ -405,7 +407,7 @@ def create_interface_spheres(geo_data, r=0.33):
     return spheres
 
 
-def create_foliation_arrows(geo_data):
+def _create_foliation_arrows(geo_data):
     "Creates FoliationArrow (vtkArrowSource) for all foliation positions in dataframe."
     arrows = []
     for index, row in geo_data.foliations.iterrows():
@@ -413,7 +415,7 @@ def create_foliation_arrows(geo_data):
     return arrows
 
 
-def create_mappers_actors(sources):
+def _create_mappers_actors(sources):
     "Creates mappers and connected actors for all given sources."
     mappers = []
     actors = []
@@ -428,7 +430,7 @@ def create_mappers_actors(sources):
     return mappers, actors
 
 
-def get_transform(startPoint, endPoint):
+def _get_transform(startPoint, endPoint):
     # Compute a basis
     normalized_x = [0 for i in range(3)]
     normalized_y = [0 for i in range(3)]
@@ -468,7 +470,7 @@ def get_transform(startPoint, endPoint):
     return transform
 
 
-def create_arrow_transformers(arrows, geo_data):
+def _create_arrow_transformers(arrows, geo_data):
     "Creates list of arrow transformation objects."
     # grab start and end points for foliation arrows
     arrows_sp = []
@@ -490,13 +492,13 @@ def create_arrow_transformers(arrows, geo_data):
     arrows_transformers = []
     for i, arrow in enumerate(arrows):
         arrows_transformers.append(vtk.vtkTransformPolyDataFilter())
-        arrows_transformers[-1].SetTransform(get_transform(arrows_sp[i], arrows_ep[i]))
+        arrows_transformers[-1].SetTransform(_get_transform(arrows_sp[i], arrows_ep[i]))
         arrows_transformers[-1].SetInputConnection(arrow.GetOutputPort())
 
     return arrows_transformers
 
 
-def create_axes(geo_data, camera_list, verbose=0):
+def _create_axes(geo_data, camera_list, verbose=0):
     "Create and return cubeAxesActor, settings."
     cube_axes_actor = vtk.vtkCubeAxesActor()
     cube_axes_actor.SetBounds(geo_data.extent)
