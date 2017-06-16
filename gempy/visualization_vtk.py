@@ -5,8 +5,6 @@ import numpy as np
 from .colors import *
 
 
-
-
 class InterfaceSphere(vtk.vtkSphereSource):
     def __init__(self, index):
         self.index = index  # df index
@@ -21,6 +19,7 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
     """
     Modified vtkInteractorStyleTrackballActor class to accomodate for interface df modifications.
     """
+
     def __init__(self, ren_list, geo_data, parent):
         self.parent = parent
         self.ren_list = ren_list
@@ -134,6 +133,7 @@ class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
     """
     Custom camera interactor class.
     """
+
     def __init__(self, ren_list, geo_data, parent):
         self.parent = parent
         self.AddObserver("LeftButtonPressEvent", self.left_button_press_event)
@@ -203,9 +203,8 @@ def visualize(geo_data,
     Returns:
 
     """
-    # TODO: Scale foliation arrow size with model extent, add option to set manually
     # TODO: Fix move lock if window gets resized
-    # create color LOT for formations
+    # TODO: Color spheres and arrows accordingly
 
     n_ren = 4
 
@@ -227,7 +226,7 @@ def visualize(geo_data,
     if interf_bool:
         # create interface SphereSource
         if sphere_r is None:
-            sphere_r = _e_d_avrg/30
+            sphere_r = _e_d_avrg / 50
         spheres = _create_interface_spheres(geo_data, r=sphere_r)
         # create sphere mappers and actors
         interf_mappers, interf_actors = _create_mappers_actors(spheres)
@@ -235,7 +234,7 @@ def visualize(geo_data,
         # create foliation ArrowSource
         arrows = _create_foliation_arrows(geo_data)
         # create arrow transformer
-        arrows_transformers = _create_arrow_transformers(arrows, geo_data)
+        arrows_transformers = _create_arrow_transformers(arrows, geo_data, _e_d_avrg / 35)
         # create arrow mappers and actors
         arrow_mappers, arrow_actors = _create_mappers_actors(arrows_transformers)
 
@@ -251,7 +250,7 @@ def visualize(geo_data,
             _pf_tris = vtk.vtkCellArray()
             _pf_tri = vtk.vtkTriangle()
 
-            for p in vertices:  #*0.4:  # TODO: What's the the 0.4 scaling for?
+            for p in vertices:
                 _pf_p.InsertNextPoint(p)
             for i in simplices:
                 _pf_tri.GetPointIds().SetId(0, i[0])
@@ -294,7 +293,7 @@ def visualize(geo_data,
     # 3d model camera
     camera_list = _create_cameras(_e, verbose=verbose)
     # define background colors of the renderers
-    ren_color = [(0,0,0), (0.5,0.,0.1), (0.1,0.5,0.1), (0.1,0.1,0.5)]
+    ren_color = [(66 / 250, 66 / 250, 66 / 250), (0.5, 0., 0.1), (0.1, 0.5, 0.1), (0.1, 0.1, 0.5)]
 
     for i in range(n_ren):
         # set active camera for each renderer
@@ -306,16 +305,16 @@ def visualize(geo_data,
     # create AxesActor and customize
     cube_axes_actor = _create_axes(geo_data, camera_list)
 
-    #axes_actor = vtk.vtkAxesActor()
-    #transform = vtk.vtkTransform()
-    #transform.Translate(_e[0], _e[2], _e[4])
-    #axes_actor.SetUserTransform(transform)
+    # axes_actor = vtk.vtkAxesActor()
+    # transform = vtk.vtkTransform()
+    # transform.Translate(_e[0], _e[2], _e[4])
+    # axes_actor.SetUserTransform(transform)
 
     # add actors to all renderers
     for r in ren_list:
         # add axes actor to all renderers
         r.AddActor(cube_axes_actor)
-        #r.AddActor(axes_actor)
+        # r.AddActor(axes_actor)
         if interf_bool:
             for a in interf_actors:
                 r.AddActor(a)
@@ -340,8 +339,8 @@ def _extract_surface(pot_field, val, res, spacing):
     from skimage import measure
 
     vertices, simplices, normals, values = measure.marching_cubes(pot_field.reshape(res[0], res[1], res[2]),
-                                                                  val, #0.2424792,  # -0.559606
-                                                                  spacing=spacing, # (10.0, 10.0, 10.0)
+                                                                  val  # , #0.2424792,  # -0.559606
+                                                                  # spacing=spacing, # (10.0, 10.0, 10.0)
                                                                   )
     return vertices, simplices, normals, values
 
@@ -438,7 +437,7 @@ def _create_mappers_actors(sources):
     return mappers, actors
 
 
-def _get_transform(startPoint, endPoint):
+def _get_transform(startPoint, endPoint, f):
     # Compute a basis
     normalized_x = [0 for i in range(3)]
     normalized_y = [0 for i in range(3)]
@@ -473,12 +472,12 @@ def _get_transform(startPoint, endPoint):
     transform = vtk.vtkTransform()
     transform.Translate(startPoint)
     transform.Concatenate(matrix)
-    transform.Scale(length, length, length)
+    transform.Scale(length*f, length*f, length*f)
 
     return transform
 
 
-def _create_arrow_transformers(arrows, geo_data):
+def _create_arrow_transformers(arrows, geo_data, f2):
     "Creates list of arrow transformation objects."
     # grab start and end points for foliation arrows
     arrows_sp = []
@@ -500,7 +499,7 @@ def _create_arrow_transformers(arrows, geo_data):
     arrows_transformers = []
     for i, arrow in enumerate(arrows):
         arrows_transformers.append(vtk.vtkTransformPolyDataFilter())
-        arrows_transformers[-1].SetTransform(_get_transform(arrows_sp[i], arrows_ep[i]))
+        arrows_transformers[-1].SetTransform(_get_transform(arrows_sp[i], arrows_ep[i], f2))
         arrows_transformers[-1].SetInputConnection(arrow.GetOutputPort())
 
     return arrows_transformers
@@ -544,50 +543,49 @@ def _create_axes(geo_data, camera_list, verbose=0):
     # ensure platform compatibility for the grid line options
     if sys.platform == "win32":
         cube_axes_actor.SetGridLineLocation(cube_axes_actor.VTK_GRID_LINES_FURTHEST)
-    else: # rather use elif == "linux" ? but what about other platforms
+    else:  # rather use elif == "linux" ? but what about other platforms
         cube_axes_actor.SetGridLineLocation(vtk.VTK_GRID_LINES_FURTHEST)
 
     return cube_axes_actor
 
 
 def export_vtk_rectilinear(geo_data, block_lith, path=None):
-        """
+    """
         export vtk
         :return:
         """
 
-        from evtk.hl import gridToVTK
+    from evtk.hl import gridToVTK
 
-        import numpy as np
+    import numpy as np
 
-        import random as rnd
+    import random as rnd
 
-        # Dimensions
+    # Dimensions
 
-        nx, ny, nz = geo_data.resolution
+    nx, ny, nz = geo_data.resolution
 
-        lx = geo_data.extent[0] - geo_data.extent[1]
-        ly = geo_data.extent[2] - geo_data.extent[3]
-        lz = geo_data.extent[4] - geo_data.extent[5]
+    lx = geo_data.extent[0] - geo_data.extent[1]
+    ly = geo_data.extent[2] - geo_data.extent[3]
+    lz = geo_data.extent[4] - geo_data.extent[5]
 
-        dx, dy, dz = lx / nx, ly / ny, lz / nz
+    dx, dy, dz = lx / nx, ly / ny, lz / nz
 
-        ncells = nx * ny * nz
+    ncells = nx * ny * nz
 
-        npoints = (nx + 1) * (ny + 1) * (nz + 1)
+    npoints = (nx + 1) * (ny + 1) * (nz + 1)
 
-        # Coordinates
-        x = np.arange(0, lx + 0.1 * dx, dx, dtype='float64')
+    # Coordinates
+    x = np.arange(0, lx + 0.1 * dx, dx, dtype='float64')
 
-        y = np.arange(0, ly + 0.1 * dy, dy, dtype='float64')
+    y = np.arange(0, ly + 0.1 * dy, dy, dtype='float64')
 
-        z = np.arange(0, lz + 0.1 * dz, dz, dtype='float64')
+    z = np.arange(0, lz + 0.1 * dz, dz, dtype='float64')
 
+    # Variables
 
-                    # Variables
+    lith = block_lith.reshape((nx, ny, nz))
+    if not path:
+        path = "./Lithology_block"
 
-        lith = block_lith.reshape((nx, ny, nz))
-        if not path:
-            path = "./Lithology_block"
-
-        gridToVTK(path, x, y, z, cellData={"Lithology": lith})
+    gridToVTK(path, x, y, z, cellData={"Lithology": lith})
