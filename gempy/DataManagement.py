@@ -123,11 +123,14 @@ class InputData(object):
             self.foliations: extra columns with components xyz of the unity vector.
         """
 
-        self.foliations['G_x'] = np.sin(np.deg2rad(self.foliations["dip"])) * \
-                                 np.sin(np.deg2rad(self.foliations["azimuth"])) * self.foliations["polarity"]
-        self.foliations['G_y'] = np.sin(np.deg2rad(self.foliations["dip"])) * \
-                                 np.cos(np.deg2rad(self.foliations["azimuth"])) * self.foliations["polarity"]
-        self.foliations['G_z'] = np.cos(np.deg2rad(self.foliations["dip"])) * self.foliations["polarity"]
+        self.foliations['G_x'] = np.sin(np.deg2rad(self.foliations["dip"].astype('float'))) * \
+                                 np.sin(np.deg2rad(self.foliations["azimuth"].astype('float'))) * \
+                                 self.foliations["polarity"].astype('float')
+        self.foliations['G_y'] = np.sin(np.deg2rad(self.foliations["dip"].astype('float'))) * \
+                                 np.cos(np.deg2rad(self.foliations["azimuth"].astype('float'))) *\
+                                 self.foliations["polarity"].astype('float')
+        self.foliations['G_z'] = np.cos(np.deg2rad(self.foliations["dip"].astype('float'))) *\
+                                 self.foliations["polarity"].astype('float')
 
     # DEP?
     def create_grid(self, extent=None, resolution=None, grid_type="regular_3D", **kwargs):
@@ -382,16 +385,16 @@ class InputData(object):
         self.interfaces.sort_values(by='order_series', inplace=True)
         self.foliations.sort_values(by='order_series', inplace=True)
 
+        # Save the dataframe in a property
+        self.series = _series
+
         # Set default faults
         faults_series = []
-        for i in _series.columns:
-            if 'fault' in i or 'Fault' in i:
+        for i in self.series.columns:
+            if ('fault' in i or 'Fault' in i) and 'Default' not in i:
                 faults_series.append(i)
 
         self.set_faults(faults_series)
-
-        # Save the dataframe in a property
-        self.series = _series
 
         return _series
 

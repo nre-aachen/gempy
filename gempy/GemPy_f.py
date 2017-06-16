@@ -312,7 +312,9 @@ def plot_potential_field(geo_data, potential_field, cell_number, n_pf=0,
                               *args, **kwargs)
 
 def plot_data_3D(geo_data):
-    visualize(geo_data)
+    r, i = visualize(geo_data)
+    del r, i
+    return None
 
 
 # DEP
