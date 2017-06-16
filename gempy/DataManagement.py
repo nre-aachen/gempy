@@ -384,7 +384,7 @@ class InputData(object):
 
         # Set default faults
         faults_series = []
-        for i in self.series.columns:
+        for i in _series.columns:
             if 'fault' in i or 'Fault' in i:
                 faults_series.append(i)
 
