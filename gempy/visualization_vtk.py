@@ -221,7 +221,7 @@ def visualize(geo_data, pot_field=None, surface_vals=None, interf_bool=True, fol
     renwin.SetWindowName('GeMpy 3D-Editor')
 
     # create interface SphereSource
-    spheres = create_interface_spheres(geo_data, r=_e_d_avrg/30)
+    spheres = create_interface_spheres(geo_data, r=_e_d_avrg/50)
     # create foliation ArrowSource
     arrows = create_foliation_arrows(geo_data)
     # create arrow transformer
@@ -360,6 +360,7 @@ def visualize(geo_data, pot_field=None, surface_vals=None, interf_bool=True, fol
     interactor.Start()
 
     del renwin, interactor
+    return renwin, interactor
 
 
 def create_interface_spheres(geo_data, r=0.33):
@@ -367,9 +368,9 @@ def create_interface_spheres(geo_data, r=0.33):
     spheres = []
     for index, row in geo_data.interfaces.iterrows():
         spheres.append(InterfaceSphere(index))
-        spheres[-1].SetCenter(geo_data.interfaces.iloc[index]["X"],
-                              geo_data.interfaces.iloc[index]["Y"],
-                              geo_data.interfaces.iloc[index]["Z"])
+        spheres[-1].SetCenter(geo_data.interfaces.ix[index]["X"],
+                              geo_data.interfaces.ix[index]["Y"],
+                              geo_data.interfaces.ix[index]["Z"])
         spheres[-1].SetRadius(r)
     return spheres
 
@@ -444,12 +445,12 @@ def create_arrow_transformers(arrows, geo_data):
     arrows_ep = []
     f = 0.75
     for arrow in arrows:
-        _sp = (geo_data.foliations.iloc[arrow.index]["X"] - geo_data.foliations.iloc[arrow.index]["G_x"] / f,
-               geo_data.foliations.iloc[arrow.index]["Y"] - geo_data.foliations.iloc[arrow.index]["G_x"] / f,
-               geo_data.foliations.iloc[arrow.index]["Z"] - geo_data.foliations.iloc[arrow.index]["G_x"] / f)
-        _ep = (geo_data.foliations.iloc[arrow.index]["X"] + geo_data.foliations.iloc[arrow.index]["G_x"] / f,
-               geo_data.foliations.iloc[arrow.index]["Y"] + geo_data.foliations.iloc[arrow.index]["G_y"] / f,
-               geo_data.foliations.iloc[arrow.index]["Z"] + geo_data.foliations.iloc[arrow.index]["G_z"] / f)
+        _sp = (geo_data.foliations.ix[arrow.index]["X"] - geo_data.foliations.ix[arrow.index]["G_x"] / f,
+               geo_data.foliations.ix[arrow.index]["Y"] - geo_data.foliations.ix[arrow.index]["G_x"] / f,
+               geo_data.foliations.ix[arrow.index]["Z"] - geo_data.foliations.ix[arrow.index]["G_x"] / f)
+        _ep = (geo_data.foliations.ix[arrow.index]["X"] + geo_data.foliations.ix[arrow.index]["G_x"] / f,
+               geo_data.foliations.ix[arrow.index]["Y"] + geo_data.foliations.ix[arrow.index]["G_y"] / f,
+               geo_data.foliations.ix[arrow.index]["Z"] + geo_data.foliations.ix[arrow.index]["G_z"] / f)
         arrows_sp.append(_sp)
         arrows_ep.append(_ep)
 
