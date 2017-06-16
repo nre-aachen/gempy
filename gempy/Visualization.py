@@ -46,6 +46,8 @@ class PlotData(object):
 
         self.cd_rgb = cd_rgb
 
+        # TODO: Map colors to formations and integer values for plots
+
         c_names = ["indigo", "red", "yellow", "brown", "orange",
                    "green", "blue", "amber", "pink", "light-blue",
                    "lime", "blue-grey", "deep-orange", "grey", "cyan",
