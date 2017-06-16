@@ -2,7 +2,7 @@ import vtk
 import random
 import sys
 import numpy as np
-# from colors import *  # TODO: Make color import work
+from .colors import *
 
 class InterfaceSphere(vtk.vtkSphereSource):
     def __init__(self, index):
@@ -16,7 +16,7 @@ class FoliationArrow(vtk.vtkArrowSource):
 
 class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
     """
-    Modified vtkInteractorStyleTrackballActor class to accomodate for interface df modification.
+    Modified vtkInteractorStyleTrackballActor class to accomodate for interface df modifications.
     """
     def __init__(self, ren_list, geo_data, parent):
         self.parent = parent
@@ -128,6 +128,9 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
 
 
 class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
+    """
+    Custom camera interactor class.
+    """
     def __init__(self, ren_list, geo_data, parent):
         self.parent = parent
         self.AddObserver("LeftButtonPressEvent", self.left_button_press_event)
@@ -186,7 +189,14 @@ def extract_surface(pot_field, val, res, spacing):
     return vertices, simplices, normals, values
 
 
-def visualize(geo_data, pot_field=None, surface_vals=None, interf_bool=True, fol_bool=True, surf_bool=True, verbose=0):
+def visualize(geo_data,
+              pot_field=None,
+              surface_vals=None,
+              interf_bool=True, fol_bool=True,
+              verbose=0,
+              win_size=(1000, 800),
+              sphere_r=None,
+              ):
     """
 
     Args:
@@ -201,7 +211,7 @@ def visualize(geo_data, pot_field=None, surface_vals=None, interf_bool=True, fol
     Returns:
 
     """
-    # TODO: Make consistent bool option for interfaces, foliations, surfaces, etc.
+    # TODO: Scale foliation arrow size with model extent, add option to set manually
 
     n_ren = 4
 
@@ -217,15 +227,23 @@ def visualize(geo_data, pot_field=None, surface_vals=None, interf_bool=True, fol
 
     # create render window, settings
     renwin = vtk.vtkRenderWindow()
-    renwin.SetSize(1000, 800)
+    renwin.SetSize(win_size[0], win_size[1])
     renwin.SetWindowName('GeMpy 3D-Editor')
 
-    # create interface SphereSource
-    spheres = create_interface_spheres(geo_data, r=_e_d_avrg/30)
-    # create foliation ArrowSource
-    arrows = create_foliation_arrows(geo_data)
-    # create arrow transformer
-    arrows_transformers = create_arrow_transformers(arrows, geo_data)
+    if interf_bool:
+        # create interface SphereSource
+        if sphere_r is None:
+            sphere_r = _e_d_avrg/30
+        spheres = create_interface_spheres(geo_data, r=sphere_r)
+        # create sphere mappers and actors
+        interf_mappers, interf_actors = create_mappers_actors(spheres)
+    if fol_bool:
+        # create foliation ArrowSource
+        arrows = create_foliation_arrows(geo_data)
+        # create arrow transformer
+        arrows_transformers = create_arrow_transformers(arrows, geo_data)
+        # create arrow mappers and actors
+        arrow_mappers, arrow_actors = create_mappers_actors(arrows_transformers)
 
     if pot_field is not None:
         # create PolyData object for each surface
@@ -252,12 +270,10 @@ def visualize(geo_data, pot_field=None, surface_vals=None, interf_bool=True, fol
             surfaces[-1].SetPoints(_pf_p)
             surfaces[-1].SetPolys(_pf_tris)
 
-    # create mappers and actors for interface spheres and foliation arrows
-    mappers, actors = create_mappers_actors(spheres)
-    arrow_mappers, arrow_actors = create_mappers_actors(arrows_transformers)
-    if pot_field is not None:
+        # create surface mappers and actors
         surface_mappers, surface_actors = create_mappers_actors(surfaces)
 
+    # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     # viewport dimensions setup
     xmins = [0, 0.6, 0.6, 0.6]
     xmaxs = [0.6, 1, 1, 1]
@@ -267,8 +283,11 @@ def visualize(geo_data, pot_field=None, surface_vals=None, interf_bool=True, fol
     # create list of renderers, set vieport values
     ren_list = []
     for i in range(n_ren):
+        # append each renderer to list of renderers
         ren_list.append(vtk.vtkRenderer())
+        # add each renderer to window
         renwin.AddRenderer(ren_list[-1])
+        # set viewport for each renderer
         ren_list[-1].SetViewport(xmins[i], ymins[i], xmaxs[i], ymaxs[i])
 
     # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,9 +298,53 @@ def visualize(geo_data, pot_field=None, surface_vals=None, interf_bool=True, fol
 
     # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     # 3d model camera
-    # TODO: Outsource camera into function
+    camera_list = _create_cameras(_e, verbose=verbose)
+    # define background colors of the renderers
+    ren_color = [(0,0,0), (0.5,0.,0.1), (0.1,0.5,0.1), (0.1,0.1,0.5)]
+
+    for i in range(n_ren):
+        # set active camera for each renderer
+        ren_list[i].SetActiveCamera(camera_list[i])
+        # set background color for each renderer
+        ren_list[i].SetBackground(ren_color[i][0], ren_color[i][1], ren_color[i][2])
+
+    # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    # create AxesActor and customize
+    cube_axes_actor = create_axes(geo_data, camera_list)
+
+    # add actors to all renderers
+    for r in ren_list:
+        # add axes actor to all renderers
+        r.AddActor(cube_axes_actor)
+        if interf_bool:
+            for a in interf_actors:
+                r.AddActor(a)
+        if fol_bool:
+            for a in arrow_actors:
+                r.AddActor(a)
+        if pot_field is not None:
+            for a in surface_actors:
+                r.AddActor(a)
+
+        # reset cameras for all renderers
+        r.ResetCamera()
+
+    # initialize and start the app
+    interactor.Initialize()
+    interactor.Start()
+
+    del renwin, interactor
+
+
+def _create_cameras(_e, verbose=0):
+    _e_dx = _e[1] - _e[0]
+    _e_dy = _e[3] - _e[2]
+    _e_dz = _e[5] - _e[4]
+    _e_d_avrg = (_e_dx + _e_dy + _e_dz) / 3
+    _e_max = np.argmax(_e)
+
     model_cam = vtk.vtkCamera()
-    model_cam.SetPosition(_e[_e_max]*5, _e[_e_max]*5, _e[_e_max]*5)
+    model_cam.SetPosition(_e[_e_max] * 5, _e[_e_max] * 5, _e[_e_max] * 5)
     model_cam.SetFocalPoint(np.min(_e[0:2]) + _e_dx / 2,
                             np.min(_e[2:4]) + _e_dy / 2,
                             np.min(_e[4:]) + _e_dz / 2)
@@ -292,10 +355,6 @@ def visualize(geo_data, pot_field=None, surface_vals=None, interf_bool=True, fol
     xy_cam.SetPosition(np.min(_e[0:2]) + _e_dx / 2,
                        np.min(_e[2:4]) + _e_dy / 2,
                        _e[_e_max] * 4)
-    # else:
-    #    xy_cam.SetPosition(np.min(_e[0:2]) + _e_dx / 2,
-    #                       np.min(_e[2:4]) + _e_dy / 2,
-    #                       _e[_e_max] * 4)
 
     xy_cam.SetFocalPoint(np.min(_e[0:2]) + _e_dx / 2,
                          np.min(_e[2:4]) + _e_dy / 2,
@@ -331,35 +390,7 @@ def visualize(geo_data, pot_field=None, surface_vals=None, interf_bool=True, fol
         print("BLUE XZ:", xz_cam.GetPosition())
         print("BLUE FP:", xz_cam.GetFocalPoint())
 
-    camera_list = [model_cam, xy_cam, yz_cam, xz_cam]
-    ren_color = [(0,0,0), (0.5,0.,0.1), (0.1,0.5,0.1), (0.1,0.1,0.5)]
-
-    for i in range(n_ren):
-        ren_list[i].SetActiveCamera(camera_list[i])
-        ren_list[i].SetBackground(ren_color[i][0], ren_color[i][1], ren_color[i][2])
-
-    # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    # create AxesActor and customize
-    cube_axes_actor = create_axes(geo_data, camera_list)
-
-    # add interface and foliation actors to all renderers
-    for r in ren_list:
-        # add axes actor to all renderers
-        r.AddActor(cube_axes_actor)
-        for a in actors:
-            # add "normal" actors to renderers (spheres)
-            r.AddActor(a)
-        for a in arrow_actors:
-            r.AddActor(a)
-        if pot_field is not None:
-            for a in surface_actors:
-                r.AddActor(a)
-
-    # initialize and start the app
-    interactor.Initialize()
-    interactor.Start()
-
-    del renwin, interactor
+    return [model_cam, xy_cam, yz_cam, xz_cam]
 
 
 def create_interface_spheres(geo_data, r=0.33):
@@ -495,9 +526,9 @@ def create_axes(geo_data, camera_list, verbose=0):
     cube_axes_actor.SetYTitle("Y")
     cube_axes_actor.SetZTitle("Z")
 
-    cube_axes_actor.SetXAxisLabelVisibility(0)
-    cube_axes_actor.SetYAxisLabelVisibility(0)
-    cube_axes_actor.SetZAxisLabelVisibility(0)
+    cube_axes_actor.SetXAxisLabelVisibility(1)
+    cube_axes_actor.SetYAxisLabelVisibility(1)
+    cube_axes_actor.SetZAxisLabelVisibility(1)
 
     # only plot grid lines furthest from viewpoint
     # ensure platform compatibility for the grid line options
@@ -507,6 +538,7 @@ def create_axes(geo_data, camera_list, verbose=0):
         cube_axes_actor.SetGridLineLocation(vtk.VTK_GRID_LINES_FURTHEST)
 
     return cube_axes_actor
+
 
 def export_vtk_rectilinear(geo_data, block_lith, path=None):
         """
