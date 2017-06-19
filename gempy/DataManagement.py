@@ -47,9 +47,11 @@ class InputData(object):
 
         # if we dont read a csv we create an empty dataframe with the columns that have to be filled
         self.foliations = pn.DataFrame(columns=['X', 'Y', 'Z', 'dip', 'azimuth', 'polarity',
-                                                'formation', 'series'])
+                                                'formation', 'series', 'X_std', 'Y_std', 'Z_std',
+                                                'dip_std', 'azimuth_std'])
 
-        self.interfaces = pn.DataFrame(columns=['X', 'Y', 'Z', 'formation', 'series'])
+        self.interfaces = pn.DataFrame(columns=['X', 'Y', 'Z', 'formation', 'series',
+                                                'X_std', 'Y_std', 'Z_std'])
 
         if path_f or path_i:
             self.import_data(path_i=path_i, path_f=path_f)
@@ -972,7 +974,7 @@ class InterpolatorInput:
         th_fn = theano.function(input_data_T, self.interpolator.tg.whole_block_model(self.data.n_faults,
                                                                                      compute_all=compute_all),
                                 on_unused_input='ignore',
-                                allow_input_downcast=True,
+                                allow_input_downcast=False,
                                 profile=False)
         return th_fn
 
@@ -1002,6 +1004,13 @@ class InterpolatorInput:
 
         new_coord_foliations = (geo_data.foliations[['X', 'Y', 'Z']] -
                                 centers) / rescaling_factor + 0.5001
+        try:
+            geo_data.interfaces[['X_std', 'Y_std', 'Z_std']] = (geo_data.interfaces[
+                                                                    ['X_std', 'Y_std', 'Z_std']]) / rescaling_factor
+            geo_data.foliations[['X_std', 'Y_std', 'Z_std']] = (geo_data.foliations[
+                                                                    ['X_std', 'Y_std', 'Z_std']]) / rescaling_factor
+        except KeyError:
+            pass
 
         new_coord_extent = (geo_data.extent - np.repeat(centers, 2)) / rescaling_factor + 0.5001
 
