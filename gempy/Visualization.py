@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
 from IPython.core.debugger import Pdb
-from .colors import color_dict_rgb
+from .colors import color_dict_rgb, color_dict_hex
 
 # TODO: inherit pygeomod classes
 # import sys, os
@@ -32,7 +32,7 @@ class PlotData(object):
         verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0
     """
 
-    def __init__(self, _data, cd_rgb=color_dict_rgb, **kwargs):
+    def __init__(self, _data, cd_rgb=color_dict_rgb, cd_hex=color_dict_hex, **kwargs):
 
         self._data = _data
 
@@ -44,7 +44,8 @@ class PlotData(object):
             # with pandas framework
         self._set_style()
 
-        self.cd_rgb = cd_rgb
+        self._cd_rgb = cd_rgb
+        self._cd_hex = cd_hex
 
         # TODO: Map colors to formations and integer values for plots
 
@@ -56,9 +57,12 @@ class PlotData(object):
         # c_subnames = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900']
         #               'a100','a200', 'a400', 'a700']
 
-        self.cmap = matplotlib.colors.ListedColormap([self.cd_rgb[key]["400"] for key in c_names])
+        self._cmap = matplotlib.colors.ListedColormap([self._cd_rgb[key]["400"] for key in c_names])
+        self._sns_palette = [self._cd_rgb[key]["400"] for key in c_names]
+
         bounds = [i for i in range(len(c_names))]
-        self.norm = matplotlib.colors.BoundaryNorm(bounds, self.cmap.N)
+        self._norm = matplotlib.colors.BoundaryNorm(bounds, self._cmap.N)
+        # TODO: Are colors correctly mapped between voxel plot and data plot?
 
     def _set_style(self):
         """
@@ -106,6 +110,7 @@ class PlotData(object):
                                 "s": 100},
                    legend=True,
                    legend_out=True,
+                   palette=self._sns_palette,
                    **kwargs)
 
         # Plotting orientations
@@ -190,7 +195,7 @@ class PlotData(object):
         if plot_data:
             self.plot_data(direction, 'all')
 
-        plt.imshow(plot_block[_a, _b, _c].T, origin="bottom", cmap=self.cmap, norm=self.norm,
+        plt.imshow(plot_block[_a, _b, _c].T, origin="bottom", cmap=self._cmap, norm=self._norm,
                    extent=extent_val,
                    interpolation=interpolation, **kwargs)
 

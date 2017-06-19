@@ -1,5 +1,13 @@
 # Google Material Design Colors as rgb or hex dictionaries
 
+color_names = ["indigo", "red", "yellow", "brown", "orange",
+           "green", "blue", "amber", "pink", "light-blue",
+           "lime", "blue-grey", "deep-orange", "grey", "cyan",
+           "deep-purple", "purple", "teal", "light-green"]
+
+color_subnames = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900']
+              # 'a100','a200', 'a400', 'a700']
+
 color_dict_rgb = {'amber': {'100': [1.0, 0.9254901960784314, 0.7019607843137254],
                             '200': [1.0, 0.8784313725490196, 0.5098039215686274],
                             '300': [1.0, 0.8352941176470589, 0.30980392156862746],
