@@ -1297,35 +1297,37 @@ class TheanoGraph_pro(object):
         final_block_init = self.final_block
         final_block_init.name = 'final block of lithologies init'
 
-        if self.compute_all:
-            final_block_init = T.vertical_stack(self.final_block, self.final_block, self.final_block)
-            # Loop the series to create the Final block
-            all_series, updates2 = theano.scan(
-                fn=self.compute_a_series,
-                outputs_info=final_block_init,
-                sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
-                           dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
-                           dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
-                           dict(input=self.u_grade_T[n_faults:], taps=[0])]
-            # all_series_pf, updates3 = theano.scan(
-            #      fn=self.compute_a_series,
-            #      outputs_info=final_block_init,
-            #      sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
-            #                 dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
-            #                 dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
-            #                 dict(input=self.u_grade_T[n_faults:], taps=[0])]
-            )
+        # Checking there are more potential fields in the data that the faults.
+        if len(self.len_series_f.get_value())-1 > n_faults:
+            if self.compute_all:
+                final_block_init = T.vertical_stack(self.final_block, self.final_block, self.final_block)
+                # Loop the series to create the Final block
+                all_series, updates2 = theano.scan(
+                    fn=self.compute_a_series,
+                    outputs_info=final_block_init,
+                    sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
+                               dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
+                               dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
+                               dict(input=self.u_grade_T[n_faults:], taps=[0])]
+                # all_series_pf, updates3 = theano.scan(
+                #      fn=self.compute_a_series,
+                #      outputs_info=final_block_init,
+                #      sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
+                #                 dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
+                #                 dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
+                #                 dict(input=self.u_grade_T[n_faults:], taps=[0])]
+                )
 
-        else:
-            # Loop the series to create the Final block
-            all_series, updates2 = theano.scan(
-                fn=self.compute_a_series,
-                outputs_info=final_block_init,
-                sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
-                           dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
-                           dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
-                           dict(input=self.u_grade_T[n_faults:], taps=[0])]
-            )
+            else:
+                # Loop the series to create the Final block
+                all_series, updates2 = theano.scan(
+                    fn=self.compute_a_series,
+                    outputs_info=final_block_init,
+                    sequences=[dict(input=self.len_series_i[n_faults:], taps=[0, 1]),
+                               dict(input=self.len_series_f[n_faults:], taps=[0, 1]),
+                               dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
+                               dict(input=self.u_grade_T[n_faults:], taps=[0])]
+                )
 
         return all_series
 
