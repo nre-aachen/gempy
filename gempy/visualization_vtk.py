@@ -178,6 +178,8 @@ def visualize(geo_data,
     # 3d model camera
     camera_list = _create_cameras(_e, verbose=verbose)
     # define background colors of the renderers
+    # TODO: Tune renderer colors
+    # TODO: Try to make renderer titles (floating text?!)
     ren_color = [(66 / 250, 66 / 250, 66 / 250), (0.5, 0., 0.1), (0.1, 0.5, 0.1), (0.1, 0.1, 0.5)]
 
     for i in range(n_ren):
@@ -217,7 +219,14 @@ def visualize(geo_data,
     interactor.Initialize()
     interactor.Start()
 
+    close_window(interactor)
     del renwin, interactor
+
+
+def close_window(interactor):
+    render_window = interactor.GetRenderWindow()
+    render_window.Finalize()
+    interactor.TerminateApp()
 
 
 def _extract_surface(pot_field, val, res, spacing):
@@ -242,8 +251,10 @@ def _create_cameras(_e, verbose=0):
     model_cam.SetFocalPoint(np.min(_e[0:2]) + _e_dx / 2,
                             np.min(_e[2:4]) + _e_dy / 2,
                             np.min(_e[4:]) + _e_dz / 2)
-    model_cam.Roll(90)
-    model_cam.SetViewUp(1, 0, 0)
+
+    model_cam.SetViewUp(-0.239,0.155,0.958)
+    #model_cam.Roll(-80.)
+    #vtk.vtk
 
     # XY camera RED
     xy_cam = vtk.vtkCamera()
@@ -411,7 +422,7 @@ def _create_arrow_transformers(arrows, geo_data, f2):
 
 
 def _create_axes(geo_data, camera_list, verbose=0):
-    "Create and return cubeAxesActor, settings."
+    "Create and returnr cubeAxesActor, settings."
     cube_axes_actor = vtk.vtkCubeAxesActor()
     cube_axes_actor.SetBounds(geo_data.extent)
     cube_axes_actor.SetCamera(camera_list[1])
@@ -524,6 +535,10 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
         key = iren.GetKeyCode()
         if key == "5":  # switch to other renderer
             self.parent.SetInteractorStyle(CustomInteractorCamera(self.ren_list, self.geo_data, self.parent))
+        #elif key == "7":
+        #    self.renwin.Finalize()
+        #    self.parent.TerminateApp()
+        #    del self.renwin, self.parent
 
         # elif key == "d":
         #     mouse_pos = self.GetInteractor().GetEventPosition()
@@ -665,6 +680,14 @@ class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
         key = iren.GetKeyCode()
         if key == "5":  # switch to other renderer
             self.parent.SetInteractorStyle(CustomInteractorActor(self.ren_list, self.geo_data, self.parent))
+        elif key =="6":
+            print("viewup:",self.ren_list[0].GetActiveCamera().GetViewUp())
+            print("roll:",self.ren_list[0].GetActiveCamera().GetRoll())
+        #elif key == "7":
+        #    self.renwin.Finalize()
+        #    self.parent.TerminateApp()
+        #    del self.renwin, self.parent
+        #    # vtk.vtkRenderWindowInteractor
 
     def left_button_press_event(self, obj, ev):
         if self.renwin is not None:
