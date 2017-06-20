@@ -221,6 +221,7 @@ def visualize(geo_data,
 
     close_window(interactor)
     del renwin, interactor
+    return renwin, interactor
 
 
 def close_window(interactor):
@@ -306,7 +307,7 @@ def _create_interface_spheres(geo_data, r=0.33):
     "Creates InterfaceSphere (vtkSphereSource) for all interface positions in dataframe."
     spheres = []
     for index, row in geo_data.interfaces.iterrows():
-        spheres.append(InterfaceSphere(index, fmt=row[3]))
+        spheres.append(InterfaceSphere(index, fmt=geo_data.interfaces.iloc[index]["formation"]))
         spheres[-1].SetCenter(geo_data.interfaces.iloc[index]["X"],
                               geo_data.interfaces.iloc[index]["Y"],
                               geo_data.interfaces.iloc[index]["Z"])
@@ -318,7 +319,7 @@ def _create_foliation_arrows(geo_data):
     "Creates FoliationArrow (vtkArrowSource) for all foliation positions in dataframe."
     arrows = []
     for index, row in geo_data.foliations.iterrows():
-        arrows.append(FoliationArrow(index, fmt=row[6]))
+        arrows.append(FoliationArrow(index, fmt=geo_data.interfaces.iloc[index]["formation"]))
     return arrows
 
 
