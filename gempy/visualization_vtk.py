@@ -503,6 +503,9 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
     """
 
     def __init__(self, ren_list, geo_data, parent):
+
+        self.On()
+        self.DebugOn()
         self.parent = parent
         self.ren_list = ren_list
         self.geo_data = geo_data
@@ -511,6 +514,7 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
         self.AddObserver("LeftButtonPressEvent", self.left_button_press_event)
         self.AddObserver("LeftButtonReleaseEvent", self.left_button_release_event)
         self.AddObserver("KeyPressEvent", self.key_down_event)
+        self.AddObserver("MouseMoveEvent", self.mouse_move_event)
 
         self.PickedActor = None
         self.PickedProducer = None
@@ -553,7 +557,7 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
 
 
     def left_button_press_event(self, obj, event):
-        self.middle_button_press_event(obj, event)
+        #self.middle_button_press_event(obj, event)
         pass
         # # print("Pressed left mouse button")
         #
@@ -585,7 +589,7 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
         # self.OnLeftButtonDown()
 
     def left_button_release_event(self, obj, event):
-        self.middle_button_release_event(obj, event)
+        #self.middle_button_release_event(obj, event)
         pass
         # # matrix = self.PickedActor.GetMatrix(vtk.vtkMatrix4x4())
         # try:
@@ -597,6 +601,11 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
 
     def middle_button_press_event(self, obj, event):
         # get event position of click event
+
+        self.PickedProducer = None
+        self.PickedActor = None
+
+
         clickPos = self.GetInteractor().GetEventPosition()
 
         pickers = []
@@ -611,40 +620,82 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
         for pa in picked_actors:
             if pa is not None:
                 self.PickedActor = pa
+                #self.PickedActor.Update()
 
         if self.PickedActor is not None:
             _m = self.PickedActor.GetMapper()
             _i = _m.GetInputConnection(0, 0)
             _p = _i.GetProducer()
-            print(type(_p))
 
-            if type(_p) is not InterfaceSphere and type(_p) is not CustomTransformPolyDataFilter and _p is not None:
-                # then go deeper
-                alg = _p.GetInputConnection(0, 0)
-                self.PickedProducer = alg.GetProducer()
-            else:
-                self.PickedProducer = _p
-        # print(str(type(self.PickedProducer)))
+            #print(type(_p))
+
+        if type(_p) is not InterfaceSphere and type(_p) is not CustomTransformPolyDataFilter and _p is not None:
+            # then go deeper
+            alg = _p.GetInputConnection(0, 0)
+            self.PickedProducer = alg.GetProducer()
+
+        else:
+            self.PickedProducer = _p
+
+            if self.PickedProducer is not None:
+                # print("Moving actor: ",type(self.PickedActor))
+                # print("Producer: ",type(self.PickedProducer))
+                if type(self.PickedProducer) is InterfaceSphere:
+                    _c = self.PickedActor.GetCenter()
+                    self.geo_data.interface_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
+                elif type(self.PickedProducer) is CustomTransformPolyDataFilter:
+                    _c = self.PickedActor.GetCenter()
+                    self.geo_data.foliation_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
+
+
+            # print(str(type(self.PickedProducer)))
         self.OnMiddleButtonDown()
         return
+
+    def mouse_move_event(self, obj, event):
+        self.OnMouseMove()
 
     def middle_button_release_event(self, obj, event):
         # TODO: disable moving surfaces
         # print("Middle Button Released")
-        print(type(self.PickedProducer))
-        if type(self.PickedProducer) is InterfaceSphere:
-            try:
+        #print(type(self.PickedProducer))
+        #self.PickedProducer.Update()
+
+        print("MiddleMouseButton released", self.PickedActor.GetCenter(), self.PickedActor.GetPosition())
+        #
+        #
+        if self.PickedProducer is not None:
+            #print("Moving actor: ",type(self.PickedActor))
+            #print("Producer: ",type(self.PickedProducer))
+            if type(self.PickedProducer) is InterfaceSphere:
                 _c = self.PickedActor.GetCenter()
                 self.geo_data.interface_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
-            except AttributeError:
-                pass
-        if type(self.PickedProducer) is CustomTransformPolyDataFilter:
-            _c = self.PickedActor.GetCenter()
-            print(type(self.PickedActor))
-            self.geo_data.foliation_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
+            elif type(self.PickedProducer) is CustomTransformPolyDataFilter:
+                _c = self.PickedActor.GetCenter()
+                self.geo_data.foliation_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
+
+        self.PickedProducer = None
+        self.PickedActor = None
 
         self.OnMiddleButtonUp()
         return
+
+    def na(self):
+        print("MiddleMouseButton released")
+
+        if self.PickedProducer is not None:
+            # print("Moving actor: ",type(self.PickedActor))
+            # print("Producer: ",type(self.PickedProducer))
+
+            if type(self.PickedProducer) is InterfaceSphere:
+                _c = self.PickedActor.GetCenter()
+                self.geo_data.interface_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
+            elif type(self.PickedProducer) is CustomTransformPolyDataFilter:
+                _c = self.PickedActor.GetCenter()
+                self.geo_data.foliation_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
+
+        self.PickedProducer = None
+        self.PickedActor = None
 
 
 class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):

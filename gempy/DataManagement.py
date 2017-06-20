@@ -399,6 +399,7 @@ class InputData(object):
                 faults_series.append(i)
 
         self.set_faults(faults_series)
+        self.reset_indices()
 
         return _series
 

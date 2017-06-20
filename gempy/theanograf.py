@@ -1328,6 +1328,9 @@ class TheanoGraph_pro(object):
                                dict(input=self.n_formations_per_serie[n_faults:], taps=[0, 1]),
                                dict(input=self.u_grade_T[n_faults:], taps=[0])]
                 )
+        else:
+            # We just pass the faults block
+            all_series = self.fault_matrix
 
         return all_series
 

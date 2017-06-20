@@ -6,14 +6,10 @@ sys.path.append("../")
 import gempy as gp
 
 # Embedding matplotlib figures into the notebooks
+geo_data = gp.read_pickle('../Tutorial/geo_data.pickle')
+geo_data.n_faults = 0
+print(geo_data)
+# Embedding matplotlib figures into the notebooks
 
-
+gp.visualize(geo_data)
 # Aux imports
-import numpy as np
-
-# Importing the data from csv files and settign extent and resolution
-geo_data = gp.create_data([696000,747000,6863000,6950000,-20000, 200],[50, 50, 50],
-                         path_f = os.pardir+"/input_data/a_Foliations.csv",
-                         path_i = os.pardir+"/input_data/a_Points.csv")
-
-gp.get_raw_data(geo_data, 'interfaces').head()
