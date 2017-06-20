@@ -310,10 +310,10 @@ class InputData(object):
         else:
             self.interfaces = interf_Dataframe
 
-       #-DEP- self.interfaces.reset_index(drop=False, inplace=True)
-       #-DEP- self._set_formations()
+        self.interfaces.reset_index(drop=False, inplace=True)
+        self._set_formations()
         self.set_series()
-       #-DEP- self.set_formation_number()
+        #self.set_formation_number()
 
     def set_foliations(self, foliat_Dataframe, append=False):
         """
@@ -330,10 +330,10 @@ class InputData(object):
         else:
             self.foliations = foliat_Dataframe
 
-        #-DEP- self.interfaces.reset_index(drop=False, inplace=True)
-        #-DEP- self._set_formations()
+        self.interfaces.reset_index(drop=False, inplace=True)
+        self._set_formations()
         self.set_series()
-        #-DEP- self.set_formation_number()
+        #self.set_formation_number()
         self.calculate_gradient()
 
     def set_series(self, series_distribution=None, order=None):
