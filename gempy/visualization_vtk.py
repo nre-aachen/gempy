@@ -49,7 +49,7 @@ def visualize(geo_data,
               verbose=0,
               win_size=(1000, 800),
               sphere_r=None,
-              surface_alpha=0.75,
+              surface_alpha=1,
               surface_spacing_modifier=1
               ):
     """
@@ -66,7 +66,6 @@ def visualize(geo_data,
 
     """
     # TODO: Fix move lock if window gets resized
-    # TODO: Color spheres and arrows accordingly
     global C_LOT  # TODO: Make this more elegant, less shitty
     C_LOT = color_lot_create(geo_data)
 
@@ -94,6 +93,7 @@ def visualize(geo_data,
         spheres = _create_interface_spheres(geo_data, r=sphere_r)
         # create sphere mappers and actors
         interf_mappers, interf_actors = _create_mappers_actors(spheres)
+
     if fol_bool:
         # create foliation ArrowSource
         arrows = _create_foliation_arrows(geo_data)
@@ -171,7 +171,7 @@ def visualize(geo_data,
     # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     # create interactor and set interactor style, assign render window
     interactor = vtk.vtkRenderWindowInteractor()
-    interactor.SetInteractorStyle(CustomInteractorCamera(ren_list, geo_data, interactor))
+    interactor.SetInteractorStyle(CustomInteractorCamera(ren_list, geo_data, interactor, pot_field))
     interactor.SetRenderWindow(renwin)
 
     # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,11 +191,6 @@ def visualize(geo_data,
     # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     # create AxesActor and customize
     cube_axes_actor = _create_axes(geo_data, camera_list)
-
-    # axes_actor = vtk.vtkAxesActor()
-    # transform = vtk.vtkTransform()
-    # transform.Translate(_e[0], _e[2], _e[4])
-    # axes_actor.SetUserTransform(transform)
 
     # add actors to all renderers
     for r in ren_list:
@@ -219,15 +214,8 @@ def visualize(geo_data,
     interactor.Initialize()
     interactor.Start()
 
-    close_window(interactor)
+    # close_window(interactor)
     del renwin, interactor
-    return renwin, interactor
-
-
-def close_window(interactor):
-    render_window = interactor.GetRenderWindow()
-    render_window.Finalize()
-    interactor.TerminateApp()
 
 
 def _extract_surface(pot_field, val, res, spacing):
@@ -255,7 +243,6 @@ def _create_cameras(_e, verbose=0):
 
     model_cam.SetViewUp(-0.239,0.155,0.958)
     #model_cam.Roll(-80.)
-    #vtk.vtk
 
     # XY camera RED
     xy_cam = vtk.vtkCamera()
@@ -307,10 +294,10 @@ def _create_interface_spheres(geo_data, r=0.33):
     "Creates InterfaceSphere (vtkSphereSource) for all interface positions in dataframe."
     spheres = []
     for index, row in geo_data.interfaces.iterrows():
-        spheres.append(InterfaceSphere(index, fmt=geo_data.interfaces.iloc[index]["formation"]))
-        spheres[-1].SetCenter(geo_data.interfaces.iloc[index]["X"],
-                              geo_data.interfaces.iloc[index]["Y"],
-                              geo_data.interfaces.iloc[index]["Z"])
+        spheres.append(InterfaceSphere(index, fmt=geo_data.interfaces.ix[index]["formation"]))
+        spheres[-1].SetCenter(geo_data.interfaces.ix[index]["X"],
+                              geo_data.interfaces.ix[index]["Y"],
+                              geo_data.interfaces.ix[index]["Z"])
         spheres[-1].SetRadius(r)
     return spheres
 
@@ -332,11 +319,13 @@ def _create_mappers_actors(sources):
         if type(s) == CustomPolyData:
             mappers[-1].SetInputData(s)
             actors.append(ColoredSurfaceActor(color=s.color))
+
             actors[-1].GetProperty().SetColor(actors[-1].color[0], actors[-1].color[1], actors[-1].color[2])
             actors[-1].GetProperty().SetOpacity(s.surface_alpha)
         else:
             mappers[-1].SetInputConnection(s.GetOutputPort())
             actors.append(ColoredActor(s.index, color=s.color))
+
             actors[-1].GetProperty().SetColor(actors[-1].color[0], actors[-1].color[1], actors[-1].color[2])
         actors[-1].SetMapper(mappers[-1])
     return mappers, actors
@@ -401,12 +390,12 @@ def _create_arrow_transformers(arrows, geo_data, f2):
     arrows_ep = []
     f = 0.75
     for arrow in arrows:
-        _sp = (geo_data.foliations.iloc[arrow.index]["X"] - geo_data.foliations.iloc[arrow.index]["G_x"] / f,
-               geo_data.foliations.iloc[arrow.index]["Y"] - geo_data.foliations.iloc[arrow.index]["G_x"] / f,
-               geo_data.foliations.iloc[arrow.index]["Z"] - geo_data.foliations.iloc[arrow.index]["G_x"] / f)
-        _ep = (geo_data.foliations.iloc[arrow.index]["X"] + geo_data.foliations.iloc[arrow.index]["G_x"] / f,
-               geo_data.foliations.iloc[arrow.index]["Y"] + geo_data.foliations.iloc[arrow.index]["G_y"] / f,
-               geo_data.foliations.iloc[arrow.index]["Z"] + geo_data.foliations.iloc[arrow.index]["G_z"] / f)
+        _sp = (geo_data.foliations.ix[arrow.index]["X"] - geo_data.foliations.ix[arrow.index]["G_x"] / f,
+               geo_data.foliations.ix[arrow.index]["Y"] - geo_data.foliations.ix[arrow.index]["G_x"] / f,
+               geo_data.foliations.ix[arrow.index]["Z"] - geo_data.foliations.ix[arrow.index]["G_x"] / f)
+        _ep = (geo_data.foliations.ix[arrow.index]["X"] + geo_data.foliations.ix[arrow.index]["G_x"] / f,
+               geo_data.foliations.ix[arrow.index]["Y"] + geo_data.foliations.ix[arrow.index]["G_y"] / f,
+               geo_data.foliations.ix[arrow.index]["Z"] + geo_data.foliations.ix[arrow.index]["G_z"] / f)
         arrows_sp.append(_sp)
         arrows_ep.append(_ep)
 
@@ -519,10 +508,8 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
         self.geo_data = geo_data
         self.AddObserver("MiddleButtonPressEvent", self.middle_button_press_event)
         self.AddObserver("MiddleButtonReleaseEvent", self.middle_button_release_event)
-
         self.AddObserver("LeftButtonPressEvent", self.left_button_press_event)
         self.AddObserver("LeftButtonReleaseEvent", self.left_button_release_event)
-
         self.AddObserver("KeyPressEvent", self.key_down_event)
 
         self.PickedActor = None
@@ -536,10 +523,6 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
         key = iren.GetKeyCode()
         if key == "5":  # switch to other renderer
             self.parent.SetInteractorStyle(CustomInteractorCamera(self.ren_list, self.geo_data, self.parent))
-        #elif key == "7":
-        #    self.renwin.Finalize()
-        #    self.parent.TerminateApp()
-        #    del self.renwin, self.parent
 
         # elif key == "d":
         #     mouse_pos = self.GetInteractor().GetEventPosition()
@@ -564,60 +547,67 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
         #                 _p = alg.GetProducer()
         #         for r in self.ren_list:
         #             r.RemoveActor(pa)
-        # TODO: Make point deletion work.
+        #             r.Render()
+        # # TODO: Make point deletion work.
 
 
 
     def left_button_press_event(self, obj, event):
-        # print("Pressed left mouse button")
-
-        # m = vtk.vtkMatrix4x4()
-
-        clickPos = self.GetInteractor().GetEventPosition()
-        pickers = []
-        picked_actors = []
-        for r in self.ren_list:
-            pickers.append(vtk.vtkPicker())
-            pickers[-1].Pick(clickPos[0], clickPos[1], 0, r)
-            picked_actors.append(pickers[-1].GetActor())
-        for pa in picked_actors:
-            if pa is not None:
-                self.PickedActor = pa
-
-        # TODO: Arrow Rotation -> modify foliation dataframe
-        # vtk.vtkOpenGLActor.GetOrientation?
-        # matrix = self.PickedActor.GetMatrix(m)
-        # if self.PickedActor is
-        # self.PickedActor.SetScale(2)
-        # renwin.Render()
-        try:
-            orientation = self.PickedActor.GetOrientation()
-            print(str(orientation))
-        except AttributeError:
-            pass
-
-        self.OnLeftButtonDown()
+        self.middle_button_press_event(obj, event)
+        pass
+        # # print("Pressed left mouse button")
+        #
+        # # m = vtk.vtkMatrix4x4()
+        #
+        # clickPos = self.GetInteractor().GetEventPosition()
+        # pickers = []
+        # picked_actors = []
+        # for r in self.ren_list:
+        #     pickers.append(vtk.vtkPicker())
+        #     pickers[-1].Pick(clickPos[0], clickPos[1], 0, r)
+        #     picked_actors.append(pickers[-1].GetActor())
+        # for pa in picked_actors:
+        #     if pa is not None:
+        #         self.PickedActor = pa
+        #
+        # # TODO: Arrow Rotation -> modify foliation dataframe
+        # # vtk.vtkOpenGLActor.GetOrientation?
+        # # matrix = self.PickedActor.GetMatrix(m)
+        # # if self.PickedActor is
+        # # self.PickedActor.SetScale(2)
+        # # renwin.Render()
+        # #try:
+        # #    orientation = self.PickedActor.GetOrientation()
+        # #    print(str(orientation))
+        # #except AttributeError:
+        # #    pass
+        #
+        # self.OnLeftButtonDown()
 
     def left_button_release_event(self, obj, event):
-        # matrix = self.PickedActor.GetMatrix(vtk.vtkMatrix4x4())
-        try:
-            matrix = self.PickedActor.GetOrientation()
-            # print(str(matrix))
-        except AttributeError:
-            pass
-        self.OnLeftButtonUp()
+        self.middle_button_release_event(obj, event)
+        pass
+        # # matrix = self.PickedActor.GetMatrix(vtk.vtkMatrix4x4())
+        # try:
+        #     matrix = self.PickedActor.GetOrientation()
+        #     # print(str(matrix))
+        # except AttributeError:
+        #     pass
+        # self.OnLeftButtonUp()
 
     def middle_button_press_event(self, obj, event):
-        # print("Middle Button Pressed")
+        # get event position of click event
         clickPos = self.GetInteractor().GetEventPosition()
 
         pickers = []
         picked_actors = []
+        # go through every renderer and pick
         for r in self.ren_list:
             pickers.append(vtk.vtkPicker())
             pickers[-1].Pick(clickPos[0], clickPos[1], 0, r)
             picked_actors.append(pickers[-1].GetActor())
 
+        # select the actual actor picked (if exists)
         for pa in picked_actors:
             if pa is not None:
                 self.PickedActor = pa
@@ -626,8 +616,9 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
             _m = self.PickedActor.GetMapper()
             _i = _m.GetInputConnection(0, 0)
             _p = _i.GetProducer()
+            print(type(_p))
 
-            if type(_p) is not InterfaceSphere:
+            if type(_p) is not InterfaceSphere and type(_p) is not CustomTransformPolyDataFilter and _p is not None:
                 # then go deeper
                 alg = _p.GetInputConnection(0, 0)
                 self.PickedProducer = alg.GetProducer()
@@ -638,15 +629,18 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
         return
 
     def middle_button_release_event(self, obj, event):
+        # TODO: disable moving surfaces
         # print("Middle Button Released")
-        if self.PickedActor is not None or type(self.PickedProducer) is not FoliationArrow:
+        print(type(self.PickedProducer))
+        if type(self.PickedProducer) is InterfaceSphere:
             try:
                 _c = self.PickedActor.GetCenter()
                 self.geo_data.interface_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
             except AttributeError:
                 pass
-        if type(self.PickedProducer) is FoliationArrow:
+        if type(self.PickedProducer) is CustomTransformPolyDataFilter:
             _c = self.PickedActor.GetCenter()
+            print(type(self.PickedActor))
             self.geo_data.foliation_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
 
         self.OnMiddleButtonUp()
@@ -658,7 +652,7 @@ class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
     Custom camera interactor class.
     """
 
-    def __init__(self, ren_list, geo_data, parent):
+    def __init__(self, ren_list, geo_data, parent, pot_field):
         self.parent = parent
         self.AddObserver("LeftButtonPressEvent", self.left_button_press_event)
         self.AddObserver("LeftButtonReleaseEvent", self.left_button_release_event)
@@ -672,6 +666,7 @@ class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
         self.prev_mouse_pos = None
 
         self.left_button_hold = False
+        self.pot_field = pot_field
 
     def key_down_event(self, obj, ev):
         iren = self.GetInteractor()
@@ -680,10 +675,12 @@ class CustomInteractorCamera(vtk.vtkInteractorStyleTrackballCamera):
 
         key = iren.GetKeyCode()
         if key == "5":  # switch to other renderer
-            self.parent.SetInteractorStyle(CustomInteractorActor(self.ren_list, self.geo_data, self.parent))
-        elif key =="6":
-            print("viewup:",self.ren_list[0].GetActiveCamera().GetViewUp())
-            print("roll:",self.ren_list[0].GetActiveCamera().GetRoll())
+            if self.pot_field is None:
+                self.parent.SetInteractorStyle(CustomInteractorActor(self.ren_list, self.geo_data,
+                                                                     self.parent))
+        # elif key =="6":
+        #     print("viewup:",self.ren_list[0].GetActiveCamera().GetViewUp())
+        #     print("roll:",self.ren_list[0].GetActiveCamera().GetRoll())
         #elif key == "7":
         #    self.renwin.Finalize()
         #    self.parent.TerminateApp()

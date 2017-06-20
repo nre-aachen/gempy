@@ -1,17 +1,19 @@
-import pandas as pn
-import numpy as np
-import matplotlib.pyplot as plt
+# These two lines are necessary only if gempy is not installed
+import sys, os
+sys.path.append("../")
 
-import theano
-import theano.tensor as T
-import pymc3 as pm
-import sys
+# Importing gempy
 import gempy as gp
-from GeoPhysics import GeoPhysicsPreprocessing
+
+# Embedding matplotlib figures into the notebooks
 
 
-geo_data = gp.read_pickle('../Prototype Notebook/geo_data.pickle')
-inter_data = gp.InterpolatorInput(geo_data, compile_theano=False)
-gpp = GeoPhysicsPreprocessing(inter_data,300,  [696000,747000,6863000,6950000,-20000, 200], res_grav = [10, 10])
-print(gpp)
-gpp.looping_z_decomp(20)
+# Aux imports
+import numpy as np
+
+# Importing the data from csv files and settign extent and resolution
+geo_data = gp.create_data([696000,747000,6863000,6950000,-20000, 200],[50, 50, 50],
+                         path_f = os.pardir+"/input_data/a_Foliations.csv",
+                         path_i = os.pardir+"/input_data/a_Points.csv")
+
+gp.get_raw_data(geo_data, 'interfaces').head()
