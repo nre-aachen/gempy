@@ -1343,7 +1343,7 @@ class InterpolatorInput:
                 ref_layer_points = np.vstack((ref_layer_points, np.tile(aux_1[e], (i - 1, 1))))
 
             # -DEP- was just a check point
-            #self.ref_layer_points = ref_layer_points
+            self.ref_layer_points = ref_layer_points
 
             # Check no reference points in rest points (at least in coor x)
             assert not any(aux_1[:, 0]) in rest_layer_points[:, 0], \
