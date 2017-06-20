@@ -242,6 +242,8 @@ def _create_cameras(_e, verbose=0):
     model_cam.SetFocalPoint(np.min(_e[0:2]) + _e_dx / 2,
                             np.min(_e[2:4]) + _e_dy / 2,
                             np.min(_e[4:]) + _e_dz / 2)
+    model_cam.Roll(90)
+    model_cam.SetViewUp(1, 0, 0)
 
     # XY camera RED
     xy_cam = vtk.vtkCamera()
@@ -263,6 +265,7 @@ def _create_cameras(_e, verbose=0):
     yz_cam.SetFocalPoint(np.min(_e[0:2]) + _e_dx / 2,
                          np.min(_e[2:4]) + _e_dy / 2,
                          np.min(_e[4:]) + _e_dz / 2)
+    yz_cam.Roll(-90)
 
     # XZ camera BLUE
     xz_cam = vtk.vtkCamera()
@@ -274,6 +277,7 @@ def _create_cameras(_e, verbose=0):
                          np.min(_e[2:4]) + _e_dy / 2,
                          np.min(_e[4:]) + _e_dz / 2)
     xz_cam.SetViewUp(1, 0, 0)
+    xz_cam.Roll(90)
 
     # camera position debugging
     if verbose == 1:
@@ -521,8 +525,35 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
         if key == "5":  # switch to other renderer
             self.parent.SetInteractorStyle(CustomInteractorCamera(self.ren_list, self.geo_data, self.parent))
 
+        # elif key == "d":
+        #     mouse_pos = self.GetInteractor().GetEventPosition()
+        #     pickers = []
+        #     picked_actors = []
+        #     for r in self.ren_list:
+        #         pickers.append(vtk.vtkPicker())
+        #         pickers[-1].Pick(mouse_pos[0], mouse_pos[1], 0, r)
+        #         picked_actors.append(pickers[-1].GetActor())
+        #     for pa in picked_actors:
+        #         if pa is not None:
+        #             _m = pa.GetMapper()
+        #             _i = _m.GetInputConnection(0, 0)
+        #             _p = _i.GetProducer()
+        #
+        #             if type(_p) is InterfaceSphere:
+        #                 self.geo_data.interface_drop(_p.index)
+        #
+        #             elif type(_p) is FoliationArrow:
+        #                 alg = _p.GetInputConnection(0, 0)
+        #                 self.geo_data.foliation_drop(_p)
+        #                 _p = alg.GetProducer()
+        #         for r in self.ren_list:
+        #             r.RemoveActor(pa)
+        # TODO: Make point deletion work.
+
+
+
     def left_button_press_event(self, obj, event):
-        print("Pressed left mouse button")
+        # print("Pressed left mouse button")
 
         # m = vtk.vtkMatrix4x4()
 
