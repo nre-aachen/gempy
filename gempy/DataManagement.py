@@ -185,7 +185,6 @@ class InputData(object):
             # Pickle the 'data' dictionary using the highest protocol available.
             pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
 
-
     def get_raw_data(self, itype='all'):
         """
         Method that returns the interfaces and foliations pandas Dataframes. Can return both at the same time or only

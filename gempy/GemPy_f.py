@@ -14,9 +14,13 @@ import theano
 import numpy as _np
 # import sys, os
 import pandas as _pn
+import warnings
 import copy
 from .Visualization import PlotData
-from .visualization_vtk import visualize, export_vtk_rectilinear
+try:
+    from .visualization_vtk import visualize, export_vtk_rectilinear
+except ModuleNotFoundError:
+    warnings.warn('Vtk package is not installed. No vtk visualization available.')
 from .DataManagement import InputData, InterpolatorInput
 from IPython.core.debugger import Tracer
 

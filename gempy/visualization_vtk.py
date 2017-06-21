@@ -657,17 +657,16 @@ class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
 
     def middle_button_release_event(self, obj, event):
         # TODO: disable moving surfaces
-        # print("Middle Button Released")
-        #print(type(self.PickedProducer))
-        #self.PickedProducer.Update()
 
-        print("MiddleMouseButton released", self.PickedActor.GetCenter(), self.PickedActor.GetPosition())
-        #
-        #
         if self.PickedProducer is not None:
             #print("Moving actor: ",type(self.PickedActor))
             #print("Producer: ",type(self.PickedProducer))
             if type(self.PickedProducer) is InterfaceSphere:
+                # if self.PickedActor.GetPosition() == (0.0, 0.0, 0.0):
+                #     pr = 'The point ' + str(self.PickedProducer.index) + ' did not move. Click on it again'
+                # else:
+                #     pr = 'The point ' + str(self.PickedProducer.index) + ' moved.'
+                # print("MiddleMouseButton released. ", pr)
                 _c = self.PickedActor.GetCenter()
                 self.geo_data.interface_modify(self.PickedProducer.index, X=_c[0], Y=_c[1], Z=_c[2])
             elif type(self.PickedProducer) is CustomTransformPolyDataFilter:
