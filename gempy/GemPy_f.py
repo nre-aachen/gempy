@@ -22,6 +22,7 @@ try:
 except ModuleNotFoundError:
     warnings.warn('Vtk package is not installed. No vtk visualization available.')
 from .DataManagement import InputData, InterpolatorInput
+from .Topology import Topology
 from IPython.core.debugger import Tracer
 
 
