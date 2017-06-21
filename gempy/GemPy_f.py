@@ -18,6 +18,7 @@ import copy
 from .Visualization import PlotData
 from .visualization_vtk import visualize, export_vtk_rectilinear
 from .DataManagement import InputData, InterpolatorInput
+from .Topology import Topology
 from IPython.core.debugger import Tracer
 
 
