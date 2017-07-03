@@ -18,7 +18,7 @@ import warnings
 import copy
 from .Visualization import PlotData
 try:
-    from .visualization_vtk import visualize, export_vtk_rectilinear
+    from .visualization_vtk import visualize, export_vtk_rectilinear, vtkVisualization
 except ModuleNotFoundError:
     warnings.warn('Vtk package is not installed. No vtk visualization available.')
 from .DataManagement import InputData, InterpolatorInput

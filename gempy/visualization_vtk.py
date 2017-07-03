@@ -4,42 +4,174 @@ import sys
 import numpy as np
 from .colors import *
 
+class vtkVisualization():
+    def __init__(self, geo_data,  verbose=0,  win_size=(1000, 800),
+                 ren_name='GemPy 3D-Editor',
+                 interf_bool=True, fol_bool=True):
 
-def color_lot_create(geo_data, cd_rgb=color_dict_rgb, c_names=color_names, c_subname="400"):
-    c_lot = {}
-    for i, fmt in enumerate(geo_data.formations):
-        c_lot[fmt] = cd_rgb[c_names[i]][c_subname]
-    return c_lot
+        self.C_LOT = color_lot_create(geo_data)
 
+        # Number of renders
+        self.n_ren = 4
 
-class InterfaceSphere(vtk.vtkSphereSource):
-    def __init__(self, index, color=(0.5, 0.5, 0.5), fmt=None):
-        self.index = index  # df index
-        if fmt is None:
-            self.color = color
-        else:
-            self.color = C_LOT[fmt]
+        # Extents
+        try:
+            self.extent = geo_data.extent
+            self._e_dx = geo_data.dx
+            self._e_dy = geo_data.dy
+            self._e_dz = geo_data.dz
+        except AttributeError:
+            _e = geo_data.extent  # array([ x, X,  y, Y,  z, Z])
+            self._e_dx = _e[1] - _e[0]
+            self._e_dy = _e[3] - _e[2]
+            self._e_dz = _e[5] - _e[4]
 
+        self._e_d_avrg = (self._e_dx + self._e_dy + self._e_dz) / 3
 
-class FoliationArrow(vtk.vtkArrowSource):
-    def __init__(self, index, color=(0.5, 0.5, 0.5), fmt=None):
-        self.index = index  # df index
-        if fmt is None:
-            self.color = color
-        else:
-            self.color = C_LOT[fmt]
+        # Resolution
+        self.res = geo_data.resolution
 
+        # create render window, settings
+        self.renwin = vtk.vtkRenderWindow()
+        self.renwin.SetSize(win_size[0], win_size[1])
+        self.renwin.SetWindowName(ren_name)
 
-class ColoredActor(vtk.vtkActor):
-    def __init__(self, index, color=(0.5, 0.5, 0.5)):
-        self.index = index
-        self.color = color
+        # Set 4 renderers. ie 3D, X,Y,Z projections
+        self.ren_list = self.create_ren_list()
 
+        # create interactor and set interactor style, assign render window
+        interactor = vtk.vtkRenderWindowInteractor()
+        #interactor.SetInteractorStyle(CustomInteractorCamera(ren_list, geo_data, interactor, pot_field))
+        interactor.SetRenderWindow(self.renwin)
 
-class CustomTransformPolyDataFilter(vtk.vtkTransformPolyDataFilter):
-    def __init__(self, index, color=(0.5, 0.5, 0.5)):
-        self.index = index
-        self.color = color
+        # 3d model camera for the 4 renders
+        self.camera_list = self._create_cameras(self.extent, verbose=verbose)
+        # Setting the camera and the background color to the renders
+        self.set_camera_backcolor()
+
+        # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        # create AxesActor and customize
+        self.cube_axes_actor = _create_axes(geo_data, self.camera_list)
+        for r in self.ren_list:
+            # add axes actor to all renderers
+            r.AddActor(self.cube_axes_actor)
+
+        # initialize and start the app
+        if False:
+            interactor.Initialize()
+            interactor.Start()
+
+            # close_window(interactor)
+            del self.renwin, interactor
+
+    def create_ren_list(self):
+
+        # viewport dimensions setup
+        xmins = [0, 0.6, 0.6, 0.6]
+        xmaxs = [0.6, 1, 1, 1]
+        ymins = [0, 0, 0.33, 0.66]
+        ymaxs = [1, 0.33, 0.66, 1]
+
+        # create list of renderers, set vieport values
+        ren_list = []
+        for i in range(self.n_ren):
+            # append each renderer to list of renderers
+            ren_list.append(vtk.vtkRenderer())
+            # add each renderer to window
+            self.renwin.AddRenderer(ren_list[-1])
+            # set viewport for each renderer
+            ren_list[-1].SetViewport(xmins[i], ymins[i], xmaxs[i], ymaxs[i])
+
+        return ren_list
+
+    def color_lot_create(geo_data, cd_rgb=color_dict_rgb, c_names=color_names, c_subname="400"):
+        """
+        Set the color for each layer
+        :param geo_data:
+        :param cd_rgb:
+        :param c_names:
+        :param c_subname:
+        :return:
+        """
+        c_lot = {}
+        for i, fmt in enumerate(geo_data.formations):
+            c_lot[fmt] = cd_rgb[c_names[i]][c_subname]
+        return c_lot
+
+    def _create_cameras(self, extent, verbose=0):
+        _e = extent
+        _e_dx = _e[1] - _e[0]
+        _e_dy = _e[3] - _e[2]
+        _e_dz = _e[5] - _e[4]
+        _e_d_avrg = (_e_dx + _e_dy + _e_dz) / 3
+        _e_max = np.argmax(_e)
+
+        model_cam = vtk.vtkCamera()
+        model_cam.SetPosition(_e[_e_max] * 5, _e[_e_max] * 5, _e[_e_max] * 5)
+        model_cam.SetFocalPoint(np.min(_e[0:2]) + _e_dx / 2,
+                                np.min(_e[2:4]) + _e_dy / 2,
+                                np.min(_e[4:]) + _e_dz / 2)
+
+        model_cam.SetViewUp(-0.239, 0.155, 0.958)
+        # model_cam.Roll(-80.)
+
+        # XY camera RED
+        xy_cam = vtk.vtkCamera()
+        # if np.argmin(_e[4:]) == 0:
+        xy_cam.SetPosition(np.min(_e[0:2]) + _e_dx / 2,
+                           np.min(_e[2:4]) + _e_dy / 2,
+                           _e[_e_max] * 4)
+
+        xy_cam.SetFocalPoint(np.min(_e[0:2]) + _e_dx / 2,
+                             np.min(_e[2:4]) + _e_dy / 2,
+                             np.min(_e[4:]) + _e_dz / 2)
+
+        # YZ camera GREEN
+        yz_cam = vtk.vtkCamera()
+        yz_cam.SetPosition(_e[_e_max] * 4,
+                           np.min(_e[2:4]) + _e_dy / 2,
+                           np.min(_e[4:]) + _e_dz / 2)
+
+        yz_cam.SetFocalPoint(np.min(_e[0:2]) + _e_dx / 2,
+                             np.min(_e[2:4]) + _e_dy / 2,
+                             np.min(_e[4:]) + _e_dz / 2)
+        yz_cam.Roll(-90)
+
+        # XZ camera BLUE
+        xz_cam = vtk.vtkCamera()
+        xz_cam.SetPosition(np.min(_e[0:2]) + _e_dx / 2,
+                           _e[_e_max] * 4,
+                           np.min(_e[4:]) + _e_dz / 2)
+
+        xz_cam.SetFocalPoint(np.min(_e[0:2]) + _e_dx / 2,
+                             np.min(_e[2:4]) + _e_dy / 2,
+                             np.min(_e[4:]) + _e_dz / 2)
+        xz_cam.SetViewUp(1, 0, 0)
+        xz_cam.Roll(90)
+
+        # camera position debugging
+        if verbose == 1:
+            print("RED XY:", xy_cam.GetPosition())
+            print("RED FP:", xy_cam.GetFocalPoint())
+            print("GREEN YZ:", yz_cam.GetPosition())
+            print("GREEN FP:", yz_cam.GetFocalPoint())
+            print("BLUE XZ:", xz_cam.GetPosition())
+            print("BLUE FP:", xz_cam.GetFocalPoint())
+
+        return [model_cam, xy_cam, yz_cam, xz_cam]
+
+    def set_camera_backcolor(self):
+
+        # define background colors of the renderers
+        # TODO: Tune renderer colors
+        # TODO: Try to make renderer titles (floating text?!)
+        ren_color = [(66 / 250, 66 / 250, 66 / 250), (0.5, 0., 0.1), (0.1, 0.5, 0.1), (0.1, 0.1, 0.5)]
+
+        for i in range(self.n_ren):
+            # set active camera for each renderer
+            self.ren_list[i].SetActiveCamera(self.camera_list[i])
+            # set background color for each renderer
+            self.ren_list[i].SetBackground(ren_color[i][0], ren_color[i][1], ren_color[i][2])
 
 
 def visualize(geo_data,
@@ -69,6 +201,7 @@ def visualize(geo_data,
     global C_LOT  # TODO: Make this more elegant, less shitty
     C_LOT = color_lot_create(geo_data)
 
+    # Number of renders
     n_ren = 4
 
     # get model extent and calculate parameters for camera and sphere size
@@ -84,12 +217,14 @@ def visualize(geo_data,
     # create render window, settings
     renwin = vtk.vtkRenderWindow()
     renwin.SetSize(win_size[0], win_size[1])
-    renwin.SetWindowName('GeMpy 3D-Editor')
+    renwin.SetWindowName('GemPy 3D-Editor')
 
     if interf_bool:
         # create interface SphereSource
         if sphere_r is None:
             sphere_r = _e_d_avrg / 50
+
+        # ++++++ Create the sphere ++++
         spheres = _create_interface_spheres(geo_data, r=sphere_r)
         # create sphere mappers and actors
         interf_mappers, interf_actors = _create_mappers_actors(spheres)
@@ -214,8 +349,69 @@ def visualize(geo_data,
     interactor.Initialize()
     interactor.Start()
 
-    # close_window(interactor)
+    close_window(interactor)
     del renwin, interactor
+
+
+def color_lot_create(geo_data, cd_rgb=color_dict_rgb, c_names=color_names, c_subname="400"):
+    """
+    Set the color for each layer
+    :param geo_data:
+    :param cd_rgb:
+    :param c_names:
+    :param c_subname:
+    :return:
+    """
+    c_lot = {}
+    for i, fmt in enumerate(geo_data.formations):
+        c_lot[fmt] = cd_rgb[c_names[i]][c_subname]
+    return c_lot
+
+# +++++ If we change it by widget this is what I have to change ++++++
+class InterfaceSphere(vtk.vtkSphereSource):
+    """
+    Create Sphere object and setting its color.
+    """
+    def __init__(self, index, color=(0.5, 0.5, 0.5), fmt=None):
+        self.index = index  # df index
+        if fmt is None:
+            self.color = color
+        else:
+            self.color = C_LOT[fmt]
+
+
+class FoliationArrow(vtk.vtkArrowSource):
+    """
+    Create Foliation Arrow object
+    """
+    def __init__(self, index, color=(0.5, 0.5, 0.5), fmt=None):
+        self.index = index  # df index
+        if fmt is None:
+            self.color = color
+        else:
+            self.color = C_LOT[fmt]
+
+
+class ColoredActor(vtk.vtkActor):
+    def __init__(self, index, color=(0.5, 0.5, 0.5)):
+        self.index = index
+        self.color = color
+
+
+class CustomTransformPolyDataFilter(vtk.vtkTransformPolyDataFilter):
+    def __init__(self, index, color=(0.5, 0.5, 0.5)):
+        self.index = index
+        self.color = color
+
+
+
+
+
+def close_window(iren):
+    render_window = iren.GetRenderWindow()
+    render_window.Finalize()
+    iren.TerminateApp()
+    del render_window, iren
 
 
 def _extract_surface(pot_field, val, res, spacing):
@@ -345,6 +541,7 @@ class ColoredSurfaceActor(vtk.vtkActor):
 
 def _get_transform(startPoint, endPoint, f):
     # Compute a basis
+    # TODO Jesus man use np.zeros
     normalized_x = [0 for i in range(3)]
     normalized_y = [0 for i in range(3)]
     normalized_z = [0 for i in range(3)]
@@ -496,7 +693,9 @@ def export_vtk_rectilinear(geo_data, block_lith, path=None):
 
     gridToVTK(path, x, y, z, cellData={"Lithology": lith})
 
-
+# ================================
+# Interactors
+# ================================
 class CustomInteractorActor(vtk.vtkInteractorStyleTrackballActor):
     """
     Modified vtkInteractorStyleTrackballActor class to accomodate for interface df modifications.
