@@ -4,9 +4,10 @@ setup(
     name='gempy',
     version='0.9',
     packages=['gempy'],
-    url='',
-    license='MIT',
+    url='https://github.com/nre-aachen/GeMpy',
     author='Miguel de la Varga',
     author_email='varga@aices.rwth-aachen.de',
-    description=''
+    description='3D implicit structural modeling library for Python.',
+    keywords=['geology', '3d modeling'],
+    classifiers=[]
 )
