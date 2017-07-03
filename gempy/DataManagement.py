@@ -39,6 +39,9 @@ class InputData(object):
         # Set extent and resolution
         self.extent = np.array(extent)
         self.resolution = np.array(resolution)
+        self.dx = self.extent[1] - self.extent[0]
+        self.dy = self.extent[3] - self.extent[2]
+        self.dz = self.extent[5] - self.extent[4]
 
         self.n_faults = 0
 
