@@ -1,11 +1,10 @@
 *-checkpoint.ipynb
-.idea/workspace.xml
-.idea/tasks.xml
+
 GeMpy/__pycache__/DataManagement.cpython-36.pyc
 GeMpy/__pycache__/GeMpy.cpython-36.pyc
 GeMpy/__pycache__/Visualization.cpython-36.pyc
 GeMpy/__pycache__/theanograf.cpython-36.pyc
-.idea/inspectionProfiles/
+
 GeMpy/DataManagement.pyc
 GeMpy/GeMpy.pyc
 GeMpy/Visualization.pyc
@@ -135,4 +134,4 @@ test/log2
 /gempy/geomodeller_xml_obj.py.bak
 !/input_data/FabLessPoints_Foliations.csv
 !/input_data/FabLessPoints_Points.csv
-/GeMpy/
+
