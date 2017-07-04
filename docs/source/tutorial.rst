@@ -4,6 +4,7 @@ Tutorial
 .. toctree::
    :maxdepth: 0
 
-   ./Notebooks/Example_1_Sandstone
-   ./Notebooks/Example_2_Simple_PyMC3
-   ./Notebooks/Example_3_Faults
+   ./Notebooks/ch1
+   ./Notebooks/ch2
+   ./Notebooks/ch3
+   ./Notebooks/ch4

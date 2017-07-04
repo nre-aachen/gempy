@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Visualization &#8212; GeMpy 2 documentation</title>
+    <title>Visualization &#8212; GemPy 4 documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2',
+        VERSION:     '4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
    
@@ -34,7 +34,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -57,13 +57,21 @@
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
+<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">path</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="c1"># This is for sphenix to find the packages</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span> <span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span> <span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span> <span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">IPython.core.debugger</span> <span class="k">import</span> <span class="n">Pdb</span>
+<span class="kn">from</span> <span class="nn">gempy.colors</span> <span class="k">import</span> <span class="n">color_dict_rgb</span><span class="p">,</span> <span class="n">color_dict_hex</span>
 
 <span class="c1"># TODO: inherit pygeomod classes</span>
 <span class="c1"># import sys, os</span>
 
+
 <div class="viewcode-block" id="PlotData"><a class="viewcode-back" href="../code.html#Visualization.PlotData">[docs]</a><span class="k">class</span> <span class="nc">PlotData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class to make the different plot related with GeMpy</span>
+<span class="sd">    Class to make the different plot related with gempy</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        _data(GeMpy_core.DataManagement): All values of a DataManagement object</span>
@@ -75,7 +83,7 @@
 <span class="sd">        verbose(int): Level of verbosity during the execution of the functions (up to 5). Default 0</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_data</span><span class="p">,</span> <span class="n">cd_rgb</span><span class="o">=</span><span class="n">color_dict_rgb</span><span class="p">,</span> <span class="n">cd_hex</span><span class="o">=</span><span class="n">color_dict_hex</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_data</span>
 
@@ -86,6 +94,26 @@
             <span class="c1"># and block. 2D 3D? Improving the iteration</span>
             <span class="c1"># with pandas framework</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_style</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cd_rgb</span> <span class="o">=</span> <span class="n">cd_rgb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cd_hex</span> <span class="o">=</span> <span class="n">cd_hex</span>
+
+        <span class="c1"># TODO: Map colors to formations and integer values for plots</span>
+
+        <span class="n">c_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;indigo&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span> <span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;amber&quot;</span><span class="p">,</span> <span class="s2">&quot;pink&quot;</span><span class="p">,</span> <span class="s2">&quot;light-blue&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;lime&quot;</span><span class="p">,</span> <span class="s2">&quot;blue-grey&quot;</span><span class="p">,</span> <span class="s2">&quot;deep-orange&quot;</span><span class="p">,</span> <span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="s2">&quot;cyan&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;deep-purple&quot;</span><span class="p">,</span> <span class="s2">&quot;purple&quot;</span><span class="p">,</span> <span class="s2">&quot;teal&quot;</span><span class="p">,</span> <span class="s2">&quot;light-green&quot;</span><span class="p">]</span>
+
+        <span class="c1"># c_subnames = [&#39;50&#39;, &#39;100&#39;, &#39;200&#39;, &#39;300&#39;, &#39;400&#39;, &#39;500&#39;, &#39;600&#39;, &#39;700&#39;, &#39;800&#39;, &#39;900&#39;]</span>
+        <span class="c1">#               &#39;a100&#39;,&#39;a200&#39;, &#39;a400&#39;, &#39;a700&#39;]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_cd_rgb</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;400&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">c_names</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sns_palette</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_cd_rgb</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;400&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">c_names</span><span class="p">]</span>
+
+        <span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c_names</span><span class="p">))]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_norm</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="c1"># TODO: Are colors correctly mapped between voxel plot and data plot?</span>
 
     <span class="k">def</span> <span class="nf">_set_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -121,6 +149,7 @@
                 <span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)]</span>
 
         <span class="k">else</span><span class="p">:</span>
+
             <span class="n">series_to_plot_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">series</span><span class="p">]</span>
             <span class="n">series_to_plot_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">foliations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">foliations</span><span class="p">[</span><span class="s2">&quot;series&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">series</span><span class="p">]</span>
 
@@ -132,6 +161,7 @@
                                 <span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
                    <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                    <span class="n">legend_out</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                   <span class="n">palette</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sns_palette</span><span class="p">,</span>
                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># Plotting orientations</span>
@@ -156,7 +186,7 @@
             <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Z&quot;</span>
             <span class="n">Gx</span> <span class="o">=</span> <span class="s2">&quot;G_y&quot;</span>
             <span class="n">Gy</span> <span class="o">=</span> <span class="s2">&quot;G_z&quot;</span>
-            <span class="n">extent_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+            <span class="n">extent_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
             <span class="n">_b</span> <span class="o">=</span> <span class="n">cell_number</span>
             <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;X&quot;</span>
@@ -170,7 +200,7 @@
             <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Y&quot;</span>
             <span class="n">Gx</span> <span class="o">=</span> <span class="s2">&quot;G_x&quot;</span>
             <span class="n">Gy</span> <span class="o">=</span> <span class="s2">&quot;G_y&quot;</span>
-            <span class="n">extent_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">extent_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;must be a cartesian direction, i.e. xyz&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">,</span> <span class="n">extent_val</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">Gx</span><span class="p">,</span> <span class="n">Gy</span>
@@ -216,7 +246,7 @@
         <span class="k">if</span> <span class="n">plot_data</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">)</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">plot_block</span><span class="p">[</span><span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">plot_block</span><span class="p">[</span><span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_norm</span><span class="p">,</span>
                    <span class="n">extent</span><span class="o">=</span><span class="n">extent_val</span><span class="p">,</span>
                    <span class="n">interpolation</span><span class="o">=</span><span class="n">interpolation</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -241,10 +271,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">plot_data</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">interfaces</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="n">n_pf</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">)</span>
 
         <span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">,</span> <span class="n">extent_val</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slice</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">cell_number</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">potential_field</span><span class="p">[</span><span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cell_number</span><span class="p">,</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">potential_field</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">2</span><span class="p">])[</span><span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_c</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                    <span class="n">cell_number</span><span class="p">,</span>
                     <span class="n">extent</span><span class="o">=</span><span class="n">extent_val</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
                     <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -255,8 +287,8 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="PlotData.annotate_plot"><a class="viewcode-back" href="../code.html#Visualization.PlotData.annotate_plot">[docs]</a>    <span class="k">def</span> <span class="nf">annotate_plot</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="PlotData.annotate_plot"><a class="viewcode-back" href="../code.html#Visualization.PlotData.annotate_plot">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">annotate_plot</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Annotate the plot of a given DataFrame using one of its columns</span>
 
@@ -324,31 +356,176 @@
         <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">vol</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 
-<div class="viewcode-block" id="PlotData.export_vtk"><a class="viewcode-back" href="../code.html#Visualization.PlotData.export_vtk">[docs]</a>    <span class="k">def</span> <span class="nf">export_vtk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1"># def plot3D_ipyvolume(block, geo_data, cm=plt.cm.viridis.colors):</span>
+    <span class="c1">#     import ipyvolume.pylab as p3</span>
+    <span class="c1">#     n_lith = np.unique(block).shape[0]</span>
+    <span class="c1">#     p3.figure()</span>
+    <span class="c1">#     for e, i in enumerate(np.unique(sol)):  # np.unique(block)):</span>
+    <span class="c1">#</span>
+    <span class="c1">#         bool_pos = block == i</span>
+    <span class="c1">#         p3.scatter(</span>
+    <span class="c1">#             geo_data.grid.grid[:, 0][bool_pos],</span>
+    <span class="c1">#             geo_data.grid.grid[:, 1][bool_pos],</span>
+    <span class="c1">#             geo_data.grid.grid[:, 2][bool_pos],</span>
+    <span class="c1">#             marker=&#39;box&#39;,</span>
+    <span class="c1">#             color=cm[np.linspace(0, 255, n_lith, dtype=int)[e]])</span>
+    <span class="c1">#</span>
+    <span class="c1">#     p3.xlim(np.min(geo_data.grid.grid[:, 0]), np.max(geo_data.grid.grid[:, 0]))</span>
+    <span class="c1">#     p3.ylim(np.min(geo_data.grid.grid[:, 1]), np.max(geo_data.grid.grid[:, 1]))</span>
+    <span class="c1">#     p3.zlim(np.min(geo_data.grid.grid[:, 2]), np.max(geo_data.grid.grid[:, 2]))</span>
+    <span class="c1">#</span>
+    <span class="c1">#     p3.show()</span>
+
+<div class="viewcode-block" id="PlotData.export_vtk_structured"><a class="viewcode-back" href="../code.html#Visualization.PlotData.export_vtk_structured">[docs]</a>    <span class="k">def</span> <span class="nf">export_vtk_structured</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        export vtk</span>
 <span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+        <span class="c1"># from evtk.hl import gridToVTK</span>
+        <span class="c1">#</span>
+        <span class="c1"># import numpy as np</span>
+        <span class="c1">#</span>
+        <span class="c1"># import random as rnd</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Dimensions</span>
+        <span class="c1">#</span>
+        <span class="c1"># nx, ny, nz = 50, 50, 50</span>
+        <span class="c1">#</span>
+        <span class="c1"># lx, ly, lz = 10., 10., -10.0</span>
+        <span class="c1">#</span>
+        <span class="c1"># dx, dy, dz = lx / nx, ly / ny, lz / nz</span>
+        <span class="c1">#</span>
+        <span class="c1"># ncells = nx * ny * nz</span>
+        <span class="c1">#</span>
+        <span class="c1"># npoints = (nx + 1) * (ny + 1) * (nz + 1)</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Coordinates</span>
+        <span class="c1">#</span>
+        <span class="c1"># X = np.arange(0, lx + 0.1 * dx, dx, dtype=&#39;float64&#39;)</span>
+        <span class="c1">#</span>
+        <span class="c1"># Y = np.arange(0, ly + 0.1 * dy, dy, dtype=&#39;float64&#39;)</span>
+        <span class="c1">#</span>
+        <span class="c1"># Z = np.arange(0, lz + 0.1 * dz, dz, dtype=&#39;float64&#39;)</span>
+        <span class="c1">#</span>
+        <span class="c1"># x = np.zeros((nx + 1, ny + 1, nz + 1))</span>
+        <span class="c1">#</span>
+        <span class="c1"># y = np.zeros((nx + 1, ny + 1, nz + 1))</span>
+        <span class="c1">#</span>
+        <span class="c1"># z = np.zeros((nx + 1, ny + 1, nz + 1))</span>
+        <span class="c1">#</span>
+        <span class="c1"># # We add some random fluctuation to make the grid more interesting</span>
+        <span class="c1">#</span>
+        <span class="c1"># for k in range(nz + 1):</span>
+        <span class="c1">#</span>
+        <span class="c1">#     for j in range(ny + 1):</span>
+        <span class="c1">#         for i in range(nx + 1):</span>
+        <span class="c1">#             x[i, j, k] = X[i] + (0.5 - rnd.random()) * 0.2 * dx</span>
+        <span class="c1">#</span>
+        <span class="c1">#             y[i, j, k] = Y[j] + (0.5 - rnd.random()) * 0.2 * dy</span>
+        <span class="c1">#</span>
+        <span class="c1">#             z[i, j, k] = Z[k] + (0.5 - rnd.random()) * 0.2 * dz</span>
+        <span class="c1">#</span>
+        <span class="c1">#             # Variables</span>
+        <span class="c1">#</span>
+        <span class="c1"># pressure = sol[0, 0, :].reshape((nx, ny, nz))</span>
+        <span class="c1">#</span>
+        <span class="c1"># gridToVTK(&quot;./structured&quot;, x, y, z, cellData={&quot;pressure&quot;: pressure})</span>
+
+<div class="viewcode-block" id="PlotData.export_vtk_rectilinear"><a class="viewcode-back" href="../code.html#Visualization.PlotData.export_vtk_rectilinear">[docs]</a>    <span class="k">def</span> <span class="nf">export_vtk_rectilinear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ajapg</span>
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="c1"># from evtk.hl import gridToVTK</span>
+        <span class="c1">#</span>
+        <span class="c1"># import numpy as np</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Dimensions</span>
+        <span class="c1">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># nx, ny, nz = 50, 50, 50</span>
+        <span class="c1">#</span>
+        <span class="c1"># lx, ly, lz = 10., 10., -10.0</span>
+        <span class="c1">#</span>
+        <span class="c1"># dx, dy, dz = lx / nx, ly / ny, lz / nz</span>
+        <span class="c1">#</span>
+        <span class="c1"># ncells = nx * ny * nz</span>
+        <span class="c1">#</span>
+        <span class="c1"># npoints = (nx + 1) * (ny + 1) * (nz + 1)</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Coordinates</span>
+        <span class="c1">#</span>
+        <span class="c1"># x = np.arange(0, lx + 0.1 * dx, dx, dtype=&#39;float64&#39;)</span>
+        <span class="c1">#</span>
+        <span class="c1"># y = np.arange(0, ly + 0.1 * dy, dy, dtype=&#39;float64&#39;)</span>
+        <span class="c1">#</span>
+        <span class="c1"># z = np.arange(0, lz + 0.1 * dz, dz, dtype=&#39;float64&#39;)</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Variables</span>
+        <span class="c1">#</span>
+        <span class="c1"># pressure = sol[0, 0, :].reshape((nx, ny, nz))</span>
+        <span class="c1">#</span>
+        <span class="c1"># temp = np.random.rand(npoints).reshape((nx + 1, ny + 1, nz + 1))</span>
+        <span class="c1">#</span>
+        <span class="c1"># gridToVTK(&quot;./rectilinear&quot;, x, y, z, cellData={&quot;lithology&quot;: pressure}, )</span>
+
+<div class="viewcode-block" id="PlotData.plot_layers"><a class="viewcode-back" href="../code.html#Visualization.PlotData.plot_layers">[docs]</a>    <span class="k">def</span> <span class="nf">plot_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        plot layers</span>
+<span class="sd">        Returns:</span>
+
 <span class="sd">        &quot;&quot;&quot;</span></div></div>
 
-
+        <span class="c1"># import vtk</span>
+        <span class="c1"># from vtk import *</span>
+        <span class="c1">#</span>
+        <span class="c1"># # setup points and vertices</span>
+        <span class="c1"># Points = vtk.vtkPoints()</span>
+        <span class="c1"># Triangles = vtk.vtkCellArray()</span>
+        <span class="c1"># Triangle = vtk.vtkTriangle()</span>
+        <span class="c1">#</span>
+        <span class="c1"># for p in vertices * 0.4:</span>
+        <span class="c1">#     Points.InsertNextPoint(p)</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Unfortunately in this simple example the following lines are ambiguous.</span>
+        <span class="c1"># # The first 0 is the index of the triangle vertex which is ALWAYS 0-2.</span>
+        <span class="c1"># # The second 0 is the index into the point (geometry) array, so this can range from 0-(NumPoints-1)</span>
+        <span class="c1"># # i.e. a more general statement is triangle-&gt;GetPointIds()-&gt;SetId(0, PointId);</span>
+        <span class="c1">#</span>
+        <span class="c1"># for i in simplices:</span>
+        <span class="c1">#     Triangle.GetPointIds().SetId(0, i[0])</span>
+        <span class="c1">#     Triangle.GetPointIds().SetId(1, i[1])</span>
+        <span class="c1">#     Triangle.GetPointIds().SetId(2, i[2])</span>
+        <span class="c1">#</span>
+        <span class="c1">#     Triangles.InsertNextCell(Triangle)</span>
+        <span class="c1">#</span>
+        <span class="c1"># polydata = vtk.vtkPolyData()</span>
+        <span class="c1"># polydata.SetPoints(Points)</span>
+        <span class="c1"># polydata.SetPolys(Triangles)</span>
+        <span class="c1">#</span>
+        <span class="c1"># polydata.Modified()</span>
+        <span class="c1"># if vtk.VTK_MAJOR_VERSION &lt;= 5:</span>
+        <span class="c1">#     polydata.Update()</span>
+        <span class="c1">#</span>
+        <span class="c1"># writer = vtk.vtkXMLPolyDataWriter();</span>
+        <span class="c1"># writer.SetFileName(&quot;Fabian_f.vtp&quot;);</span>
+        <span class="c1"># if vtk.VTK_MAJOR_VERSION &lt;= 5:</span>
+        <span class="c1">#     writer.SetInput(polydata)</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     writer.SetInputData(polydata)</span>
+        <span class="c1"># writer.Write()</span>
 </pre></div>
 
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h3><a href="../GeMpy Introduction.html">Table Of Contents</a></h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../GeMpy Introduction.html">Welcome to GeMpy&#8217;s documentation!</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Kriging.html">Kriging structure of the <em>Potential field method</em></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../code.html">Code</a></li>
-</ul>
-<div class="relations">
+        <div class="sphinxsidebarwrapper"><div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="../GeMpy Introduction.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="index.html">Module code</a><ul>
   </ul></li>
   </ul></li>
@@ -369,11 +546,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016, Miguel de la Varga. NRE-RWTH team.
+      &copy;2017, Miguel de la Varga, CGR-Aachen Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
     </div>
 

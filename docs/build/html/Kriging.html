@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Kriging structure of the Potential field method &#8212; GeMpy 2 documentation</title>
+    <title>Kriging structure of the Potential field method &#8212; GemPy 4 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '2',
+        VERSION:     '4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,11 +24,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Tutorial" href="tutorial.html" />
-    <link rel="prev" title="Welcome to GeMpy’s documentation!" href="GeMpy Introduction.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -36,7 +34,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -50,7 +48,7 @@
 used in GeMpy to generate the 3-D geological model. The idea is to
 exploit the stratigrafic nature of geological settings describing the
 deposition direction with an scalar field. This means that every
-layer&#8212;or in a sense every synchronal deposition&#8212;will have the same
+layer—or in a sense every synchronal deposition—will have the same
 value forming a sequence of isosurfaces <span class="math">\(k\)</span>. In addition, the
 direction of the layers can be provided either in the form of dips (i.e.
 tangential to the isosurfaces) or pole (i.e. perpendicular to the
@@ -66,8 +64,8 @@ them, which is one parameter is the first derivative of the other.</p>
 \end{equation}</div><p>Kriging or Gaussian process regression (cite Matheron) is a spatial
 interpolation method that makes use of a given covariance function to
 compute the best linear unbiased prediction between the data. This
-method can be easily extended to multivariate methods&#8212;i.e.
-cokriging&#8212; and the consideration of drifts in the mean values&#8212;i.e.
+method can be easily extended to multivariate methods—i.e.
+cokriging— and the consideration of drifts in the mean values—i.e.
 universal kriging.</p>
 <p>Normally, notation of cokriging parameters is complicated since it has
 to be considered <em>p</em> random functions <span class="math">\(\bf{Z}_\it{i}\)</span> (i.e. every
@@ -85,8 +83,8 @@ subscript,<span class="math">\({\bf{x}}_{\alpha \, i}^k\)</span>.</p>
 making use of two or more variables exploiting their relative drift
 dependencies. In our particular case, the main advantage is to be able
 to utilized two different type of data sampled from different locations
-to estimate both parameters&#8212;potential field, <span class="math">\(\bf{Z}\)</span>, and pole,
-<span class="math">\(\partial {\bf{Z}}/ \partial u\)</span>&#8212;as if they were sampled in all
+to estimate both parameters—potential field, <span class="math">\(\bf{Z}\)</span>, and pole,
+<span class="math">\(\partial {\bf{Z}}/ \partial u\)</span>—as if they were sampled in all
 the involved locations at any given point <span class="math">\({\bf{x}}_0\)</span>.Due to the
 mathematical dependencies between the two variables allows to express
 the universal drift as</p>
@@ -130,20 +128,10 @@ application such as meshing or geophysical forward calculations.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h3><a href="GeMpy Introduction.html">Table Of Contents</a></h3>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="GeMpy Introduction.html">Welcome to GeMpy&#8217;s documentation!</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Kriging structure of the <em>Potential field method</em></a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">Code</a></li>
-</ul>
-<div class="relations">
+        <div class="sphinxsidebarwrapper"><div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="GeMpy Introduction.html">Documentation overview</a><ul>
-      <li>Previous: <a href="GeMpy Introduction.html" title="previous chapter">Welcome to GeMpy&#8217;s documentation!</a></li>
-      <li>Next: <a href="tutorial.html" title="next chapter">Tutorial</a></li>
+  <li><a href="index.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 </div>
@@ -169,11 +157,11 @@ application such as meshing or geophysical forward calculations.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016, Miguel de la Varga. NRE-RWTH team.
+      &copy;2017, Miguel de la Varga, CGR-Aachen Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="_sources/Kriging.rst.txt"

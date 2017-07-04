@@ -9,19 +9,27 @@ Created on 10/10 /2016
 
 """
 from __future__ import division
-import theano
+import os
+from os import path
+import sys
+
+# This is for sphenix to find the packages
+sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
+
+# --DEP
+# import theano
 # import theano.tensor as T
 import numpy as _np
-# import sys, os
-import pandas as _pn
+
+# --DEP-- import pandas as _pn
 import warnings
 import copy
-from .Visualization import PlotData
+from gempy.Visualization import PlotData
 try:
-    from .visualization_vtk import visualize, export_vtk_rectilinear
+    from gempy.visualization_vtk import visualize, export_vtk_rectilinear
 except ModuleNotFoundError:
     warnings.warn('Vtk package is not installed. No vtk visualization available.')
-from .DataManagement import InputData, InterpolatorInput
+from gempy.DataManagement import InputData, InterpolatorInput
 from IPython.core.debugger import Tracer
 
 

@@ -1,13 +1,13 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Index &#8212; GeMpy 2 documentation</title>
+    <title>Index &#8212; GemPy 4 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '2',
+        VERSION:     '4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -91,7 +91,9 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#DataManagement.DataManagement.calculate_gradient">calculate_gradient() (DataManagement.DataManagement method)</a>
+      <li><a href="code.html#DataManagement.InputData.calculate_gradient">calculate_gradient() (DataManagement.InputData method)</a>
+</li>
+      <li><a href="code.html#theanograf.TheanoGraph_pro.choose_cells">choose_cells() (theanograf.TheanoGraph_pro method)</a>
 </li>
       <li><a href="code.html#theanograf.TheanoGraph_pro.compute_a_fault">compute_a_fault() (theanograf.TheanoGraph_pro method)</a>
 </li>
@@ -99,17 +101,23 @@
 </li>
       <li><a href="code.html#theanograf.TheanoGraph_pro.cov_gradients">cov_gradients() (theanograf.TheanoGraph_pro method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="code.html#theanograf.TheanoGraph_pro.cov_interface_gradients">cov_interface_gradients() (theanograf.TheanoGraph_pro method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="code.html#theanograf.TheanoGraph_pro.cov_interfaces">cov_interfaces() (theanograf.TheanoGraph_pro method)</a>
 </li>
       <li><a href="code.html#theanograf.TheanoGraph_pro.covariance_matrix">covariance_matrix() (theanograf.TheanoGraph_pro method)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement.create_grid">create_grid() (DataManagement.DataManagement method)</a>
+      <li><a href="code.html#GemPy_f.create_data">create_data() (in module GemPy_f)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement.GridClass.create_regular_grid_3d">create_regular_grid_3d() (DataManagement.DataManagement.GridClass method)</a>
+      <li><a href="code.html#DataManagement.InputData.create_grid">create_grid() (DataManagement.InputData method)</a>
+</li>
+      <li><a href="code.html#DataManagement.InputData.GridClass.create_regular_grid_3d">create_regular_grid_3d() (DataManagement.InputData.GridClass method)</a>
+</li>
+      <li><a href="code.html#visualization_vtk.CustomInteractorActor">CustomInteractorActor (class in visualization_vtk)</a>
+</li>
+      <li><a href="code.html#visualization_vtk.CustomInteractorCamera">CustomInteractorCamera (class in visualization_vtk)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -117,19 +125,11 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#DataManagement.DataManagement.InterpolatorClass.data_prep">data_prep() (DataManagement.DataManagement.InterpolatorClass method)</a>
+      <li><a href="code.html#DataManagement.InputData.InterpolatorClass.data_prep">data_prep() (DataManagement.InputData.InterpolatorClass method)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement">DataManagement (class in DataManagement)</a>
-
-      <ul>
-        <li><a href="code.html#module-DataManagement">(module)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#DataManagement.DataManagement.GridClass">DataManagement.GridClass (class in DataManagement)</a>
-</li>
-      <li><a href="code.html#DataManagement.DataManagement.InterpolatorClass">DataManagement.InterpolatorClass (class in DataManagement)</a>
+      <li><a href="code.html#module-DataManagement">DataManagement (module)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -137,13 +137,19 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#Visualization.PlotData.export_vtk">export_vtk() (Visualization.PlotData method)</a>
+      <li><a href="code.html#visualization_vtk.export_vtk_rectilinear">export_vtk_rectilinear() (in module visualization_vtk)</a>
+
+      <ul>
+        <li><a href="code.html#Visualization.PlotData.export_vtk_rectilinear">(Visualization.PlotData method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code.html#Visualization.PlotData.export_vtk_structured">export_vtk_structured() (Visualization.PlotData method)</a>
+</li>
       <li><a href="code.html#theanograf.TheanoGraph_pro.extend_dual_kriging">extend_dual_kriging() (theanograf.TheanoGraph_pro method)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement.extent">extent (DataManagement.DataManagement attribute)</a>
+      <li><a href="code.html#DataManagement.InputData.extent">extent (DataManagement.InputData attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -155,11 +161,17 @@
 </li>
       <li><a href="code.html#theanograf.TheanoGraph_pro.faults_matrix">faults_matrix() (theanograf.TheanoGraph_pro method)</a>
 </li>
+      <li><a href="code.html#DataManagement.InputData.foliation_add">foliation_add() (DataManagement.InputData method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#DataManagement.DataManagement.Foliations">Foliations (DataManagement.DataManagement attribute)</a>
+      <li><a href="code.html#DataManagement.InputData.foliation_modify">foliation_modify() (DataManagement.InputData method)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement.formations">formations (DataManagement.DataManagement attribute)</a>
+      <li><a href="code.html#DataManagement.InputData.Foliations">Foliations (DataManagement.InputData attribute)</a>
+</li>
+      <li><a href="code.html#DataManagement.InputData.foliations_drop">foliations_drop() (DataManagement.InputData method)</a>
+</li>
+      <li><a href="code.html#DataManagement.InputData.formations">formations (DataManagement.InputData attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -167,11 +179,17 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#module-GeMpy">GeMpy (module)</a>
+      <li><a href="code.html#module-GemPy_f">GemPy_f (module)</a>
+</li>
+      <li><a href="code.html#module-GeoPhysics">GeoPhysics (module)</a>
+</li>
+      <li><a href="code.html#DataManagement.InputData.get_raw_data">get_raw_data() (DataManagement.InputData method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#DataManagement.DataManagement.get_raw_data">get_raw_data() (DataManagement.DataManagement method)</a>
+      <li><a href="code.html#GemPy_f.get_series">get_series() (in module GemPy_f)</a>
+</li>
+      <li><a href="code.html#GemPy_f.get_th_fn">get_th_fn() (in module GemPy_f)</a>
 </li>
       <li><a href="code.html#theanograf.TheanoGraph_pro.gradient_contribution">gradient_contribution() (theanograf.TheanoGraph_pro method)</a>
 </li>
@@ -181,19 +199,31 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#DataManagement.DataManagement.i_close_set_data">i_close_set_data() (DataManagement.DataManagement method)</a>
+      <li><a href="code.html#DataManagement.InputData.i_close_set_data">i_close_set_data() (DataManagement.InputData method)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement.i_open_set_data">i_open_set_data() (DataManagement.DataManagement method)</a>
+      <li><a href="code.html#DataManagement.InputData.i_open_set_data">i_open_set_data() (DataManagement.InputData method)</a>
 </li>
-      <li><a href="code.html#GeMpy.import_data">import_data() (in module GeMpy)</a>
+      <li><a href="code.html#DataManagement.InputData.import_data">import_data() (DataManagement.InputData method)</a>
+</li>
+      <li><a href="code.html#theanograf.TheanoGraph_pro.input_parameters_list">input_parameters_list() (theanograf.TheanoGraph_pro method)</a>
+</li>
+      <li><a href="code.html#DataManagement.InputData">InputData (class in DataManagement)</a>
+</li>
+      <li><a href="code.html#DataManagement.InputData.GridClass">InputData.GridClass (class in DataManagement)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#theanograf.TheanoGraph_pro.input_parameters_list">input_parameters_list() (theanograf.TheanoGraph_pro method)</a>
+      <li><a href="code.html#DataManagement.InputData.InterpolatorClass">InputData.InterpolatorClass (class in DataManagement)</a>
+</li>
+      <li><a href="code.html#DataManagement.InputData.interface_add">interface_add() (DataManagement.InputData method)</a>
 </li>
       <li><a href="code.html#theanograf.TheanoGraph_pro.interface_contribution">interface_contribution() (theanograf.TheanoGraph_pro method)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement.Interfaces">Interfaces (DataManagement.DataManagement attribute)</a>
+      <li><a href="code.html#DataManagement.InputData.interface_drop">interface_drop() (DataManagement.InputData method)</a>
+</li>
+      <li><a href="code.html#DataManagement.InputData.interface_modify">interface_modify() (DataManagement.InputData method)</a>
+</li>
+      <li><a href="code.html#DataManagement.InputData.Interfaces">Interfaces (DataManagement.InputData attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -201,7 +231,7 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#DataManagement.DataManagement.load_data_csv">load_data_csv() (DataManagement.DataManagement static method)</a>
+      <li><a href="code.html#DataManagement.InputData.load_data_csv">load_data_csv() (DataManagement.InputData static method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -217,7 +247,7 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#DataManagement.DataManagement.InterpolatorClass.order_table">order_table() (DataManagement.DataManagement.InterpolatorClass method)</a>
+      <li><a href="code.html#DataManagement.InputData.InterpolatorClass.order_table">order_table() (DataManagement.InputData.InterpolatorClass method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -229,10 +259,12 @@
 </li>
       <li><a href="code.html#Visualization.PlotData.plot_data">plot_data() (Visualization.PlotData method)</a>
 </li>
-      <li><a href="code.html#Visualization.PlotData.plot_potential_field">plot_potential_field() (Visualization.PlotData method)</a>
+      <li><a href="code.html#Visualization.PlotData.plot_layers">plot_layers() (Visualization.PlotData method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code.html#Visualization.PlotData.plot_potential_field">plot_potential_field() (Visualization.PlotData method)</a>
+</li>
       <li><a href="code.html#Visualization.PlotData">PlotData (class in Visualization)</a>
 </li>
       <li><a href="code.html#theanograf.TheanoGraph_pro.potential_field_at_all">potential_field_at_all() (theanograf.TheanoGraph_pro method)</a>
@@ -245,11 +277,13 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#GeMpy.rescale_data">rescale_data() (in module GeMpy)</a>
+      <li><a href="code.html#DataManagement.InputData.read_vox">read_vox() (DataManagement.InputData method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#DataManagement.DataManagement.resolution">resolution (DataManagement.DataManagement attribute)</a>
+      <li><a href="code.html#DataManagement.InputData.reset_indices">reset_indices() (DataManagement.InputData method)</a>
+</li>
+      <li><a href="code.html#DataManagement.InputData.resolution">resolution (DataManagement.InputData attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -257,29 +291,33 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#GeMpy.select_series">select_series() (in module GeMpy)</a>
+      <li><a href="code.html#GemPy_f.select_series">select_series() (in module GemPy_f)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement.series">series (DataManagement.DataManagement attribute)</a>
+      <li><a href="code.html#DataManagement.InputData.series">series (DataManagement.InputData attribute)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement.set_foliations">set_foliations() (DataManagement.DataManagement method)</a>
+      <li><a href="code.html#DataManagement.InputData.set_faults">set_faults() (DataManagement.InputData method)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement.set_formation_number">set_formation_number() (DataManagement.DataManagement method)</a>
+      <li><a href="code.html#DataManagement.InputData.set_foliations">set_foliations() (DataManagement.InputData method)</a>
+</li>
+      <li><a href="code.html#DataManagement.InputData.set_formation_number">set_formation_number() (DataManagement.InputData method)</a>
 
       <ul>
-        <li><a href="code.html#DataManagement.DataManagement.InterpolatorClass.set_formation_number">(DataManagement.DataManagement.InterpolatorClass method)</a>
+        <li><a href="code.html#DataManagement.InputData.InterpolatorClass.set_formation_number">(DataManagement.InputData.InterpolatorClass method)</a>
 </li>
       </ul></li>
-      <li><a href="code.html#GeMpy.set_grid">set_grid() (in module GeMpy)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="code.html#DataManagement.DataManagement.set_interfaces">set_interfaces() (DataManagement.DataManagement method)</a>
+      <li><a href="code.html#DataManagement.InputData.set_grid">set_grid() (DataManagement.InputData method)</a>
+
+      <ul>
+        <li><a href="code.html#GemPy_f.set_grid">(in module GemPy_f)</a>
 </li>
-      <li><a href="code.html#GeMpy.set_interpolator">set_interpolator() (in module GeMpy)</a>
+      </ul></li>
+      <li><a href="code.html#DataManagement.InputData.set_interfaces">set_interfaces() (DataManagement.InputData method)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement.set_series">set_series() (DataManagement.DataManagement method)</a>
+      <li><a href="code.html#DataManagement.InputData.set_series">set_series() (DataManagement.InputData method)</a>
 </li>
-      <li><a href="code.html#DataManagement.DataManagement.InterpolatorClass.set_theano_shared_parameteres">set_theano_shared_parameteres() (DataManagement.DataManagement.InterpolatorClass method)</a>
+      <li><a href="code.html#DataManagement.InputData.InterpolatorClass.set_theano_shared_parameteres">set_theano_shared_parameteres() (DataManagement.InputData.InterpolatorClass method)</a>
 </li>
       <li><a href="code.html#theanograf.TheanoGraph_pro.solve_kriging">solve_kriging() (theanograf.TheanoGraph_pro method)</a>
 </li>
@@ -318,6 +356,12 @@
       <li><a href="code.html#module-Visualization">Visualization (module)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code.html#module-visualization_vtk">visualization_vtk (module)</a>
+</li>
+      <li><a href="code.html#visualization_vtk.visualize">visualize() (in module visualization_vtk)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="W">W</h2>
@@ -343,20 +387,15 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h3><a href="GeMpy Introduction.html">Table Of Contents</a></h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="GeMpy Introduction.html">Welcome to GeMpy&#8217;s documentation!</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Kriging.html">Kriging structure of the <em>Potential field method</em></a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">Code</a></li>
-</ul>
-<div class="relations">
+
+   <div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="GeMpy Introduction.html">Documentation overview</a><ul>
+  <li><a href="index.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 </div>
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -372,11 +411,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016, Miguel de la Varga. NRE-RWTH team.
+      &copy;2017, Miguel de la Varga, CGR-Aachen Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
     </div>
 

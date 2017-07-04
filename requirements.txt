@@ -4,3 +4,4 @@ theano
 pandas
 seaborn
 ipyvolume
+vtk

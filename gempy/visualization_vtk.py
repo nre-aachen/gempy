@@ -1,9 +1,12 @@
 import vtk
 import random
+import os
+from os import path
 import sys
+# This is for sphenix to find the packages
+sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
 import numpy as np
-from .colors import *
-
+from gempy.colors import *
 
 def color_lot_create(geo_data, cd_rgb=color_dict_rgb, c_names=color_names, c_subname="400"):
     c_lot = {}

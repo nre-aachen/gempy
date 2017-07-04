@@ -11,8 +11,14 @@ Created on 23/09/2016
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
+
+from os import path
+import sys
+# This is for sphenix to find the packages
+sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
+
 from IPython.core.debugger import Pdb
-from .colors import color_dict_rgb, color_dict_hex
+from gempy.colors import color_dict_rgb, color_dict_hex
 
 # TODO: inherit pygeomod classes
 # import sys, os

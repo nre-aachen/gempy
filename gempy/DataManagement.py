@@ -1,12 +1,16 @@
 from __future__ import division
 
 import os
+from os import path
 import sys
+
+# This is for sphenix to find the packages
+sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
 
 import copy
 import numpy as np
 import pandas as pn
-from . import theanograf
+from gempy import theanograf
 import theano
 
 class InputData(object):
