@@ -1379,7 +1379,7 @@ class InterpolatorInput:
             """
             Here we create most of the kriging parameters. The user can pass them as kwargs otherwise we pick the
             default values from the DataManagement info. The share variables are set in place. All the parameters here
-            are independent of the input data so this function only has to be called if you change the extent or grid or
+            are independent of the input data so this function only to be called if you change the extent or grid or
             if you want to change one the kriging parameters.
             Args:
                 _data_rescaled: DataManagement object
